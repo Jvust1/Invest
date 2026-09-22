@@ -19,6 +19,7 @@
   "delivery_branch": "feat/a-share-research-v0.1-20260922",
   "delivery_policy": "draft PR to main; no automatic merge",
   "implementation": "complete_remote_ci_validated",
+  "research_governance": "evaluation_protocol_v1_frozen",
   "validation": {
     "unittest": 82,
     "independent_groups": 8,
@@ -34,6 +35,15 @@
       "python_versions": ["3.11", "3.12"],
       "tests_per_job": 82,
       "compile_source": "pass"
+    },
+    "evaluation_protocol": {
+      "id": "invest-oos-forward-paper-v1",
+      "status": "FROZEN_METHOD_V1",
+      "human_readable": "docs/EVALUATION_PROTOCOL_V1.md",
+      "machine_readable": "governance/evaluation_protocol_v1.json",
+      "real_data_binding": "PENDING_LICENSED_REAL_DATA",
+      "frozen_holdout": "NOT_OPENED",
+      "forward_paper": "NOT_STARTED"
     }
   },
   "unverified": [
@@ -46,9 +56,10 @@
   ],
   "next_actions": [
     "complete licensed real-data validation with explicit suspension/corporate-action coverage when local authorization is available",
-    "define and freeze out-of-sample and forward-paper evaluation before interpreting strategy returns"
+    "before opening any frozen holdout result, bind the first authorized dataset and development/validation/holdout windows in a new evaluation_run or binding manifest",
+    "after a candidate and data binding are frozen, begin append-only forward-paper evidence without retroactive signal edits"
   ],
-  "latest_checkpoint": "governance/checkpoints/20260923_ci_reconciliation.json",
+  "latest_checkpoint": "governance/checkpoints/20260923_evaluation_protocol_freeze.json",
   "authority": {
     "code_and_state": "GitHub",
     "artifacts": "existing Drive project folder",
@@ -59,7 +70,7 @@
       "pr": 1,
       "url": "https://github.com/Jvust2/Invest/pull/1",
       "branch": "docs/long-term-roadmap-20260922",
-      "head_sha": "4fc6e668cd60f544809a0a204ad688c2edf37961",
+      "head_sha": "0629240f417d0f9b340ac74862bad56fc7e680f1",
       "base": "chore/security-bootstrap-20260922",
       "scope": [
         "README.md",
@@ -73,7 +84,7 @@
       "branch": "feat/a-share-research-v0.1-20260922",
       "base": "main",
       "state": "open_draft",
-      "handling": "remote CI inspected and passed at application/test head f40b0285; do not auto-merge"
+      "handling": "remote CI was inspected and passed at application/test head f40b0285; after governance-only commits, re-read the live PR head/checks; do not auto-merge"
     }
   ]
 }

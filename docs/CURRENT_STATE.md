@@ -49,9 +49,21 @@
 
 企业行动现金流、送转/配股、红利税、完整风险警示历史、历史费率重建、盘口与部分成交、全市场存活偏差处理、PIT 基本面、ETF/其他板块和券商连接均不在当前实现范围。没有 AI 预测、荐股概率、真实账户读取或自动下单。
 
+## 评价协议冻结状态
+
+样本外与 forward-paper 的**方法协议 v1 已冻结**，见 [EVALUATION_PROTOCOL_V1.md](EVALUATION_PROTOCOL_V1.md) 和 `governance/evaluation_protocol_v1.json`。当前状态是：
+
+- 方法：`FROZEN_METHOD_V1`
+- 首个授权真实数据绑定：`PENDING_LICENSED_REAL_DATA`
+- Frozen holdout：`NOT_OPENED`
+- Forward-paper：`NOT_STARTED`
+
+这只关闭“先看结果再定规则”的治理缺口，并没有产生任何真实收益证据。首个真实数据集可用后，必须先登记 development / validation / frozen holdout 时间边界、数据身份、证券池、成本情景和首次观察状态，再读取 holdout 结果；看过的数据不能重新标记为 unseen。
+
 ## 下一步
 
 1. 在本地授权可用时，完成真实 Tushare 供应商验证，并显式核对权限、单位、交易日历、停牌缺行及企业行动边界；未知状态继续阻断执行，Token 不进入仓库、聊天或共享 artifact。
-2. 在解释任何策略收益前，定义并冻结样本外与 forward-paper 评价协议，明确开发样本、首次观察留出集、成本情景、基准、存活偏差与后续前向记录方式。
+2. 首个授权真实数据集可用后，按已冻结的 v1 协议创建新的 `evaluation_run`/binding manifest，在读取 holdout 结果前固定 development / validation / holdout 区间、候选、参数、成本情景、基准和数据身份。
+3. 只有完成冻结候选与合法数据绑定后才开始 append-only forward-paper；不得回填事后信号，也不得把协议冻结本身解释为策略有效。
 
-当前不需要重复检查已成功的远端 CI，也不得把 CI 成功推导为收益有效、真实供应商完整或 PR 已获合并授权。
+当前不需要重复检查已成功的远端 CI，也不得把 CI 成功或协议冻结推导为收益有效、真实供应商完整或 PR 已获合并授权。

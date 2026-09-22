@@ -27,3 +27,9 @@ CSV 可用于研究查看，但未知公司行动、停牌、每日限价、因�
 2026-09-23 对草稿 PR #2 的实时检查确认：应用/测试 head `f40b0285b1c2bb249464f2ec354e9eb3bb6b18df` 的 GitHub Actions 在 Ubuntu/Windows × Python 3.11/3.12 四个矩阵作业全部成功，82 项单测与源码编译均通过。该结果把“远端 CI 未验证”从当前阻塞中移除，但不等价于真实 Tushare 权限/返回验收、Windows 桌面浏览器与 `start.bat` 人工体验、样本外收益或前向模拟验证。
 
 因此后续普通推进顺序改为：在本地授权可用时完成真实供应商验证；并在解释任何策略收益前先定义并冻结样本外与 forward-paper 评价协议。PR #2 继续保持可审查、未合并状态，合并仍需要对该具体 PR 的明确授权。
+
+## D007 — 在真实收益解释前冻结样本外与 Forward-Paper 方法 v1
+
+2026-09-23 按长期成长路线的 G2 入口要求，将样本外与 forward-paper 评价方法先于任何真实收益读取冻结。协议 v1 明确 development / validation / frozen holdout / forward-paper 四阶段边界、搜索预算、三类成本情景要求、PIT/存活偏差与可交易性检查、首次观察语义和版本变更规则。
+
+当前只冻结方法，没有绑定真实授权数据，也没有打开 holdout 或产生 forward-paper 结果。具体日期、数据身份、证券池和成本数值必须在首个 `evaluation_run`/binding 中于读取 holdout 之前登记；若看过结果后修改规则，必须创建新协议版本或新未见数据身份，不能把已见数据重新称为 unseen。

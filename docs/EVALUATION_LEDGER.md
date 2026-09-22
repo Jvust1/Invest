@@ -76,3 +76,11 @@ GitHub Actions `Invest tests` run `35701856144` 状态为 `completed/success`。
 因此，“远端 CI 未验证”和“Windows CI 因 SQLite fixture 清理失败”均已关闭。该证据只说明当前代码在 GitHub-hosted Ubuntu/Windows Python 3.11/3.12 的单元测试与编译矩阵通过；它不等价于真实 Tushare 联调、Windows 桌面浏览器/`start.bat` 人工体验、真实市场收益、样本外结果或 forward-paper 表现。PR 合并状态也没有因 CI 成功改变。
 
 本轮检查点记录在 `governance/checkpoints/20260923_ci_reconciliation.json`。下一验证主线转为真实供应商数据边界，以及在解释策略收益前冻结样本外与 forward-paper 协议。
+
+## E004 — 样本外与 Forward-Paper 评价方法 v1 冻结（2026-09-23）
+
+本轮没有使用真实 Tushare Token、真实行情收益或券商数据。由于真实供应商联调需要本地授权，而“先冻结评价协议”是可独立安全完成的下一未完成事项，本轮将 `docs/EVALUATION_PROTOCOL_V1.md` 与 `governance/evaluation_protocol_v1.json` 作为方法 v1 固定下来。
+
+冻结状态为 `FROZEN_METHOD_V1`；首个授权真实数据绑定为 `PENDING_LICENSED_REAL_DATA`，frozen holdout 为 `NOT_OPENED`，forward-paper 为 `NOT_STARTED`。协议要求在首次读取 holdout 结果前登记数据身份、development / validation / holdout 时间边界、候选参数、成本情景、基准和首次观察状态；已经看过的数据不能因为调参或改规则重新称为 unseen。
+
+这项记录只证明研究治理边界已建立，不证明策略有效。真实供应商权限/字段、停牌和公司行动覆盖、真实样本外表现以及后续 forward-paper 证据仍属于未验证项。机器检查点见 `governance/checkpoints/20260923_evaluation_protocol_freeze.json`。
