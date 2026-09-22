@@ -59,7 +59,6 @@ Playwright 对本机实际应用 HTTP API 的流程检查通过，覆盖：
 
 任何后续修复、接口联调或真实样本评价应追加独立记录，注明真实代码身份、数据来源及指纹、环境、参数、结果和失败/未覆盖项，不覆盖本次验证边界。模型及官方规则引用见 [REFERENCES_AND_RULES.md](REFERENCES_AND_RULES.md)，当前交接状态见 [CURRENT_STATE.md](CURRENT_STATE.md)。
 
-
 ## E002 — 首次远端 CI 与 Windows 测试清理修复
 
 功能提交 `44e6a318d9eed11e1e849b026c5ca306599c5523` 已发布到 [草稿 PR #2](https://github.com/Jvust2/Invest/pull/2)。[首次 push CI](https://github.com/Jvust2/Invest/actions/runs/35701489393) 的 Ubuntu / Python 3.11、3.12 均通过；两个 Windows 作业均在 `test_journal_reopens_and_database_rejects_rewrite` 的临时目录清理阶段发生 WinError 32。所有业务断言均通过，失败原因是测试直接创建的 SQLite 连接只退出事务上下文，未显式 close。
@@ -67,3 +66,13 @@ Playwright 对本机实际应用 HTTP API 的流程检查通过，覆盖：
 修复仅在 `tests/test_portfolio.py` 用 `contextlib.closing` 关闭该测试连接，保留原有两项数据库防改写断言。应用 `PaperLedger._connection()` 已有 `finally: db.close()`，应用逻辑不变。本地针对 portfolio 的 16 项测试再次通过。修复提交之后的四平台矩阵结果以 PR #2 的最新 head 检查为准；本记录生成时尚未拿到重跑结论。
 
 E001 的源码 ZIP 保留为冻结检查点，不重写。其应用源码仍与当前版本一致，测试的上述关闭修复及本节记录可由 GitHub 后续提交恢复；参见 `governance/artifact_manifest.json` 的后续变更索引。
+
+## E003 — PR #2 远端四平台矩阵复核通过（2026-09-23）
+
+本轮重新从 GitHub 实时读取草稿 PR #2、功能分支和 Actions，不沿用聊天中的历史结论。PR #2 当前仍为 open/draft、base=`main`、head=`feat/a-share-research-v0.1-20260922`、未合并；本次复核对应应用/测试 head `f40b0285b1c2bb249464f2ec354e9eb3bb6b18df`。
+
+GitHub Actions `Invest tests` run `35701856144` 状态为 `completed/success`。其 4 个矩阵 job 均成功：Windows / Python 3.11、Windows / Python 3.12、Ubuntu / Python 3.11、Ubuntu / Python 3.12。每个 job 都完成 `python -m unittest discover -s tests -v` 的 82 项测试，并完成 `python -m compileall -q invest`。
+
+因此，“远端 CI 未验证”和“Windows CI 因 SQLite fixture 清理失败”均已关闭。该证据只说明当前代码在 GitHub-hosted Ubuntu/Windows Python 3.11/3.12 的单元测试与编译矩阵通过；它不等价于真实 Tushare 联调、Windows 桌面浏览器/`start.bat` 人工体验、真实市场收益、样本外结果或 forward-paper 表现。PR 合并状态也没有因 CI 成功改变。
+
+本轮检查点记录在 `governance/checkpoints/20260923_ci_reconciliation.json`。下一验证主线转为真实供应商数据边界，以及在解释策略收益前冻结样本外与 forward-paper 协议。
