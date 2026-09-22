@@ -224,5 +224,18 @@
     "drive_metadata": "verified id, parent, filename, MIME and byte count",
     "raw_download_sha256": "verified byte-for-byte via connector raw fetch"
   },
-  "git_comparison_note": "The frozen ZIP has one extra trailing blank line in SECURITY_POLICY.md and AGENTS.md from local materialization. Those whitespace-only differences are skipped. GitHub preserves the exact canonical bootstrap blobs; all application source files match the archive."
+  "git_comparison_note": "The frozen ZIP has one extra trailing blank line in SECURITY_POLICY.md and AGENTS.md from local materialization. Those whitespace-only differences are skipped. GitHub preserves the exact canonical bootstrap blobs; all application source files match the archive.",
+  "post_checkpoint_changes": [
+    {
+      "reason": "First Windows CI exposed a test-owned SQLite handle retained during TemporaryDirectory cleanup",
+      "paths": [
+        "tests/test_portfolio.py",
+        "docs/EVALUATION_LEDGER.md",
+        "governance/artifact_manifest.json"
+      ],
+      "application_source_changed": false,
+      "publication": "PR #2; follow-up commit after 44e6a318d9eed11e1e849b026c5ca306599c5523",
+      "recovery": "Use GitHub commit history; preserve this checkpoint unchanged"
+    }
+  ]
 }

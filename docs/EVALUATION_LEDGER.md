@@ -58,3 +58,12 @@ Playwright 对本机实际应用 HTTP API 的流程检查通过，覆盖：
 - 合成数据不包含真实交易所节假日和完整市场历史；测试通过不能推导出规则覆盖完整、策略有效或投资回报承诺。
 
 任何后续修复、接口联调或真实样本评价应追加独立记录，注明真实代码身份、数据来源及指纹、环境、参数、结果和失败/未覆盖项，不覆盖本次验证边界。模型及官方规则引用见 [REFERENCES_AND_RULES.md](REFERENCES_AND_RULES.md)，当前交接状态见 [CURRENT_STATE.md](CURRENT_STATE.md)。
+
+
+## E002 — 首次远端 CI 与 Windows 测试清理修复
+
+功能提交 `44e6a318d9eed11e1e849b026c5ca306599c5523` 已发布到 [草稿 PR #2](https://github.com/Jvust2/Invest/pull/2)。[首次 push CI](https://github.com/Jvust2/Invest/actions/runs/35701489393) 的 Ubuntu / Python 3.11、3.12 均通过；两个 Windows 作业均在 `test_journal_reopens_and_database_rejects_rewrite` 的临时目录清理阶段发生 WinError 32。所有业务断言均通过，失败原因是测试直接创建的 SQLite 连接只退出事务上下文，未显式 close。
+
+修复仅在 `tests/test_portfolio.py` 用 `contextlib.closing` 关闭该测试连接，保留原有两项数据库防改写断言。应用 `PaperLedger._connection()` 已有 `finally: db.close()`，应用逻辑不变。本地针对 portfolio 的 16 项测试再次通过。修复提交之后的四平台矩阵结果以 PR #2 的最新 head 检查为准；本记录生成时尚未拿到重跑结论。
+
+E001 的源码 ZIP 保留为冻结检查点，不重写。其应用源码仍与当前版本一致，测试的上述关闭修复及本节记录可由 GitHub 后续提交恢复；参见 `governance/artifact_manifest.json` 的后续变更索引。

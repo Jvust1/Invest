@@ -1,6 +1,7 @@
 """Financial journal boundaries, rollback and provenance regression tests."""
 
 from concurrent.futures import ThreadPoolExecutor
+from contextlib import closing
 from copy import deepcopy
 import json
 from pathlib import Path
@@ -170,7 +171,7 @@ class PaperLedgerTests(unittest.TestCase):
         self.trade()
         reopened = PaperLedger(self.path)
         self.assertEqual(len(reopened.snapshot(self.account_id)["trades"]), 1)
-        with sqlite3.connect(self.path) as db:
+        with closing(sqlite3.connect(self.path)) as db:
             with self.assertRaises(sqlite3.IntegrityError):
                 db.execute("DELETE FROM trades")
             with self.assertRaises(sqlite3.IntegrityError):
