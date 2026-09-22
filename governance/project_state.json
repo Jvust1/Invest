@@ -4,8 +4,8 @@
   "repository": "Jvust2/Invest",
   "repository_id": 1381007406,
   "drive_folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
-  "as_of": "2026-09-22",
-  "state_scope": "prepublication validation snapshot; live branch/PR is authoritative for publication state",
+  "as_of": "2026-09-23",
+  "state_scope": "live feature-branch governance snapshot; live branch/PR/checks remain authoritative for publication state",
   "version": "0.1.0",
   "currency": "CNY",
   "security_status": "REGISTERED_PROTECTED",
@@ -18,26 +18,37 @@
   "bootstrap_sha": "172803ad30cd2065719944f1fab26a952c42be54",
   "delivery_branch": "feat/a-share-research-v0.1-20260922",
   "delivery_policy": "draft PR to main; no automatic merge",
-  "implementation": "complete_local_validated",
+  "implementation": "complete_remote_ci_validated",
   "validation": {
     "unittest": 82,
     "independent_groups": 8,
     "root_browser_checks": 10,
     "ui_curve_edge_cases": 3,
-    "uncaught_js_errors": 0
+    "uncaught_js_errors": 0,
+    "remote_ci": {
+      "head_sha": "f40b0285b1c2bb249464f2ec354e9eb3bb6b18df",
+      "workflow_run_id": 35701856144,
+      "result": "success",
+      "matrix_jobs": 4,
+      "platforms": ["ubuntu-latest", "windows-latest"],
+      "python_versions": ["3.11", "3.12"],
+      "tests_per_job": 82,
+      "compile_source": "pass"
+    }
   },
   "unverified": [
     "live Tushare credentials/permissions/responses",
-    "Windows runtime and remote CI at snapshot time",
-    "real market or out-of-sample profitability",
+    "Windows desktop browser and start.bat manual experience",
+    "real market or frozen out-of-sample profitability",
+    "forward-paper evidence",
     "brokerage execution; not implemented",
     "public or LAN deployment; not implemented"
   ],
   "next_actions": [
-    "inspect draft PR and CI",
-    "complete licensed real-data validation with explicit suspension/corporate-action coverage",
-    "define frozen out-of-sample and forward-paper evaluation before interpreting strategy returns"
+    "complete licensed real-data validation with explicit suspension/corporate-action coverage when local authorization is available",
+    "define and freeze out-of-sample and forward-paper evaluation before interpreting strategy returns"
   ],
+  "latest_checkpoint": "governance/checkpoints/20260923_ci_reconciliation.json",
   "authority": {
     "code_and_state": "GitHub",
     "artifacts": "existing Drive project folder",
@@ -55,6 +66,14 @@
         "docs/LONG_TERM_ROADMAP.md"
       ],
       "handling": "preserved untouched; reconcile both README additions during eventual merge"
+    },
+    {
+      "pr": 2,
+      "url": "https://github.com/Jvust2/Invest/pull/2",
+      "branch": "feat/a-share-research-v0.1-20260922",
+      "base": "main",
+      "state": "open_draft",
+      "handling": "remote CI inspected and passed at application/test head f40b0285; do not auto-merge"
     }
   ]
 }
