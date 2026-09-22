@@ -1,0 +1,228 @@
+{
+  "schema_version": 1,
+  "project": "Jvust2/Invest",
+  "date": "2026-09-22",
+  "artifact_type": "frozen source checkpoint before publication",
+  "file_name": "Invest_v0.1.0_source_checkpoint_20260922.zip",
+  "drive_id": "1Iscm0akdNG5s0WNJfc83-T_eh88xIz1F",
+  "drive_folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
+  "url": "https://drive.google.com/file/d/1Iscm0akdNG5s0WNJfc83-T_eh88xIz1F/view",
+  "sha256": "68f6060004f0e31312973301e0f34824c72bfa29045cad1a5bbe5e7efecbb31d",
+  "bytes": 970123,
+  "source_file_count": 38,
+  "archive_member_count": 42,
+  "scope": "All validated source, docs, tests, safety and text validation evidence, plus 3 screenshots; governance/ is intentionally excluded and authoritative in GitHub. ZIP contains an internal CHECKPOINT_MANIFEST.json.",
+  "contains_private_runtime_data": false,
+  "files": [
+    {
+      "path": ".github/workflows/tests.yml",
+      "sha256": "ff6a8db9b17685851f4b603509ee657083c538d065c6e725d6757452040f4d65",
+      "bytes": 588
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "524433a59ddce647b065c564540e2eee8edfc8af79e6000a681d487bdb19ed65",
+      "bytes": 123
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "c7a92135aad34ec559c7f31f8e34baae74fabb0be0c6cba06b9daa1e38a6e362",
+      "bytes": 2156
+    },
+    {
+      "path": "README.md",
+      "sha256": "82f4e69e28eac28856ff897dafd3d937286af5174359dd011db532d2e33ba991",
+      "bytes": 4834
+    },
+    {
+      "path": "SECURITY_POLICY.md",
+      "sha256": "2b7896aa0f3aeeb206c15c700376db53b848214f4a8bb31e215eb55eac01c522",
+      "bytes": 14856
+    },
+    {
+      "path": "docs/ARCHITECTURE_INVARIANTS.md",
+      "sha256": "afbb3dbcb8060fc7d8532ae1a95c4e458fdf8a236ed53dfb7f7b26120dbd3b6f",
+      "bytes": 2215
+    },
+    {
+      "path": "docs/CURRENT_STATE.md",
+      "sha256": "bcc072c825440fbd0133f9d356b5d612ed72693fa10d81373dfdaf9084263c96",
+      "bytes": 4109
+    },
+    {
+      "path": "docs/DATA_FORMAT.md",
+      "sha256": "b9fb3fe84756b341b0866fe8c47a7d8a4db8ed2fc26234f8f13ac0be56c7f8dc",
+      "bytes": 12964
+    },
+    {
+      "path": "docs/DECISION_LEDGER.md",
+      "sha256": "f1413478f5eb162308d28e8b753350ee5f7b0802f5b264df46b35215a9b40533",
+      "bytes": 1851
+    },
+    {
+      "path": "docs/EVALUATION_LEDGER.md",
+      "sha256": "819c5b31e34f95faca0e66065f48d89e8e9d0b38dc61ec64da6b2ae4d1fe6db5",
+      "bytes": 4597
+    },
+    {
+      "path": "docs/HANDOFF.md",
+      "sha256": "e404c2b5346ef487ac6e8db2834e61b6c3c922541f320f671e4dc866aaa0bf31",
+      "bytes": 4529
+    },
+    {
+      "path": "docs/PRE_FLIGHT_CHECKLIST.md",
+      "sha256": "5378ca3c9c547810b4e403b0bc99aac7798772fc2eaa3c749febf517abb45016",
+      "bytes": 1082
+    },
+    {
+      "path": "docs/PROJECT_NORTH_STAR.md",
+      "sha256": "0a638dbb5bfe73191a15ba953529efea4c03d8637129e57d01ec7d2c49c379f7",
+      "bytes": 922
+    },
+    {
+      "path": "docs/REFERENCES_AND_RULES.md",
+      "sha256": "730ae26ef3f6d999734a7f2e1043e2d9a619b19b057b43bbbc25d7fb741fa030",
+      "bytes": 11254
+    },
+    {
+      "path": "examples/README.md",
+      "sha256": "4c10e670f10fb06d9a6fc36518d4b4aa3150a6d5e0f43e87f2ec310f59f4273f",
+      "bytes": 3535
+    },
+    {
+      "path": "examples/SYNTHETIC_DEMO_calendar.csv",
+      "sha256": "fc36ed02f14959906eaac31c160453e6d224aeac3e5783fa38e0b6aa6e09ebfc",
+      "bytes": 1545
+    },
+    {
+      "path": "examples/SYNTHETIC_DEMO_prices.csv",
+      "sha256": "1b1b979e414791ae9a2cf1f2e23d3ed51c3d1c00d0692d95c201f9c90c5bb0e0",
+      "bytes": 22618
+    },
+    {
+      "path": "invest/__init__.py",
+      "sha256": "43d55010095326bdcc7eda0ac35948c23bad7b0be0480902b03cb9c28a681f0c",
+      "bytes": 103
+    },
+    {
+      "path": "invest/__main__.py",
+      "sha256": "f62b759b2fe633bc41a4387bf504a2ec502f643dd5922dc64053c9203670ff3b",
+      "bytes": 64
+    },
+    {
+      "path": "invest/data.py",
+      "sha256": "7886bda1f79134aca67be8869d0e985783121c159474f1a626dfb583bd7bec93",
+      "bytes": 22314
+    },
+    {
+      "path": "invest/engine.py",
+      "sha256": "3fe0863fadb806cce5687551bf0c2eb2d6964b182e1249460bf3acd8b78eb455",
+      "bytes": 23420
+    },
+    {
+      "path": "invest/portfolio.py",
+      "sha256": "e3a15c427a9d159190fcb6821b9c6b28ee1662b0a6956477104cccb57c19996c",
+      "bytes": 18141
+    },
+    {
+      "path": "invest/server.py",
+      "sha256": "0b26deaa0103fc26dd5a5ac8db49c1216ee9d2be44bc9e07ea966a1b13d03eef",
+      "bytes": 15662
+    },
+    {
+      "path": "invest/web/app.css",
+      "sha256": "db98a44cd4125c11bce274e9a399a69d4ac8fab0a1db38d233414597f8caa1a1",
+      "bytes": 16959
+    },
+    {
+      "path": "invest/web/app.js",
+      "sha256": "951825e88800a345d503fa8ec892293448e1ef0df086d04f0b1506952eb5c80a",
+      "bytes": 35859
+    },
+    {
+      "path": "invest/web/index.html",
+      "sha256": "09de4a852e666c9617f5d8117cae384a074a00cdf6f5486ff5a3cca98906cd2a",
+      "bytes": 16315
+    },
+    {
+      "path": "pyproject.toml",
+      "sha256": "0696dd9030c66263a6c1ea473a829da41f0ff529304f2edb9c2f25ce7f3e86a6",
+      "bytes": 422
+    },
+    {
+      "path": "review/invest-backtest.png",
+      "sha256": "d8c2862f0c3337e33b4d153604f9e390195d518d34ca4cde7d7b9640b06867fb",
+      "bytes": 456072
+    },
+    {
+      "path": "review/invest-desktop.png",
+      "sha256": "1da5bf59b0905d8e9d40467a855ea6cdea027b900f6e88dee5f0f299a180059f",
+      "bytes": 215801
+    },
+    {
+      "path": "review/invest-mobile.png",
+      "sha256": "7cf8964c16fa5d10af7b1037c32d5a2667e52aa1a17aa37d5323c27229c2163b",
+      "bytes": 217550
+    },
+    {
+      "path": "start.bat",
+      "sha256": "508764d945488c59130e7938c11670355e440f5c1a2c4a995a75cac1425a775d",
+      "bytes": 130
+    },
+    {
+      "path": "tests/test_data.py",
+      "sha256": "3c783134174f8860fff6af66cce7727bebb37a04b6ae9396313e3ff6899303d5",
+      "bytes": 16871
+    },
+    {
+      "path": "tests/test_engine.py",
+      "sha256": "531828a3a18069859054aca36527e193f169edceb80d20206d5c53f8c99583c1",
+      "bytes": 11512
+    },
+    {
+      "path": "tests/test_portfolio.py",
+      "sha256": "645a8ee7363daf1826b93514ff7f7c6a373742b09bfd1df20caf579922479f45",
+      "bytes": 10675
+    },
+    {
+      "path": "tests/test_server.py",
+      "sha256": "6f969ea5eb7ee0c29b55f375b453532e780e240ab90d693a0b5673479f61cc29",
+      "bytes": 7443
+    },
+    {
+      "path": "validation/20260922/README.md",
+      "sha256": "37f0f8992598303957ed4dc760f4f805ce0c64a528bafc792aed75cc8978d62f",
+      "bytes": 1517
+    },
+    {
+      "path": "validation/20260922/browser-check.cjs",
+      "sha256": "7e88eb124e8c3c2768b59eedcc7641cb88b28d8c315ccfa9d963104622f5d2fe",
+      "bytes": 6854
+    },
+    {
+      "path": "validation/20260922/browser-results.json",
+      "sha256": "a545a515cd2862ef72695604b20c99f5065ed0f7275c2758c5bd817fe0f892c5",
+      "bytes": 599
+    },
+    {
+      "path": "validation/20260922/independent-review.py",
+      "sha256": "c69649b7c308cc6e0d5d15d8dd7c1c8c4080d6a6b504cca5d992b7a72132670e",
+      "bytes": 5824
+    },
+    {
+      "path": "validation/20260922/independent-review.txt",
+      "sha256": "91153a8f275f172f0a618ce5ef8bc039df040f77111f0bf1e8ffd1a21b142e6e",
+      "bytes": 892
+    },
+    {
+      "path": "validation/20260922/unittest.txt",
+      "sha256": "ddc59c4b6699c6cf70e54c53c9d40d9853678b3bad853054afe56dc4944d26d9",
+      "bytes": 219
+    }
+  ],
+  "verification": {
+    "drive_metadata": "verified id, parent, filename, MIME and byte count",
+    "raw_download_sha256": "verified byte-for-byte via connector raw fetch"
+  },
+  "git_comparison_note": "The frozen ZIP has one extra trailing blank line in SECURITY_POLICY.md and AGENTS.md from local materialization. Those whitespace-only differences are skipped. GitHub preserves the exact canonical bootstrap blobs; all application source files match the archive."
+}

@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "project": "Invest",
+  "repository": "Jvust2/Invest",
+  "repository_id": 1381007406,
+  "drive_folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
+  "as_of": "2026-09-22",
+  "state_scope": "prepublication validation snapshot; live branch/PR is authoritative for publication state",
+  "version": "0.1.0",
+  "currency": "CNY",
+  "security_status": "REGISTERED_PROTECTED",
+  "protection_scope": [
+    "chore/security-bootstrap-20260922",
+    "descendant non-default feature branch"
+  ],
+  "main_security_pending_pr": true,
+  "main_baseline_sha": "71b32347fd954b7952f748b852503779851dbf1a",
+  "bootstrap_sha": "172803ad30cd2065719944f1fab26a952c42be54",
+  "delivery_branch": "feat/a-share-research-v0.1-20260922",
+  "delivery_policy": "draft PR to main; no automatic merge",
+  "implementation": "complete_local_validated",
+  "validation": {
+    "unittest": 82,
+    "independent_groups": 8,
+    "root_browser_checks": 10,
+    "ui_curve_edge_cases": 3,
+    "uncaught_js_errors": 0
+  },
+  "unverified": [
+    "live Tushare credentials/permissions/responses",
+    "Windows runtime and remote CI at snapshot time",
+    "real market or out-of-sample profitability",
+    "brokerage execution; not implemented",
+    "public or LAN deployment; not implemented"
+  ],
+  "next_actions": [
+    "inspect draft PR and CI",
+    "complete licensed real-data validation with explicit suspension/corporate-action coverage",
+    "define frozen out-of-sample and forward-paper evaluation before interpreting strategy returns"
+  ],
+  "authority": {
+    "code_and_state": "GitHub",
+    "artifacts": "existing Drive project folder",
+    "private_ledger": "local user data only"
+  },
+  "parallel_work": [
+    {
+      "pr": 1,
+      "url": "https://github.com/Jvust2/Invest/pull/1",
+      "branch": "docs/long-term-roadmap-20260922",
+      "head_sha": "4fc6e668cd60f544809a0a204ad688c2edf37961",
+      "base": "chore/security-bootstrap-20260922",
+      "scope": [
+        "README.md",
+        "docs/LONG_TERM_ROADMAP.md"
+      ],
+      "handling": "preserved untouched; reconcile both README additions during eventual merge"
+    }
+  ]
+}

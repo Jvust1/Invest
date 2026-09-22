@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "invest-local-research"
+version = "0.1.0"
+description = "人民币 A 股研究、可审计日频回测与模拟账本"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+invest = "invest.server:main"
+
+[tool.setuptools.packages.find]
+include = ["invest*"]
+
+[tool.setuptools.package-data]
+invest = ["web/*"]
