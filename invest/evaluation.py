@@ -153,6 +153,7 @@ def validate_evaluation_binding(binding: dict) -> dict:
         "universe",
         "candidate",
         "windows",
+        "historical_market_environments",
         "cost_scenarios",
         "benchmark",
         "market_data_boundaries",
@@ -231,6 +232,35 @@ def validate_evaluation_binding(binding: dict) -> dict:
     for previous, current in zip(parsed_windows, parsed_windows[1:]):
         if previous[2] >= current[1]:
             raise ValueError("development / validation / frozen_holdout 必须按时间严格前进且不重叠")
+
+    environments = original["historical_market_environments"]
+    if not isinstance(environments, list) or len(environments) < 3:
+        raise ValueError("historical_market_environments 至少需要 3 个已冻结历史市场环境")
+    environment_names: set[str] = set()
+    environment_ranges: set[tuple[date, date]] = set()
+    evaluation_start = parsed_windows[0][1]
+    evaluation_end = parsed_windows[-1][2]
+    for index, environment_value in enumerate(environments):
+        field = f"historical_market_environments[{index}]"
+        environment = _mapping(environment_value, field)
+        _only_keys(environment, field, {"name", "start", "end", "evidence"})
+        name = _text(environment["name"], f"{field}.name", limit=200)
+        if name in environment_names:
+            raise ValueError("historical_market_environments 名称不能重复")
+        environment_names.add(name)
+        start = _date(environment["start"], f"{field}.start")
+        end = _date(environment["end"], f"{field}.end")
+        if start > end:
+            raise ValueError(f"{field} 起始日不能晚于结束日")
+        if start < evaluation_start or end > evaluation_end:
+            raise ValueError(
+                "historical_market_environments 必须位于已冻结的 development 至 frozen_holdout 总时间边界内"
+            )
+        environment_range = (start, end)
+        if environment_range in environment_ranges:
+            raise ValueError("historical_market_environments 日期区间不能完全重复")
+        environment_ranges.add(environment_range)
+        _text(environment["evidence"], f"{field}.evidence")
 
     scenarios = original["cost_scenarios"]
     if not isinstance(scenarios, list) or len(scenarios) < 3:

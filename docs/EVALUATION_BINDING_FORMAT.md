@@ -9,7 +9,7 @@
 只有在合法授权的真实数据已经实际可用后，才创建真实 binding。顺序必须是：
 
 1. 取得并核验授权数据，不把 Token、密码、Cookie 或其他凭据写入仓库、binding 或共享 artifact。
-2. 在首次读取 frozen holdout 结果之前，冻结数据身份、代码身份、证券池形成规则、候选参数、时间窗口、成本情景、基准和市场数据边界。
+2. 在首次读取 frozen holdout 结果之前，冻结数据身份、代码身份、证券池形成规则、候选参数、时间窗口、至少三个历史市场环境、成本情景、基准和市场数据边界。
 3. 调用 `validate_evaluation_binding()` 校验并计算 `binding_id`。
 4. 只有返回 `can_open_holdout=true` 且其它项目级 gate 也通过，才有资格进入首次 holdout 观察；校验器本身不会读取行情、运行回测或打开 holdout。
 
@@ -25,6 +25,7 @@
 - `universe`: 证券池描述、形成规则和 PIT 证据。
 - `candidate`: 冻结候选身份与参数哈希。
 - `windows`: development / validation / frozen_holdout 三个严格递进且不重叠的日期区间。
+- `historical_market_environments`: 至少三个在上述总评价时间边界内、名称和日期区间可区分的历史市场环境，并保存形成该标注的证据说明。
 - `cost_scenarios`: 至少三个名称唯一、配置非空的成本情景。
 - `benchmark`: 冻结的比较基准。
 - `market_data_boundaries`: 关键数据边界的显式验证状态。
@@ -49,7 +50,19 @@
 
 凭据字段会被递归拒绝。真实 Tushare Token 继续只存在于受信本地环境变量，不进入 binding。
 
-## 4. 市场数据边界
+## 4. 历史市场环境
+
+`historical_market_environments` 是冻结协议 v1 中“至少 3 个需要覆盖或单独标注的历史市场环境”的机器可读实现。每项包含：
+
+- `name`: 冻结的环境名称；同一 binding 内不能重复。
+- `start`, `end`: `YYYY-MM-DD`，起始日不能晚于结束日。
+- `evidence`: 该环境名称与时间区间的形成依据或标注证据。
+
+至少需要 3 项。每项日期必须位于 binding 已冻结的 development 起点至 frozen_holdout 终点总时间边界内；完全相同的日期区间不能用不同名称重复计数。这里的字段只冻结“要比较/单独标注哪些历史环境”，不会自动证明环境分类正确，也不会替代真实评价结果。
+
+该要求是对已冻结 `EVALUATION_PROTOCOL_V1.md` 既有规则的执行补齐，不改变协议含义；此前没有任何真实 binding，因此不存在需要迁移或改写的冻结真实评价记录。
+
+## 5. 市场数据边界
 
 以下七项必须全部出现：
 
@@ -62,15 +75,16 @@
 
 `unknown` 与 `not_covered` 是合法、诚实的记录状态，但会使 `can_open_holdout=false`。校验器不会把未知静默变成安全值。
 
-## 5. 不变式
+## 6. 不变式
 
 - Development、Validation、Frozen Holdout 严格按时间向前且互不重叠。
+- 至少三个历史市场环境，名称唯一，日期真实且落在冻结总评价时间边界内；完全重复日期区间不能重复计数。
 - 至少三组成本情景，名称唯一，配置不可为空。
 - 预观察 binding 不能写入首次 holdout 观察时间，也不能伪装成 `OBSERVED`。
 - `binding_id` 对内容敏感；带 ID 的 binding 被修改后将校验失败。
 - NaN、Infinity、非 JSON 类型、未知顶层字段和疑似凭据字段都会被拒绝。
-- 校验通过只说明 provenance/binding 结构合规。真实数据本身是否完整、策略是否有效、收益是否可重复，仍必须由真实供应商验证、冻结样本外评价和后续 forward-paper 证据回答。
+- 校验通过只说明 provenance/binding 结构合规。真实数据本身是否完整、历史环境分类是否合理、策略是否有效、收益是否可重复，仍必须由真实供应商验证、冻结样本外评价和后续 forward-paper 证据回答。
 
-## 6. 当前状态
+## 7. 当前状态
 
-截至 2026-09-23，仅完成格式、离线校验器和针对危险边界的单元测试；**没有创建真实 binding，没有使用真实 Token，没有打开 holdout，也没有产生真实收益证据**。
+截至 2026-09-23，已完成格式、离线校验器和针对危险边界的单元测试，并补齐冻结协议 v1 已明确要求、原校验器遗漏的“至少三个历史市场环境”机器门禁；**没有创建真实 binding，没有使用真实 Token，没有打开 holdout，也没有产生真实收益证据**。

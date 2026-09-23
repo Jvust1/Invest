@@ -43,6 +43,26 @@ def valid_binding():
             "validation": {"start": "2023-01-01", "end": "2023-12-31"},
             "frozen_holdout": {"start": "2024-01-01", "end": "2024-12-31"},
         },
+        "historical_market_environments": [
+            {
+                "name": "2020 recovery",
+                "start": "2020-04-01",
+                "end": "2020-12-31",
+                "evidence": "regime label and dates frozen before holdout observation",
+            },
+            {
+                "name": "2022 stress",
+                "start": "2022-01-01",
+                "end": "2022-10-31",
+                "evidence": "regime label and dates frozen before holdout observation",
+            },
+            {
+                "name": "2023 range-bound",
+                "start": "2023-01-01",
+                "end": "2023-12-31",
+                "evidence": "regime label and dates frozen before holdout observation",
+            },
+        ],
         "cost_scenarios": [
             {"name": "low", "configuration": {"commission_bps": 1}},
             {"name": "base", "configuration": {"commission_bps": 3}},
@@ -110,6 +130,34 @@ class EvaluationBindingTests(unittest.TestCase):
         binding = valid_binding()
         binding["windows"]["development"] = {"start": "2022-01-02", "end": "2022-01-01"}
         with self.assertRaisesRegex(ValueError, "起始日"):
+            evaluation.validate_evaluation_binding(binding)
+
+    def test_three_historical_market_environments_are_required_and_bounded(self):
+        binding = valid_binding()
+        binding["historical_market_environments"] = binding["historical_market_environments"][:2]
+        with self.assertRaisesRegex(ValueError, "至少需要 3"):
+            evaluation.validate_evaluation_binding(binding)
+
+        binding = valid_binding()
+        binding["historical_market_environments"][2]["name"] = "2022 stress"
+        with self.assertRaisesRegex(ValueError, "名称不能重复"):
+            evaluation.validate_evaluation_binding(binding)
+
+        binding = valid_binding()
+        binding["historical_market_environments"][2]["start"] = "2019-01-01"
+        with self.assertRaisesRegex(ValueError, "总时间边界"):
+            evaluation.validate_evaluation_binding(binding)
+
+        binding = valid_binding()
+        binding["historical_market_environments"][2]["start"] = "2023-12-31"
+        binding["historical_market_environments"][2]["end"] = "2023-01-01"
+        with self.assertRaisesRegex(ValueError, "起始日"):
+            evaluation.validate_evaluation_binding(binding)
+
+        binding = valid_binding()
+        binding["historical_market_environments"][2]["start"] = "2022-01-01"
+        binding["historical_market_environments"][2]["end"] = "2022-10-31"
+        with self.assertRaisesRegex(ValueError, "日期区间不能完全重复"):
             evaluation.validate_evaluation_binding(binding)
 
     def test_at_least_three_unique_cost_scenarios_with_configuration(self):
