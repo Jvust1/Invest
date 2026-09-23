@@ -33,3 +33,11 @@ CSV 可用于研究查看，但未知公司行动、停牌、每日限价、因�
 2026-09-23 按长期成长路线的 G2 入口要求，将样本外与 forward-paper 评价方法先于任何真实收益读取冻结。协议 v1 明确 development / validation / frozen holdout / forward-paper 四阶段边界、搜索预算、三类成本情景要求、PIT/存活偏差与可交易性检查、首次观察语义和版本变更规则。
 
 当前只冻结方法，没有绑定真实授权数据，也没有打开 holdout 或产生 forward-paper 结果。具体日期、数据身份、证券池和成本数值必须在首个 `evaluation_run`/binding 中于读取 holdout 之前登记；若看过结果后修改规则，必须创建新协议版本或新未见数据身份，不能把已见数据重新称为 unseen。
+
+## D008 — 先实现 fail-closed 数据 binding 执行门，不伪造真实供应商验证
+
+2026-09-23 当前自动执行环境没有可合法读取的本地 Tushare 授权凭据或授权真实数据快照。凭据不应进入聊天、GitHub 或共享 Drive，因此本轮不尝试伪造联网验收，也不把 mock/合成数据当成真实供应商证据。
+
+为使下一次真正取得授权数据时能够在首次 holdout 观察**之前**冻结 provenance，本轮新增 `invest/evaluation.py` 与 `docs/EVALUATION_BINDING_FORMAT.md`。校验器要求授权状态、原始与规范化数据身份、代码 SHA、证券池/PIT 证据、候选参数哈希、development/validation/holdout 非重叠窗口、至少三组成本情景、基准以及七类市场数据边界全部显式记录；递归拒绝 token/secret/password/credential/API key 等字段。
+
+未知或未覆盖的市场边界可以如实登记，但会使 `can_open_holdout=false`；已有 blocker 也会阻止打开 holdout。该门只证明 binding 结构与冻结语义合规，不能证明数据完整或策略有效。首个真实 binding 仍必须等合法授权数据实际可用后创建。

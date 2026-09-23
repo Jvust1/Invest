@@ -18,7 +18,7 @@
   "bootstrap_sha": "172803ad30cd2065719944f1fab26a952c42be54",
   "delivery_branch": "feat/a-share-research-v0.1-20260922",
   "delivery_policy": "draft PR to main; no automatic merge",
-  "implementation": "complete_remote_ci_validated",
+  "implementation": "evaluation_binding_validator_local_validated_remote_ci_pending",
   "research_governance": "evaluation_protocol_v1_frozen",
   "validation": {
     "unittest": 82,
@@ -31,8 +31,14 @@
       "workflow_run_id": 35701856144,
       "result": "success",
       "matrix_jobs": 4,
-      "platforms": ["ubuntu-latest", "windows-latest"],
-      "python_versions": ["3.11", "3.12"],
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "python_versions": [
+        "3.11",
+        "3.12"
+      ],
       "tests_per_job": 82,
       "compile_source": "pass"
     },
@@ -44,6 +50,16 @@
       "real_data_binding": "PENDING_LICENSED_REAL_DATA",
       "frozen_holdout": "NOT_OPENED",
       "forward_paper": "NOT_STARTED"
+    },
+    "evaluation_binding_validator": {
+      "status": "OFFLINE_LOCAL_PASS_REMOTE_CI_PENDING",
+      "module": "invest/evaluation.py",
+      "format": "docs/EVALUATION_BINDING_FORMAT.md",
+      "tests": 12,
+      "compile_source": "pass",
+      "real_data_used": false,
+      "credential_used": false,
+      "real_binding_created": false
     }
   },
   "unverified": [
@@ -56,10 +72,10 @@
   ],
   "next_actions": [
     "complete licensed real-data validation with explicit suspension/corporate-action coverage when local authorization is available",
-    "before opening any frozen holdout result, bind the first authorized dataset and development/validation/holdout windows in a new evaluation_run or binding manifest",
-    "after a candidate and data binding are frozen, begin append-only forward-paper evidence without retroactive signal edits"
+    "before opening any frozen holdout result, create the first authorized data binding and pass invest/evaluation.py validation for development/validation/holdout windows, candidate, costs, benchmark, PIT and market-data boundaries",
+    "after a candidate and data binding are frozen and all opening blockers are closed, begin append-only forward-paper evidence without retroactive signal edits"
   ],
-  "latest_checkpoint": "governance/checkpoints/20260923_evaluation_protocol_freeze.json",
+  "latest_checkpoint": "governance/checkpoints/20260923_evaluation_binding_validator.json",
   "authority": {
     "code_and_state": "GitHub",
     "artifacts": "existing Drive project folder",
@@ -84,7 +100,7 @@
       "branch": "feat/a-share-research-v0.1-20260922",
       "base": "main",
       "state": "open_draft",
-      "handling": "remote CI was inspected and passed at application/test head f40b0285; after governance-only commits, re-read the live PR head/checks; do not auto-merge"
+      "handling": "remote CI passed at application/test head f40b0285; evaluation-binding validator is locally validated and must use live current-head checks after publication; do not auto-merge"
     }
   ]
 }

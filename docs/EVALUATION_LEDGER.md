@@ -61,7 +61,7 @@ Playwright 对本机实际应用 HTTP API 的流程检查通过，覆盖：
 
 ## E002 — 首次远端 CI 与 Windows 测试清理修复
 
-功能提交 `44e6a318d9eed11e1e849b026c5ca306599c5523` 已发布到 [草稿 PR #2](https://github.com/Jvust2/Invest/pull/2)。[首次 push CI](https://github.com/Jvust2/Invest/actions/runs/35701489393) 的 Ubuntu / Python 3.11、3.12 均通过；两个 Windows 作业均在 `test_journal_reopens_and_database_rejects_rewrite` 的临时目录清理阶段发生 WinError 32。所有业务断言均通过，失败原因是测试直接创建的 SQLite 连接只退出事务上下文，未显式 close。
+功能提交 `44e6a318d9eed11e1e849b026c5ca306599c5523` 已发布到草稿 PR #2。首次 push CI `35701489393` 的 Ubuntu / Python 3.11、3.12 均通过；两个 Windows 作业均在 `test_journal_reopens_and_database_rejects_rewrite` 的临时目录清理阶段发生 WinError 32。所有业务断言均通过，失败原因是测试直接创建的 SQLite 连接只退出事务上下文，未显式 close。
 
 修复仅在 `tests/test_portfolio.py` 用 `contextlib.closing` 关闭该测试连接，保留原有两项数据库防改写断言。应用 `PaperLedger._connection()` 已有 `finally: db.close()`，应用逻辑不变。本地针对 portfolio 的 16 项测试再次通过。修复提交之后的四平台矩阵结果以 PR #2 的最新 head 检查为准；本记录生成时尚未拿到重跑结论。
 
@@ -84,3 +84,20 @@ GitHub Actions `Invest tests` run `35701856144` 状态为 `completed/success`。
 冻结状态为 `FROZEN_METHOD_V1`；首个授权真实数据绑定为 `PENDING_LICENSED_REAL_DATA`，frozen holdout 为 `NOT_OPENED`，forward-paper 为 `NOT_STARTED`。协议要求在首次读取 holdout 结果前登记数据身份、development / validation / holdout 时间边界、候选参数、成本情景、基准和首次观察状态；已经看过的数据不能因为调参或改规则重新称为 unseen。
 
 这项记录只证明研究治理边界已建立，不证明策略有效。真实供应商权限/字段、停牌和公司行动覆盖、真实样本外表现以及后续 forward-paper 证据仍属于未验证项。机器检查点见 `governance/checkpoints/20260923_evaluation_protocol_freeze.json`。
+
+## E005 — 预观察真实数据 Binding 校验器离线验收（2026-09-23）
+
+目标：在没有真实供应商凭据的当前环境中，只完成**可独立验证的 credential-free 准备**，使未来首个授权数据集能够在 frozen holdout 首次观察前以机器可验证方式冻结 provenance。没有调用 Tushare、没有读取真实行情、没有创建真实 binding，也没有打开 holdout。
+
+新增 `invest/evaluation.py` 与 `tests/test_evaluation.py`。定向执行 `python -m unittest discover -s tests -v`（仅本轮临时工作树中的新测试）共 **12 PASS**，另执行 `python -m compileall -q invest` 通过。覆盖至少包括：
+
+- 合法 binding 的确定性 SHA-256 `binding_id` 与内容修改检测；
+- development / validation / frozen_holdout 严格递进、不重叠；
+- 至少三组唯一、非空成本情景；
+- 授权状态、原始/规范化数据哈希与代码 SHA 格式；
+- 递归拒绝 token / API key / secret / password / credential 类字段；
+- `holdout_first_observed_at` 在预观察状态必须为 null；
+- 未知/未覆盖市场数据边界显式阻断 `can_open_holdout`，而不是静默补安全值；
+- 已知 blocker、NaN/Infinity、未知字段与 binding 事后变更均被拒绝或阻断。
+
+该结果是**离线定向测试**，不是新的远端 GitHub Actions 结论。发布后的当前 feature head 必须重新读取 live CI；若 CI 失败，以失败为准并继续修复。真实 Tushare 权限、实际字段、停牌/公司行动覆盖、真实 OOS 与 forward-paper 仍全部未验证。

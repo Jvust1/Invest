@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "project": "Invest",
+  "date": "2026-09-23",
+  "checkpoint": "evaluation_binding_validator_pre_real_data",
+  "status": "OFFLINE_LOCAL_PASS_REMOTE_CI_PENDING",
+  "scope": [
+    "fail-closed pre-observation evaluation binding validator",
+    "binding provenance/identity format",
+    "dangerous boundary unit tests",
+    "governance handoff for licensed real-data step"
+  ],
+  "evidence": {
+    "module": "invest/evaluation.py",
+    "test_file": "tests/test_evaluation.py",
+    "format_doc": "docs/EVALUATION_BINDING_FORMAT.md",
+    "focused_tests": {
+      "count": 12,
+      "result": "PASS"
+    },
+    "compileall_invest": "PASS",
+    "real_provider_calls": 0,
+    "real_market_data_used": false,
+    "credentials_used": false,
+    "real_binding_created": false,
+    "frozen_holdout_opened": false,
+    "forward_paper_started": false
+  },
+  "blocked_external_step": {
+    "item": "licensed real Tushare/provider validation",
+    "reason": "this automation environment has no authorized local provider credential or licensed real-data snapshot; credentials must not be requested into chat or stored in GitHub/Drive",
+    "handling": "do not fake provider validation; continue only credential-free preparation"
+  },
+  "next_safe_action": "When an authorized local real-data snapshot is available, validate provider boundaries, create the first BOUND_UNOPENED binding, and require validator can_open_holdout=true before first frozen-holdout observation.",
+  "drive": {
+    "new_artifact_required": false,
+    "reason": "code/docs/governance-only checkpoint; existing frozen source archive is preserved and intentionally not overwritten"
+  }
+}
