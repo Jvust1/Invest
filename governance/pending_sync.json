@@ -1,18 +1,18 @@
 {
   "schema_version": 1,
   "as_of": "2026-09-23",
-  "phase": "evaluation protocol v1 frozen; historical-market-environment binding gate remote-CI validated; licensed real-data gate blocked",
+  "phase": "evaluation protocol v1 frozen; historical-market-environment binding gate remote-CI validated; credential-free provider-validation runbook ready; licensed real-data gate blocked",
   "drive_checkpoint": {
     "status": "exists_verified",
     "id": "1Iscm0akdNG5s0WNJfc83-T_eh88xIz1F"
   },
   "pending_sync": [],
-  "publication_action": "Continue on the existing non-default feature branch and Draft PR #2. Code head 7629e221619f22500dc2016f2bf698eb055f50f2 passed the four-job GitHub Actions matrix after aligning the binding validator with protocol v1's three-historical-market-environments requirement. No Drive write is required for this code/docs/governance checkpoint.",
+  "publication_action": "Continue on the existing non-default feature branch and Draft PR #2. The provider-validation runbook, D011 decision record and checkpoint are GitHub-recoverable governance artifacts; no Drive write is required and the existing frozen source checkpoint must remain unchanged.",
   "publication_authority": "GitHub live branch, PR and checks",
   "main_merge": "requires later explicit authorization for the specific PR; not a pending sync",
   "parallel_roadmap_pr": {
     "number": 1,
     "status": "preserved untouched; reconcile README during eventual merge"
   },
-  "next_safe_action": "When licensed real data is available locally, validate provider boundaries and create the first BOUND_UNOPENED evaluation binding with at least three frozen historical market environments; do not open holdout unless the binding validator returns can_open_holdout=true."
+  "next_safe_action": "When licensed real data is available locally, execute docs/REAL_DATA_PROVIDER_VALIDATION_RUNBOOK.md, preserve sanitized evidence for all seven market-data boundaries, and create the first BOUND_UNOPENED evaluation binding only before any frozen-holdout observation."
 }

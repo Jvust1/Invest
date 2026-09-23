@@ -9,6 +9,7 @@
 3. 当前功能线为 `feat/a-share-research-v0.1-20260922`，Draft PR #2 → `main`，保持未合并；任何合并都需要针对 PR #2 的明确授权，禁止直接写 main。
 4. 并行长期路线图在 PR #1 / `docs/long-term-roadmap-20260922`，继续独立保留；未来处理合并顺序时同时保留应用 README 使用说明和长期路线图入口。
 5. 接手后读取 [PROJECT_NORTH_STAR.md](PROJECT_NORTH_STAR.md)、[CURRENT_STATE.md](CURRENT_STATE.md)、[ARCHITECTURE_INVARIANTS.md](ARCHITECTURE_INVARIANTS.md)、[DECISION_LEDGER.md](DECISION_LEDGER.md)、[EVALUATION_LEDGER.md](EVALUATION_LEDGER.md)、`governance/project_state.json`、`governance/artifact_manifest.json` 与 `governance/pending_sync.json`。
+6. 真实数据主线另读取 [REAL_DATA_PROVIDER_VALIDATION_RUNBOOK.md](REAL_DATA_PROVIDER_VALIDATION_RUNBOOK.md) 与 `governance/decisions/D011_provider_validation_runbook.json`；它们只定义本地授权联调的证据合同，不代表真实联调已经完成。
 
 ## 当前已验证的软件状态
 
@@ -17,12 +18,15 @@
 - 样本外与 forward-paper 方法协议 v1 已冻结，状态为 `FROZEN_METHOD_V1`。
 - `invest/evaluation.py` 的 fail-closed evaluation binding 校验器已完成远端四矩阵 CI；它只校验冻结身份、窗口、成本、基准、PIT/证券池与市场数据边界，不证明真实数据完整或策略有效。
 - 当前首个真实数据 binding 仍为 `PENDING_LICENSED_REAL_DATA`；frozen holdout=`NOT_OPENED`，forward-paper=`NOT_STARTED`。
+- credential-free 的真实供应商验证执行手册已经冻结为下一步执行合同，覆盖 `calendar`、`suspension`、`corporate_actions`、`price_limits`、`risk_warning_history`、`survivorship_bias`、`pit_features` 七类边界；截至当前仍未进行 provider call、未读取凭据、未使用真实数据。
 
 ## Drive 与恢复证据
 
 Drive 当前项目根目录已回读，只存在已核验的 `Invest_v0.1.0_source_checkpoint_20260922.zip` 和 `05_Reference_Materials/`。源码检查点 ID 为 `1Iscm0akdNG5s0WNJfc83-T_eh88xIz1F`；它是发布前冻结源码/截图证据，不因后续 GitHub 治理与代码增量而重写。
 
 本次恢复未发现新的已授权真实行情数据集、真实 evaluation binding 或可代替本地授权 Tushare 联调的 artifact。因此不得伪造 provider 验收，不得把 mock、合成数据或格式校验当成真实供应商证据，也不得为了自动化把 Token 写入 GitHub、聊天或共享 Drive。
+
+本轮新增内容只有 GitHub 可恢复的运行手册、决策记录和治理 checkpoint，没有新的大型或不可替代二进制 artifact，因此 Drive 不制造重复 ZIP，现有冻结源码检查点继续原样保留。
 
 ## 本机复核入口
 
@@ -38,9 +42,9 @@ python -m compileall -q invest
 
 ## 当前唯一主线与阻塞边界
 
-1. **真实供应商验证**：仅在本地合法授权可用时调用真实 Tushare，核对权限、返回字段、单位、交易日历、停牌缺行、复权/公司行动边界，并只保存脱敏证据。
-2. **首次 `BOUND_UNOPENED` binding**：授权真实数据集形成后、任何 frozen holdout 结果被读取之前，固定原始/规范化数据身份、代码身份、development/validation/holdout 区间、候选参数、至少三组成本情景、基准、证券池/PIT 证据和市场数据边界，并运行 `invest/evaluation.py`。
+1. **执行真实供应商验证手册**：仅在本地合法授权可用时按 [REAL_DATA_PROVIDER_VALIDATION_RUNBOOK.md](REAL_DATA_PROVIDER_VALIDATION_RUNBOOK.md) 调用真实 Tushare，核对权限、返回字段、单位、交易日历、停牌缺行、公司行动、涨跌停、风险警示历史、存活偏差与 PIT 边界；只保存脱敏证据。
+2. **首次 `BOUND_UNOPENED` binding**：授权真实数据集形成后、任何 frozen holdout 结果被读取之前，固定原始/规范化数据身份、代码身份、development/validation/holdout 区间、候选参数、至少三个历史市场环境、至少三组成本情景、基准、证券池/PIT 证据和市场数据边界，并运行 `invest/evaluation.py`。
 3. 若 `can_open_holdout=false`，继续保持 holdout 未打开；未知市场边界必须显式阻断，不能静默补安全值。
 4. 只有候选、合法数据 binding 和 opening blockers 全部闭环后，才开始 append-only forward-paper；不得事后回填信号或把已见数据重新称为 unseen。
 
-若合法真实数据仍不可用，可继续做与上述主线直接相关、可独立验证且不制造伪证据的治理/测试/研究准备；不要用无关功能扩张替代真实数据门禁。当前恢复检查点见 `governance/checkpoints/20260923_real_data_gate_reconciliation.json`。
+若合法真实数据仍不可用，可继续做与上述主线直接相关、可独立验证且不制造伪证据的治理/测试/研究准备；不要用无关功能扩张替代真实数据门禁。当前最新检查点见 `governance/checkpoints/20260923_provider_validation_runbook.json`。
