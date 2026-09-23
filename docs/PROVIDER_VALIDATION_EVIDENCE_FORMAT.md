@@ -1,0 +1,45 @@
+# 授权真实行情供应商验证证据格式 v1
+
+状态：**FORMAT_READY / CREDENTIAL_FREE / NO_REAL_PROVIDER_RESULT IMPLIED**
+
+本格式把 `REAL_DATA_PROVIDER_VALIDATION_RUNBOOK.md` 中的脱敏供应商验证记录变成机器可检查的 JSON 契约。它只规范“真实供应商调用完成后应怎样保存脱敏证据”，**不会发起供应商请求，不读取凭据，不证明真实数据完整，也不替代 `BOUND_UNOPENED` evaluation binding。**
+
+实现：`invest/provider_validation.py::validate_provider_validation_evidence`。
+
+## 顶层字段
+
+记录必须包含：`schema_version=1`、`status=PROVIDER_VALIDATION_EVIDENCE`、带时区 `executed_at`、40 位 `code_sha`、`provider`、`sample`、`interfaces`、`dataset_identity`、`units`、七类 `market_data_boundaries`、`known_blockers`、`provider_call_performed`、`real_data_used`、`credentials_saved=false`、`holdout_observed=false`。可选 `evidence_id` 是去除自身后规范化 JSON 的 SHA-256；填写时必须与重算结果一致。
+
+## 供应商与授权
+
+`provider` 必须且只能包含 `name`、`source_kind`、`license_status`、`evidence_summary`；`license_status` 必须严格为 `authorized`。真实供应商验证记录必须明确 `provider_call_performed=true`。mock、synthetic、旧 ZIP 或离线格式测试不能冒充真实供应商联调。
+
+## 最小验证样本
+
+`sample` 包含 `security_code`、`start_date`、`end_date`、`purpose`。日期必须存在且有序；首轮最小样本最长 366 个自然日，与执行手册一致。
+
+## 接口尝试
+
+`interfaces` 至少一项，每项包含 `name`、`status`、`fields`、`row_count`、`evidence`。`status` 只能为 `success` / `failed`；接口名和字段名不得重复，行数必须为非负整数。真实失败请求也应保留为 `failed`，不得替换成伪造成功；任一接口失败都会让 provider-side opening readiness 保持 fail-closed。
+
+## 数据身份与单位
+
+`dataset_identity` 包含 `raw_artifact_identity`、`raw_sha256`、`normalized_dataset_id`。两个哈希均为小写 64 位 SHA-256。授权原始数据本体可以只留在本地；共享治理证据只保存不可恢复凭据的身份、哈希与脱敏摘要。
+
+`units` 包含 `currency`、`price_unit`、`volume_input_unit`、`volume_output_unit`、`timezone`、`conversion_notes`；当前 v1 的 `currency` 必须是 `CNY`。
+
+## 七类 market-data boundary
+
+`market_data_boundaries` 必须恰好包含：`calendar`、`suspension`、`corporate_actions`、`price_limits`、`risk_warning_history`、`survivorship_bias`、`pit_features`。每项只有 `status` 与 `evidence`，其中 `status` 只能是 `verified` / `unknown` / `not_covered`。
+
+`unknown` / `not_covered` 可以诚实保存，但会使 `can_support_holdout_opening=false`。未知状态不得被静默填成安全的 false/0。
+
+## Blocker 与敏感信息
+
+`known_blockers` 是去重文本数组；存在任何 blocker 时保持 fail-closed。校验器递归拒绝键名中疑似 token、secret、password、API key、cookie 等凭据字段。唯一允许的凭据相关 attestation 是 `credentials_saved=false`，其它值全部拒绝。
+
+## 与 frozen holdout 的关系
+
+只有 `real_data_used=true`、所有记录接口成功、七类 boundary 全部 `verified`、`known_blockers` 为空且 `holdout_observed=false` 时，校验器才返回 `can_support_holdout_opening=true`。
+
+这个布尔值只说明**供应商证据这一侧**没有已知 opening blocker，绝不单独授权打开 frozen holdout。随后仍必须创建真实 `BOUND_UNOPENED` binding，并由 `invest/evaluation.py` 对授权、数据/代码身份、development/validation/holdout、至少三个历史市场环境、候选、成本、基准、PIT/证券池和市场边界再次 fail-closed 校验；其它项目 gate 也必须全部通过。
