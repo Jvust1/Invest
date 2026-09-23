@@ -47,3 +47,11 @@ CSV 可用于研究查看，但未知公司行动、停牌、每日限价、因�
 2026-09-23 重新对账 Invest Drive 项目根目录后，只确认到既有冻结源码检查点 `Invest_v0.1.0_source_checkpoint_20260922.zip` 与 `05_Reference_Materials/`，没有发现新的已授权真实行情数据集、真实 evaluation binding 或可替代本地 Tushare 授权联调的 artifact。GitHub Draft PR #2 仍未合并，当前恢复时 head 为 `f98734c8ffd7ce7885c4e020062b74f15a1ad29d`，该 head 的 GitHub Actions run `35801429931` 为 success。
 
 因此真实供应商验证继续作为外部授权门禁：不上传、不索取、不回显 Token；不把 mock、合成数据、旧源码 ZIP 或 binding 格式校验当成真实供应商证据；也不为了让自动化“有进度”而打开 frozen holdout。当前可安全执行的治理修复是把已过时的 `HANDOFF.md` 与机器状态重新对齐，并明确下一步仍是“授权真实数据 → `BOUND_UNOPENED` binding → gate 通过后才首次观察 holdout → append-only forward-paper”。
+
+## D010 — 在首个真实 binding 前补齐冻结协议已有的“三个历史市场环境”机器门禁
+
+2026-09-23 对照已冻结的 `EVALUATION_PROTOCOL_V1.md` 与长期路线图 G2 后发现：协议 v1 已明确要求首个真实评价 binding 在首次 holdout 观察前登记“至少 3 个需要覆盖或单独标注的历史市场环境”，但此前 `EVALUATION_BINDING_FORMAT.md` 与 `invest/evaluation.py` 没有对应机器字段。这样会导致一个其它字段均合规的 binding 仍可能遗漏冻结协议的一项硬要求。
+
+当前没有任何真实 binding、没有真实供应商数据、没有打开 frozen holdout，因此在第一次真实证据产生之前修复该实现缺口，不会迁移、覆盖或事后改写冻结结果。本轮保持方法协议 v1 本身不变，只让 binding 实现与已经冻结的方法一致：新增必填 `historical_market_environments`，至少 3 项；名称不得重复，日期必须真实且落在 development 起点至 frozen_holdout 终点总边界内，完全相同日期区间不能用不同名称重复计数，并要求保存环境标注 evidence。
+
+这项门禁只冻结“哪些历史环境要比较/单独标注”的 provenance，不证明环境划分正确，也不产生收益证据。真实数据许可、供应商边界、PIT/存活偏差和所有其它 opening blockers 继续独立 fail closed。

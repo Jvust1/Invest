@@ -103,3 +103,15 @@ GitHub Actions `Invest tests` run `35701856144` 状态为 `completed/success`。
 随后将校验器与治理增量发布到代码 head `474959c7d789b12feecb4eb2ff9ae6c36044be95`，GitHub Actions run `35801154754` 已完成并成功。四个矩阵 job（Ubuntu/Windows × Python 3.11/3.12）的 `Standard-library tests` 与 `Compile source` 步骤全部通过。因此校验器从“仅本地定向通过”推进为“当前代码 head 远端 CI 验证通过”。
 
 这仍不改变证据边界：真实 Tushare 权限、实际字段、停牌/公司行动覆盖、真实 OOS 与 forward-paper 全部未验证；CI 成功不能替代真实供应商证据或收益证据。
+
+## E006 — 冻结协议历史市场环境要求与 Binding 门禁对齐（2026-09-23）
+
+恢复最新治理后对照 `EVALUATION_PROTOCOL_V1.md` 第 4 节、长期路线图 G2 与当前 `EVALUATION_BINDING_FORMAT.md`/`invest/evaluation.py`，发现一个可自动验证的一致性缺口：冻结协议已经要求首个真实评价数据 binding 在首次 holdout 观察前登记**至少三个需要覆盖或单独标注的历史市场环境**，但此前 binding schema 和校验器没有对应字段，因此无法机器保证这项已冻结要求被执行。
+
+当前 Drive 根目录仍未发现授权真实行情数据或真实 evaluation binding；frozen holdout 仍为 `NOT_OPENED`。因此本次修复发生在第一份真实 binding 之前，没有迁移或改写任何真实结果，也没有改变冻结方法 v1 的语义。
+
+代码 head `7629e221619f22500dc2016f2bf698eb055f50f2` 新增必填 `historical_market_environments`：至少三项，名称唯一、日期真实、日期落在 development 起点至 frozen_holdout 终点总时间边界内、完全重复区间不能重复计数，并要求 evidence 文本。新增一个测试方法覆盖五类反例：不足三项、重复名称、越过总时间边界、起止日期反转、完全重复区间。
+
+Credential-free 本地重建执行 `python -m unittest discover -s tests -q` 得到 **95 tests PASS**（基础 82 + evaluation 13），`python -m compileall -q invest` 通过。随后 GitHub Actions run `35809448144` 对该代码 head 完成 Ubuntu/Windows × Python 3.11/3.12 四个 job，所有 `Standard-library tests` 与 `Compile source` 步骤均为 success。
+
+本次验证没有使用真实 Tushare Token、没有 provider call、没有真实市场数据、没有创建真实 binding、没有打开 holdout，也没有产生收益证据。该修复只关闭“冻结协议要求无法被 binding schema 执行”的治理/实现缺口；真实供应商边界与 `LICENSED_REAL_DATA_REQUIRED` 继续保持 OPEN。

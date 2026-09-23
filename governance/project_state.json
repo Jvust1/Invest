@@ -18,23 +18,26 @@
   "bootstrap_sha": "172803ad30cd2065719944f1fab26a952c42be54",
   "delivery_branch": "feat/a-share-research-v0.1-20260922",
   "delivery_policy": "draft PR to main; no automatic merge",
-  "implementation": "evaluation_binding_validator_remote_ci_validated_real_data_gate_blocked",
+  "implementation": "evaluation_binding_validator_market_environment_gate_remote_ci_validated_real_data_gate_blocked",
   "research_governance": "evaluation_protocol_v1_frozen",
   "validation": {
-    "unittest": 82,
+    "base_application_unittest": 82,
+    "current_full_suite_tests": 95,
     "independent_groups": 8,
     "root_browser_checks": 10,
     "ui_curve_edge_cases": 3,
     "uncaught_js_errors": 0,
     "remote_ci": {
-      "head_sha": "f40b0285b1c2bb249464f2ec354e9eb3bb6b18df",
-      "workflow_run_id": 35701856144,
+      "historical_application_head_sha": "f40b0285b1c2bb249464f2ec354e9eb3bb6b18df",
+      "historical_workflow_run_id": 35701856144,
+      "latest_validated_code_head_sha": "7629e221619f22500dc2016f2bf698eb055f50f2",
+      "latest_workflow_run_id": 35809448144,
       "result": "success",
       "matrix_jobs": 4,
       "platforms": ["ubuntu-latest", "windows-latest"],
       "python_versions": ["3.11", "3.12"],
-      "tests_per_job": 82,
-      "compile_source": "pass"
+      "standard_library_tests_step": "pass",
+      "compile_source_step": "pass"
     },
     "evaluation_protocol": {
       "id": "invest-oos-forward-paper-v1",
@@ -49,13 +52,16 @@
       "status": "REMOTE_CI_VALIDATED",
       "module": "invest/evaluation.py",
       "format": "docs/EVALUATION_BINDING_FORMAT.md",
-      "tests": 12,
+      "tests": 13,
+      "current_full_suite_tests": 95,
       "compile_source": "pass",
       "real_data_used": false,
       "credential_used": false,
       "real_binding_created": false,
-      "remote_ci_head_sha": "474959c7d789b12feecb4eb2ff9ae6c36044be95",
-      "workflow_run_id": 35801154754,
+      "historical_market_environments_required": true,
+      "minimum_historical_market_environments": 3,
+      "remote_ci_head_sha": "7629e221619f22500dc2016f2bf698eb055f50f2",
+      "workflow_run_id": 35809448144,
       "matrix_jobs": 4,
       "platforms": ["ubuntu-latest", "windows-latest"],
       "python_versions": ["3.11", "3.12"],
@@ -63,14 +69,15 @@
       "compile_source_step": "pass"
     },
     "governance_reconciliation": {
-      "reconciled_from_head_sha": "f98734c8ffd7ce7885c4e020062b74f15a1ad29d",
-      "reconciled_head_workflow_run_id": 35801429931,
-      "reconciled_head_workflow_result": "success",
       "drive_root_inventory_checked": true,
       "licensed_real_dataset_found": false,
       "real_binding_found": false,
       "provider_call_performed": false,
-      "credential_used": false
+      "credential_used": false,
+      "frozen_protocol_market_environment_requirement_reconciled": true,
+      "reconciliation_code_head_sha": "7629e221619f22500dc2016f2bf698eb055f50f2",
+      "reconciliation_workflow_run_id": 35809448144,
+      "reconciliation_workflow_result": "success"
     }
   },
   "external_blockers": [
@@ -91,11 +98,11 @@
   ],
   "next_actions": [
     "complete licensed real-data validation with explicit suspension/corporate-action coverage when local authorization is available",
-    "before opening any frozen holdout result, create the first authorized BOUND_UNOPENED data binding and pass invest/evaluation.py validation for development/validation/holdout windows, candidate, costs, benchmark, PIT and market-data boundaries",
+    "before opening any frozen holdout result, create the first authorized BOUND_UNOPENED data binding and pass invest/evaluation.py validation for development/validation/holdout windows, at least three frozen historical market environments, candidate, costs, benchmark, PIT and market-data boundaries",
     "after a candidate and data binding are frozen and all opening blockers are closed, begin append-only forward-paper evidence without retroactive signal edits",
     "while licensed data is unavailable, only advance directly related credential-free governance, adversarial tests, or research preparation that does not fabricate provider evidence"
   ],
-  "latest_checkpoint": "governance/checkpoints/20260923_real_data_gate_reconciliation.json",
+  "latest_checkpoint": "governance/checkpoints/20260923_market_environment_binding_reconciliation.json",
   "authority": {
     "code_and_state": "GitHub",
     "artifacts": "existing Drive project folder",
@@ -117,8 +124,8 @@
       "branch": "feat/a-share-research-v0.1-20260922",
       "base": "main",
       "state": "open_draft",
-      "reconciled_head_sha": "f98734c8ffd7ce7885c4e020062b74f15a1ad29d",
-      "handling": "application/test and evaluation-binding validator CI evidence are green; PR remains Draft and must not be auto-merged"
+      "validated_code_head_sha": "7629e221619f22500dc2016f2bf698eb055f50f2",
+      "handling": "application/test and strengthened evaluation-binding validator CI evidence are green; PR remains Draft and must not be auto-merged"
     }
   ]
 }
