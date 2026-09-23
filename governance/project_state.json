@@ -18,7 +18,7 @@
   "bootstrap_sha": "172803ad30cd2065719944f1fab26a952c42be54",
   "delivery_branch": "feat/a-share-research-v0.1-20260922",
   "delivery_policy": "draft PR to main; no automatic merge",
-  "implementation": "evaluation_binding_validator_local_validated_remote_ci_pending",
+  "implementation": "evaluation_binding_validator_remote_ci_validated",
   "research_governance": "evaluation_protocol_v1_frozen",
   "validation": {
     "unittest": 82,
@@ -52,14 +52,27 @@
       "forward_paper": "NOT_STARTED"
     },
     "evaluation_binding_validator": {
-      "status": "OFFLINE_LOCAL_PASS_REMOTE_CI_PENDING",
+      "status": "REMOTE_CI_VALIDATED",
       "module": "invest/evaluation.py",
       "format": "docs/EVALUATION_BINDING_FORMAT.md",
       "tests": 12,
       "compile_source": "pass",
       "real_data_used": false,
       "credential_used": false,
-      "real_binding_created": false
+      "real_binding_created": false,
+      "remote_ci_head_sha": "474959c7d789b12feecb4eb2ff9ae6c36044be95",
+      "workflow_run_id": 35801154754,
+      "matrix_jobs": 4,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "python_versions": [
+        "3.11",
+        "3.12"
+      ],
+      "standard_library_tests_step": "pass",
+      "compile_source_step": "pass"
     }
   },
   "unverified": [
@@ -100,7 +113,7 @@
       "branch": "feat/a-share-research-v0.1-20260922",
       "base": "main",
       "state": "open_draft",
-      "handling": "remote CI passed at application/test head f40b0285; evaluation-binding validator is locally validated and must use live current-head checks after publication; do not auto-merge"
+      "handling": "remote CI passed at application/test head f40b0285 and binding-validator code head 474959c7; PR remains Draft and must not be auto-merged"
     }
   ]
 }

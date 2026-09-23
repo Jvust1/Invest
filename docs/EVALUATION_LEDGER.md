@@ -100,4 +100,6 @@ GitHub Actions `Invest tests` run `35701856144` 状态为 `completed/success`。
 - 未知/未覆盖市场数据边界显式阻断 `can_open_holdout`，而不是静默补安全值；
 - 已知 blocker、NaN/Infinity、未知字段与 binding 事后变更均被拒绝或阻断。
 
-该结果是**离线定向测试**，不是新的远端 GitHub Actions 结论。发布后的当前 feature head 必须重新读取 live CI；若 CI 失败，以失败为准并继续修复。真实 Tushare 权限、实际字段、停牌/公司行动覆盖、真实 OOS 与 forward-paper 仍全部未验证。
+随后将校验器与治理增量发布到代码 head `474959c7d789b12feecb4eb2ff9ae6c36044be95`，GitHub Actions run `35801154754` 已完成并成功。四个矩阵 job（Ubuntu/Windows × Python 3.11/3.12）的 `Standard-library tests` 与 `Compile source` 步骤全部通过。因此校验器从“仅本地定向通过”推进为“当前代码 head 远端 CI 验证通过”。
+
+这仍不改变证据边界：真实 Tushare 权限、实际字段、停牌/公司行动覆盖、真实 OOS 与 forward-paper 全部未验证；CI 成功不能替代真实供应商证据或收益证据。

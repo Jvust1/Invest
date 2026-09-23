@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
   "as_of": "2026-09-23",
-  "phase": "evaluation protocol v1 frozen; offline pre-holdout binding validator locally validated",
+  "phase": "evaluation protocol v1 frozen; pre-holdout binding validator remote-CI validated",
   "drive_checkpoint": {
     "status": "exists_verified",
     "id": "1Iscm0akdNG5s0WNJfc83-T_eh88xIz1F"
   },
   "pending_sync": [],
-  "publication_action": "Continue on the existing non-default feature branch and Draft PR #2; inspect the live current-head CI after publication. No Drive write is required for this code/docs/governance checkpoint.",
+  "publication_action": "Continue on the existing non-default feature branch and Draft PR #2. Binding-validator code head 474959c7 passed the four-job GitHub Actions matrix. No Drive write is required for this code/docs/governance checkpoint.",
   "publication_authority": "GitHub live branch, PR and checks",
   "main_merge": "requires later explicit authorization for the specific PR; not a pending sync",
   "parallel_roadmap_pr": {

@@ -41,7 +41,8 @@
 | 主执行者独立 Playwright | 10 条检查全部通过，无 JavaScript 异常或 console errors |
 | 目视检查 | 桌面与 390px 截图已检查 |
 | GitHub Actions | **PASS**：run `35701856144`，Ubuntu/Windows × Python 3.11/3.12 四组合均完成 82 项单测与源码编译 |
-| Evaluation binding validator | **12 PASS（本轮离线定向测试）**；`python -m compileall -q invest` 通过；发布后的当前 head 仍须以 GitHub live checks 为准 |
+| Evaluation binding validator | **12 PASS（本轮离线定向测试）**；`python -m compileall -q invest` 通过 |
+| Validator GitHub Actions | **PASS**：代码 head `474959c7d789b12feecb4eb2ff9ae6c36044be95`，run `35801154754`；Ubuntu/Windows × Python 3.11/3.12 四个 job 的 standard-library tests 与 compile source 均通过 |
 
 “真实应用 API”指本机 Invest HTTP 服务，不指真实行情供应商或券商。验证使用合成数据与测试构造输入，不支持任何收益能力结论。远端 Windows runner 的单测/编译通过也不等同于 Windows 桌面浏览器和 `start.bat` 人工体验验收。证据索引见 [EVALUATION_LEDGER.md](EVALUATION_LEDGER.md)、`governance/checkpoints/20260923_ci_reconciliation.json` 和 `governance/checkpoints/20260923_evaluation_binding_validator.json`。
 
@@ -57,7 +58,7 @@
 
 - 方法：`FROZEN_METHOD_V1`
 - 首个授权真实数据绑定：`PENDING_LICENSED_REAL_DATA`
-- Binding 格式/校验器：`FORMAT_READY / OFFLINE_LOCAL_PASS`
+- Binding 格式/校验器：`FORMAT_READY / REMOTE_CI_VALIDATED`
 - Frozen holdout：`NOT_OPENED`
 - Forward-paper：`NOT_STARTED`
 
@@ -71,4 +72,4 @@
 2. 首个授权真实数据集可用后，在读取 holdout 结果前按已冻结 v1 协议创建 `BOUND_UNOPENED` binding，固定 development / validation / holdout 区间、候选、参数、成本情景、基准、证券池/PIT 证据和数据身份，并要求 `invest/evaluation.py` 校验通过；若 `can_open_holdout=false`，不得打开 holdout。
 3. 只有完成冻结候选、合法数据绑定并关闭 opening blockers 后才开始 append-only forward-paper；不得回填事后信号，也不得把协议冻结或 binding 格式通过解释为策略有效。
 
-当前不需要重复检查已经闭环的旧 CI；但本轮新增代码发布后的**当前 head**检查仍应从 GitHub 实时读取。PR #2 继续保持 Draft，合并仍需针对该具体 PR 的明确授权。
+本轮新增校验器代码 head `474959c7d789b12feecb4eb2ff9ae6c36044be95` 已完成四平台 GitHub Actions 验证。后续若继续写入新代码，仍应以新的 live head/checks 为准。PR #2 继续保持 Draft，合并仍需针对该具体 PR 的明确授权。
