@@ -18,7 +18,7 @@
   "bootstrap_sha": "172803ad30cd2065719944f1fab26a952c42be54",
   "delivery_branch": "feat/a-share-research-v0.1-20260922",
   "delivery_policy": "draft PR to main; no automatic merge",
-  "implementation": "evaluation_binding_validator_market_environment_gate_remote_ci_validated_real_data_gate_blocked",
+  "implementation": "evaluation_binding_validator_market_environment_gate_remote_ci_validated_provider_validation_runbook_ready_real_data_gate_blocked",
   "research_governance": "evaluation_protocol_v1_frozen",
   "validation": {
     "base_application_unittest": 82,
@@ -34,8 +34,14 @@
       "latest_workflow_run_id": 35809448144,
       "result": "success",
       "matrix_jobs": 4,
-      "platforms": ["ubuntu-latest", "windows-latest"],
-      "python_versions": ["3.11", "3.12"],
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "python_versions": [
+        "3.11",
+        "3.12"
+      ],
       "standard_library_tests_step": "pass",
       "compile_source_step": "pass"
     },
@@ -63,10 +69,35 @@
       "remote_ci_head_sha": "7629e221619f22500dc2016f2bf698eb055f50f2",
       "workflow_run_id": 35809448144,
       "matrix_jobs": 4,
-      "platforms": ["ubuntu-latest", "windows-latest"],
-      "python_versions": ["3.11", "3.12"],
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "python_versions": [
+        "3.11",
+        "3.12"
+      ],
       "standard_library_tests_step": "pass",
       "compile_source_step": "pass"
+    },
+    "real_data_provider_validation_prep": {
+      "status": "RUNBOOK_READY_NO_REAL_DATA",
+      "runbook": "docs/REAL_DATA_PROVIDER_VALIDATION_RUNBOOK.md",
+      "provider_call_performed": false,
+      "credential_used": false,
+      "real_data_used": false,
+      "real_binding_created": false,
+      "holdout_opened": false,
+      "boundary_fields": [
+        "calendar",
+        "suspension",
+        "corporate_actions",
+        "price_limits",
+        "risk_warning_history",
+        "survivorship_bias",
+        "pit_features"
+      ],
+      "decision_record": "governance/decisions/D011_provider_validation_runbook.json"
     },
     "governance_reconciliation": {
       "drive_root_inventory_checked": true,
@@ -75,6 +106,7 @@
       "provider_call_performed": false,
       "credential_used": false,
       "frozen_protocol_market_environment_requirement_reconciled": true,
+      "real_data_validation_runbook_ready": true,
       "reconciliation_code_head_sha": "7629e221619f22500dc2016f2bf698eb055f50f2",
       "reconciliation_workflow_run_id": 35809448144,
       "reconciliation_workflow_result": "success"
@@ -97,12 +129,13 @@
     "public or LAN deployment; not implemented"
   ],
   "next_actions": [
-    "complete licensed real-data validation with explicit suspension/corporate-action coverage when local authorization is available",
+    "when local authorization is available, execute docs/REAL_DATA_PROVIDER_VALIDATION_RUNBOOK.md and preserve sanitized boundary evidence without storing credentials",
+    "complete licensed real-data validation with explicit calendar, suspension, corporate-action, price-limit, risk-warning, survivorship and PIT coverage; unresolved boundaries remain explicit blockers",
     "before opening any frozen holdout result, create the first authorized BOUND_UNOPENED data binding and pass invest/evaluation.py validation for development/validation/holdout windows, at least three frozen historical market environments, candidate, costs, benchmark, PIT and market-data boundaries",
     "after a candidate and data binding are frozen and all opening blockers are closed, begin append-only forward-paper evidence without retroactive signal edits",
     "while licensed data is unavailable, only advance directly related credential-free governance, adversarial tests, or research preparation that does not fabricate provider evidence"
   ],
-  "latest_checkpoint": "governance/checkpoints/20260923_market_environment_binding_reconciliation.json",
+  "latest_checkpoint": "governance/checkpoints/20260923_provider_validation_runbook.json",
   "authority": {
     "code_and_state": "GitHub",
     "artifacts": "existing Drive project folder",
@@ -115,7 +148,10 @@
       "branch": "docs/long-term-roadmap-20260922",
       "head_sha": "0629240f417d0f9b340ac74862bad56fc7e680f1",
       "base": "chore/security-bootstrap-20260922",
-      "scope": ["README.md", "docs/LONG_TERM_ROADMAP.md"],
+      "scope": [
+        "README.md",
+        "docs/LONG_TERM_ROADMAP.md"
+      ],
       "handling": "preserved untouched; reconcile both README additions during eventual merge"
     },
     {
