@@ -41,3 +41,9 @@ CSV 可用于研究查看，但未知公司行动、停牌、每日限价、因�
 为使下一次真正取得授权数据时能够在首次 holdout 观察**之前**冻结 provenance，本轮新增 `invest/evaluation.py` 与 `docs/EVALUATION_BINDING_FORMAT.md`。校验器要求授权状态、原始与规范化数据身份、代码 SHA、证券池/PIT 证据、候选参数哈希、development/validation/holdout 非重叠窗口、至少三组成本情景、基准以及七类市场数据边界全部显式记录；递归拒绝 token/secret/password/credential/API key 等字段。
 
 未知或未覆盖的市场边界可以如实登记，但会使 `can_open_holdout=false`；已有 blocker 也会阻止打开 holdout。该门只证明 binding 结构与冻结语义合规，不能证明数据完整或策略有效。首个真实 binding 仍必须等合法授权数据实际可用后创建。
+
+## D009 — 真实数据门禁按实时 Drive 证据保持阻断，先修复接力状态而不制造伪进展
+
+2026-09-23 重新对账 Invest Drive 项目根目录后，只确认到既有冻结源码检查点 `Invest_v0.1.0_source_checkpoint_20260922.zip` 与 `05_Reference_Materials/`，没有发现新的已授权真实行情数据集、真实 evaluation binding 或可替代本地 Tushare 授权联调的 artifact。GitHub Draft PR #2 仍未合并，当前恢复时 head 为 `f98734c8ffd7ce7885c4e020062b74f15a1ad29d`，该 head 的 GitHub Actions run `35801429931` 为 success。
+
+因此真实供应商验证继续作为外部授权门禁：不上传、不索取、不回显 Token；不把 mock、合成数据、旧源码 ZIP 或 binding 格式校验当成真实供应商证据；也不为了让自动化“有进度”而打开 frozen holdout。当前可安全执行的治理修复是把已过时的 `HANDOFF.md` 与机器状态重新对齐，并明确下一步仍是“授权真实数据 → `BOUND_UNOPENED` binding → gate 通过后才首次观察 holdout → append-only forward-paper”。

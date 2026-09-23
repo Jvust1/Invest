@@ -18,7 +18,7 @@
   "bootstrap_sha": "172803ad30cd2065719944f1fab26a952c42be54",
   "delivery_branch": "feat/a-share-research-v0.1-20260922",
   "delivery_policy": "draft PR to main; no automatic merge",
-  "implementation": "evaluation_binding_validator_remote_ci_validated",
+  "implementation": "evaluation_binding_validator_remote_ci_validated_real_data_gate_blocked",
   "research_governance": "evaluation_protocol_v1_frozen",
   "validation": {
     "unittest": 82,
@@ -31,14 +31,8 @@
       "workflow_run_id": 35701856144,
       "result": "success",
       "matrix_jobs": 4,
-      "platforms": [
-        "ubuntu-latest",
-        "windows-latest"
-      ],
-      "python_versions": [
-        "3.11",
-        "3.12"
-      ],
+      "platforms": ["ubuntu-latest", "windows-latest"],
+      "python_versions": ["3.11", "3.12"],
       "tests_per_job": 82,
       "compile_source": "pass"
     },
@@ -63,18 +57,30 @@
       "remote_ci_head_sha": "474959c7d789b12feecb4eb2ff9ae6c36044be95",
       "workflow_run_id": 35801154754,
       "matrix_jobs": 4,
-      "platforms": [
-        "ubuntu-latest",
-        "windows-latest"
-      ],
-      "python_versions": [
-        "3.11",
-        "3.12"
-      ],
+      "platforms": ["ubuntu-latest", "windows-latest"],
+      "python_versions": ["3.11", "3.12"],
       "standard_library_tests_step": "pass",
       "compile_source_step": "pass"
+    },
+    "governance_reconciliation": {
+      "reconciled_from_head_sha": "f98734c8ffd7ce7885c4e020062b74f15a1ad29d",
+      "reconciled_head_workflow_run_id": 35801429931,
+      "reconciled_head_workflow_result": "success",
+      "drive_root_inventory_checked": true,
+      "licensed_real_dataset_found": false,
+      "real_binding_found": false,
+      "provider_call_performed": false,
+      "credential_used": false
     }
   },
+  "external_blockers": [
+    {
+      "id": "LICENSED_REAL_DATA_REQUIRED",
+      "status": "OPEN",
+      "reason": "No authorized real Tushare/provider dataset or local credential-bearing execution environment is available through the connected project artifacts. Provider validation cannot be truthfully replaced by mocks or synthetic data.",
+      "safe_behavior": "Keep provider validation and frozen holdout closed; never store credentials in GitHub, chat, or shared Drive."
+    }
+  ],
   "unverified": [
     "live Tushare credentials/permissions/responses",
     "Windows desktop browser and start.bat manual experience",
@@ -85,10 +91,11 @@
   ],
   "next_actions": [
     "complete licensed real-data validation with explicit suspension/corporate-action coverage when local authorization is available",
-    "before opening any frozen holdout result, create the first authorized data binding and pass invest/evaluation.py validation for development/validation/holdout windows, candidate, costs, benchmark, PIT and market-data boundaries",
-    "after a candidate and data binding are frozen and all opening blockers are closed, begin append-only forward-paper evidence without retroactive signal edits"
+    "before opening any frozen holdout result, create the first authorized BOUND_UNOPENED data binding and pass invest/evaluation.py validation for development/validation/holdout windows, candidate, costs, benchmark, PIT and market-data boundaries",
+    "after a candidate and data binding are frozen and all opening blockers are closed, begin append-only forward-paper evidence without retroactive signal edits",
+    "while licensed data is unavailable, only advance directly related credential-free governance, adversarial tests, or research preparation that does not fabricate provider evidence"
   ],
-  "latest_checkpoint": "governance/checkpoints/20260923_evaluation_binding_validator.json",
+  "latest_checkpoint": "governance/checkpoints/20260923_real_data_gate_reconciliation.json",
   "authority": {
     "code_and_state": "GitHub",
     "artifacts": "existing Drive project folder",
@@ -101,10 +108,7 @@
       "branch": "docs/long-term-roadmap-20260922",
       "head_sha": "0629240f417d0f9b340ac74862bad56fc7e680f1",
       "base": "chore/security-bootstrap-20260922",
-      "scope": [
-        "README.md",
-        "docs/LONG_TERM_ROADMAP.md"
-      ],
+      "scope": ["README.md", "docs/LONG_TERM_ROADMAP.md"],
       "handling": "preserved untouched; reconcile both README additions during eventual merge"
     },
     {
@@ -113,7 +117,8 @@
       "branch": "feat/a-share-research-v0.1-20260922",
       "base": "main",
       "state": "open_draft",
-      "handling": "remote CI passed at application/test head f40b0285 and binding-validator code head 474959c7; PR remains Draft and must not be auto-merged"
+      "reconciled_head_sha": "f98734c8ffd7ce7885c4e020062b74f15a1ad29d",
+      "handling": "application/test and evaluation-binding validator CI evidence are green; PR remains Draft and must not be auto-merged"
     }
   ]
 }

@@ -1,46 +1,46 @@
 # 接手说明
 
-本说明对应 2026-09-22 的 v0.1 提交前本地工作树。安全 bootstrap 已完成，功能分支与草稿 PR 在本快照时尚未发布；不要把计划状态当成已完成事实。
+更新时间：2026-09-23。本文已按 GitHub/Drive 实时状态重建，不再沿用 2026-09-22“功能分支尚未发布”的旧快照描述。
 
 ## 先恢复权威状态
 
-1. 读取项目 `AGENTS.md`、`SECURITY_POLICY.md`、实时全项目入口及动态基线，按 [PRE_FLIGHT_CHECKLIST.md](PRE_FLIGHT_CHECKLIST.md) 确认权限和同步范围。
-2. 在 GitHub 核对 `Jvust2/Invest` 的 main、活动 PR、base/head SHA 和 CI。记录中的原始 main 为 `71b32347fd954b7952f748b852503779851dbf1a`，安全 bootstrap 为 `172803ad30cd2065719944f1fab26a952c42be54`，它们不是后续功能发布的固定结论。
-3. 查找计划分支 `feat/a-share-research-v0.1-20260922` 及其对 main 的单个草稿 PR；若不存在，仍按未发布处理。保留已有工作，不自动合并或覆盖分支。
-4. 阅读 [PROJECT_NORTH_STAR.md](PROJECT_NORTH_STAR.md)、[CURRENT_STATE.md](CURRENT_STATE.md)、[ARCHITECTURE_INVARIANTS.md](ARCHITECTURE_INVARIANTS.md)、[DECISION_LEDGER.md](DECISION_LEDGER.md) 与 [EVALUATION_LEDGER.md](EVALUATION_LEDGER.md)。GitHub 管代码与治理，Drive 管源码检查点等大文件。
+1. 读取 `AGENTS.md`、目标分支 `SECURITY_POLICY.md`、Drive 根目录 `全项目` 入口及动态发现的全部 `全项目_` 基线，再按 [PRE_FLIGHT_CHECKLIST.md](PRE_FLIGHT_CHECKLIST.md) 恢复项目。
+2. GitHub `Jvust2/Invest` 是代码、治理、当前状态与下一步权威；Drive 项目目录 `15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u` 保存原始资料和长期 artifact。
+3. 当前功能线为 `feat/a-share-research-v0.1-20260922`，Draft PR #2 → `main`，保持未合并；任何合并都需要针对 PR #2 的明确授权，禁止直接写 main。
+4. 并行长期路线图在 PR #1 / `docs/long-term-roadmap-20260922`，继续独立保留；未来处理合并顺序时同时保留应用 README 使用说明和长期路线图入口。
+5. 接手后读取 [PROJECT_NORTH_STAR.md](PROJECT_NORTH_STAR.md)、[CURRENT_STATE.md](CURRENT_STATE.md)、[ARCHITECTURE_INVARIANTS.md](ARCHITECTURE_INVARIANTS.md)、[DECISION_LEDGER.md](DECISION_LEDGER.md)、[EVALUATION_LEDGER.md](EVALUATION_LEDGER.md)、`governance/project_state.json`、`governance/artifact_manifest.json` 与 `governance/pending_sync.json`。
 
-发布前已发现并行文档 [PR #1](https://github.com/Jvust2/Invest/pull/1)，分支 `docs/long-term-roadmap-20260922`，head `4fc6e668cd60f544809a0a204ad688c2edf37961`，base `security-bootstrap`，尚未合并。它只改 README 与 `docs/LONG_TERM_ROADMAP.md`。本轮应用发布不改该 PR/分支；后续安排合并顺序时核对双方 README，保留应用使用说明和长期路线图入口。
+## 当前已验证的软件状态
 
-## 启动与复核
+- v0.1 已实现标准库本机中文网页、CSV/交易日历审计、有限日频均线回测、人民币模拟账本和 Tushare 四接口研究导入边界。
+- 应用/测试基线的 GitHub Actions 已在 Ubuntu/Windows × Python 3.11/3.12 四组合通过 82 项单测与源码编译。
+- 样本外与 forward-paper 方法协议 v1 已冻结，状态为 `FROZEN_METHOD_V1`。
+- `invest/evaluation.py` 的 fail-closed evaluation binding 校验器已完成远端四矩阵 CI；它只校验冻结身份、窗口、成本、基准、PIT/证券池与市场数据边界，不证明真实数据完整或策略有效。
+- 当前首个真实数据 binding 仍为 `PENDING_LICENSED_REAL_DATA`；frozen holdout=`NOT_OPENED`，forward-paper=`NOT_STARTED`。
 
-在仓库根目录使用 Python 3.11 或更高版本：
+## Drive 与恢复证据
+
+Drive 当前项目根目录已回读，只存在已核验的 `Invest_v0.1.0_source_checkpoint_20260922.zip` 和 `05_Reference_Materials/`。源码检查点 ID 为 `1Iscm0akdNG5s0WNJfc83-T_eh88xIz1F`；它是发布前冻结源码/截图证据，不因后续 GitHub 治理与代码增量而重写。
+
+本次恢复未发现新的已授权真实行情数据集、真实 evaluation binding 或可代替本地授权 Tushare 联调的 artifact。因此不得伪造 provider 验收，不得把 mock、合成数据或格式校验当成真实供应商证据，也不得为了自动化把 Token 写入 GitHub、聊天或共享 Drive。
+
+## 本机复核入口
+
+在 Python 3.11+ 环境可运行：
 
 ```sh
 python -m invest --open
-```
-
-默认打开 `http://127.0.0.1:8765`；端口冲突可用 `python -m invest --port 8766 --open`。运行目录 `.invest/` 保存本地数据、回测、私人账户与笔记，已忽略提交；不要上传其中的私密内容。退出使用 Ctrl+C。
-
-```sh
 python -m unittest discover -s tests -v
 python -m compileall -q invest
 ```
 
-当前单测结果为 82 PASS（35/20/16/11）。复跑时记录实际环境、提交 SHA、命令和输出，不把这份历史结果沿用为新改动的验收。浏览器检查脚本与结果见 `validation/20260922/`；Playwright/浏览器属于开发验证工具，不是应用运行依赖。执行脚本前确认其本机服务地址与浏览器环境。
+默认服务仅绑定 `127.0.0.1:8765`。`.invest/` 中的本地数据、模拟账户和笔记不进入仓库或共享 artifact。每次新代码提交都要重新以 live head/checks 验证，不能沿用旧 CI 结论。
 
-先用“加载演示数据”检查完整流程。演示数据和 `examples/` 都是 140 个合成日期 × 2 个代码，不是真实市场；日历也不能当成交易所官方日历。UI 的合成标识必须保留。
+## 当前唯一主线与阻塞边界
 
-## 本轮发布交接
+1. **真实供应商验证**：仅在本地合法授权可用时调用真实 Tushare，核对权限、返回字段、单位、交易日历、停牌缺行、复权/公司行动边界，并只保存脱敏证据。
+2. **首次 `BOUND_UNOPENED` binding**：授权真实数据集形成后、任何 frozen holdout 结果被读取之前，固定原始/规范化数据身份、代码身份、development/validation/holdout 区间、候选参数、至少三组成本情景、基准、证券池/PIT 证据和市场数据边界，并运行 `invest/evaluation.py`。
+3. 若 `can_open_holdout=false`，继续保持 holdout 未打开；未知市场边界必须显式阻断，不能静默补安全值。
+4. 只有候选、合法数据 binding 和 opening blockers 全部闭环后，才开始 append-only forward-paper；不得事后回填信号或把已见数据重新称为 unseen。
 
-- 主执行者负责汇总代码、文档与验证材料，并发布计划分支和单个草稿 PR；不得据本文推定已获合并授权。
-- 提交前核对 `validation/20260922/` 中的脚本、结果与这份记录一致；截图放 Drive 源码检查点 zip 的 `review/` 路径，避免将私人运行数据混入检查点。
-- 发布后回读 refs、PR base/head/diff 与 CI 结果；功能提交和 PR 编号以 GitHub 实际产生的记录为准。若后续更新本文，保留本轮验证的合成数据及环境边界。
-
-## 下一阶段的优先事项
-
-1. **真实供应商验证。** 在获授权的本机环境设置 `TUSHARE_TOKEN`，核实权限、返回字段、单位、停牌缺行和日历；记录脱敏结果，禁止将 Token 放页面、仓库或验证附件。现有 mock 通过不代表接口账号联调通过。
-2. **企业行动与执行数据契约。** 在允许真实数据执行前，先定义停复牌、除权除息、登记/派息日期、送转/配股、红利税和逐日价格限制的覆盖范围及反例。四接口 Tushare 导入继续研究专用；不能简单把未知状态改为 false 或删除阻断。
-3. **目标平台验证。** 在 Windows 复跑启动与关键流程；发布后读取实际 Actions 结果，处理真实失败再入账。
-4. **研究效果评价。** 先冻结有出处、可追溯的样本及评价方案，分清开发样本、样本外与前向模拟；检查成本、基准和存活偏差。软件正确性与合成曲线不能代替收益证据。
-
-仅在用户明确选择相应方向后扩展范围，不将这些待办视为券商连接、真实下单或全自动交易授权。对第三方框架的现有调查限 README、许可与官方 API；未拷贝其代码、未引入运行依赖，也未完成深层源码研究，详见 [REFERENCES_AND_RULES.md](REFERENCES_AND_RULES.md)。
+若合法真实数据仍不可用，可继续做与上述主线直接相关、可独立验证且不制造伪证据的治理/测试/研究准备；不要用无关功能扩张替代真实数据门禁。当前恢复检查点见 `governance/checkpoints/20260923_real_data_gate_reconciliation.json`。
