@@ -55,3 +55,12 @@ CSV 可用于研究查看，但未知公司行动、停牌、每日限价、因�
 当前没有任何真实 binding、没有真实供应商数据、没有打开 frozen holdout，因此在第一次真实证据产生之前修复该实现缺口，不会迁移、覆盖或事后改写冻结结果。本轮保持方法协议 v1 本身不变，只让 binding 实现与已经冻结的方法一致：新增必填 `historical_market_environments`，至少 3 项；名称不得重复，日期必须真实且落在 development 起点至 frozen_holdout 终点总边界内，完全相同日期区间不能用不同名称重复计数，并要求保存环境标注 evidence。
 
 这项门禁只冻结“哪些历史环境要比较/单独标注”的 provenance，不证明环境划分正确，也不产生收益证据。真实数据许可、供应商边界、PIT/存活偏差和所有其它 opening blockers 继续独立 fail closed。
+
+
+## D017 — Provider evidence 单位必须与当前 Tushare 适配器契约一致
+
+2026-09-24 在恢复真实数据门禁后发现：provider evidence 已能严格检查核心接口、字段、样本范围和执行时间，但除 `currency=CNY` 外，`price_unit`、成交量输入/输出单位与时区此前只要求非空。这样一条“字段齐全、行数正常、但单位解释错误”的脱敏证据仍可能通过 provider-side readiness，和 `invest/data.py` 当前明确的 Tushare 手→股转换及 A 股日期语义不一致。
+
+因此 v1 证据契约新增 fail-closed 单位门禁：`currency=CNY`、`price_unit=CNY/share`、`volume_input_unit=lot`、`volume_output_unit=share`、`timezone=Asia/Shanghai` 必须逐项严格匹配；`conversion_notes` 继续要求非空。未来若接入单位语义不同的供应商，应升级或扩展证据契约，而不是静默复用当前 v1。
+
+代码 head `1a19ab04bcc5d26f6e825e1d76bd83e9c4621f73` 的 GitHub Actions run `36010703814` 已在 Ubuntu/Windows × Python 3.11/3.12 四个矩阵 job 全部通过完整测试与源码编译。完整测试集为 115，provider evidence 测试方法为 20。本变更没有 provider call、没有读取凭据、没有真实行情、没有创建真实 binding，也没有观察 frozen holdout。

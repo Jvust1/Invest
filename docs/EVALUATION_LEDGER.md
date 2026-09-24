@@ -115,3 +115,14 @@ GitHub Actions `Invest tests` run `35701856144` 状态为 `completed/success`。
 Credential-free 本地重建执行 `python -m unittest discover -s tests -q` 得到 **95 tests PASS**（基础 82 + evaluation 13），`python -m compileall -q invest` 通过。随后 GitHub Actions run `35809448144` 对该代码 head 完成 Ubuntu/Windows × Python 3.11/3.12 四个 job，所有 `Standard-library tests` 与 `Compile source` 步骤均为 success。
 
 本次验证没有使用真实 Tushare Token、没有 provider call、没有真实市场数据、没有创建真实 binding、没有打开 holdout，也没有产生收益证据。该修复只关闭“冻结协议要求无法被 binding schema 执行”的治理/实现缺口；真实供应商边界与 `LICENSED_REAL_DATA_REQUIRED` 继续保持 OPEN。
+
+
+## E007 — Provider evidence 单位契约 fail-closed 验收（2026-09-24）
+
+目标：关闭真实 provider evidence 中“字段与行数看似合格，但价格/成交量/时区单位语义与当前 Tushare 适配器不一致仍可能通过”的结构性缺口。当前环境仍没有合法可用的真实供应商凭据或真实行情，因此本次只做 credential-free 契约加固，不产生任何真实市场或收益结论。
+
+代码 head `1a19ab04bcc5d26f6e825e1d76bd83e9c4621f73` 新增严格单位契约：`currency=CNY`、`price_unit=CNY/share`、`volume_input_unit=lot`、`volume_output_unit=share`、`timezone=Asia/Shanghai`。测试新增一个方法、五个 subcase，分别证明货币、价格单位、输入成交量单位、输出成交量单位和时区任一不一致都会被拒绝；正确 fixture 保持通过。
+
+GitHub Actions `Invest tests` run `36010703814` 已 completed/success。四个矩阵 job（Ubuntu/Windows × Python 3.11/3.12）的 `Standard-library tests` 与 `Compile source` 均成功。完整 discover 为 **115 tests PASS**，其中 evaluation 13、provider evidence 20。
+
+证据边界不变：没有真实 provider call、没有 Token/凭据、没有真实数据、没有真实 provider evidence、没有真实 `BOUND_UNOPENED` binding、frozen holdout 仍未打开、forward-paper 仍未开始。该结果只证明当前 evidence contract 对单位语义继续 fail closed。
