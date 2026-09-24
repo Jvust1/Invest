@@ -99,7 +99,7 @@
 - `executed_at`
 - `code_sha`
 - 证券与请求区间
-- 实际成功/失败的接口名称
+- `daily`、`adj_factor`、`stk_limit`、`trade_cal` 四个当前核心接口的实际尝试结果，以及任何额外接口记录
 - 每个接口实际返回字段集合及行数
 - 数据单位与转换说明
 - 原始数据身份/哈希引用（原始授权数据本体可只留在本地）
@@ -110,7 +110,7 @@
 - 是否存在 provider call、是否使用真实数据
 - 明确声明凭据未被保存
 
-不要在脱敏记录中保存 Token、Cookie、密码、账户凭据或可恢复这些凭据的内容。
+不要在脱敏记录中保存 Token、Cookie、密码、账户凭据或可恢复这些凭据的内容。四个核心接口中任一缺失或失败都可以如实保存，但 provider-side opening readiness 必须继续 fail closed，不能把“没有记录”解释为成功。
 
 ## 6. Fail-closed 判定
 
@@ -120,16 +120,17 @@
 
 1. 数据许可明确 `authorized`；
 2. 原始与规范化数据身份被冻结；
-3. 所有 evaluation binding 所需市场边界均有真实证据；
-4. 任何不能验证的边界如实写为 `unknown` / `not_covered`；
-5. 没有未处理的已知 blocker；
-6. 尚未读取 frozen holdout 结果。
+3. `daily`、`adj_factor`、`stk_limit`、`trade_cal` 四个当前核心接口均存在真实尝试记录且全部成功；
+4. 所有 evaluation binding 所需市场边界均有真实证据；
+5. 任何不能验证的边界如实写为 `unknown` / `not_covered`；
+6. 没有未处理的已知 blocker；
+7. 尚未读取 frozen holdout 结果。
 
 随后创建 `BOUND_UNOPENED` binding，并由 `invest/evaluation.py` 校验。只有 `can_open_holdout=true` 且项目其它 gate 也全部通过，才允许首次观察 holdout。
 
 ## 7. 当前状态
 
-截至 2026-09-23，本手册仅完成 credential-free 准备：
+截至 2026-09-24，本手册仍只完成 credential-free 准备：
 
 - `provider_call_performed=false`
 - `credential_used=false`

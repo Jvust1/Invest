@@ -48,6 +48,20 @@ def valid_evidence():
                 "evidence": "rows matched request",
             },
             {
+                "name": "adj_factor",
+                "status": "success",
+                "fields": ["trade_date", "adj_factor"],
+                "row_count": 240,
+                "evidence": "adjustment factors matched request",
+            },
+            {
+                "name": "stk_limit",
+                "status": "success",
+                "fields": ["trade_date", "up_limit", "down_limit"],
+                "row_count": 240,
+                "evidence": "daily price limits matched request",
+            },
+            {
                 "name": "trade_cal",
                 "status": "success",
                 "fields": ["cal_date", "is_open"],
@@ -81,9 +95,21 @@ class ProviderValidationEvidenceTests(unittest.TestCase):
     def test_valid_record_is_fingerprinted_and_provider_side_ready(self):
         result = validate_provider_validation_evidence(valid_evidence())
         self.assertEqual(len(result["evidence_id"]), 64)
+        self.assertTrue(result["required_core_interfaces_present"])
+        self.assertEqual(result["missing_core_interfaces"], ())
         self.assertTrue(result["all_boundaries_verified"])
         self.assertTrue(result["interfaces_all_success"])
         self.assertTrue(result["can_support_holdout_opening"])
+
+    def test_missing_required_core_interface_is_preserved_but_fail_closed(self):
+        evidence = valid_evidence()
+        evidence["interfaces"] = [
+            item for item in evidence["interfaces"] if item["name"] != "adj_factor"
+        ]
+        result = validate_provider_validation_evidence(evidence)
+        self.assertFalse(result["required_core_interfaces_present"])
+        self.assertEqual(result["missing_core_interfaces"], ("adj_factor",))
+        self.assertFalse(result["can_support_holdout_opening"])
 
     def test_unknown_boundary_is_allowed_but_fail_closed(self):
         evidence = valid_evidence()

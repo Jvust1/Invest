@@ -22,6 +22,8 @@
 
 `interfaces` 至少一项，每项包含 `name`、`status`、`fields`、`row_count`、`evidence`。`status` 只能为 `success` / `failed`；接口名和字段名不得重复，行数必须为非负整数。标记为 `success` 的接口必须同时具有至少一个非空字段名，并且 `row_count > 0`；空 schema 或 0 行结果不得作为成功证据进入 provider-side opening readiness。真实失败请求可以使用空字段与 0 行，但必须保留为 `failed`，不得替换成伪造成功；任一接口失败都会让 provider-side opening readiness 保持 fail-closed。
 
+当前 Invest v1 的核心供应商调用边界固定为 `daily`、`adj_factor`、`stk_limit`、`trade_cal` 四项。真实记录可以保存部分执行结果或真实失败，但只有四项全部明确出现在 `interfaces` 中且均成功时，接口覆盖这一侧才允许参与 provider-side opening readiness；缺少任何一项都会返回 `required_core_interfaces_present=false` 和对应 `missing_core_interfaces`，保持 fail-closed。额外接口可以作为补充证据，但不能替代这四项核心接口。
+
 ## 数据身份与单位
 
 `dataset_identity` 包含 `raw_artifact_identity`、`raw_sha256`、`normalized_dataset_id`。两个哈希均为小写 64 位 SHA-256。授权原始数据本体可以只留在本地；共享治理证据只保存不可恢复凭据的身份、哈希与脱敏摘要。
@@ -40,6 +42,6 @@
 
 ## 与 frozen holdout 的关系
 
-只有 `real_data_used=true`、样本身份与时间范围通过上述门禁、所有记录接口成功且成功接口具有非空字段与正行数、七类 boundary 全部 `verified`、`known_blockers` 为空且 `holdout_observed=false` 时，校验器才返回 `can_support_holdout_opening=true`。
+只有 `real_data_used=true`、样本身份与时间范围通过上述门禁、四个当前核心接口全部存在且全部成功、成功接口具有非空字段与正行数、七类 boundary 全部 `verified`、`known_blockers` 为空且 `holdout_observed=false` 时，校验器才返回 `can_support_holdout_opening=true`。
 
 这个布尔值只说明**供应商证据这一侧**没有已知 opening blocker，绝不单独授权打开 frozen holdout。随后仍必须创建真实 `BOUND_UNOPENED` binding，并由 `invest/evaluation.py` 对授权、数据/代码身份、development/validation/holdout、至少三个历史市场环境、候选、成本、基准、PIT/证券池和市场边界再次 fail-closed 校验；其它项目 gate 也必须全部通过。

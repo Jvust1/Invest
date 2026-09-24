@@ -28,6 +28,7 @@ BOUNDARY_KEYS = (
 )
 BOUNDARY_STATES = {"verified", "unknown", "not_covered"}
 INTERFACE_STATES = {"success", "failed"}
+REQUIRED_CORE_INTERFACES = ("daily", "adj_factor", "stk_limit", "trade_cal")
 _FORBIDDEN_KEY_PARTS = ("token", "secret", "password", "api_key", "apikey", "cookie")
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _GIT_SHA = re.compile(r"[0-9a-f]{40}\Z")
@@ -136,10 +137,11 @@ def _canonical_payload(evidence: dict) -> bytes:
 def validate_provider_validation_evidence(evidence: dict) -> dict:
     """Validate and fingerprint one sanitized provider-validation record.
 
-    A structurally valid record can describe a failed real attempt. Provider-side
-    readiness is true only with real data, all interfaces successful, all seven
-    boundaries verified, no blocker, and the frozen holdout still unobserved.
-    The separate ``invest.evaluation`` binding gate must still pass afterwards.
+    A structurally valid record can describe a failed or partial real attempt.
+    Provider-side readiness is true only with real data, all four current Invest
+    v1 core interfaces recorded and successful, all seven boundaries verified,
+    no blocker, and the frozen holdout still unobserved. The separate
+    ``invest.evaluation`` binding gate must still pass afterwards.
     """
     original = _mapping(evidence, "evidence")
     _reject_sensitive_keys(original)
@@ -221,6 +223,9 @@ def validate_provider_validation_evidence(evidence: dict) -> dict:
             raise ValueError(f"{field}.status=success 时 row_count 必须大于 0")
         _text(interface["evidence"], f"{field}.evidence")
 
+    missing_core_interfaces = tuple(name for name in REQUIRED_CORE_INTERFACES if name not in names)
+    required_core_interfaces_present = not missing_core_interfaces
+
     identity = _mapping(original["dataset_identity"], "dataset_identity")
     _only_keys(identity, "dataset_identity", {"raw_artifact_identity", "raw_sha256", "normalized_dataset_id"})
     _text(identity["raw_artifact_identity"], "dataset_identity.raw_artifact_identity", 500)
@@ -262,12 +267,15 @@ def validate_provider_validation_evidence(evidence: dict) -> dict:
 
     can_support = (
         original["real_data_used"] is True
+        and required_core_interfaces_present
         and interfaces_all_success
         and all_boundaries_verified
         and not normalized_blockers
     )
     return {
         "evidence_id": computed_id,
+        "required_core_interfaces_present": required_core_interfaces_present,
+        "missing_core_interfaces": missing_core_interfaces,
         "all_boundaries_verified": all_boundaries_verified,
         "boundary_states": boundary_states,
         "interfaces_all_success": interfaces_all_success,

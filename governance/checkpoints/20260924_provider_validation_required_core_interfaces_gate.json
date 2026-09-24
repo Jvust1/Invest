@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "checkpoint": "provider_validation_required_core_interfaces_gate",
+  "date": "2026-09-24",
+  "status": "IMPLEMENTED_REMOTE_CI_PENDING",
+  "branch": "feat/a-share-research-v0.1-20260922",
+  "base_head": "dd101cc83d3e86e82145e248dc77fcb4a256df02",
+  "change": {
+    "required_core_interfaces": ["daily", "adj_factor", "stk_limit", "trade_cal"],
+    "partial_evidence_preserved": true,
+    "missing_interface_fail_closed": true,
+    "validator_result_fields_added": ["required_core_interfaces_present", "missing_core_interfaces"],
+    "provider_evidence_tests_before": 17,
+    "provider_evidence_tests_expected_after": 18,
+    "full_suite_tests_before": 112,
+    "full_suite_tests_expected_after": 113
+  },
+  "real_provider_call_performed": false,
+  "credential_used": false,
+  "real_data_used": false,
+  "real_binding_created": false,
+  "holdout_observed": false,
+  "next_action": "Publish this non-destructive increment on the existing feature branch, require GitHub Actions success, then update current state/governance with the actual validated SHA and workflow run ID."
+}
