@@ -4,49 +4,35 @@
 
 ## 先恢复权威状态
 
-1. 读取 `AGENTS.md`、目标分支 `SECURITY_POLICY.md`、Drive 根目录 `全项目` 入口及动态发现的全部 `全项目_` 基线，再按 [PRE_FLIGHT_CHECKLIST.md](PRE_FLIGHT_CHECKLIST.md) 恢复项目。
+1. 读取 `AGENTS.md`、目标分支 `SECURITY_POLICY.md`、Drive 根目录 `全项目` 入口及动态发现的全部 `全项目_` 基线，再按 `PRE_FLIGHT_CHECKLIST.md` 恢复项目。
 2. GitHub `Jvust2/Invest` 是代码、治理、当前状态与下一步权威；Drive 项目目录 `15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u` 保存原始资料和长期 artifact。
 3. 当前功能线为 `feat/a-share-research-v0.1-20260922`，Draft PR #2 → `main`，保持未合并；任何合并都需要针对 PR #2 的明确授权，禁止直接写 main。
-4. 并行长期路线图在 PR #1 / `docs/long-term-roadmap-20260922`，继续独立保留；未来处理合并顺序时同时保留应用 README 使用说明和长期路线图入口。
-5. 接手后读取 [PROJECT_NORTH_STAR.md](PROJECT_NORTH_STAR.md)、[CURRENT_STATE.md](CURRENT_STATE.md)、[ARCHITECTURE_INVARIANTS.md](ARCHITECTURE_INVARIANTS.md)、[DECISION_LEDGER.md](DECISION_LEDGER.md)、[EVALUATION_LEDGER.md](EVALUATION_LEDGER.md)、`governance/project_state.json`、`governance/artifact_manifest.json` 与 `governance/pending_sync.json`。
-6. 真实数据主线另读取 [REAL_DATA_PROVIDER_VALIDATION_RUNBOOK.md](REAL_DATA_PROVIDER_VALIDATION_RUNBOOK.md)、[PROVIDER_VALIDATION_EVIDENCE_FORMAT.md](PROVIDER_VALIDATION_EVIDENCE_FORMAT.md) 与 `governance/decisions/D011`–`D014`；这些只定义真实联调前后的证据合同，不代表真实联调已经完成。
+4. 并行长期路线图在 PR #1 / `docs/long-term-roadmap-20260922`，继续独立保留。
+5. 接手后读取 North Star、Current State、Architecture Invariants、Decision/Evaluation Ledgers、`governance/project_state.json`、artifact manifest 与 pending_sync。
+6. 真实数据主线另读取真实供应商 runbook、provider evidence 格式与 `governance/decisions/D011`–`D015`；这些只定义真实联调前后的证据合同，不代表真实联调已经完成。
 
 ## 当前已验证的软件状态
 
 - v0.1 已实现标准库本机中文网页、CSV/交易日历审计、有限日频均线回测、人民币模拟账本和 Tushare 四接口研究导入边界。
-- 应用/测试历史基线在 GitHub Actions Ubuntu/Windows × Python 3.11/3.12 四组合通过 82 项基础单测与源码编译。
-- 样本外与 forward-paper 方法协议 v1 已冻结，状态为 `FROZEN_METHOD_V1`；`invest/evaluation.py` 的 fail-closed binding 校验器已远端矩阵验证。
-- Provider evidence 校验器当前有 17 个测试方法；完整测试集为 112。最新已验证代码/文档 head `6b27845191c62a35d5930cc56e518e9eeb187400`，Actions run `35993749624` 成功。
-- Provider evidence 现在 fail closed 于：失败接口、成功接口空字段/0 行、未知/未覆盖市场边界、显式 blocker、凭据字段、超出当前沪深主板格式范围的样本代码，以及 `sample.end_date` 晚于 `executed_at` 所在日期。
-- 这些门禁仍只是 credential-free 结构与 provenance 验证；没有真实 provider call、没有读取凭据、没有真实行情、没有真实收益证据。
+- 样本外与 forward-paper 方法协议 v1 已冻结；binding 校验器已远端矩阵验证。
+- Provider evidence 校验器现在有 18 个测试方法；完整测试集为 113。最新已验证代码/文档 head `04f02079d3876f5a25ed9487acc56b3b0ae0b234`，Actions run `36001056069` 成功，Ubuntu/Windows × Python 3.11/3.12 四个 job 的 tests 与 compile 均成功。
+- Provider evidence 当前 fail closed 于：失败接口、成功接口空字段/0 行、未知/未覆盖市场边界、显式 blocker、凭据字段、超出当前沪深主板格式范围的样本代码、`sample.end_date` 晚于 `executed_at` 日期，以及缺少 `daily` / `adj_factor` / `stk_limit` / `trade_cal` 任一当前核心接口。
+- 部分真实供应商尝试可以诚实保存；“缺少接口记录”绝不能默认为成功。四接口即使全部成功也不能替代七类市场数据边界的独立真实证据。
+- 没有真实 provider call、没有读取凭据、没有真实行情、没有真实收益证据。
 - 首个真实 provider evidence 与真实 `BOUND_UNOPENED` binding 均仍为 `PENDING_LICENSED_REAL_DATA`；frozen holdout=`NOT_OPENED`，forward-paper=`NOT_STARTED`。
 
 ## Drive 与恢复证据
 
-Drive 项目根目录本轮重新回读，仍只有已核验的 `Invest_v0.1.0_source_checkpoint_20260922.zip` 和 `05_Reference_Materials/`。源码检查点 ID 为 `1Iscm0akdNG5s0WNJfc83-T_eh88xIz1F`；它是发布前冻结源码/截图证据，不因后续 GitHub 可恢复的代码和治理增量而重写。
+Drive 项目根目录重新回读，仍只有已核验的 `Invest_v0.1.0_source_checkpoint_20260922.zip` 和 `05_Reference_Materials/`。源码检查点 ID 为 `1Iscm0akdNG5s0WNJfc83-T_eh88xIz1F`；它是冻结证据，不因后续 GitHub 可恢复增量重写。没有发现授权真实行情数据集或真实 evaluation binding，因此 `LICENSED_REAL_DATA_REQUIRED=OPEN`。
 
-没有发现新的已授权真实行情数据集、真实 evaluation binding 或可代替本地授权 Tushare 联调的 artifact。因此保持 `LICENSED_REAL_DATA_REQUIRED=OPEN`：不得伪造 provider 验收，不得把 mock、合成数据或格式校验当成真实供应商证据，也不得把 Token 写入 GitHub、聊天或共享 Drive。
-
-本轮新增内容均为 GitHub 可恢复的代码、测试、文档、决策和 checkpoint，没有新的大型或不可替代二进制 artifact；Drive 不创建重复 ZIP，现有冻结源码检查点原样保留。
-
-## 本机复核入口
-
-在 Python 3.11+ 环境可运行：
-
-```sh
-python -m invest --open
-python -m unittest discover -s tests -v
-python -m compileall -q invest
-```
-
-默认服务仅绑定 `127.0.0.1:8765`。`.invest/` 中的本地数据、模拟账户和笔记不进入仓库或共享 artifact。每次新代码提交都要重新以 live head/checks 验证，不能沿用旧 CI 结论。
+本轮新增内容均为 GitHub 可恢复的代码、测试、文档、决策和 checkpoint，没有新的大型或不可替代二进制 artifact；Drive 不创建重复 ZIP。
 
 ## 当前唯一主线与阻塞边界
 
-1. **执行真实供应商验证手册**：仅在本地合法授权可用时按 [REAL_DATA_PROVIDER_VALIDATION_RUNBOOK.md](REAL_DATA_PROVIDER_VALIDATION_RUNBOOK.md) 调用真实供应商，核对权限、返回字段、单位、交易日历、停牌缺行、公司行动、涨跌停、风险警示历史、存活偏差与 PIT 边界；只保存脱敏证据。样本代码必须属于当前 v1 沪深主板格式范围，样本结束日期不得晚于记录执行日期。
-2. **首次 `BOUND_UNOPENED` binding**：授权真实数据集形成后、任何 frozen holdout 结果被读取之前，固定原始/规范化数据身份、代码身份、development/validation/holdout 区间、候选参数、至少三个历史市场环境、至少三组成本情景、基准、证券池/PIT 证据和市场数据边界，并运行 `invest/evaluation.py`。
-3. 若任一 provider/binding gate 失败，继续保持 holdout 未打开；未知市场边界必须显式阻断，不能静默补安全值。
-4. 只有候选、合法数据 binding 和 opening blockers 全部闭环后，才开始 append-only forward-paper；不得事后回填信号或把已见数据重新称为 unseen。
+1. 仅在本地合法授权可用时执行真实供应商验证；四个当前核心接口必须全部实际尝试并登记，缺失或失败保持 fail closed。
+2. 所有七类 market-data boundary 仍须真实证据；四接口存在不证明停牌、公司行动、风险警示历史、存活偏差或 PIT 完整。
+3. provider evidence 无已知 blocker 后，才能在任何 frozen holdout 结果被读取之前建立首个 `BOUND_UNOPENED` binding，并运行 `invest/evaluation.py`。
+4. 只有 opening blockers 全部闭环后才首次观察 holdout；之后 append-only forward-paper，不回填事后信号。
 5. 合法真实数据仍不可用时，只推进与上述主线直接相关、可独立验证且不制造伪证据的治理、对抗测试或研究准备。
 
-当前最新检查点为 `governance/checkpoints/20260924_provider_validation_sample_scope_time_gate.json`，对应决策为 `governance/decisions/D014_provider_validation_sample_scope_time_gate.json`。
+当前最新检查点为 `governance/checkpoints/20260924_provider_validation_required_core_interfaces_gate.json`，对应决策为 `governance/decisions/D015_provider_validation_required_core_interfaces_gate.json`。

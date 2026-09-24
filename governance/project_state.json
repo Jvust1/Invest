@@ -9,20 +9,17 @@
   "version": "0.1.0",
   "currency": "CNY",
   "security_status": "REGISTERED_PROTECTED",
-  "protection_scope": [
-    "chore/security-bootstrap-20260922",
-    "descendant non-default feature branch"
-  ],
+  "protection_scope": ["chore/security-bootstrap-20260922", "descendant non-default feature branch"],
   "main_security_pending_pr": true,
   "main_baseline_sha": "71b32347fd954b7952f748b852503779851dbf1a",
   "bootstrap_sha": "172803ad30cd2065719944f1fab26a952c42be54",
   "delivery_branch": "feat/a-share-research-v0.1-20260922",
   "delivery_policy": "draft PR to main; no automatic merge",
-  "implementation": "evaluation_binding_gate_and_provider_evidence_gate_remote_ci_validated_empty_success_sample_scope_and_execution_time_fail_closed_real_data_gate_blocked",
+  "implementation": "evaluation_binding_gate_and_provider_evidence_gate_remote_ci_validated_empty_success_sample_scope_execution_time_and_required_core_interfaces_fail_closed_real_data_gate_blocked",
   "research_governance": "evaluation_protocol_v1_frozen",
   "validation": {
     "base_application_unittest": 82,
-    "current_full_suite_tests": 112,
+    "current_full_suite_tests": 113,
     "independent_groups": 8,
     "root_browser_checks": 10,
     "ui_curve_edge_cases": 3,
@@ -30,18 +27,12 @@
     "remote_ci": {
       "historical_application_head_sha": "f40b0285b1c2bb249464f2ec354e9eb3bb6b18df",
       "historical_workflow_run_id": 35701856144,
-      "latest_validated_code_head_sha": "6b27845191c62a35d5930cc56e518e9eeb187400",
-      "latest_workflow_run_id": 35993749624,
+      "latest_validated_code_head_sha": "04f02079d3876f5a25ed9487acc56b3b0ae0b234",
+      "latest_workflow_run_id": 36001056069,
       "result": "success",
       "matrix_jobs": 4,
-      "platforms": [
-        "ubuntu-latest",
-        "windows-latest"
-      ],
-      "python_versions": [
-        "3.11",
-        "3.12"
-      ],
+      "platforms": ["ubuntu-latest", "windows-latest"],
+      "python_versions": ["3.11", "3.12"],
       "standard_library_tests_step": "pass",
       "compile_source_step": "pass"
     },
@@ -69,14 +60,8 @@
       "remote_ci_head_sha": "7629e221619f22500dc2016f2bf698eb055f50f2",
       "workflow_run_id": 35809448144,
       "matrix_jobs": 4,
-      "platforms": [
-        "ubuntu-latest",
-        "windows-latest"
-      ],
-      "python_versions": [
-        "3.11",
-        "3.12"
-      ],
+      "platforms": ["ubuntu-latest", "windows-latest"],
+      "python_versions": ["3.11", "3.12"],
       "standard_library_tests_step": "pass",
       "compile_source_step": "pass"
     },
@@ -91,43 +76,33 @@
       "real_provider_evidence_created": false,
       "real_binding_created": false,
       "holdout_opened": false,
-      "boundary_fields": [
-        "calendar",
-        "suspension",
-        "corporate_actions",
-        "price_limits",
-        "risk_warning_history",
-        "survivorship_bias",
-        "pit_features"
-      ],
+      "boundary_fields": ["calendar", "suspension", "corporate_actions", "price_limits", "risk_warning_history", "survivorship_bias", "pit_features"],
+      "required_core_interfaces": ["daily", "adj_factor", "stk_limit", "trade_cal"],
       "runbook_decision_record": "governance/decisions/D011_provider_validation_runbook.json",
       "evidence_validator_decision_record": "governance/decisions/D012_provider_validation_evidence_validator.json",
       "nonempty_success_gate_decision_record": "governance/decisions/D013_provider_validation_nonempty_success_gate.json",
-      "sample_scope_time_gate_decision_record": "governance/decisions/D014_provider_validation_sample_scope_time_gate.json"
+      "sample_scope_time_gate_decision_record": "governance/decisions/D014_provider_validation_sample_scope_time_gate.json",
+      "required_core_interfaces_gate_decision_record": "governance/decisions/D015_provider_validation_required_core_interfaces_gate.json"
     },
     "provider_validation_evidence_validator": {
       "status": "REMOTE_CI_VALIDATED",
       "module": "invest/provider_validation.py",
       "format": "docs/PROVIDER_VALIDATION_EVIDENCE_FORMAT.md",
-      "tests": 17,
-      "current_full_suite_tests": 112,
-      "remote_ci_head_sha": "6b27845191c62a35d5930cc56e518e9eeb187400",
-      "workflow_run_id": 35993749624,
+      "tests": 18,
+      "current_full_suite_tests": 113,
+      "remote_ci_head_sha": "04f02079d3876f5a25ed9487acc56b3b0ae0b234",
+      "workflow_run_id": 36001056069,
       "matrix_jobs": 4,
-      "platforms": [
-        "ubuntu-latest",
-        "windows-latest"
-      ],
-      "python_versions": [
-        "3.11",
-        "3.12"
-      ],
+      "platforms": ["ubuntu-latest", "windows-latest"],
+      "python_versions": ["3.11", "3.12"],
       "standard_library_tests_step": "pass",
       "compile_source_step": "pass",
       "success_interface_nonempty_fields_required": true,
       "success_interface_positive_row_count_required": true,
       "sample_security_code_mainboard_required": true,
       "sample_end_not_after_execution_date_required": true,
+      "required_core_interfaces": ["daily", "adj_factor", "stk_limit", "trade_cal"],
+      "all_required_core_interfaces_must_be_present_for_readiness": true,
       "provider_call_performed": false,
       "credential_used": false,
       "real_data_used": false,
@@ -154,6 +129,21 @@
       "tests_added": 2,
       "sample_security_code_mainboard_required": true,
       "sample_end_not_after_execution_date_required": true,
+      "real_data_used": false,
+      "provider_call_performed": false,
+      "credentials_used": false,
+      "holdout_observed": false
+    },
+    "provider_evidence_required_core_interfaces_hardening": {
+      "status": "REMOTE_CI_VALIDATED",
+      "checkpoint": "governance/checkpoints/20260924_provider_validation_required_core_interfaces_gate.json",
+      "decision": "governance/decisions/D015_provider_validation_required_core_interfaces_gate.json",
+      "validated_code_head_sha": "04f02079d3876f5a25ed9487acc56b3b0ae0b234",
+      "workflow_run_id": 36001056069,
+      "tests_added": 1,
+      "required_core_interfaces": ["daily", "adj_factor", "stk_limit", "trade_cal"],
+      "partial_real_attempts_preserved": true,
+      "missing_core_interface_blocks_readiness": true,
       "real_data_used": false,
       "provider_call_performed": false,
       "credentials_used": false,
@@ -191,17 +181,13 @@
   ],
   "next_actions": [
     "when local authorization is available, execute docs/REAL_DATA_PROVIDER_VALIDATION_RUNBOOK.md and emit sanitized evidence conforming to docs/PROVIDER_VALIDATION_EVIDENCE_FORMAT.md without storing credentials",
-    "validate the real provider evidence with invest/provider_validation.py; out-of-scope sample codes, sample windows extending beyond executed_at, failed interfaces, empty successful responses, unknown/not_covered market boundaries, or explicit blockers keep the provider side fail-closed",
+    "validate real provider evidence with invest/provider_validation.py; missing any of daily/adj_factor/stk_limit/trade_cal, out-of-scope sample codes, sample windows extending beyond executed_at, failed interfaces, empty successful responses, unknown/not_covered market boundaries, or explicit blockers keep provider-side readiness fail-closed",
     "before opening any frozen holdout result, create the first authorized BOUND_UNOPENED data binding and pass invest/evaluation.py validation for development/validation/holdout windows, at least three frozen historical market environments, candidate, costs, benchmark, PIT and market-data boundaries",
     "after provider evidence, candidate and data binding are frozen and all opening blockers are closed, begin append-only forward-paper evidence without retroactive signal edits",
     "while licensed data is unavailable, only advance directly related credential-free governance, adversarial tests, or research preparation that does not fabricate provider evidence"
   ],
-  "latest_checkpoint": "governance/checkpoints/20260924_provider_validation_sample_scope_time_gate.json",
-  "authority": {
-    "code_and_state": "GitHub",
-    "artifacts": "existing Drive project folder",
-    "private_ledger": "local user data only"
-  },
+  "latest_checkpoint": "governance/checkpoints/20260924_provider_validation_required_core_interfaces_gate.json",
+  "authority": {"code_and_state": "GitHub", "artifacts": "existing Drive project folder", "private_ledger": "local user data only"},
   "parallel_work": [
     {
       "pr": 1,
@@ -209,10 +195,7 @@
       "branch": "docs/long-term-roadmap-20260922",
       "head_sha": "0629240f417d0f9b340ac74862bad56fc7e680f1",
       "base": "chore/security-bootstrap-20260922",
-      "scope": [
-        "README.md",
-        "docs/LONG_TERM_ROADMAP.md"
-      ],
+      "scope": ["README.md", "docs/LONG_TERM_ROADMAP.md"],
       "handling": "preserved untouched; reconcile both README additions during eventual merge"
     },
     {
@@ -221,7 +204,7 @@
       "branch": "feat/a-share-research-v0.1-20260922",
       "base": "main",
       "state": "open_draft",
-      "validated_code_head_sha": "6b27845191c62a35d5930cc56e518e9eeb187400",
+      "validated_code_head_sha": "04f02079d3876f5a25ed9487acc56b3b0ae0b234",
       "handling": "application/test, evaluation-binding validator and provider-evidence validator CI evidence are green; PR remains Draft and must not be auto-merged"
     }
   ]
