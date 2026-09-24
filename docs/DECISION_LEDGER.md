@@ -69,3 +69,11 @@ CSV 可用于研究查看，但未知公司行动、停牌、每日限价、因�
 因此 v1 evidence contract 新增 provenance commitment：每个 `status=verified` 的 boundary 必须同时提供 `evidence_sha256`，且必须是小写 64 位 SHA-256；授权原始 supporting artifact 可继续只留在本地。`unknown` / `not_covered` 可以不提供 hash，以便诚实保存未闭环状态；若提供 hash 则也必须合法。哈希只冻结证据身份，不证明 artifact 的内容真实性、许可充分性或 boundary 判断正确，因此真实 binding 与人工/独立证据审查仍不可绕过。
 
 代码 head `5f1c3be266227d7403ef0ff10b61be4742471c5c` 的 GitHub Actions run `36013947202` 已在 Ubuntu/Windows × Python 3.11/3.12 四矩阵通过测试与源码编译。完整测试集为 116，provider evidence 测试方法为 21。本变更没有 provider call、没有读取凭据、没有真实行情、没有创建真实 binding，也没有观察 frozen holdout。
+
+## D019 — Provider evidence 执行时间必须与 A 股市场时区保持同一日期语义
+
+2026-09-24 继续做 credential-free 对抗检查时发现：`executed_at` 此前只要求“带时区”，而 `units.timezone` 又独立要求 `Asia/Shanghai`。`sample.end_date` 是直接与 `executed_at.date()` 比较；若允许 `Z`、`+09:00` 或其它任意 offset，同一个绝对瞬间可能落到不同日历日期，造成 evidence 中“样本是否晚于实际执行日期”的判定与 A 股市场日期语义错位。
+
+因此 v1 evidence contract 把执行时间也绑定到当前市场时区语义：`executed_at` 必须使用 `Asia/Shanghai` 对应的 `+08:00` UTC offset。等价瞬间如以其它 offset 表示也需要先规范化为 `+08:00` 再写入证据；否则整条 evidence 结构校验失败。该要求不声称时区 offset 能证明供应商请求真实性，只是保证时间边界的机器比较使用单一、明确的市场日期基准。
+
+代码 head `070ac1b536ad7b96a97b0b0b944453a6c6fbc919` 的 GitHub Actions run `36017899955` 已在 Ubuntu/Windows × Python 3.11/3.12 四矩阵通过测试与源码编译。完整测试集为 117，provider evidence 测试方法为 22；新增测试覆盖 `Z` 与 `+09:00` 两种错误 offset。本变更没有 provider call、没有读取凭据、没有真实行情、没有创建真实 binding，也没有观察 frozen holdout。

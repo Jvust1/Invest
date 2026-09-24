@@ -126,3 +126,13 @@ Credential-free 本地重建执行 `python -m unittest discover -s tests -q` 得
 GitHub Actions `Invest tests` run `36010703814` 已 completed/success。四个矩阵 job（Ubuntu/Windows × Python 3.11/3.12）的 `Standard-library tests` 与 `Compile source` 均成功。完整 discover 为 **115 tests PASS**，其中 evaluation 13、provider evidence 20。
 
 证据边界不变：没有真实 provider call、没有 Token/凭据、没有真实数据、没有真实 provider evidence、没有真实 `BOUND_UNOPENED` binding、frozen holdout 仍未打开、forward-paper 仍未开始。该结果只证明当前 evidence contract 对单位语义继续 fail closed。
+
+## E008 — Provider evidence 执行时区一致性门禁验收（2026-09-24）
+
+目标：关闭 `executed_at` 虽然“带时区”但仍可使用任意 UTC offset 的日期语义缺口。当前 v1 evidence contract 已声明 `units.timezone=Asia/Shanghai`，而样本边界使用 `sample.end_date <= executed_at.date()`；若执行时间以 `Z`、`+09:00` 等其它 offset 表示，同一绝对瞬间可能映射到不同日历日期，从而使 provider evidence 的样本结束日期检查偏离 A 股市场日历语义。
+
+代码 head `070ac1b536ad7b96a97b0b0b944453a6c6fbc919` 新增 fail-closed 约束：`executed_at.utcoffset()` 必须严格等于 `+08:00`。测试新增一个方法，覆盖 UTC/Z 和 `+09:00` 两个反例；原有 `+08:00` 正常 fixture 继续通过。
+
+GitHub Actions `Invest tests` run `36017899955` 已 completed/success。四个矩阵 job（Ubuntu/Windows × Python 3.11/3.12）的 `Standard-library tests` 与 `Compile source` 均成功。完整测试集推进为 **117 tests**，其中 evaluation 13、provider evidence 22。
+
+证据边界不变：本轮没有真实 provider call、没有 Token/凭据、没有真实数据、没有真实 provider evidence、没有真实 `BOUND_UNOPENED` binding、frozen holdout 仍未打开、forward-paper 仍未开始。该门禁只确保 evidence 的日期比较与声明的市场时区使用同一基准，不证明供应商真实性、数据完整性或策略有效性。

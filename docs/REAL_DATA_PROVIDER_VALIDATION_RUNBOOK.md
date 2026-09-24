@@ -35,7 +35,7 @@
 3. 区间内应包含足够的开市日与非开市日，以验证 `trade_cal` 的覆盖和缺行判断；
 4. 若用于验证停牌、风险警示或公司行动，则必须另外选择有可核验事件的历史样本，不能从“没有观察到事件”推断覆盖完整。
 
-每次样本必须冻结：证券代码、请求区间、获取时间、代码 SHA、供应商来源、原始响应/导出身份、原始 SHA-256 与规范化数据身份。
+每次样本必须冻结：证券代码、请求区间、获取时间、代码 SHA、供应商来源、原始响应/导出身份、原始 SHA-256 与规范化数据身份。脱敏证据中的 `executed_at` 必须把真实执行瞬间规范化为 `Asia/Shanghai` 对应的 `+08:00` offset；不要把 `Z`、`+09:00` 或其它 offset 原样写入 v1 evidence。这样样本结束日期与执行日期的比较始终使用同一 A 股市场日期语义。
 
 ## 4. 七类 market-data boundary 的证据要求
 
@@ -98,7 +98,7 @@
 
 一次真实验证完成后，至少生成一份**脱敏**记录，包含：
 
-- `executed_at`
+- `executed_at`，以 `Asia/Shanghai` 对应 `+08:00` offset 表示
 - `code_sha`
 - 证券与请求区间
 - `daily`、`adj_factor`、`stk_limit`、`trade_cal` 四个当前核心接口的实际尝试结果，以及任何额外接口记录
@@ -123,11 +123,12 @@
 
 1. 数据许可明确 `authorized`；
 2. 原始与规范化数据身份被冻结；
-3. `daily`、`adj_factor`、`stk_limit`、`trade_cal` 四个当前核心接口均存在真实尝试记录且全部成功；
-4. 所有 evaluation binding 所需市场边界均有真实证据，且任何 `verified` boundary 都冻结 supporting-evidence SHA-256；
-5. 任何不能验证的边界如实写为 `unknown` / `not_covered`；
-6. 没有未处理的已知 blocker；
-7. 尚未读取 frozen holdout 结果。
+3. `executed_at` 已规范化为当前 v1 市场时区 `Asia/Shanghai` 对应的 `+08:00` offset；
+4. `daily`、`adj_factor`、`stk_limit`、`trade_cal` 四个当前核心接口均存在真实尝试记录且全部成功；
+5. 所有 evaluation binding 所需市场边界均有真实证据，且任何 `verified` boundary 都冻结 supporting-evidence SHA-256；
+6. 任何不能验证的边界如实写为 `unknown` / `not_covered`；
+7. 没有未处理的已知 blocker；
+8. 尚未读取 frozen holdout 结果。
 
 随后创建 `BOUND_UNOPENED` binding，并由 `invest/evaluation.py` 校验。只有 `can_open_holdout=true` 且项目其它 gate 也全部通过，才允许首次观察 holdout。
 

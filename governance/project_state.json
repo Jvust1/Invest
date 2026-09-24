@@ -15,11 +15,11 @@
   "bootstrap_sha": "172803ad30cd2065719944f1fab26a952c42be54",
   "delivery_branch": "feat/a-share-research-v0.1-20260922",
   "delivery_policy": "draft PR to main; no automatic merge",
-  "implementation": "evaluation_binding_gate_and_provider_evidence_gate_remote_ci_validated_empty_success_sample_scope_execution_time_required_core_interfaces_required_core_fields_units_contract_and_verified_boundary_provenance_hash_fail_closed_real_data_gate_blocked",
+  "implementation": "evaluation_binding_gate_and_provider_evidence_gate_remote_ci_validated_empty_success_sample_scope_execution_time_required_core_interfaces_required_core_fields_units_contract_execution_timezone_and_verified_boundary_provenance_hash_fail_closed_real_data_gate_blocked",
   "research_governance": "evaluation_protocol_v1_frozen",
   "validation": {
     "base_application_unittest": 82,
-    "current_full_suite_tests": 116,
+    "current_full_suite_tests": 117,
     "independent_groups": 8,
     "root_browser_checks": 10,
     "ui_curve_edge_cases": 3,
@@ -27,8 +27,8 @@
     "remote_ci": {
       "historical_application_head_sha": "f40b0285b1c2bb249464f2ec354e9eb3bb6b18df",
       "historical_workflow_run_id": 35701856144,
-      "latest_validated_code_head_sha": "5f1c3be266227d7403ef0ff10b61be4742471c5c",
-      "latest_workflow_run_id": 36013947202,
+      "latest_validated_code_head_sha": "070ac1b536ad7b96a97b0b0b944453a6c6fbc919",
+      "latest_workflow_run_id": 36017899955,
       "result": "success",
       "matrix_jobs": 4,
       "platforms": ["ubuntu-latest", "windows-latest"],
@@ -85,16 +85,17 @@
       "required_core_interfaces_gate_decision_record": "governance/decisions/D015_provider_validation_required_core_interfaces_gate.json",
       "required_core_fields_gate_decision_record": "governance/decisions/D016_provider_validation_required_fields_gate.json",
       "units_contract_gate_decision_record": "governance/decisions/D017_provider_validation_units_contract_gate.json",
-      "verified_boundary_provenance_gate_decision_record": "governance/decisions/D018_provider_validation_boundary_provenance_gate.json"
+      "verified_boundary_provenance_gate_decision_record": "governance/decisions/D018_provider_validation_boundary_provenance_gate.json",
+      "execution_timezone_gate_decision_record": "governance/decisions/D019_provider_validation_execution_timezone_gate.json"
     },
     "provider_validation_evidence_validator": {
       "status": "REMOTE_CI_VALIDATED",
       "module": "invest/provider_validation.py",
       "format": "docs/PROVIDER_VALIDATION_EVIDENCE_FORMAT.md",
-      "tests": 21,
-      "current_full_suite_tests": 116,
-      "remote_ci_head_sha": "5f1c3be266227d7403ef0ff10b61be4742471c5c",
-      "workflow_run_id": 36013947202,
+      "tests": 22,
+      "current_full_suite_tests": 117,
+      "remote_ci_head_sha": "070ac1b536ad7b96a97b0b0b944453a6c6fbc919",
+      "workflow_run_id": 36017899955,
       "matrix_jobs": 4,
       "platforms": ["ubuntu-latest", "windows-latest"],
       "python_versions": ["3.11", "3.12"],
@@ -104,6 +105,8 @@
       "success_interface_positive_row_count_required": true,
       "sample_security_code_mainboard_required": true,
       "sample_end_not_after_execution_date_required": true,
+      "executed_at_required_utc_offset": "+08:00",
+      "executed_at_market_timezone_contract": "Asia/Shanghai",
       "required_core_interfaces": ["daily", "adj_factor", "stk_limit", "trade_cal"],
       "required_core_interface_fields": {
         "daily": ["ts_code", "trade_date", "open", "high", "low", "close", "vol"],
@@ -218,6 +221,21 @@
       "credentials_used": false,
       "holdout_observed": false
     },
+    "provider_evidence_execution_timezone_hardening": {
+      "status": "REMOTE_CI_VALIDATED",
+      "checkpoint": "governance/checkpoints/20260924_provider_validation_execution_timezone_gate.json",
+      "decision": "governance/decisions/D019_provider_validation_execution_timezone_gate.json",
+      "validated_code_head_sha": "070ac1b536ad7b96a97b0b0b944453a6c6fbc919",
+      "workflow_run_id": 36017899955,
+      "tests_added": 1,
+      "negative_subcases": 2,
+      "executed_at_required_utc_offset": "+08:00",
+      "declared_market_timezone": "Asia/Shanghai",
+      "real_data_used": false,
+      "provider_call_performed": false,
+      "credentials_used": false,
+      "holdout_observed": false
+    },
     "governance_reconciliation": {
       "drive_root_inventory_checked": true,
       "licensed_real_dataset_found": false,
@@ -249,13 +267,13 @@
     "public or LAN deployment; not implemented"
   ],
   "next_actions": [
-    "when local authorization is available, execute docs/REAL_DATA_PROVIDER_VALIDATION_RUNBOOK.md and emit sanitized evidence conforming to docs/PROVIDER_VALIDATION_EVIDENCE_FORMAT.md without storing credentials",
-    "validate real provider evidence with invest/provider_validation.py; missing any core interface, missing adapter-required fields on a successful core interface, unit-contract mismatch, out-of-scope sample codes, sample windows extending beyond executed_at, failed interfaces, empty successful responses, unknown/not_covered market boundaries, verified boundaries without supporting-evidence SHA-256, or explicit blockers keep provider-side readiness fail-closed",
+    "when local authorization is available, execute docs/REAL_DATA_PROVIDER_VALIDATION_RUNBOOK.md and emit sanitized evidence conforming to docs/PROVIDER_VALIDATION_EVIDENCE_FORMAT.md without storing credentials; normalize executed_at to +08:00",
+    "validate real provider evidence with invest/provider_validation.py; missing any core interface, missing adapter-required fields on a successful core interface, unit-contract mismatch, executed_at offset other than +08:00, out-of-scope sample codes, sample windows extending beyond executed_at, failed interfaces, empty successful responses, unknown/not_covered market boundaries, verified boundaries without supporting-evidence SHA-256, or explicit blockers keep provider-side readiness fail-closed",
     "before opening any frozen holdout result, create the first authorized BOUND_UNOPENED data binding and pass invest/evaluation.py validation for development/validation/holdout windows, at least three frozen historical market environments, candidate, costs, benchmark, PIT and market-data boundaries",
     "after provider evidence, candidate and data binding are frozen and all opening blockers are closed, begin append-only forward-paper evidence without retroactive signal edits",
     "while licensed data is unavailable, only advance directly related credential-free governance, adversarial tests, or research preparation that does not fabricate provider evidence"
   ],
-  "latest_checkpoint": "governance/checkpoints/20260924_provider_validation_boundary_provenance_gate.json",
+  "latest_checkpoint": "governance/checkpoints/20260924_provider_validation_execution_timezone_gate.json",
   "authority": {
     "code_and_state": "GitHub",
     "artifacts": "existing Drive project folder",
@@ -277,7 +295,7 @@
       "branch": "feat/a-share-research-v0.1-20260922",
       "base": "main",
       "state": "open_draft",
-      "validated_code_head_sha": "5f1c3be266227d7403ef0ff10b61be4742471c5c",
+      "validated_code_head_sha": "070ac1b536ad7b96a97b0b0b944453a6c6fbc919",
       "handling": "application/test, evaluation-binding validator and provider-evidence validator CI evidence are green; PR remains Draft and must not be auto-merged"
     }
   ]
