@@ -270,6 +270,17 @@ class ProviderValidationEvidenceTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             validate_provider_validation_evidence(evidence)
 
+    def test_execution_timestamp_must_use_market_timezone_offset(self):
+        for invalid_timestamp in (
+            "2026-09-23T04:00:00Z",
+            "2026-09-23T13:00:00+09:00",
+        ):
+            with self.subTest(executed_at=invalid_timestamp):
+                evidence = valid_evidence()
+                evidence["executed_at"] = invalid_timestamp
+                with self.assertRaises(ValueError):
+                    validate_provider_validation_evidence(evidence)
+
     def test_supplied_evidence_id_must_match_canonical_payload(self):
         evidence = valid_evidence()
         evidence["evidence_id"] = "c" * 64

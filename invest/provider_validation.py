@@ -7,7 +7,7 @@ that record can support the separate frozen evaluation-binding gate.
 from __future__ import annotations
 
 from copy import deepcopy
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 import hashlib
 import json
 import math
@@ -42,6 +42,7 @@ REQUIRED_PROVIDER_UNITS = {
     "volume_output_unit": "share",
     "timezone": "Asia/Shanghai",
 }
+_MARKET_TIMEZONE_OFFSET = timedelta(hours=8)
 _FORBIDDEN_KEY_PARTS = ("token", "secret", "password", "api_key", "apikey", "cookie")
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _GIT_SHA = re.compile(r"[0-9a-f]{40}\Z")
@@ -173,6 +174,8 @@ def validate_provider_validation_evidence(evidence: dict) -> dict:
     if original["status"] != EVIDENCE_STATUS:
         raise ValueError(f"status 必须严格等于 {EVIDENCE_STATUS}")
     executed_at = _timestamp(original["executed_at"], "executed_at")
+    if executed_at.utcoffset() != _MARKET_TIMEZONE_OFFSET:
+        raise ValueError("executed_at 必须使用 Asia/Shanghai 对应的 +08:00 时区偏移")
     _git_sha(original["code_sha"], "code_sha")
     if original["provider_call_performed"] is not True:
         raise ValueError("真实供应商验证记录必须明确 provider_call_performed=true")
