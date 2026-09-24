@@ -14,5 +14,7 @@
     "number": 1,
     "status": "preserved untouched; reconcile README during eventual merge"
   },
-  "next_safe_action": "When licensed real data is available locally, execute the provider-validation runbook and require daily/adj_factor/stk_limit/trade_cal to all be explicitly recorded; any successful core interface must contain adapter-required fields and the v1 unit contract must match CNY/CNY-share/lot-to-share/Asia-Shanghai semantics before provider-side readiness. Then validate sanitized evidence and create the first BOUND_UNOPENED evaluation binding before any frozen-holdout observation. Until then, only continue directly related credential-free adversarial tests, governance or research preparation."
+  "next_safe_action": "When licensed real data is available locally, execute the provider-validation runbook and require daily/adj_factor/stk_limit/trade_cal to all be explicitly recorded; any successful core interface must contain adapter-required fields and the v1 unit contract must match CNY/CNY-share/lot-to-share/Asia-Shanghai semantics before provider-side readiness. Then validate sanitized evidence and create the first BOUND_UNOPENED evaluation binding before any frozen-holdout observation. Until then, only continue directly related credential-free adversarial tests, governance or research preparation.",
+  "latest_validated_code_head": "1a19ab04bcc5d26f6e825e1d76bd83e9c4621f73",
+  "latest_governance_commit": "c1c4b5c8c2e03b5d811552b33da491dbe7b062ad"
 }
