@@ -30,7 +30,7 @@
 
 `dataset_identity` 包含 `raw_artifact_identity`、`raw_sha256`、`normalized_dataset_id`。两个哈希均为小写 64 位 SHA-256。授权原始数据本体可以只留在本地；共享治理证据只保存不可恢复凭据的身份、哈希与脱敏摘要。
 
-`units` 包含 `currency`、`price_unit`、`volume_input_unit`、`volume_output_unit`、`timezone`、`conversion_notes`；当前 v1 的 `currency` 必须是 `CNY`。
+`units` 包含 `currency`、`price_unit`、`volume_input_unit`、`volume_output_unit`、`timezone`、`conversion_notes`。当前 v1 证据契约必须与现有 Tushare 适配器的实际单位语义严格一致：`currency=CNY`、`price_unit=CNY/share`、`volume_input_unit=lot`、`volume_output_unit=share`、`timezone=Asia/Shanghai`；`conversion_notes` 仍需非空说明。单位不一致时整条证据结构校验失败，不能让“字段完整但单位语义错误”的记录支持 provider-side readiness。未来若引入单位语义不同的供应商，应升级/扩展证据契约，而不是复用 v1 并静默改写单位。
 
 ## 七类 market-data boundary
 

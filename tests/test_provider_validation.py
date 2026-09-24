@@ -168,6 +168,21 @@ class ProviderValidationEvidenceTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     validate_provider_validation_evidence(evidence)
 
+    def test_units_must_match_current_adapter_contract(self):
+        invalid_units = {
+            "currency": "USD",
+            "price_unit": "CNY/lot",
+            "volume_input_unit": "share",
+            "volume_output_unit": "lot",
+            "timezone": "UTC",
+        }
+        for field, invalid_value in invalid_units.items():
+            with self.subTest(field=field, invalid_value=invalid_value):
+                evidence = valid_evidence()
+                evidence["units"][field] = invalid_value
+                with self.assertRaises(ValueError):
+                    validate_provider_validation_evidence(evidence)
+
     def test_provider_call_must_have_actually_been_attempted(self):
         evidence = valid_evidence()
         evidence["provider_call_performed"] = False

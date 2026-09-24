@@ -35,6 +35,13 @@ REQUIRED_CORE_INTERFACE_FIELDS = {
     "stk_limit": frozenset({"ts_code", "trade_date", "up_limit", "down_limit"}),
     "trade_cal": frozenset({"exchange", "cal_date", "is_open"}),
 }
+REQUIRED_PROVIDER_UNITS = {
+    "currency": "CNY",
+    "price_unit": "CNY/share",
+    "volume_input_unit": "lot",
+    "volume_output_unit": "share",
+    "timezone": "Asia/Shanghai",
+}
 _FORBIDDEN_KEY_PARTS = ("token", "secret", "password", "api_key", "apikey", "cookie")
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _GIT_SHA = re.compile(r"[0-9a-f]{40}\Z")
@@ -247,10 +254,11 @@ def validate_provider_validation_evidence(evidence: dict) -> dict:
 
     units = _mapping(original["units"], "units")
     _only_keys(units, "units", {"currency", "price_unit", "volume_input_unit", "volume_output_unit", "timezone", "conversion_notes"})
-    if units["currency"] != "CNY":
-        raise ValueError("Invest v1 真实数据验证 currency 必须为 CNY")
-    for key in ("price_unit", "volume_input_unit", "volume_output_unit", "timezone", "conversion_notes"):
-        _text(units[key], f"units.{key}", 500)
+    for key, expected in REQUIRED_PROVIDER_UNITS.items():
+        value = _text(units[key], f"units.{key}", 500)
+        if value != expected:
+            raise ValueError(f"units.{key} 必须严格等于 {expected}，与当前 Invest v1 Tushare 适配器一致")
+    _text(units["conversion_notes"], "units.conversion_notes", 500)
 
     boundaries = _mapping(original["market_data_boundaries"], "market_data_boundaries")
     _only_keys(boundaries, "market_data_boundaries", set(BOUNDARY_KEYS))
