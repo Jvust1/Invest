@@ -43,28 +43,28 @@ def valid_evidence():
             {
                 "name": "daily",
                 "status": "success",
-                "fields": ["trade_date", "open", "close"],
+                "fields": ["ts_code", "trade_date", "open", "high", "low", "close", "vol"],
                 "row_count": 240,
                 "evidence": "rows matched request",
             },
             {
                 "name": "adj_factor",
                 "status": "success",
-                "fields": ["trade_date", "adj_factor"],
+                "fields": ["ts_code", "trade_date", "adj_factor"],
                 "row_count": 240,
                 "evidence": "adjustment factors matched request",
             },
             {
                 "name": "stk_limit",
                 "status": "success",
-                "fields": ["trade_date", "up_limit", "down_limit"],
+                "fields": ["ts_code", "trade_date", "up_limit", "down_limit"],
                 "row_count": 240,
                 "evidence": "daily price limits matched request",
             },
             {
                 "name": "trade_cal",
                 "status": "success",
-                "fields": ["cal_date", "is_open"],
+                "fields": ["exchange", "cal_date", "is_open"],
                 "row_count": 365,
                 "evidence": "calendar covers every natural day",
             },
@@ -148,6 +148,25 @@ class ProviderValidationEvidenceTests(unittest.TestCase):
         evidence["interfaces"][0]["row_count"] = 0
         with self.assertRaises(ValueError):
             validate_provider_validation_evidence(evidence)
+
+    def test_success_core_interfaces_require_adapter_fields(self):
+        missing_cases = {
+            "daily": "vol",
+            "adj_factor": "ts_code",
+            "stk_limit": "up_limit",
+            "trade_cal": "exchange",
+        }
+        for interface_name, missing_field in missing_cases.items():
+            with self.subTest(interface=interface_name, missing_field=missing_field):
+                evidence = valid_evidence()
+                interface = next(
+                    item for item in evidence["interfaces"] if item["name"] == interface_name
+                )
+                interface["fields"] = [
+                    field for field in interface["fields"] if field != missing_field
+                ]
+                with self.assertRaises(ValueError):
+                    validate_provider_validation_evidence(evidence)
 
     def test_provider_call_must_have_actually_been_attempted(self):
         evidence = valid_evidence()

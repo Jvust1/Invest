@@ -29,6 +29,12 @@ BOUNDARY_KEYS = (
 BOUNDARY_STATES = {"verified", "unknown", "not_covered"}
 INTERFACE_STATES = {"success", "failed"}
 REQUIRED_CORE_INTERFACES = ("daily", "adj_factor", "stk_limit", "trade_cal")
+REQUIRED_CORE_INTERFACE_FIELDS = {
+    "daily": frozenset({"ts_code", "trade_date", "open", "high", "low", "close", "vol"}),
+    "adj_factor": frozenset({"ts_code", "trade_date", "adj_factor"}),
+    "stk_limit": frozenset({"ts_code", "trade_date", "up_limit", "down_limit"}),
+    "trade_cal": frozenset({"exchange", "cal_date", "is_open"}),
+}
 _FORBIDDEN_KEY_PARTS = ("token", "secret", "password", "api_key", "apikey", "cookie")
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _GIT_SHA = re.compile(r"[0-9a-f]{40}\Z")
@@ -139,9 +145,9 @@ def validate_provider_validation_evidence(evidence: dict) -> dict:
 
     A structurally valid record can describe a failed or partial real attempt.
     Provider-side readiness is true only with real data, all four current Invest
-    v1 core interfaces recorded and successful, all seven boundaries verified,
-    no blocker, and the frozen holdout still unobserved. The separate
-    ``invest.evaluation`` binding gate must still pass afterwards.
+    v1 core interfaces recorded and successful with the adapter-required schema,
+    all seven boundaries verified, no blocker, and the frozen holdout still
+    unobserved. The separate ``invest.evaluation`` binding gate must still pass.
     """
     original = _mapping(evidence, "evidence")
     _reject_sensitive_keys(original)
@@ -221,6 +227,13 @@ def validate_provider_validation_evidence(evidence: dict) -> dict:
             raise ValueError(f"{field}.status=success 时 fields 不能为空")
         if status == "success" and interface["row_count"] == 0:
             raise ValueError(f"{field}.status=success 时 row_count 必须大于 0")
+        if status == "success" and name in REQUIRED_CORE_INTERFACE_FIELDS:
+            missing_fields = REQUIRED_CORE_INTERFACE_FIELDS[name] - set(normalized_fields)
+            if missing_fields:
+                raise ValueError(
+                    f"{field}.status=success 缺少当前适配器必需字段："
+                    + ", ".join(sorted(missing_fields))
+                )
         _text(interface["evidence"], f"{field}.evidence")
 
     missing_core_interfaces = tuple(name for name in REQUIRED_CORE_INTERFACES if name not in names)
