@@ -208,6 +208,10 @@ def validate_provider_validation_evidence(evidence: dict) -> dict:
             raise ValueError(f"{field}.fields 不能重复")
         if type(interface["row_count"]) is not int or interface["row_count"] < 0:
             raise ValueError(f"{field}.row_count 必须是非负整数")
+        if status == "success" and not normalized_fields:
+            raise ValueError(f"{field}.status=success 时 fields 不能为空")
+        if status == "success" and interface["row_count"] == 0:
+            raise ValueError(f"{field}.status=success 时 row_count 必须大于 0")
         _text(interface["evidence"], f"{field}.evidence")
 
     identity = _mapping(original["dataset_identity"], "dataset_identity")
