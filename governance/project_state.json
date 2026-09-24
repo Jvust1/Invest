@@ -18,11 +18,11 @@
   "bootstrap_sha": "172803ad30cd2065719944f1fab26a952c42be54",
   "delivery_branch": "feat/a-share-research-v0.1-20260922",
   "delivery_policy": "draft PR to main; no automatic merge",
-  "implementation": "evaluation_binding_gate_and_provider_evidence_gate_remote_ci_validated_empty_success_fail_closed_real_data_gate_blocked",
+  "implementation": "evaluation_binding_gate_and_provider_evidence_gate_remote_ci_validated_empty_success_sample_scope_and_execution_time_fail_closed_real_data_gate_blocked",
   "research_governance": "evaluation_protocol_v1_frozen",
   "validation": {
     "base_application_unittest": 82,
-    "current_full_suite_tests": 110,
+    "current_full_suite_tests": 112,
     "independent_groups": 8,
     "root_browser_checks": 10,
     "ui_curve_edge_cases": 3,
@@ -30,8 +30,8 @@
     "remote_ci": {
       "historical_application_head_sha": "f40b0285b1c2bb249464f2ec354e9eb3bb6b18df",
       "historical_workflow_run_id": 35701856144,
-      "latest_validated_code_head_sha": "4cbb66fb1c021d998368ee75f468e5be3e498f95",
-      "latest_workflow_run_id": 35988041656,
+      "latest_validated_code_head_sha": "6b27845191c62a35d5930cc56e518e9eeb187400",
+      "latest_workflow_run_id": 35993749624,
       "result": "success",
       "matrix_jobs": 4,
       "platforms": [
@@ -102,16 +102,17 @@
       ],
       "runbook_decision_record": "governance/decisions/D011_provider_validation_runbook.json",
       "evidence_validator_decision_record": "governance/decisions/D012_provider_validation_evidence_validator.json",
-      "nonempty_success_gate_decision_record": "governance/decisions/D013_provider_validation_nonempty_success_gate.json"
+      "nonempty_success_gate_decision_record": "governance/decisions/D013_provider_validation_nonempty_success_gate.json",
+      "sample_scope_time_gate_decision_record": "governance/decisions/D014_provider_validation_sample_scope_time_gate.json"
     },
     "provider_validation_evidence_validator": {
       "status": "REMOTE_CI_VALIDATED",
       "module": "invest/provider_validation.py",
       "format": "docs/PROVIDER_VALIDATION_EVIDENCE_FORMAT.md",
-      "tests": 15,
-      "current_full_suite_tests": 110,
-      "remote_ci_head_sha": "4cbb66fb1c021d998368ee75f468e5be3e498f95",
-      "workflow_run_id": 35988041656,
+      "tests": 17,
+      "current_full_suite_tests": 112,
+      "remote_ci_head_sha": "6b27845191c62a35d5930cc56e518e9eeb187400",
+      "workflow_run_id": 35993749624,
       "matrix_jobs": 4,
       "platforms": [
         "ubuntu-latest",
@@ -125,6 +126,8 @@
       "compile_source_step": "pass",
       "success_interface_nonempty_fields_required": true,
       "success_interface_positive_row_count_required": true,
+      "sample_security_code_mainboard_required": true,
+      "sample_end_not_after_execution_date_required": true,
       "provider_call_performed": false,
       "credential_used": false,
       "real_data_used": false,
@@ -137,6 +140,20 @@
       "validated_code_head_sha": "4cbb66fb1c021d998368ee75f468e5be3e498f95",
       "workflow_run_id": 35988041656,
       "tests_added": 2,
+      "real_data_used": false,
+      "provider_call_performed": false,
+      "credentials_used": false,
+      "holdout_observed": false
+    },
+    "provider_evidence_sample_scope_time_hardening": {
+      "status": "REMOTE_CI_VALIDATED",
+      "checkpoint": "governance/checkpoints/20260924_provider_validation_sample_scope_time_gate.json",
+      "decision": "governance/decisions/D014_provider_validation_sample_scope_time_gate.json",
+      "validated_code_head_sha": "6b27845191c62a35d5930cc56e518e9eeb187400",
+      "workflow_run_id": 35993749624,
+      "tests_added": 2,
+      "sample_security_code_mainboard_required": true,
+      "sample_end_not_after_execution_date_required": true,
       "real_data_used": false,
       "provider_call_performed": false,
       "credentials_used": false,
@@ -174,12 +191,12 @@
   ],
   "next_actions": [
     "when local authorization is available, execute docs/REAL_DATA_PROVIDER_VALIDATION_RUNBOOK.md and emit sanitized evidence conforming to docs/PROVIDER_VALIDATION_EVIDENCE_FORMAT.md without storing credentials",
-    "validate the real provider evidence with invest/provider_validation.py; failed interfaces, empty successful responses, unknown/not_covered market boundaries, or explicit blockers keep the provider side fail-closed",
+    "validate the real provider evidence with invest/provider_validation.py; out-of-scope sample codes, sample windows extending beyond executed_at, failed interfaces, empty successful responses, unknown/not_covered market boundaries, or explicit blockers keep the provider side fail-closed",
     "before opening any frozen holdout result, create the first authorized BOUND_UNOPENED data binding and pass invest/evaluation.py validation for development/validation/holdout windows, at least three frozen historical market environments, candidate, costs, benchmark, PIT and market-data boundaries",
     "after provider evidence, candidate and data binding are frozen and all opening blockers are closed, begin append-only forward-paper evidence without retroactive signal edits",
     "while licensed data is unavailable, only advance directly related credential-free governance, adversarial tests, or research preparation that does not fabricate provider evidence"
   ],
-  "latest_checkpoint": "governance/checkpoints/20260924_provider_validation_nonempty_success_gate.json",
+  "latest_checkpoint": "governance/checkpoints/20260924_provider_validation_sample_scope_time_gate.json",
   "authority": {
     "code_and_state": "GitHub",
     "artifacts": "existing Drive project folder",
@@ -204,7 +221,7 @@
       "branch": "feat/a-share-research-v0.1-20260922",
       "base": "main",
       "state": "open_draft",
-      "validated_code_head_sha": "4cbb66fb1c021d998368ee75f468e5be3e498f95",
+      "validated_code_head_sha": "6b27845191c62a35d5930cc56e518e9eeb187400",
       "handling": "application/test, evaluation-binding validator and provider-evidence validator CI evidence are green; PR remains Draft and must not be auto-merged"
     }
   ]
