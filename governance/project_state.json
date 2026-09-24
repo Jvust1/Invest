@@ -4,7 +4,7 @@
   "repository": "Jvust2/Invest",
   "repository_id": 1381007406,
   "drive_folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
-  "as_of": "2026-09-23",
+  "as_of": "2026-09-24",
   "state_scope": "live feature-branch governance snapshot; live branch/PR/checks remain authoritative for publication state",
   "version": "0.1.0",
   "currency": "CNY",
@@ -18,11 +18,11 @@
   "bootstrap_sha": "172803ad30cd2065719944f1fab26a952c42be54",
   "delivery_branch": "feat/a-share-research-v0.1-20260922",
   "delivery_policy": "draft PR to main; no automatic merge",
-  "implementation": "evaluation_binding_gate_and_provider_evidence_gate_remote_ci_validated_real_data_gate_blocked",
+  "implementation": "evaluation_binding_gate_and_provider_evidence_gate_remote_ci_validated_empty_success_fail_closed_real_data_gate_blocked",
   "research_governance": "evaluation_protocol_v1_frozen",
   "validation": {
     "base_application_unittest": 82,
-    "current_full_suite_tests": 108,
+    "current_full_suite_tests": 110,
     "independent_groups": 8,
     "root_browser_checks": 10,
     "ui_curve_edge_cases": 3,
@@ -30,8 +30,8 @@
     "remote_ci": {
       "historical_application_head_sha": "f40b0285b1c2bb249464f2ec354e9eb3bb6b18df",
       "historical_workflow_run_id": 35701856144,
-      "latest_validated_code_head_sha": "ac65138475b1ecee11388dd8d6294f53ea13ac67",
-      "latest_workflow_run_id": 35817379641,
+      "latest_validated_code_head_sha": "4cbb66fb1c021d998368ee75f468e5be3e498f95",
+      "latest_workflow_run_id": 35988041656,
       "result": "success",
       "matrix_jobs": 4,
       "platforms": [
@@ -101,16 +101,17 @@
         "pit_features"
       ],
       "runbook_decision_record": "governance/decisions/D011_provider_validation_runbook.json",
-      "evidence_validator_decision_record": "governance/decisions/D012_provider_validation_evidence_validator.json"
+      "evidence_validator_decision_record": "governance/decisions/D012_provider_validation_evidence_validator.json",
+      "nonempty_success_gate_decision_record": "governance/decisions/D013_provider_validation_nonempty_success_gate.json"
     },
     "provider_validation_evidence_validator": {
       "status": "REMOTE_CI_VALIDATED",
       "module": "invest/provider_validation.py",
       "format": "docs/PROVIDER_VALIDATION_EVIDENCE_FORMAT.md",
-      "tests": 13,
-      "current_full_suite_tests": 108,
-      "remote_ci_head_sha": "ac65138475b1ecee11388dd8d6294f53ea13ac67",
-      "workflow_run_id": 35817379641,
+      "tests": 15,
+      "current_full_suite_tests": 110,
+      "remote_ci_head_sha": "4cbb66fb1c021d998368ee75f468e5be3e498f95",
+      "workflow_run_id": 35988041656,
       "matrix_jobs": 4,
       "platforms": [
         "ubuntu-latest",
@@ -122,10 +123,24 @@
       ],
       "standard_library_tests_step": "pass",
       "compile_source_step": "pass",
+      "success_interface_nonempty_fields_required": true,
+      "success_interface_positive_row_count_required": true,
       "provider_call_performed": false,
       "credential_used": false,
       "real_data_used": false,
       "holdout_opened": false
+    },
+    "provider_evidence_fail_closed_hardening": {
+      "status": "REMOTE_CI_VALIDATED",
+      "checkpoint": "governance/checkpoints/20260924_provider_validation_nonempty_success_gate.json",
+      "decision": "governance/decisions/D013_provider_validation_nonempty_success_gate.json",
+      "validated_code_head_sha": "4cbb66fb1c021d998368ee75f468e5be3e498f95",
+      "workflow_run_id": 35988041656,
+      "tests_added": 2,
+      "real_data_used": false,
+      "provider_call_performed": false,
+      "credentials_used": false,
+      "holdout_observed": false
     },
     "governance_reconciliation": {
       "drive_root_inventory_checked": true,
@@ -159,12 +174,12 @@
   ],
   "next_actions": [
     "when local authorization is available, execute docs/REAL_DATA_PROVIDER_VALIDATION_RUNBOOK.md and emit sanitized evidence conforming to docs/PROVIDER_VALIDATION_EVIDENCE_FORMAT.md without storing credentials",
-    "validate the real provider evidence with invest/provider_validation.py; failed interfaces, unknown/not_covered market boundaries, or explicit blockers keep the provider side fail-closed",
+    "validate the real provider evidence with invest/provider_validation.py; failed interfaces, empty successful responses, unknown/not_covered market boundaries, or explicit blockers keep the provider side fail-closed",
     "before opening any frozen holdout result, create the first authorized BOUND_UNOPENED data binding and pass invest/evaluation.py validation for development/validation/holdout windows, at least three frozen historical market environments, candidate, costs, benchmark, PIT and market-data boundaries",
     "after provider evidence, candidate and data binding are frozen and all opening blockers are closed, begin append-only forward-paper evidence without retroactive signal edits",
     "while licensed data is unavailable, only advance directly related credential-free governance, adversarial tests, or research preparation that does not fabricate provider evidence"
   ],
-  "latest_checkpoint": "governance/checkpoints/20260923_provider_validation_evidence_validator.json",
+  "latest_checkpoint": "governance/checkpoints/20260924_provider_validation_nonempty_success_gate.json",
   "authority": {
     "code_and_state": "GitHub",
     "artifacts": "existing Drive project folder",
@@ -189,7 +204,7 @@
       "branch": "feat/a-share-research-v0.1-20260922",
       "base": "main",
       "state": "open_draft",
-      "validated_code_head_sha": "ac65138475b1ecee11388dd8d6294f53ea13ac67",
+      "validated_code_head_sha": "4cbb66fb1c021d998368ee75f468e5be3e498f95",
       "handling": "application/test, evaluation-binding validator and provider-evidence validator CI evidence are green; PR remains Draft and must not be auto-merged"
     }
   ]
