@@ -11,7 +11,11 @@ GIT_SHA = "1" * 40
 
 def valid_evidence():
     boundaries = {
-        name: {"status": "verified", "evidence": f"verified {name} with PIT source"}
+        name: {
+            "status": "verified",
+            "evidence": f"verified {name} with PIT source",
+            "evidence_sha256": SHA256_A,
+        }
         for name in (
             "calendar",
             "suspension",
@@ -98,6 +102,7 @@ class ProviderValidationEvidenceTests(unittest.TestCase):
         self.assertTrue(result["required_core_interfaces_present"])
         self.assertEqual(result["missing_core_interfaces"], ())
         self.assertTrue(result["all_boundaries_verified"])
+        self.assertEqual(result["boundary_evidence_sha256"]["calendar"], SHA256_A)
         self.assertTrue(result["interfaces_all_success"])
         self.assertTrue(result["can_support_holdout_opening"])
 
@@ -182,6 +187,27 @@ class ProviderValidationEvidenceTests(unittest.TestCase):
                 evidence["units"][field] = invalid_value
                 with self.assertRaises(ValueError):
                     validate_provider_validation_evidence(evidence)
+
+    def test_verified_boundary_requires_stable_provenance_hash(self):
+        for mode in ("missing", "malformed"):
+            with self.subTest(mode=mode):
+                evidence = valid_evidence()
+                boundary = evidence["market_data_boundaries"]["corporate_actions"]
+                if mode == "missing":
+                    boundary.pop("evidence_sha256")
+                else:
+                    boundary["evidence_sha256"] = "not-a-sha256"
+                with self.assertRaises(ValueError):
+                    validate_provider_validation_evidence(evidence)
+
+        evidence = valid_evidence()
+        boundary = evidence["market_data_boundaries"]["corporate_actions"]
+        boundary["status"] = "unknown"
+        boundary.pop("evidence_sha256")
+        result = validate_provider_validation_evidence(evidence)
+        self.assertFalse(result["all_boundaries_verified"])
+        self.assertIsNone(result["boundary_evidence_sha256"]["corporate_actions"])
+        self.assertFalse(result["can_support_holdout_opening"])
 
     def test_provider_call_must_have_actually_been_attempted(self):
         evidence = valid_evidence()

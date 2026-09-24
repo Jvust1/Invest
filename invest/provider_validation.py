@@ -153,8 +153,9 @@ def validate_provider_validation_evidence(evidence: dict) -> dict:
     A structurally valid record can describe a failed or partial real attempt.
     Provider-side readiness is true only with real data, all four current Invest
     v1 core interfaces recorded and successful with the adapter-required schema,
-    all seven boundaries verified, no blocker, and the frozen holdout still
-    unobserved. The separate ``invest.evaluation`` binding gate must still pass.
+    all seven boundaries verified with stable supporting-evidence hashes, no
+    blocker, and the frozen holdout still unobserved. The separate
+    ``invest.evaluation`` binding gate must still pass.
     """
     original = _mapping(evidence, "evidence")
     _reject_sensitive_keys(original)
@@ -263,16 +264,25 @@ def validate_provider_validation_evidence(evidence: dict) -> dict:
     boundaries = _mapping(original["market_data_boundaries"], "market_data_boundaries")
     _only_keys(boundaries, "market_data_boundaries", set(BOUNDARY_KEYS))
     boundary_states: dict[str, str] = {}
+    boundary_evidence_sha256: dict[str, str | None] = {}
     all_boundaries_verified = True
     for name in BOUNDARY_KEYS:
-        boundary = _mapping(boundaries[name], f"market_data_boundaries.{name}")
-        _only_keys(boundary, f"market_data_boundaries.{name}", {"status", "evidence"})
+        field = f"market_data_boundaries.{name}"
+        boundary = _mapping(boundaries[name], field)
+        _only_keys(boundary, field, {"status", "evidence"}, {"evidence_sha256"})
         state = boundary["status"]
         if state not in BOUNDARY_STATES:
-            raise ValueError(f"market_data_boundaries.{name}.status 非法")
+            raise ValueError(f"{field}.status 非法")
         boundary_states[name] = state
         all_boundaries_verified = all_boundaries_verified and state == "verified"
-        _text(boundary["evidence"], f"market_data_boundaries.{name}.evidence")
+        _text(boundary["evidence"], f"{field}.evidence")
+        evidence_sha256 = boundary.get("evidence_sha256")
+        if state == "verified" and evidence_sha256 is None:
+            raise ValueError(f"{field}.status=verified 时必须提供 supporting evidence SHA-256")
+        if evidence_sha256 is not None:
+            boundary_evidence_sha256[name] = _sha256(evidence_sha256, f"{field}.evidence_sha256")
+        else:
+            boundary_evidence_sha256[name] = None
 
     blockers = original["known_blockers"]
     if not isinstance(blockers, list):
@@ -299,6 +309,7 @@ def validate_provider_validation_evidence(evidence: dict) -> dict:
         "missing_core_interfaces": missing_core_interfaces,
         "all_boundaries_verified": all_boundaries_verified,
         "boundary_states": boundary_states,
+        "boundary_evidence_sha256": boundary_evidence_sha256,
         "interfaces_all_success": interfaces_all_success,
         "known_blockers": tuple(normalized_blockers),
         "can_support_holdout_opening": can_support,

@@ -34,9 +34,11 @@
 
 ## 七类 market-data boundary
 
-`market_data_boundaries` 必须恰好包含：`calendar`、`suspension`、`corporate_actions`、`price_limits`、`risk_warning_history`、`survivorship_bias`、`pit_features`。每项只有 `status` 与 `evidence`，其中 `status` 只能是 `verified` / `unknown` / `not_covered`。
+`market_data_boundaries` 必须恰好包含：`calendar`、`suspension`、`corporate_actions`、`price_limits`、`risk_warning_history`、`survivorship_bias`、`pit_features`。每项必须包含 `status` 与 `evidence`，并可带 `evidence_sha256`；`status` 只能是 `verified` / `unknown` / `not_covered`。
 
-`unknown` / `not_covered` 可以诚实保存，但会使 `can_support_holdout_opening=false`。未知状态不得被静默填成安全的 false/0。
+当某项标记为 `verified` 时，`evidence_sha256` **必须**存在且为小写 64 位 SHA-256，用于把“已验证”声明绑定到一个稳定、可追溯的 supporting-evidence artifact/脱敏证据包身份。授权原始数据或事件级证据可以继续只保存在本地，但共享记录至少要冻结其 supporting evidence 的哈希，不能只用一段自由文本把 boundary 升级为 verified。`unknown` / `not_covered` 可不提供哈希；若提供，也必须是有效 SHA-256。
+
+`unknown` / `not_covered` 可以诚实保存，但会使 `can_support_holdout_opening=false`。未知状态不得被静默填成安全的 false/0。`evidence_sha256` 只提供 provenance commitment，不证明 artifact 内容真实、许可充分或 boundary 判断正确；这些仍需独立审查和真实 binding 门禁。
 
 ## Blocker 与敏感信息
 
@@ -44,6 +46,6 @@
 
 ## 与 frozen holdout 的关系
 
-只有 `real_data_used=true`、样本身份与时间范围通过上述门禁、四个当前核心接口全部存在且全部成功、每个成功核心接口覆盖当前适配器所需字段、成功接口具有正行数、七类 boundary 全部 `verified`、`known_blockers` 为空且 `holdout_observed=false` 时，校验器才返回 `can_support_holdout_opening=true`。
+只有 `real_data_used=true`、样本身份与时间范围通过上述门禁、四个当前核心接口全部存在且全部成功、每个成功核心接口覆盖当前适配器所需字段、成功接口具有正行数、七类 boundary 全部 `verified` 且每个 verified boundary 都绑定有效 supporting-evidence SHA-256、`known_blockers` 为空且 `holdout_observed=false` 时，校验器才返回 `can_support_holdout_opening=true`。
 
 这个布尔值只说明**供应商证据这一侧**没有已知 opening blocker，绝不单独授权打开 frozen holdout。随后仍必须创建真实 `BOUND_UNOPENED` binding，并由 `invest/evaluation.py` 对授权、数据/代码身份、development/validation/holdout、至少三个历史市场环境、候选、成本、基准、PIT/证券池和市场边界再次 fail-closed 校验；其它项目 gate 也必须全部通过。
