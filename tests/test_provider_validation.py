@@ -111,6 +111,18 @@ class ProviderValidationEvidenceTests(unittest.TestCase):
         self.assertFalse(result["interfaces_all_success"])
         self.assertFalse(result["can_support_holdout_opening"])
 
+    def test_success_interface_requires_nonempty_fields(self):
+        evidence = valid_evidence()
+        evidence["interfaces"][0]["fields"] = []
+        with self.assertRaises(ValueError):
+            validate_provider_validation_evidence(evidence)
+
+    def test_success_interface_requires_positive_row_count(self):
+        evidence = valid_evidence()
+        evidence["interfaces"][0]["row_count"] = 0
+        with self.assertRaises(ValueError):
+            validate_provider_validation_evidence(evidence)
+
     def test_provider_call_must_have_actually_been_attempted(self):
         evidence = valid_evidence()
         evidence["provider_call_performed"] = False
