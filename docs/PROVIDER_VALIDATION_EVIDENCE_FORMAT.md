@@ -16,7 +16,7 @@
 
 ## 最小验证样本
 
-`sample` 包含 `security_code`、`start_date`、`end_date`、`purpose`。日期必须存在且有序；首轮最小样本最长 366 个自然日，与执行手册一致。
+`sample` 包含 `security_code`、`start_date`、`end_date`、`purpose`。`security_code` 必须通过当前 Invest v1 与 `invest/data.py` 共用的沪深主板代码格式门禁；科创板、创业板、ETF、境外或其它未纳入当前范围的代码不能作为本格式的有效首轮样本。日期必须存在且有序；首轮最小样本最长 366 个自然日。`sample.end_date` 还不得晚于证据自身 `executed_at` 所在日期，避免尚未发生的数据区间被写成已经完成的真实供应商验证证据。
 
 ## 接口尝试
 
@@ -40,6 +40,6 @@
 
 ## 与 frozen holdout 的关系
 
-只有 `real_data_used=true`、所有记录接口成功且成功接口具有非空字段与正行数、七类 boundary 全部 `verified`、`known_blockers` 为空且 `holdout_observed=false` 时，校验器才返回 `can_support_holdout_opening=true`。
+只有 `real_data_used=true`、样本身份与时间范围通过上述门禁、所有记录接口成功且成功接口具有非空字段与正行数、七类 boundary 全部 `verified`、`known_blockers` 为空且 `holdout_observed=false` 时，校验器才返回 `can_support_holdout_opening=true`。
 
 这个布尔值只说明**供应商证据这一侧**没有已知 opening blocker，绝不单独授权打开 frozen holdout。随后仍必须创建真实 `BOUND_UNOPENED` binding，并由 `invest/evaluation.py` 对授权、数据/代码身份、development/validation/holdout、至少三个历史市场环境、候选、成本、基准、PIT/证券池和市场边界再次 fail-closed 校验；其它项目 gate 也必须全部通过。
