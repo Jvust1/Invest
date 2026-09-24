@@ -39,6 +39,8 @@
 
 ## 4. 七类 market-data boundary 的证据要求
 
+每个 boundary 都必须保存脱敏 `evidence` 摘要。**任何标记为 `verified` 的 boundary 还必须冻结 supporting-evidence artifact/证据包的 SHA-256**；授权原始数据可继续只留本地，但共享治理记录不能只有自由文本断言。`unknown` / `not_covered` 可不提供 hash。Supporting-evidence hash 只绑定 provenance identity，不独立证明内容真实或判断正确。
+
 ### `calendar`
 
 可标记 `verified` 的最低要求：
@@ -106,6 +108,7 @@
 - 规范化数据身份
 - 七类 boundary 的 `verified / unknown / not_covered`
 - 每项 boundary 的证据摘要
+- 每个 `verified` boundary 的 supporting-evidence SHA-256
 - 明确 blockers
 - 是否存在 provider call、是否使用真实数据
 - 明确声明凭据未被保存
@@ -121,7 +124,7 @@
 1. 数据许可明确 `authorized`；
 2. 原始与规范化数据身份被冻结；
 3. `daily`、`adj_factor`、`stk_limit`、`trade_cal` 四个当前核心接口均存在真实尝试记录且全部成功；
-4. 所有 evaluation binding 所需市场边界均有真实证据；
+4. 所有 evaluation binding 所需市场边界均有真实证据，且任何 `verified` boundary 都冻结 supporting-evidence SHA-256；
 5. 任何不能验证的边界如实写为 `unknown` / `not_covered`；
 6. 没有未处理的已知 blocker；
 7. 尚未读取 frozen holdout 结果。

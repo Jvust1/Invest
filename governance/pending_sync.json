@@ -1,20 +1,21 @@
 {
   "schema_version": 1,
   "as_of": "2026-09-24",
-  "phase": "evaluation protocol v1 frozen; provider-evidence core-interface, required-field and unit-contract fail-closed gates remote-CI validated; licensed real-data gate blocked",
+  "phase": "evaluation protocol v1 frozen; provider-evidence core-interface, required-field, unit-contract and verified-boundary provenance-hash fail-closed gates remote-CI validated; licensed real-data gate blocked",
   "drive_checkpoint": {
     "status": "exists_verified",
     "id": "1Iscm0akdNG5s0WNJfc83-T_eh88xIz1F"
   },
   "pending_sync": [],
-  "publication_action": "Continue on the existing non-default feature branch and Draft PR #2. Provider-validation runbook/evidence format, D011-D017 decisions and checkpoints are GitHub-recoverable; no Drive write is required and the existing frozen source checkpoint must remain unchanged.",
+  "publication_action": "Continue on the existing non-default feature branch and Draft PR #2. Provider-validation runbook/evidence format, D011-D018 decisions and checkpoints are GitHub-recoverable; no Drive write is required and the existing frozen source checkpoint must remain unchanged.",
   "publication_authority": "GitHub live branch, PR and checks",
   "main_merge": "requires later explicit authorization for the specific PR; not a pending sync",
   "parallel_roadmap_pr": {
     "number": 1,
     "status": "preserved untouched; reconcile README during eventual merge"
   },
-  "next_safe_action": "When licensed real data is available locally, execute the provider-validation runbook and require daily/adj_factor/stk_limit/trade_cal to all be explicitly recorded; any successful core interface must contain adapter-required fields and the v1 unit contract must match CNY/CNY-share/lot-to-share/Asia-Shanghai semantics before provider-side readiness. Then validate sanitized evidence and create the first BOUND_UNOPENED evaluation binding before any frozen-holdout observation. Until then, only continue directly related credential-free adversarial tests, governance or research preparation.",
-  "latest_validated_code_head": "1a19ab04bcc5d26f6e825e1d76bd83e9c4621f73",
-  "latest_governance_commit": "c1c4b5c8c2e03b5d811552b33da491dbe7b062ad"
+  "next_safe_action": "When licensed real data is available locally, execute the provider-validation runbook. Require all four core interfaces, adapter-required fields, exact v1 units, and stable supporting-evidence SHA-256 for every verified market-data boundary before provider-side readiness. Then create and validate the first BOUND_UNOPENED evaluation binding before any frozen-holdout observation. Until then, only continue directly related credential-free adversarial tests, governance or research preparation.",
+  "latest_validated_code_head": "5f1c3be266227d7403ef0ff10b61be4742471c5c",
+  "latest_validation_workflow_run_id": 36013947202,
+  "latest_governance_commit_before_this_checkpoint": "5924246cdcae6c967e28f2d55110e7b7e812869a"
 }

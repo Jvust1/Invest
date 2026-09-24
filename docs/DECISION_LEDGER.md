@@ -44,18 +44,15 @@ CSV 可用于研究查看，但未知公司行动、停牌、每日限价、因�
 
 ## D009 — 真实数据门禁按实时 Drive 证据保持阻断，先修复接力状态而不制造伪进展
 
-2026-09-23 重新对账 Invest Drive 项目根目录后，只确认到既有冻结源码检查点 `Invest_v0.1.0_source_checkpoint_20260922.zip` 与 `05_Reference_Materials/`，没有发现新的已授权真实行情数据集、真实 evaluation binding 或可替代本地 Tushare 授权联调的 artifact。GitHub Draft PR #2 仍未合并，当前恢复时 head 为 `f98734c8ffd7ce7885c4e020062b74f15a1ad29d`，该 head 的 GitHub Actions run `35801429931` 为 success。
+2026-09-23 重新对账 Invest Drive 项目根目录后，只确认到既有冻结源码检查点 `Invest_v0.1.0_source_checkpoint_20260922.zip` 与 `05_Reference_Materials/`，没有发现新的已授权真实行情数据集、真实 evaluation binding 或可替代本地 Tushare 授权联调的 artifact。GitHub Draft PR #2 仍未合并。
 
-因此真实供应商验证继续作为外部授权门禁：不上传、不索取、不回显 Token；不把 mock、合成数据、旧源码 ZIP 或 binding 格式校验当成真实供应商证据；也不为了让自动化“有进度”而打开 frozen holdout。当前可安全执行的治理修复是把已过时的 `HANDOFF.md` 与机器状态重新对齐，并明确下一步仍是“授权真实数据 → `BOUND_UNOPENED` binding → gate 通过后才首次观察 holdout → append-only forward-paper”。
+因此真实供应商验证继续作为外部授权门禁：不上传、不索取、不回显 Token；不把 mock、合成数据、旧源码 ZIP 或 binding 格式校验当成真实供应商证据；也不为了让自动化“有进度”而打开 frozen holdout。当前可安全执行的治理修复是把机器状态保持对齐，并明确下一步仍是“授权真实数据 → `BOUND_UNOPENED` binding → gate 通过后才首次观察 holdout → append-only forward-paper”。
 
 ## D010 — 在首个真实 binding 前补齐冻结协议已有的“三个历史市场环境”机器门禁
 
-2026-09-23 对照已冻结的 `EVALUATION_PROTOCOL_V1.md` 与长期路线图 G2 后发现：协议 v1 已明确要求首个真实评价 binding 在首次 holdout 观察前登记“至少 3 个需要覆盖或单独标注的历史市场环境”，但此前 `EVALUATION_BINDING_FORMAT.md` 与 `invest/evaluation.py` 没有对应机器字段。这样会导致一个其它字段均合规的 binding 仍可能遗漏冻结协议的一项硬要求。
+2026-09-23 对照已冻结的 `EVALUATION_PROTOCOL_V1.md` 与长期路线图 G2 后发现：协议 v1 已明确要求首个真实评价 binding 在首次 holdout 观察前登记“至少 3 个需要覆盖或单独标注的历史市场环境”，但此前 `EVALUATION_BINDING_FORMAT.md` 与 `invest/evaluation.py` 没有对应机器字段。当前没有任何真实 binding、没有真实供应商数据、没有打开 frozen holdout，因此在第一次真实证据产生之前修复该实现缺口，不会迁移、覆盖或事后改写冻结结果。
 
-当前没有任何真实 binding、没有真实供应商数据、没有打开 frozen holdout，因此在第一次真实证据产生之前修复该实现缺口，不会迁移、覆盖或事后改写冻结结果。本轮保持方法协议 v1 本身不变，只让 binding 实现与已经冻结的方法一致：新增必填 `historical_market_environments`，至少 3 项；名称不得重复，日期必须真实且落在 development 起点至 frozen_holdout 终点总边界内，完全相同日期区间不能用不同名称重复计数，并要求保存环境标注 evidence。
-
-这项门禁只冻结“哪些历史环境要比较/单独标注”的 provenance，不证明环境划分正确，也不产生收益证据。真实数据许可、供应商边界、PIT/存活偏差和所有其它 opening blockers 继续独立 fail closed。
-
+本轮保持方法协议 v1 本身不变，只让 binding 实现与已经冻结的方法一致：新增必填 `historical_market_environments`，至少 3 项；名称不得重复，日期必须真实且落在 development 起点至 frozen_holdout 终点总边界内，完全相同日期区间不能用不同名称重复计数，并要求保存环境标注 evidence。
 
 ## D017 — Provider evidence 单位必须与当前 Tushare 适配器契约一致
 
@@ -64,3 +61,11 @@ CSV 可用于研究查看，但未知公司行动、停牌、每日限价、因�
 因此 v1 证据契约新增 fail-closed 单位门禁：`currency=CNY`、`price_unit=CNY/share`、`volume_input_unit=lot`、`volume_output_unit=share`、`timezone=Asia/Shanghai` 必须逐项严格匹配；`conversion_notes` 继续要求非空。未来若接入单位语义不同的供应商，应升级或扩展证据契约，而不是静默复用当前 v1。
 
 代码 head `1a19ab04bcc5d26f6e825e1d76bd83e9c4621f73` 的 GitHub Actions run `36010703814` 已在 Ubuntu/Windows × Python 3.11/3.12 四个矩阵 job 全部通过完整测试与源码编译。完整测试集为 115，provider evidence 测试方法为 20。本变更没有 provider call、没有读取凭据、没有真实行情、没有创建真实 binding，也没有观察 frozen holdout。
+
+## D018 — Verified market-data boundary 必须绑定稳定 supporting-evidence SHA-256
+
+2026-09-24 继续审查 provider-side readiness 时发现：七类 market-data boundary 虽然必须逐项写 `verified / unknown / not_covered` 和文本证据摘要，但此前 `verified` 只依赖自由文本即可参与 readiness。这样无法机器区分“有稳定 supporting artifact 的已验证声明”和“只有文字断言的已验证声明”，与项目“数据有来源、缺失显式阻断”的 North Star 不一致。
+
+因此 v1 evidence contract 新增 provenance commitment：每个 `status=verified` 的 boundary 必须同时提供 `evidence_sha256`，且必须是小写 64 位 SHA-256；授权原始 supporting artifact 可继续只留在本地。`unknown` / `not_covered` 可以不提供 hash，以便诚实保存未闭环状态；若提供 hash 则也必须合法。哈希只冻结证据身份，不证明 artifact 的内容真实性、许可充分性或 boundary 判断正确，因此真实 binding 与人工/独立证据审查仍不可绕过。
+
+代码 head `5f1c3be266227d7403ef0ff10b61be4742471c5c` 的 GitHub Actions run `36013947202` 已在 Ubuntu/Windows × Python 3.11/3.12 四矩阵通过测试与源码编译。完整测试集为 116，provider evidence 测试方法为 21。本变更没有 provider call、没有读取凭据、没有真实行情、没有创建真实 binding，也没有观察 frozen holdout。
