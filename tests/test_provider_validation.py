@@ -165,6 +165,19 @@ class ProviderValidationEvidenceTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             validate_provider_validation_evidence(evidence)
 
+    def test_sample_security_code_must_be_supported_mainboard_format(self):
+        evidence = valid_evidence()
+        evidence["sample"]["security_code"] = "688001.SH"
+        with self.assertRaises(ValueError):
+            validate_provider_validation_evidence(evidence)
+
+    def test_sample_cannot_extend_beyond_execution_date(self):
+        evidence = valid_evidence()
+        evidence["sample"]["start_date"] = "2026-09-01"
+        evidence["sample"]["end_date"] = "2026-09-24"
+        with self.assertRaises(ValueError):
+            validate_provider_validation_evidence(evidence)
+
     def test_naive_execution_timestamp_is_rejected(self):
         evidence = valid_evidence()
         evidence["executed_at"] = "2026-09-23T12:00:00"
