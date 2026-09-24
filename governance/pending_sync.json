@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
   "as_of": "2026-09-24",
-  "phase": "evaluation protocol v1 frozen; binding gate and provider-evidence core-interface fail-closed gate remote-CI validated; licensed real-data gate blocked",
+  "phase": "evaluation protocol v1 frozen; binding gate and provider-evidence required-interface plus required-field fail-closed gates remote-CI validated; licensed real-data gate blocked",
   "drive_checkpoint": {"status": "exists_verified", "id": "1Iscm0akdNG5s0WNJfc83-T_eh88xIz1F"},
   "pending_sync": [],
-  "publication_action": "Continue on the existing non-default feature branch and Draft PR #2. Provider-validation runbook/evidence format, D011-D015 decisions and checkpoints are GitHub-recoverable; no Drive write is required and the existing frozen source checkpoint must remain unchanged.",
+  "publication_action": "Continue on the existing non-default feature branch and Draft PR #2. Provider-validation runbook/evidence format, D011-D016 decisions and checkpoints are GitHub-recoverable; no Drive write is required and the existing frozen source checkpoint must remain unchanged.",
   "publication_authority": "GitHub live branch, PR and checks",
   "main_merge": "requires later explicit authorization for the specific PR; not a pending sync",
   "parallel_roadmap_pr": {"number": 1, "status": "preserved untouched; reconcile README during eventual merge"},
-  "next_safe_action": "When licensed real data is available locally, execute the provider-validation runbook and require daily/adj_factor/stk_limit/trade_cal to all be explicitly recorded before provider-side readiness. Then validate sanitized evidence and create the first BOUND_UNOPENED evaluation binding before any frozen-holdout observation. Until then, only continue directly related credential-free adversarial tests, governance or research preparation."
+  "next_safe_action": "When licensed real data is available locally, execute the provider-validation runbook and require daily/adj_factor/stk_limit/trade_cal to all be explicitly recorded; any successful core interface must also contain the adapter-required fields before provider-side readiness. Then validate sanitized evidence and create the first BOUND_UNOPENED evaluation binding before any frozen-holdout observation. Until then, only continue directly related credential-free adversarial tests, governance or research preparation."
 }
