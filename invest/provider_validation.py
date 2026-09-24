@@ -14,6 +14,8 @@ import math
 import re
 from typing import Any
 
+from .data import is_mainboard_symbol
+
 EVIDENCE_STATUS = "PROVIDER_VALIDATION_EVIDENCE"
 BOUNDARY_KEYS = (
     "calendar",
@@ -77,7 +79,7 @@ def _date(value: Any, field: str) -> date:
         raise ValueError(f"{field} 日期不存在") from None
 
 
-def _timestamp(value: Any, field: str) -> None:
+def _timestamp(value: Any, field: str) -> datetime:
     if not isinstance(value, str):
         raise ValueError(f"{field} 必须是带时区 ISO-8601 时间")
     try:
@@ -86,6 +88,7 @@ def _timestamp(value: Any, field: str) -> None:
         raise ValueError(f"{field} 必须是带时区 ISO-8601 时间") from None
     if parsed.tzinfo is None or parsed.utcoffset() is None:
         raise ValueError(f"{field} 必须包含时区")
+    return parsed
 
 
 def _reject_sensitive_keys(value: Any, path: str = "evidence") -> None:
@@ -153,7 +156,7 @@ def validate_provider_validation_evidence(evidence: dict) -> dict:
         raise ValueError("schema_version 必须严格等于 1")
     if original["status"] != EVIDENCE_STATUS:
         raise ValueError(f"status 必须严格等于 {EVIDENCE_STATUS}")
-    _timestamp(original["executed_at"], "executed_at")
+    executed_at = _timestamp(original["executed_at"], "executed_at")
     _git_sha(original["code_sha"], "code_sha")
     if original["provider_call_performed"] is not True:
         raise ValueError("真实供应商验证记录必须明确 provider_call_performed=true")
@@ -174,13 +177,17 @@ def validate_provider_validation_evidence(evidence: dict) -> dict:
 
     sample = _mapping(original["sample"], "sample")
     _only_keys(sample, "sample", {"security_code", "start_date", "end_date", "purpose"})
-    _text(sample["security_code"], "sample.security_code", 100)
+    security_code = _text(sample["security_code"], "sample.security_code", 100)
+    if not is_mainboard_symbol(security_code):
+        raise ValueError("sample.security_code 必须是当前支持的沪深主板代码格式")
     start = _date(sample["start_date"], "sample.start_date")
     end = _date(sample["end_date"], "sample.end_date")
     if start > end:
         raise ValueError("sample.start_date 不能晚于 sample.end_date")
     if (end - start).days > 365:
         raise ValueError("首轮最小验证样本不得超过 366 个自然日")
+    if end > executed_at.date():
+        raise ValueError("sample.end_date 不能晚于 executed_at 所在日期")
     _text(sample["purpose"], "sample.purpose")
 
     interfaces = original["interfaces"]
