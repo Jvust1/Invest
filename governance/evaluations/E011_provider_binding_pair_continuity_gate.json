@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "id": "E011",
+  "date": "2026-09-26",
+  "title": "Provider-binding opening continuity gate remote CI validation",
+  "status": "REMOTE_CI_VALIDATED",
+  "implementation_head": "0ea25352e951cdbfc33b2e7edc2e97f0d2b3ce51",
+  "workflow_run_id": 36168325134,
+  "validation": {
+    "full_suite_tests": 125,
+    "platforms": [
+      "ubuntu-latest",
+      "windows-latest"
+    ],
+    "python_versions": [
+      "3.11",
+      "3.12"
+    ],
+    "tests": "pass",
+    "compile_source": "pass",
+    "opening_module_test_methods": 1
+  },
+  "scope": {
+    "module": "invest/opening.py",
+    "decision": "governance/decisions/D023_provider_binding_pair_continuity_gate.json"
+  },
+  "evidence_boundary": {
+    "provider_call_performed": false,
+    "real_data_used": false,
+    "real_binding_created": false,
+    "frozen_holdout_opened": false,
+    "profit_result_created": false
+  }
+}
