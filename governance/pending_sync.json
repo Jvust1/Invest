@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "as_of": "2026-09-25",
-  "phase": "evaluation protocol v1 frozen; provider-evidence/binding provenance bridge remote-CI validated; licensed real-data gate blocked",
+  "as_of": "2026-09-26",
+  "phase": "provider/binding exact-pair opening continuity gate remote-CI validated; licensed real-data gate remains open",
   "drive_checkpoint": {
     "status": "exists_verified",
     "id": "1Iscm0akdNG5s0WNJfc83-T_eh88xIz1F"
@@ -14,16 +14,15 @@
     "number": 1,
     "status": "preserved untouched; reconcile README during eventual merge"
   },
-  "next_safe_action": "When licensed real data is unavailable, continue credential-free adversarial hardening directly tied to the provider/binding/holdout gates; when available, validate provider evidence first and create only a provenance-linked BOUND_UNOPENED binding before any holdout observation.",
-  "latest_validated_code_head": "c6ada411910d0e904fbaf1fbcec0ef399a1a9ea7",
-  "latest_validation_workflow_run_id": 36093418179,
-  "latest_governance_commit_before_this_checkpoint": "c6ada411910d0e904fbaf1fbcec0ef399a1a9ea7",
+  "next_safe_action": "Before any holdout observation, validate the exact provider evidence and BOUND_UNOPENED binding pair with invest/opening.py. Otherwise continue directly related credential-free hardening.",
+  "latest_validated_code_head": "af60cf663ad2bb5aa237d82171969832f399588b",
+  "latest_validation_workflow_run_id": 36170981233,
+  "latest_governance_commit_before_this_checkpoint": "191dff32e574409040fc52c9ef97d3aa997fa7d5",
   "write_path_recovery": {
-    "status": "RECOVERED",
-    "date": "2026-09-25",
-    "reason": "Mandatory live global Drive safety baseline + dynamic root baselines + target-branch SECURITY_POLICY preflight completed before mutation.",
+    "status": "CURRENT_GOVERNANCE_APPLIED",
+    "date": "2026-09-26",
+    "reason": "AGENTS.md and project_state declare NO_PROJECT_SECURITY_GATE; retired historical gate references are not current blockers.",
     "validated_on_non_default_branch": true,
-    "main_write": false,
-    "force_push": false
+    "main_write": false
   }
 }
