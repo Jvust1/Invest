@@ -4,22 +4,25 @@
   "repository": "Jvust2/Invest",
   "repository_id": 1381007406,
   "drive_folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
-  "as_of": "2026-09-24",
+  "as_of": "2026-09-25",
   "state_scope": "live feature-branch governance snapshot; live branch/PR/checks remain authoritative for publication state",
   "version": "0.1.0",
   "currency": "CNY",
   "security_status": "REGISTERED_PROTECTED",
-  "protection_scope": ["chore/security-bootstrap-20260922", "descendant non-default feature branch"],
+  "protection_scope": [
+    "chore/security-bootstrap-20260922",
+    "descendant non-default feature branch"
+  ],
   "main_security_pending_pr": true,
   "main_baseline_sha": "71b32347fd954b7952f748b852503779851dbf1a",
   "bootstrap_sha": "172803ad30cd2065719944f1fab26a952c42be54",
   "delivery_branch": "feat/a-share-research-v0.1-20260922",
   "delivery_policy": "draft PR to main; no automatic merge",
-  "implementation": "evaluation_binding_gate_and_provider_evidence_gate_remote_ci_validated_empty_success_sample_scope_execution_time_required_core_interfaces_required_core_fields_units_contract_execution_timezone_and_verified_boundary_provenance_hash_fail_closed_real_data_gate_blocked",
+  "implementation": "evaluation_binding_gate_and_provider_evidence_gate_remote_ci_validated_with_license_provenance_fail_closed_real_data_gate_blocked",
   "research_governance": "evaluation_protocol_v1_frozen",
   "validation": {
     "base_application_unittest": 82,
-    "current_full_suite_tests": 117,
+    "current_full_suite_tests": 118,
     "independent_groups": 8,
     "root_browser_checks": 10,
     "ui_curve_edge_cases": 3,
@@ -27,12 +30,18 @@
     "remote_ci": {
       "historical_application_head_sha": "f40b0285b1c2bb249464f2ec354e9eb3bb6b18df",
       "historical_workflow_run_id": 35701856144,
-      "latest_validated_code_head_sha": "070ac1b536ad7b96a97b0b0b944453a6c6fbc919",
-      "latest_workflow_run_id": 36017899955,
+      "latest_validated_code_head_sha": "6db24bb3cde003f937a73dc5a5eb2041181af505",
+      "latest_workflow_run_id": 36089180871,
       "result": "success",
       "matrix_jobs": 4,
-      "platforms": ["ubuntu-latest", "windows-latest"],
-      "python_versions": ["3.11", "3.12"],
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "python_versions": [
+        "3.11",
+        "3.12"
+      ],
       "standard_library_tests_step": "pass",
       "compile_source_step": "pass"
     },
@@ -60,8 +69,14 @@
       "remote_ci_head_sha": "7629e221619f22500dc2016f2bf698eb055f50f2",
       "workflow_run_id": 35809448144,
       "matrix_jobs": 4,
-      "platforms": ["ubuntu-latest", "windows-latest"],
-      "python_versions": ["3.11", "3.12"],
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "python_versions": [
+        "3.11",
+        "3.12"
+      ],
       "standard_library_tests_step": "pass",
       "compile_source_step": "pass"
     },
@@ -76,8 +91,21 @@
       "real_provider_evidence_created": false,
       "real_binding_created": false,
       "holdout_opened": false,
-      "boundary_fields": ["calendar", "suspension", "corporate_actions", "price_limits", "risk_warning_history", "survivorship_bias", "pit_features"],
-      "required_core_interfaces": ["daily", "adj_factor", "stk_limit", "trade_cal"],
+      "boundary_fields": [
+        "calendar",
+        "suspension",
+        "corporate_actions",
+        "price_limits",
+        "risk_warning_history",
+        "survivorship_bias",
+        "pit_features"
+      ],
+      "required_core_interfaces": [
+        "daily",
+        "adj_factor",
+        "stk_limit",
+        "trade_cal"
+      ],
       "runbook_decision_record": "governance/decisions/D011_provider_validation_runbook.json",
       "evidence_validator_decision_record": "governance/decisions/D012_provider_validation_evidence_validator.json",
       "nonempty_success_gate_decision_record": "governance/decisions/D013_provider_validation_nonempty_success_gate.json",
@@ -86,19 +114,27 @@
       "required_core_fields_gate_decision_record": "governance/decisions/D016_provider_validation_required_fields_gate.json",
       "units_contract_gate_decision_record": "governance/decisions/D017_provider_validation_units_contract_gate.json",
       "verified_boundary_provenance_gate_decision_record": "governance/decisions/D018_provider_validation_boundary_provenance_gate.json",
-      "execution_timezone_gate_decision_record": "governance/decisions/D019_provider_validation_execution_timezone_gate.json"
+      "execution_timezone_gate_decision_record": "governance/decisions/D019_provider_validation_execution_timezone_gate.json",
+      "license_provenance_gate_decision_record": "governance/decisions/D020_provider_validation_license_provenance_gate.json",
+      "license_provenance_addendum": "docs/PROVIDER_LICENSE_EVIDENCE_ADDENDUM.md"
     },
     "provider_validation_evidence_validator": {
       "status": "REMOTE_CI_VALIDATED",
       "module": "invest/provider_validation.py",
       "format": "docs/PROVIDER_VALIDATION_EVIDENCE_FORMAT.md",
-      "tests": 22,
-      "current_full_suite_tests": 117,
-      "remote_ci_head_sha": "070ac1b536ad7b96a97b0b0b944453a6c6fbc919",
-      "workflow_run_id": 36017899955,
+      "tests": 23,
+      "current_full_suite_tests": 118,
+      "remote_ci_head_sha": "6db24bb3cde003f937a73dc5a5eb2041181af505",
+      "workflow_run_id": 36089180871,
       "matrix_jobs": 4,
-      "platforms": ["ubuntu-latest", "windows-latest"],
-      "python_versions": ["3.11", "3.12"],
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "python_versions": [
+        "3.11",
+        "3.12"
+      ],
       "standard_library_tests_step": "pass",
       "compile_source_step": "pass",
       "success_interface_nonempty_fields_required": true,
@@ -107,12 +143,38 @@
       "sample_end_not_after_execution_date_required": true,
       "executed_at_required_utc_offset": "+08:00",
       "executed_at_market_timezone_contract": "Asia/Shanghai",
-      "required_core_interfaces": ["daily", "adj_factor", "stk_limit", "trade_cal"],
+      "required_core_interfaces": [
+        "daily",
+        "adj_factor",
+        "stk_limit",
+        "trade_cal"
+      ],
       "required_core_interface_fields": {
-        "daily": ["ts_code", "trade_date", "open", "high", "low", "close", "vol"],
-        "adj_factor": ["ts_code", "trade_date", "adj_factor"],
-        "stk_limit": ["ts_code", "trade_date", "up_limit", "down_limit"],
-        "trade_cal": ["exchange", "cal_date", "is_open"]
+        "daily": [
+          "ts_code",
+          "trade_date",
+          "open",
+          "high",
+          "low",
+          "close",
+          "vol"
+        ],
+        "adj_factor": [
+          "ts_code",
+          "trade_date",
+          "adj_factor"
+        ],
+        "stk_limit": [
+          "ts_code",
+          "trade_date",
+          "up_limit",
+          "down_limit"
+        ],
+        "trade_cal": [
+          "exchange",
+          "cal_date",
+          "is_open"
+        ]
       },
       "all_required_core_interfaces_must_be_present_for_readiness": true,
       "successful_core_interfaces_require_adapter_fields": true,
@@ -129,7 +191,9 @@
       },
       "units_must_match_current_adapter_contract": true,
       "verified_boundaries_require_supporting_evidence_sha256": true,
-      "supporting_evidence_sha256_is_provenance_commitment_not_truth_proof": true
+      "supporting_evidence_sha256_is_provenance_commitment_not_truth_proof": true,
+      "license_evidence_sha256_required": true,
+      "license_evidence_sha256_is_provenance_commitment_not_truth_proof": true
     },
     "provider_evidence_fail_closed_hardening": {
       "status": "REMOTE_CI_VALIDATED",
@@ -164,7 +228,12 @@
       "validated_code_head_sha": "04f02079d3876f5a25ed9487acc56b3b0ae0b234",
       "workflow_run_id": 36001056069,
       "tests_added": 1,
-      "required_core_interfaces": ["daily", "adj_factor", "stk_limit", "trade_cal"],
+      "required_core_interfaces": [
+        "daily",
+        "adj_factor",
+        "stk_limit",
+        "trade_cal"
+      ],
       "partial_real_attempts_preserved": true,
       "missing_core_interface_blocks_readiness": true,
       "real_data_used": false,
@@ -248,6 +317,20 @@
       "reconciliation_code_head_sha": "ac65138475b1ecee11388dd8d6294f53ea13ac67",
       "reconciliation_workflow_run_id": 35817379641,
       "reconciliation_workflow_result": "success"
+    },
+    "provider_evidence_license_provenance_hardening": {
+      "status": "REMOTE_CI_VALIDATED",
+      "checkpoint": "governance/checkpoints/20260925_provider_validation_license_provenance_gate.json",
+      "decision": "governance/decisions/D020_provider_validation_license_provenance_gate.json",
+      "evaluation_record": "governance/evaluations/E009_provider_validation_license_provenance_gate.json",
+      "validated_code_head_sha": "6db24bb3cde003f937a73dc5a5eb2041181af505",
+      "workflow_run_id": 36089180871,
+      "tests_added": 1,
+      "negative_subcases": 2,
+      "license_evidence_sha256_required": true,
+      "real_data_used": false,
+      "provider_call_performed": false,
+      "holdout_observed": false
     }
   },
   "external_blockers": [
@@ -267,13 +350,13 @@
     "public or LAN deployment; not implemented"
   ],
   "next_actions": [
-    "when local authorization is available, execute docs/REAL_DATA_PROVIDER_VALIDATION_RUNBOOK.md and emit sanitized evidence conforming to docs/PROVIDER_VALIDATION_EVIDENCE_FORMAT.md without storing credentials; normalize executed_at to +08:00",
-    "validate real provider evidence with invest/provider_validation.py; missing any core interface, missing adapter-required fields on a successful core interface, unit-contract mismatch, executed_at offset other than +08:00, out-of-scope sample codes, sample windows extending beyond executed_at, failed interfaces, empty successful responses, unknown/not_covered market boundaries, verified boundaries without supporting-evidence SHA-256, or explicit blockers keep provider-side readiness fail-closed",
+    "when local authorization is available, require provider.license_evidence_sha256 and all existing provider evidence gates before creating a real binding",
+    "validate real provider evidence with invest/provider_validation.py; missing or malformed license provenance keeps readiness fail-closed",
     "before opening any frozen holdout result, create the first authorized BOUND_UNOPENED data binding and pass invest/evaluation.py validation for development/validation/holdout windows, at least three frozen historical market environments, candidate, costs, benchmark, PIT and market-data boundaries",
     "after provider evidence, candidate and data binding are frozen and all opening blockers are closed, begin append-only forward-paper evidence without retroactive signal edits",
     "while licensed data is unavailable, only advance directly related credential-free governance, adversarial tests, or research preparation that does not fabricate provider evidence"
   ],
-  "latest_checkpoint": "governance/checkpoints/20260924_provider_validation_execution_timezone_gate.json",
+  "latest_checkpoint": "governance/checkpoints/20260925_provider_validation_license_provenance_gate.json",
   "authority": {
     "code_and_state": "GitHub",
     "artifacts": "existing Drive project folder",
@@ -286,7 +369,10 @@
       "branch": "docs/long-term-roadmap-20260922",
       "head_sha": "0629240f417d0f9b340ac74862bad56fc7e680f1",
       "base": "chore/security-bootstrap-20260922",
-      "scope": ["README.md", "docs/LONG_TERM_ROADMAP.md"],
+      "scope": [
+        "README.md",
+        "docs/LONG_TERM_ROADMAP.md"
+      ],
       "handling": "preserved untouched; reconcile both README additions during eventual merge"
     },
     {
@@ -295,7 +381,7 @@
       "branch": "feat/a-share-research-v0.1-20260922",
       "base": "main",
       "state": "open_draft",
-      "validated_code_head_sha": "070ac1b536ad7b96a97b0b0b944453a6c6fbc919",
+      "validated_code_head_sha": "6db24bb3cde003f937a73dc5a5eb2041181af505",
       "handling": "application/test, evaluation-binding validator and provider-evidence validator CI evidence are green; PR remains Draft and must not be auto-merged"
     }
   ]

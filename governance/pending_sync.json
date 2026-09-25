@@ -1,21 +1,34 @@
 {
   "schema_version": 1,
-  "as_of": "2026-09-24",
-  "phase": "evaluation protocol v1 frozen; provider-evidence core-interface, required-field, unit-contract, execution-timezone and verified-boundary provenance-hash fail-closed gates remote-CI validated; licensed real-data gate blocked",
+  "as_of": "2026-09-25",
+  "phase": "evaluation protocol v1 frozen; provider-evidence license-provenance gate remote-CI validated; licensed real-data gate blocked",
   "drive_checkpoint": {
     "status": "exists_verified",
     "id": "1Iscm0akdNG5s0WNJfc83-T_eh88xIz1F"
   },
-  "pending_sync": [],
-  "publication_action": "Continue on the existing non-default feature branch and Draft PR #2. Provider-validation runbook/evidence format, D011-D019 decisions and checkpoints are GitHub-recoverable; no Drive write is required and the existing frozen source checkpoint must remain unchanged.",
+  "pending_sync": [
+    {
+      "id": "PROVIDER_RUNBOOK_LICENSE_HASH_WORDING",
+      "status": "OPEN_NON_BLOCKING",
+      "scope": "docs/REAL_DATA_PROVIDER_VALIDATION_RUNBOOK.md",
+      "reason": "wording does not yet list provider.license_evidence_sha256"
+    },
+    {
+      "id": "EVALUATION_LEDGER_E009_APPEND",
+      "status": "OPEN_NON_BLOCKING",
+      "scope": "docs/EVALUATION_LEDGER.md",
+      "reason": "E009 is currently recorded in governance/evaluations and checkpoint rather than the narrative ledger"
+    }
+  ],
+  "publication_action": "Continue on Draft PR #2; keep the frozen Drive checkpoint unchanged.",
   "publication_authority": "GitHub live branch, PR and checks",
   "main_merge": "requires later explicit authorization for the specific PR; not a pending sync",
   "parallel_roadmap_pr": {
     "number": 1,
     "status": "preserved untouched; reconcile README during eventual merge"
   },
-  "next_safe_action": "When licensed real data is available locally, execute the provider-validation runbook. Normalize executed_at to +08:00, require all four core interfaces, adapter-required fields, exact v1 units, and stable supporting-evidence SHA-256 for every verified market-data boundary before provider-side readiness. Then create and validate the first BOUND_UNOPENED evaluation binding before any frozen-holdout observation. Until then, only continue directly related credential-free adversarial tests, governance or research preparation.",
-  "latest_validated_code_head": "070ac1b536ad7b96a97b0b0b944453a6c6fbc919",
-  "latest_validation_workflow_run_id": 36017899955,
-  "latest_governance_commit_before_this_checkpoint": "e71764724b5f44f43af282588fb8355342e0fefe"
+  "next_safe_action": "Reconcile the two wording-only records, then continue credential-free provider-gate validation until licensed real data is available.",
+  "latest_validated_code_head": "6db24bb3cde003f937a73dc5a5eb2041181af505",
+  "latest_validation_workflow_run_id": 36089180871,
+  "latest_governance_commit_before_this_checkpoint": "6db24bb3cde003f937a73dc5a5eb2041181af505"
 }
