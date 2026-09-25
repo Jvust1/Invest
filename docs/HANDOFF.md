@@ -1,3 +1,10 @@
+## 2026-09-25 最新交付接手点
+
+- Windows 发布源码：`2992482fec57758b39b5aabf7a0e567e0502af0c`。
+- Drive 完整交付文件 ID：`1Mz2DeM1kjY-fMJmBOXP_cfVIEtCo_RmQ`。
+- Draft PR：#3；未合并、不得自动合并。
+- 用户本人 Windows 设备验收仍未完成；发布包的自动验收环境为 GitHub hosted Windows / Microsoft Edge。
+
 # 接手说明
 
 更新时间：2026-09-25。本文按 GitHub/Drive 实时状态维护；动态分支、PR 与 CI 状态接手时必须再次读取，不依赖聊天历史。
