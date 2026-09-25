@@ -4,7 +4,7 @@
 
 ## 先恢复权威状态
 
-1. 读取 `AGENTS.md`、目标分支 `SECURITY_POLICY.md`、Drive 根目录 `全项目` 入口及动态发现的全部 `全项目_` 基线，再按 `PRE_FLIGHT_CHECKLIST.md` 恢复项目。
+1. 先读取目标分支 `AGENTS.md` 与 `governance/project_state.json`；仅当当前分支实际存在 `SECURITY_POLICY.md` 时再读取。当前治理明确 `security_status=NO_PROJECT_SECURITY_GATE` 且该文件已正式移除，因此缺失不构成阻塞，不恢复旧安全文件，也不要求历史 Drive safety-baseline ID。随后按仍属现行治理的 `PRE_FLIGHT_CHECKLIST.md` 恢复项目。
 2. GitHub `Jvust2/Invest` 是代码、治理、当前状态与下一步权威；Drive 项目目录 `15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u` 保存原始资料和长期 artifact。
 3. 当前功能线为 `feat/a-share-research-v0.1-20260922`，Draft PR #2 → `main`，保持未合并；任何合并都需要针对 PR #2 的明确授权，禁止直接写 main。
 4. 并行长期路线图在 PR #1 / `docs/long-term-roadmap-20260922`，继续独立保留。
@@ -15,7 +15,7 @@
 
 - v0.1 已实现标准库本机中文网页、CSV/交易日历审计、有限日频均线回测、人民币模拟账本和 Tushare 四接口研究导入边界。
 - 样本外与 forward-paper 方法协议 v1 已冻结；binding 校验器已远端矩阵验证。
-- Provider evidence 校验器有 23 个测试方法，evaluation binding 校验器现为 15 个测试方法；完整测试集为 120。最新已验证代码/文档 head `c6ada411910d0e904fbaf1fbcec0ef399a1a9ea7`，Actions run `36093418179` 成功，Ubuntu/Windows × Python 3.11/3.12 四个 job 的 tests 与 compile 均成功。
+- Provider evidence 校验器有 23 个测试方法，evaluation binding 校验器为 15 个测试方法；opening continuity 模块有 6 个测试方法，其中 5 个直接行为测试覆盖 22 个对抗 subcase。完整测试集为 **130**。最新已验证代码 head `af60cf663ad2bb5aa237d82171969832f399588b`，Actions run `36170981233` 成功，Ubuntu/Windows × Python 3.11/3.12 四个 job 的 tests 与 compile 均成功。
 - Provider evidence 当前 fail closed 于：失败接口、成功接口空字段/0 行、成功核心接口缺当前适配器必需字段、未知/未覆盖市场边界、显式 blocker、凭据字段、超出当前沪深主板格式范围的样本代码、`sample.end_date` 晚于 `executed_at` 日期、缺少四核心接口、单位契约不匹配、`executed_at` 不是 `Asia/Shanghai` 对应的 `+08:00` offset，任何 `status=verified` 的 market-data boundary 缺少有效 supporting-evidence SHA-256，以及授权状态缺少有效 `license_evidence_sha256`。
 - `unknown` / `not_covered` boundary 仍可不带 evidence hash 诚实保存，但 provider-side readiness 保持关闭；已提供的 hash 必须是有效 SHA-256。
 - 四核心接口即使全部成功也不能替代七类 market-data boundary 的独立真实证据；supporting-evidence hash 只是 provenance commitment，不是真实性证明；执行时间 offset 门禁也只固定日期基准，不是真实数据证明。
@@ -37,4 +37,4 @@ Drive 项目目录已经重新回读；没有发现授权真实行情数据集�
 4. 只有 opening blockers 全部闭环后才首次观察 holdout；之后 append-only forward-paper，不回填事后信号。
 5. 合法真实数据仍不可用时，只推进与上述主线直接相关、可独立验证且不制造伪证据的治理、对抗测试或研究准备。
 
-当前最新检查点为 `governance/checkpoints/20260925_provider_evidence_binding_bridge_gate.json`，对应决策为 `governance/decisions/D021_provider_evidence_binding_bridge_gate.json`。runbook 许可证据哈希文字与 E009 ledger 的旧非阻塞同步项已经关闭；后续只按最新 GitHub/Drive 实时状态接续。
+当前治理检查点为 `governance/checkpoints/20260926_governance_text_alignment_closed.json`；opening continuity 的最新技术决策为 `governance/decisions/D023_provider_binding_pair_continuity_gate.json`，对应验证记录 `governance/evaluations/E011_provider_binding_pair_continuity_gate.json`。此前遗留的 Pre-flight/Handoff 旧安全门禁文字债务已关闭；后续只按最新 GitHub/Drive 实时状态接续。
