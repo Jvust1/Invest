@@ -388,6 +388,17 @@
       "real_data_used": false,
       "real_binding_created": false,
       "holdout_observed": false
+    },
+    "canonical_state_reconciliation": {
+      "status": "PARTIAL_NONBLOCKING_TEXT_DEBT_REMAINS",
+      "checkpoint": "governance/checkpoints/20260926_project_state_reconciled.json",
+      "project_state_updated": true,
+      "current_state_updated": true,
+      "pending_sync_updated": true,
+      "remaining_text_debt": [
+        "docs/PRE_FLIGHT_CHECKLIST.md",
+        "docs/HANDOFF.md"
+      ]
     }
   },
   "external_blockers": [
@@ -412,7 +423,7 @@
     "after provider evidence, candidate and data binding are frozen and all opening blockers are closed, begin append-only forward-paper evidence without retroactive signal edits",
     "while licensed data is unavailable, only advance directly related credential-free governance, adversarial tests, or research preparation that does not fabricate provider evidence"
   ],
-  "latest_checkpoint": "governance/checkpoints/20260926_canonical_state_sync_closed.json",
+  "latest_checkpoint": "governance/checkpoints/20260926_project_state_reconciled.json",
   "authority": {
     "code_and_state": "GitHub",
     "artifacts": "existing Drive project folder",
