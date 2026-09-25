@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "id": "D023",
+  "date": "2026-09-26",
+  "title": "Provider evidence and evaluation binding require exact pair continuity before holdout opening",
+  "status": "IMPLEMENTED_AWAITING_REMOTE_CI",
+  "decision": [
+    "Use invest/opening.py as the offline opening gate for a provider-evidence/binding pair.",
+    "Revalidate both objects and require evidence/license/raw/normalized/code identities to match.",
+    "Require all seven market-data boundary states and supporting-evidence hashes to match exactly.",
+    "Opening readiness is true only when both provider-side and binding-side readiness are true."
+  ],
+  "rationale": "D021 linked copied provenance fields but did not compare the binding against the complete referenced provider evidence record.",
+  "evidence_boundary": {
+    "provider_call_performed": false,
+    "real_data_used": false,
+    "real_binding_created": false,
+    "frozen_holdout_opened": false
+  },
+  "implementation": {
+    "module": "invest/opening.py",
+    "tests": "tests/test_opening.py"
+  }
+}
