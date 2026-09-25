@@ -1,6 +1,6 @@
 # 当前状态
 
-更新时间：2026-09-25。本文记录 v0.1 当前功能分支的真实远端状态；分支、PR 与 CI 的实时事实仍以 GitHub 为准。
+更新时间：2026-09-26。本文记录 v0.1 当前功能分支的真实远端状态；分支、PR 与 CI 的实时事实仍以 GitHub 为准。
 
 ## 代码与发布位置
 
@@ -11,8 +11,8 @@
 | 已完成的安全治理 bootstrap | `172803ad30cd2065719944f1fab26a952c42be54` |
 | 功能分支 | `feat/a-share-research-v0.1-20260922` |
 | 功能 PR | Draft PR #2 → `main`；未合并 |
-| 最新已验证代码/文档 head | `c6ada411910d0e904fbaf1fbcec0ef399a1a9ea7` |
-| 最新 GitHub Actions CI | run `36093418179` 成功：Ubuntu/Windows × Python 3.11/3.12 四组合 standard-library tests 与源码编译全部通过 |
+| 最新已验证代码 head | `af60cf663ad2bb5aa237d82171969832f399588b` |
+| 最新 GitHub Actions CI | run `36170981233` 成功：Ubuntu/Windows × Python 3.11/3.12 四组合 standard-library tests 与源码编译全部通过 |
 
 安全 bootstrap 与 Drive 项目登记已完成。功能 PR 不自动合并，也不直接写 main。
 
@@ -41,7 +41,7 @@ Provider-evidence 门禁当前同时要求：成功接口具有非空 schema 与
 | 验证层 | 结果 |
 | --- | --- |
 | 基础应用 unittest | 82 PASS |
-| 当前完整测试集 | **120 tests**：基础 82 + evaluation 15 + provider evidence 23；GitHub Actions 全套 discover 通过 |
+| 当前完整测试集 | **130 tests**；opening continuity 模块 6 个测试方法；GitHub Actions 全套 discover 通过 |
 | 独立审查 | 8 组检查通过 |
 | UI 代理 Playwright | 使用本机真实应用 API 的全流程通过 |
 | 曲线专用 fixtures | 3 组通过 |
