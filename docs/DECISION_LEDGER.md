@@ -77,3 +77,12 @@ CSV 可用于研究查看，但未知公司行动、停牌、每日限价、因�
 因此 v1 evidence contract 把执行时间也绑定到当前市场时区语义：`executed_at` 必须使用 `Asia/Shanghai` 对应的 `+08:00` UTC offset。等价瞬间如以其它 offset 表示也需要先规范化为 `+08:00` 再写入证据；否则整条 evidence 结构校验失败。该要求不声称时区 offset 能证明供应商请求真实性，只是保证时间边界的机器比较使用单一、明确的市场日期基准。
 
 代码 head `070ac1b536ad7b96a97b0b0b944453a6c6fbc919` 的 GitHub Actions run `36017899955` 已在 Ubuntu/Windows × Python 3.11/3.12 四矩阵通过测试与源码编译。完整测试集为 117，provider evidence 测试方法为 22；新增测试覆盖 `Z` 与 `+09:00` 两种错误 offset。本变更没有 provider call、没有读取凭据、没有真实行情、没有创建真实 binding，也没有观察 frozen holdout。
+
+
+## D020 — Provider 授权声明必须绑定稳定的许可证据 SHA-256
+
+2026-09-25 继续审查真实数据门禁时发现：provider evidence 虽要求 `provider.license_status=authorized`，但此前该授权结论只是文本状态，没有稳定 provenance 身份。这样一条记录即使其它字段完整，也无法机器区分“有可复核的本地授权依据”和“只有 authorized 字样”的情况。
+
+因此 v1 evidence contract 新增 `provider.license_evidence_sha256`：必须为小写 64 位 SHA-256。它只把授权声明绑定到一个稳定的本地 supporting artifact 身份，不独立证明授权真实性、授权范围或持续有效性；缺失或格式错误时整条 evidence 结构校验失败。
+
+代码 head `6db24bb3cde003f937a73dc5a5eb2041181af505` 的 GitHub Actions run `36089180871` 已在 Ubuntu/Windows × Python 3.11/3.12 四矩阵通过完整测试与源码编译。完整测试集为 118，provider evidence 测试方法为 23；新增测试覆盖缺失和格式错误两种许可证据哈希反例。本变更没有真实 provider call、没有真实行情、没有创建真实 binding，也没有观察 frozen holdout。

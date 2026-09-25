@@ -1,6 +1,6 @@
 # 当前状态
 
-更新时间：2026-09-24。本文记录 v0.1 当前功能分支的真实远端状态；分支、PR 与 CI 的实时事实仍以 GitHub 为准。
+更新时间：2026-09-25。本文记录 v0.1 当前功能分支的真实远端状态；分支、PR 与 CI 的实时事实仍以 GitHub 为准。
 
 ## 代码与发布位置
 
@@ -11,8 +11,8 @@
 | 已完成的安全治理 bootstrap | `172803ad30cd2065719944f1fab26a952c42be54` |
 | 功能分支 | `feat/a-share-research-v0.1-20260922` |
 | 功能 PR | Draft PR #2 → `main`；未合并 |
-| Provider evidence 最新已验证代码/文档 head | `070ac1b536ad7b96a97b0b0b944453a6c6fbc919` |
-| 最新 Provider evidence CI | run `36017899955` 成功：Ubuntu/Windows × Python 3.11/3.12 四组合 standard-library tests 与源码编译全部通过 |
+| Provider evidence 最新已验证代码/文档 head | `6db24bb3cde003f937a73dc5a5eb2041181af505` |
+| 最新 Provider evidence CI | run `36089180871` 成功：Ubuntu/Windows × Python 3.11/3.12 四组合 standard-library tests 与源码编译全部通过 |
 
 安全 bootstrap 与 Drive 项目登记已完成。功能 PR 不自动合并，也不直接写 main。
 
@@ -40,13 +40,13 @@ Provider-evidence 门禁当前同时要求：成功接口具有非空 schema 与
 | 验证层 | 结果 |
 | --- | --- |
 | 基础应用 unittest | 82 PASS |
-| 当前完整测试集 | **117 tests**：基础 82 + evaluation 13 + provider evidence 22；GitHub Actions 全套 discover 通过 |
+| 当前完整测试集 | **118 tests**：基础 82 + evaluation 13 + provider evidence 23；GitHub Actions 全套 discover 通过 |
 | 独立审查 | 8 组检查通过 |
 | UI 代理 Playwright | 使用本机真实应用 API 的全流程通过 |
 | 曲线专用 fixtures | 3 组通过 |
 | 主执行者独立 Playwright | 10 条检查全部通过，无 JavaScript 异常或 console errors |
 | Evaluation binding validator | 13 个测试方法；历史市场环境等反例 fail closed |
-| Provider evidence validator | **22 个测试方法**；新增 `executed_at` 非 `+08:00` 的 UTC/Z 与 `+09:00` 两类反例，避免样本结束日期与市场日期语义错位 |
+| Provider evidence validator | **23 个测试方法**；新增 `executed_at` 非 `+08:00` 的 UTC/Z 与 `+09:00` 两类反例，避免样本结束日期与市场日期语义错位 |
 | 最新 Provider evidence GitHub Actions | **PASS**：head `070ac1b536ad7b96a97b0b0b944453a6c6fbc919`，run `36017899955`；Ubuntu/Windows × Python 3.11/3.12 四个 job 的 tests 与 compile source 全部通过 |
 
 当前 provider evidence 测试只验证证据格式与 fail-closed 语义，**没有真实 provider call、没有真实数据、没有凭据、没有收益证据**。supporting-evidence SHA-256 只冻结 provenance identity，不证明 artifact 内容、许可或 boundary 判断真实正确。远端 Windows runner 单测/编译通过也不等同于 Windows 桌面浏览器和 `start.bat` 人工体验验收。
@@ -65,7 +65,7 @@ Provider-evidence 门禁当前同时要求：成功接口具有非空 schema 与
 
 ## Drive 与真实数据门禁
 
-2026-09-24 再次读取 Invest Drive 项目目录，没有发现新的已授权真实行情数据集或真实 evaluation binding。既有 source checkpoint `Invest_v0.1.0_source_checkpoint_20260922.zip` 保持冻结，不因 GitHub 可恢复的代码/治理增量重写；本轮没有 provider call、没有读取或保存 Token、没有打开 frozen holdout，也没有制造重复 Drive ZIP。
+2026-09-25 再次读取 Invest Drive 项目目录，没有发现新的已授权真实行情数据集或真实 evaluation binding。既有 source checkpoint `Invest_v0.1.0_source_checkpoint_20260922.zip` 保持冻结，不因 GitHub 可恢复的代码/治理增量重写；本轮没有 provider call、没有读取或保存 Token、没有打开 frozen holdout，也没有制造重复 Drive ZIP。
 
 ## 下一步
 
@@ -74,4 +74,11 @@ Provider-evidence 门禁当前同时要求：成功接口具有非空 schema 与
 3. 只有全部 opening blockers 关闭后才首次观察 frozen holdout；之后开始 append-only forward-paper。
 4. 合法真实数据仍不可用时，只推进与真实数据门禁直接相关的 credential-free 对抗测试、治理或研究准备，不用 mock/合成数据冒充 provider 证据。
 
-最新决策为 `governance/decisions/D019_provider_validation_execution_timezone_gate.json`，检查点为 `governance/checkpoints/20260924_provider_validation_execution_timezone_gate.json`。PR #2 继续保持 Draft，合并仍需针对该具体 PR 的明确授权。
+最新决策为 `governance/decisions/D020_provider_validation_license_provenance_gate.json`，检查点为 `governance/checkpoints/20260925_provider_validation_license_provenance_gate.json`。本轮机器契约已要求 `provider.license_evidence_sha256`；真实供应商 runbook 的对应文字说明仍有一个非阻塞同步项，执行时以机器校验器和 evidence format 为准。PR #2 继续保持 Draft，合并仍需针对该具体 PR 的明确授权。
+
+
+## 2026-09-25 Provider 授权 provenance 门禁
+
+Provider evidence 的 `license_status=authorized` 现在必须同时绑定一个小写 64 位 `license_evidence_sha256`。该哈希用于固定本地许可证据的 provenance 身份，不独立证明授权真实性或适用范围。缺失或格式错误会使整条 evidence 结构校验失败。
+
+代码 head `6db24bb3cde003f937a73dc5a5eb2041181af505` 的 GitHub Actions run `36089180871` 已完成并成功；Ubuntu/Windows × Python 3.11/3.12 四个矩阵作业的完整测试与源码编译均通过。完整测试集为 **118 tests**，其中 provider evidence 测试方法为 **23**。本轮没有真实 provider call、没有真实市场数据、没有真实 provider evidence、没有真实 `BOUND_UNOPENED` binding，也没有打开 frozen holdout。
