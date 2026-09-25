@@ -187,11 +187,14 @@ def validate_provider_validation_evidence(evidence: dict) -> dict:
         raise ValueError("供应商验证阶段不得观察 frozen holdout")
 
     provider = _mapping(original["provider"], "provider")
-    _only_keys(provider, "provider", {"name", "source_kind", "license_status", "evidence_summary"})
+    _only_keys(provider, "provider", {"name", "source_kind", "license_status", "license_evidence_sha256", "evidence_summary"})
     _text(provider["name"], "provider.name", 200)
     _text(provider["source_kind"], "provider.source_kind", 100)
     if provider["license_status"] != "authorized":
         raise ValueError("provider.license_status 必须明确为 authorized")
+    license_evidence_sha256 = _sha256(
+        provider["license_evidence_sha256"], "provider.license_evidence_sha256"
+    )
     _text(provider["evidence_summary"], "provider.evidence_summary")
 
     sample = _mapping(original["sample"], "sample")
@@ -308,6 +311,7 @@ def validate_provider_validation_evidence(evidence: dict) -> dict:
     )
     return {
         "evidence_id": computed_id,
+        "license_evidence_sha256": license_evidence_sha256,
         "required_core_interfaces_present": required_core_interfaces_present,
         "missing_core_interfaces": missing_core_interfaces,
         "all_boundaries_verified": all_boundaries_verified,

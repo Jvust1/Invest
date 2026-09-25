@@ -6,6 +6,7 @@ from invest.provider_validation import validate_provider_validation_evidence
 
 SHA256_A = "a" * 64
 SHA256_B = "b" * 64
+SHA256_C = "c" * 64
 GIT_SHA = "1" * 40
 
 
@@ -35,6 +36,7 @@ def valid_evidence():
             "name": "authorized-provider",
             "source_kind": "market-data-api",
             "license_status": "authorized",
+            "license_evidence_sha256": SHA256_C,
             "evidence_summary": "local authorized session; credentials excluded",
         },
         "sample": {
@@ -103,6 +105,7 @@ class ProviderValidationEvidenceTests(unittest.TestCase):
         self.assertEqual(result["missing_core_interfaces"], ())
         self.assertTrue(result["all_boundaries_verified"])
         self.assertEqual(result["boundary_evidence_sha256"]["calendar"], SHA256_A)
+        self.assertEqual(result["license_evidence_sha256"], SHA256_C)
         self.assertTrue(result["interfaces_all_success"])
         self.assertTrue(result["can_support_holdout_opening"])
 
@@ -220,6 +223,17 @@ class ProviderValidationEvidenceTests(unittest.TestCase):
         evidence["provider"]["license_status"] = "unknown"
         with self.assertRaises(ValueError):
             validate_provider_validation_evidence(evidence)
+
+    def test_authorized_license_requires_stable_provenance_hash(self):
+        for mode in ("missing", "malformed"):
+            with self.subTest(mode=mode):
+                evidence = valid_evidence()
+                if mode == "missing":
+                    evidence["provider"].pop("license_evidence_sha256")
+                else:
+                    evidence["provider"]["license_evidence_sha256"] = "not-a-sha256"
+                with self.assertRaises(ValueError):
+                    validate_provider_validation_evidence(evidence)
 
     def test_holdout_must_still_be_unobserved(self):
         evidence = valid_evidence()

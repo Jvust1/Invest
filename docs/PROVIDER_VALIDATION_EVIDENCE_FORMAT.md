@@ -14,7 +14,7 @@
 
 ## 供应商与授权
 
-`provider` 必须且只能包含 `name`、`source_kind`、`license_status`、`evidence_summary`；`license_status` 必须严格为 `authorized`。真实供应商验证记录必须明确 `provider_call_performed=true`。mock、synthetic、旧 ZIP 或离线格式测试不能冒充真实供应商联调。
+`provider` 必须且只能包含 `name`、`source_kind`、`license_status`、`license_evidence_sha256`、`evidence_summary`；`license_status` 必须严格为 `authorized`，`license_evidence_sha256` 必须是小写 64 位 SHA-256，用于固定许可证据的来源身份。该哈希只用于 provenance，不独立证明许可结论。真实供应商验证记录必须明确 `provider_call_performed=true`。mock、synthetic、旧 ZIP 或离线格式测试不能冒充真实供应商联调。
 
 ## 最小验证样本
 
@@ -48,6 +48,6 @@
 
 ## 与 frozen holdout 的关系
 
-只有 `real_data_used=true`、执行时间与市场时区语义一致、样本身份与时间范围通过上述门禁、四个当前核心接口全部存在且全部成功、每个成功核心接口覆盖当前适配器所需字段、成功接口具有正行数、七类 boundary 全部 `verified` 且每个 verified boundary 都绑定有效 supporting-evidence SHA-256、`known_blockers` 为空且 `holdout_observed=false` 时，校验器才返回 `can_support_holdout_opening=true`。
+只有 `real_data_used=true`、`license_evidence_sha256` 有效、执行时间与市场时区语义一致、样本身份与时间范围通过上述门禁、四个当前核心接口全部存在且全部成功、每个成功核心接口覆盖当前适配器所需字段、成功接口具有正行数、七类 boundary 全部 `verified` 且每个 verified boundary 都绑定有效 supporting-evidence SHA-256、`known_blockers` 为空且 `holdout_observed=false` 时，校验器才返回 `can_support_holdout_opening=true`。
 
 这个布尔值只说明**供应商证据这一侧**没有已知 opening blocker，绝不单独授权打开 frozen holdout。随后仍必须创建真实 `BOUND_UNOPENED` binding，并由 `invest/evaluation.py` 对授权、数据/代码身份、development/validation/holdout、至少三个历史市场环境、候选、成本、基准、PIT/证券池和市场边界再次 fail-closed 校验；其它项目 gate 也必须全部通过。
