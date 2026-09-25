@@ -21,5 +21,11 @@
   "drive_changes": {
     "new_objects": 0,
     "modified_objects": 0
+  },
+  "validation_debt": {
+    "status": "OPEN_NON_BLOCKING",
+    "item": "Direct adversarial unit coverage for provider-binding mismatch branches",
+    "current_coverage": "Module exposure/import only; full suite and compile are green.",
+    "next": "Add direct credential-free mismatch tests before relying on the new pair gate for a future holdout opening."
   }
 }
