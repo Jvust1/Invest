@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "as_of": "2026-09-26",
-  "phase": "provider/binding exact-pair opening continuity gate remote-CI validated; licensed real-data gate remains open",
+  "phase": "governance text alignment closed; provider/binding exact-pair opening continuity gate remote-CI validated; licensed real-data gate remains open",
   "drive_checkpoint": {
     "status": "exists_verified",
     "id": "1Iscm0akdNG5s0WNJfc83-T_eh88xIz1F"
@@ -14,7 +14,7 @@
     "number": 1,
     "status": "preserved untouched; reconcile README during eventual merge"
   },
-  "next_safe_action": "Before any holdout observation, validate the exact provider evidence and BOUND_UNOPENED binding pair with invest/opening.py. Otherwise continue directly related credential-free hardening.",
+  "next_safe_action": "Before any holdout observation, validate the exact provider evidence and BOUND_UNOPENED binding pair with invest/opening.py. While licensed data remains unavailable, continue only directly related credential-free hardening or research preparation.",
   "latest_validated_code_head": "af60cf663ad2bb5aa237d82171969832f399588b",
   "latest_validation_workflow_run_id": 36170981233,
   "latest_governance_commit_before_this_checkpoint": "191dff32e574409040fc52c9ef97d3aa997fa7d5",
@@ -24,5 +24,15 @@
     "reason": "AGENTS.md and project_state declare NO_PROJECT_SECURITY_GATE; retired historical gate references are not current blockers.",
     "validated_on_non_default_branch": true,
     "main_write": false
+  },
+  "governance_text_alignment": {
+    "status": "CLOSED",
+    "checkpoint": "governance/checkpoints/20260926_governance_text_alignment_closed.json",
+    "paths": [
+      "docs/PRE_FLIGHT_CHECKLIST.md",
+      "docs/HANDOFF.md",
+      "README.md",
+      "docs/CURRENT_STATE.md"
+    ]
   }
 }
