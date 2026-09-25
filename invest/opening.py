@@ -50,6 +50,14 @@ def validate_opening_pair(binding: dict, provider_evidence: dict) -> dict:
                 f"market_data_boundaries.{key}.evidence_sha256 与 provider evidence 不一致"
             )
 
+    if (
+        identity["raw_artifact_identity"]
+        != binding["dataset"]["raw_artifact_identity"]
+    ):
+        raise ValueError(
+            "provider evidence raw_artifact_identity 与 binding dataset 不一致"
+        )
+
     can_open = bool(
         provider["can_support_holdout_opening"] and bound["can_open_holdout"]
     )

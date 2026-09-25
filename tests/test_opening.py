@@ -24,6 +24,7 @@ def valid_pair():
     provider_evidence = {
         "code_sha": G40,
         "dataset_identity": {
+            "raw_artifact_identity": "local-authorized-snapshot-001",
             "raw_sha256": H64_A,
             "normalized_dataset_id": H64_B,
         },
@@ -41,6 +42,9 @@ def valid_pair():
             "raw_sha256": H64_A,
             "normalized_dataset_id": H64_B,
             "code_sha": G40,
+        },
+        "dataset": {
+            "raw_artifact_identity": "local-authorized-snapshot-001",
         },
         "market_data_boundaries": copy.deepcopy(boundaries),
     }
@@ -87,6 +91,12 @@ class OpeningModuleTests(unittest.TestCase):
                 binding["provider_evidence"][field] = mismatched
                 with self.assertRaisesRegex(ValueError, field):
                     self.validate_pair(binding, evidence, provider_result, binding_result)
+
+    def test_raw_artifact_identity_mismatch_fails_closed(self):
+        binding, evidence, provider_result, binding_result = valid_pair()
+        binding["dataset"]["raw_artifact_identity"] = "different-local-snapshot"
+        with self.assertRaisesRegex(ValueError, "raw_artifact_identity"):
+            self.validate_pair(binding, evidence, provider_result, binding_result)
 
     def test_every_boundary_status_mismatch_fails_closed(self):
         for key in opening.BOUNDARY_KEYS:
