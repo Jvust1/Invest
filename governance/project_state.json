@@ -407,5 +407,18 @@
       "validated_code_head_sha": "c6ada411910d0e904fbaf1fbcec0ef399a1a9ea7",
       "handling": "application/test, provider-evidence validator and provider-evidence→binding provenance bridge CI evidence are green; PR remains Draft and must not be auto-merged"
     }
-  ]
+  ],
+  "desktop_delivery": {
+    "state": "NATIVE_WINDOWS_DELIVERY_VERIFIED_ARCHIVED_USER_DEVICE_PENDING",
+    "release_source_commit": "2992482fec57758b39b5aabf7a0e567e0502af0c",
+    "release_workflow_run": 36147377359,
+    "portable_file": "Invest-Windows-Portable.zip",
+    "portable_bytes": 13750466,
+    "portable_sha256": "01d196be5811275c3355a7d62d70ff9727ba735a80212dabc4f6f35ec402b514",
+    "drive_file_id": "1Mz2DeM1kjY-fMJmBOXP_cfVIEtCo_RmQ",
+    "review_pr": 3,
+    "main_modified": false,
+    "automatic_merge": false,
+    "user_device_acceptance": false
+  }
 }
