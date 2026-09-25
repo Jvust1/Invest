@@ -2,7 +2,12 @@
   "schema_version": 1,
   "project": "Invest",
   "date": "2026-09-26",
-  "status": "CODE_AND_TARGETED_TESTS_COMPLETE",
+  "status": "REMOTE_CI_VALIDATED",
+  "implementation_commit": "3b25024ba47ae1383d82b4b9611e8335929b26fa",
+  "validated_head": "6086a1862e2ce6aa8097f09304527e493a5a341a",
+  "workflow_run_id": 36199602714,
+  "full_suite_tests": 131,
+  "opening_test_methods": 7,
   "drive_new_objects": 0,
   "drive_modified_objects": 0
 }
