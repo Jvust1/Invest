@@ -1,12 +1,18 @@
 {
   "schema_version": 1,
   "as_of": "2026-09-26",
-  "phase": "governance text alignment closed; provider/binding exact-pair opening continuity gate remote-CI validated; licensed real-data gate remains open",
+  "phase": "text alignment landed; canonical project_state reconciliation remains open",
   "drive_checkpoint": {
     "status": "exists_verified",
     "id": "1Iscm0akdNG5s0WNJfc83-T_eh88xIz1F"
   },
-  "pending_sync": [],
+  "pending_sync": [
+    {
+      "id": "PROJECT_STATE_RECONCILIATION",
+      "status": "OPEN_NONBLOCKING",
+      "path": "governance/project_state.json"
+    }
+  ],
   "publication_action": "Continue on Draft PR #2; keep the frozen Drive checkpoint unchanged.",
   "publication_authority": "GitHub live branch, PR and checks",
   "main_merge": "requires later explicit authorization for the specific PR; not a pending sync",
@@ -14,7 +20,7 @@
     "number": 1,
     "status": "preserved untouched; reconcile README during eventual merge"
   },
-  "next_safe_action": "Before any holdout observation, validate the exact provider evidence and BOUND_UNOPENED binding pair with invest/opening.py. While licensed data remains unavailable, continue only directly related credential-free hardening or research preparation.",
+  "next_safe_action": "Reconcile governance/project_state.json with the landed checkpoint, then continue provider-to-binding opening hardening while licensed data remains unavailable.",
   "latest_validated_code_head": "af60cf663ad2bb5aa237d82171969832f399588b",
   "latest_validation_workflow_run_id": 36170981233,
   "latest_governance_commit_before_this_checkpoint": "191dff32e574409040fc52c9ef97d3aa997fa7d5",
@@ -26,7 +32,7 @@
     "main_write": false
   },
   "governance_text_alignment": {
-    "status": "CLOSED",
+    "status": "DOCS_ALIGNED_PROJECT_STATE_PENDING",
     "checkpoint": "governance/checkpoints/20260926_governance_text_alignment_closed.json",
     "paths": [
       "docs/PRE_FLIGHT_CHECKLIST.md",
