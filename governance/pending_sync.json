@@ -17,5 +17,13 @@
   "next_safe_action": "When licensed real data is unavailable, continue credential-free adversarial hardening directly tied to the provider/binding/holdout gates; when available, validate provider evidence first and create only a provenance-linked BOUND_UNOPENED binding before any holdout observation.",
   "latest_validated_code_head": "c6ada411910d0e904fbaf1fbcec0ef399a1a9ea7",
   "latest_validation_workflow_run_id": 36093418179,
-  "latest_governance_commit_before_this_checkpoint": "c6ada411910d0e904fbaf1fbcec0ef399a1a9ea7"
+  "latest_governance_commit_before_this_checkpoint": "c6ada411910d0e904fbaf1fbcec0ef399a1a9ea7",
+  "write_path_recovery": {
+    "status": "RECOVERED",
+    "date": "2026-09-25",
+    "reason": "Mandatory live global Drive safety baseline + dynamic root baselines + target-branch SECURITY_POLICY preflight completed before mutation.",
+    "validated_on_non_default_branch": true,
+    "main_write": false,
+    "force_push": false
+  }
 }
