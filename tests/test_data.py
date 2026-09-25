@@ -309,5 +309,74 @@ class TushareTests(unittest.TestCase):
             data._NoRedirect().redirect_request(None, None, 307, "redirect", {}, "https://other.example/")
 
 
+class _FakeFrame:
+    def __init__(self, rows):
+        self._rows = rows
+        self.columns = list(rows[0].keys()) if rows else []
+
+    def to_dict(self, orient=None):
+        if orient != "records":
+            raise AssertionError("records orientation required")
+        return [dict(row) for row in self._rows]
+
+
+class _FakeAkShare:
+    __version__ = "1.18.97"
+
+    def stock_zh_a_hist(self, **kwargs):
+        self.hist_kwargs = kwargs
+        return _FakeFrame([
+            {"日期": "2024-01-02", "股票代码": "600000", "开盘": 8.00, "收盘": 8.10, "最高": 8.20, "最低": 7.90, "成交量": 1234},
+            {"日期": "2024-01-03", "股票代码": "600000", "开盘": 8.12, "收盘": 8.20, "最高": 8.30, "最低": 8.01, "成交量": 2000},
+        ])
+
+    def tool_trade_date_hist_sina(self):
+        return _FakeFrame([
+            {"trade_date": "2024-01-02"},
+            {"trade_date": "2024-01-03"},
+        ])
+
+
+class AkShareAdapterTests(unittest.TestCase):
+    def test_real_research_adapter_normalizes_unadjusted_daily_data(self):
+        client = _FakeAkShare()
+        result = data.fetch_akshare("600000.SH", "2024-01-02", "2024-01-03", client=client)
+        self.assertEqual(result["meta"]["source_kind"], "akshare")
+        self.assertEqual(result["meta"]["provider_price_adjustment"], "none")
+        self.assertEqual(result["bars"][0]["volume_shares"], 123400)
+        self.assertEqual(result["calendar"], ["2024-01-02", "2024-01-03"])
+        self.assertIsNone(result["bars"][0]["suspended"])
+        self.assertIsNone(result["bars"][0]["corporate_action"])
+        self.assertFalse(result["audit"]["backtest_ready"])
+        self.assertIn("akshare_research_only", [item["code"] for item in result["audit"]["warnings"]])
+        self.assertEqual(client.hist_kwargs["adjust"], "")
+
+    def test_calendar_failure_preserves_real_bars_and_blocks_execution(self):
+        client = _FakeAkShare()
+        def fail_calendar():
+            raise RuntimeError("upstream unavailable")
+        client.tool_trade_date_hist_sina = fail_calendar
+        result = data.fetch_akshare("600000.SH", "2024-01-02", "2024-01-03", client=client)
+        self.assertEqual(len(result["bars"]), 2)
+        self.assertEqual(result["calendar"], [])
+        self.assertIn("provider_calendar_incomplete", [item["code"] for item in result["audit"]["backtest_blockers"]])
+
+    def test_symbol_mismatch_and_fractional_share_conversion_fail_closed(self):
+        bad_symbol = _FakeAkShare()
+        bad_symbol.stock_zh_a_hist = lambda **_: _FakeFrame([
+            {"日期": "2024-01-02", "股票代码": "000001", "开盘": 8, "收盘": 8, "最高": 8, "最低": 8, "成交量": 1}
+        ])
+        with self.assertRaises(ValueError):
+            data.fetch_akshare("600000.SH", "2024-01-02", "2024-01-02", client=bad_symbol)
+
+        fractional = _FakeAkShare()
+        fractional.stock_zh_a_hist = lambda **_: _FakeFrame([
+            {"日期": "2024-01-02", "股票代码": "600000", "开盘": 8, "收盘": 8, "最高": 8, "最低": 8, "成交量": "0.001"}
+        ])
+        with self.assertRaises(ValueError):
+            data.fetch_akshare("600000.SH", "2024-01-02", "2024-01-02", client=fractional)
+
+
+
 if __name__ == "__main__":
     unittest.main()

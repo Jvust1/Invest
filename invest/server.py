@@ -16,7 +16,7 @@ from urllib.parse import parse_qs, urlsplit
 import uuid
 
 from . import __version__
-from .data import demo_dataset, fetch_tushare, parse_csv, verify_dataset_identity
+from .data import akshare_available, demo_dataset, fetch_akshare, fetch_tushare, parse_csv, verify_dataset_identity
 from .engine import backtest, research
 from .portfolio import PaperLedger
 
@@ -230,7 +230,7 @@ class InvestHandler(BaseHTTPRequestHandler):
                 return self._reply(200, body=(self.server.web_root / name).read_bytes(), content_type=mime)
             if path == "/api/config":
                 return self._reply(200, {"version": __version__, "csrf_token": self.server.csrf_token,
-                    "tushare_configured": bool(os.environ.get("TUSHARE_TOKEN")), "default_parameters": DEFAULT_PARAMETERS})
+                    "tushare_configured": bool(os.environ.get("TUSHARE_TOKEN")), "akshare_available": akshare_available(), "default_parameters": DEFAULT_PARAMETERS})
             if path == "/api/datasets":
                 return self._reply(200, {"datasets": self.server.state.datasets()})
             if path.startswith("/api/datasets/"):
@@ -264,6 +264,12 @@ class InvestHandler(BaseHTTPRequestHandler):
             if not all(isinstance(x, str) for x in (csv_text, source, calendar_csv)):
                 raise ValueError("CSV、来源和日历必须是文本")
             data = parse_csv(csv_text, source=source, calendar_csv=calendar_csv)
+            return self._reply(200, self.server.state.save_dataset(data))
+        if path == "/api/datasets/akshare":
+            args = [payload.get(key) for key in ("symbol", "start", "end")]
+            if not all(isinstance(x, str) for x in args):
+                raise ValueError("请输入证券代码和日期范围")
+            data = fetch_akshare(*args)
             return self._reply(200, self.server.state.save_dataset(data))
         if path == "/api/datasets/tushare":
             if not os.environ.get("TUSHARE_TOKEN"):

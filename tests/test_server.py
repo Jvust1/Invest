@@ -137,6 +137,23 @@ class ServerTests(unittest.TestCase):
             self.assertTrue(config["tushare_configured"])
             self.assertNotIn("private-test-token", json.dumps(config))
 
+    def test_akshare_research_endpoint_and_config(self):
+        with patch("invest.server.akshare_available", return_value=True):
+            _, config = self.request("/api/config")
+            self.assertTrue(config["akshare_available"])
+        realish = self.demo()
+        realish["meta"]["source_kind"] = "akshare"
+        from invest import data as data_module
+        realish["id"] = data_module.dataset_identity(realish)
+        with patch("invest.server.fetch_akshare", return_value=realish) as fetch:
+            status, result = self.request("/api/datasets/akshare", {
+                "symbol": "600000.SH", "start": "2024-01-02", "end": "2024-01-03"
+            })
+        self.assertEqual(status, 200, result)
+        self.assertEqual(result["meta"]["source_kind"], "akshare")
+        fetch.assert_called_once_with("600000.SH", "2024-01-02", "2024-01-03")
+
+
     def test_refuses_unprotected_network_binding(self):
         with self.assertRaises(ValueError):
             InvestServer(("0.0.0.0", 0), Path(self.temp.name))
