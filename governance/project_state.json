@@ -19,7 +19,7 @@
   "research_governance": "evaluation_protocol_v1_frozen",
   "validation": {
     "base_application_unittest": 82,
-    "current_full_suite_tests": 120,
+    "current_full_suite_tests": 130,
     "independent_groups": 8,
     "root_browser_checks": 10,
     "ui_curve_edge_cases": 3,
@@ -27,8 +27,8 @@
     "remote_ci": {
       "historical_application_head_sha": "f40b0285b1c2bb249464f2ec354e9eb3bb6b18df",
       "historical_workflow_run_id": 35701856144,
-      "latest_validated_code_head_sha": "c6ada411910d0e904fbaf1fbcec0ef399a1a9ea7",
-      "latest_workflow_run_id": 36093418179,
+      "latest_validated_code_head_sha": "af60cf663ad2bb5aa237d82171969832f399588b",
+      "latest_workflow_run_id": 36170981233,
       "result": "success",
       "matrix_jobs": 4,
       "platforms": [
@@ -368,6 +368,26 @@
         "simulated_execution_unlocked": false,
         "rationale": "real OHLCV research path added; execution metadata remains incomplete"
       }
+    },
+    "opening_pair_continuity_gate": {
+      "status": "REMOTE_CI_VALIDATED",
+      "module": "invest/opening.py",
+      "tests": "tests/test_opening.py",
+      "decision": "governance/decisions/D023_provider_binding_pair_continuity_gate.json",
+      "evaluation_record": "governance/evaluations/E011_provider_binding_pair_continuity_gate.json",
+      "checkpoint": "governance/checkpoints/20260926_provider_binding_pair_adversarial_coverage.json",
+      "validated_code_head_sha": "af60cf663ad2bb5aa237d82171969832f399588b",
+      "workflow_run_id": 36170981233,
+      "full_suite_tests": 130,
+      "opening_module_test_methods": 6,
+      "direct_behavioral_tests": 5,
+      "adversarial_subcases": 22,
+      "provider_pair_exact_identity_required": true,
+      "all_boundary_states_and_hashes_must_match": true,
+      "provider_call_performed": false,
+      "real_data_used": false,
+      "real_binding_created": false,
+      "holdout_observed": false
     }
   },
   "external_blockers": [
@@ -392,7 +412,7 @@
     "after provider evidence, candidate and data binding are frozen and all opening blockers are closed, begin append-only forward-paper evidence without retroactive signal edits",
     "while licensed data is unavailable, only advance directly related credential-free governance, adversarial tests, or research preparation that does not fabricate provider evidence"
   ],
-  "latest_checkpoint": "governance/checkpoints/20260925_provider_evidence_binding_bridge_gate.json",
+  "latest_checkpoint": "governance/checkpoints/20260926_canonical_state_sync_closed.json",
   "authority": {
     "code_and_state": "GitHub",
     "artifacts": "existing Drive project folder",
@@ -417,8 +437,8 @@
       "branch": "feat/a-share-research-v0.1-20260922",
       "base": "main",
       "state": "open_draft",
-      "validated_code_head_sha": "c6ada411910d0e904fbaf1fbcec0ef399a1a9ea7",
-      "handling": "application/test, provider-evidence validator and provider-evidence→binding provenance bridge CI evidence are green; PR remains Draft and must not be auto-merged"
+      "validated_code_head_sha": "af60cf663ad2bb5aa237d82171969832f399588b",
+      "handling": "application/test plus provider-to-binding opening continuity gate are CI-validated; PR remains Draft and must not be auto-merged"
     }
   ]
 }
