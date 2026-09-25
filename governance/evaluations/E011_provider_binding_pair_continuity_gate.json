@@ -3,11 +3,11 @@
   "id": "E011",
   "date": "2026-09-26",
   "title": "Provider-binding opening continuity gate remote CI validation",
-  "status": "REMOTE_CI_GREEN_BEHAVIOR_TEST_DEBT_OPEN",
-  "implementation_head": "0ea25352e951cdbfc33b2e7edc2e97f0d2b3ce51",
-  "workflow_run_id": 36168325134,
+  "status": "REMOTE_CI_GREEN_BEHAVIOR_COVERAGE_CLOSED",
+  "implementation_head": "af60cf663ad2bb5aa237d82171969832f399588b",
+  "workflow_run_id": 36170981233,
   "validation": {
-    "full_suite_tests": 125,
+    "full_suite_tests": 130,
     "platforms": [
       "ubuntu-latest",
       "windows-latest"
@@ -18,9 +18,10 @@
     ],
     "tests": "pass",
     "compile_source": "pass",
-    "opening_module_test_methods": 1,
-    "direct_behavioral_tests": 0,
-    "behavioral_test_debt": "OPEN_NON_BLOCKING"
+    "opening_module_test_methods": 6,
+    "direct_behavioral_tests": 5,
+    "adversarial_subcases": 22,
+    "behavioral_test_debt": "CLOSED"
   },
   "scope": {
     "module": "invest/opening.py",
