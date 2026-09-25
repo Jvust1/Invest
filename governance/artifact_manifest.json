@@ -252,5 +252,19 @@
       "publication": "PR #2; commit c6ada411910d0e904fbaf1fbcec0ef399a1a9ea7",
       "recovery": "Use GitHub commit history; preserve the 2026-09-22 Drive checkpoint unchanged"
     }
-  ]
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "invest-windows-delivery-20260925",
+      "file_name": "Invest-Windows-完整交付-20260925.zip",
+      "type": "generated_release",
+      "drive_file_id_or_path": "1Mz2DeM1kjY-fMJmBOXP_cfVIEtCo_RmQ",
+      "drive_parent_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
+      "size_bytes": 14178048,
+      "release_source_commit": "2992482fec57758b39b5aabf7a0e567e0502af0c",
+      "purpose": "Verified Windows portable Invest app, exact source/tests, evidence and checksums.",
+      "status": "archived_verified_windows_ci_user_device_pending"
+    }
+  ],
+  "last_updated": "2026-09-25"
 }
