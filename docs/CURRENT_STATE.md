@@ -14,7 +14,7 @@
 | 最新已验证代码 head | `af60cf663ad2bb5aa237d82171969832f399588b` |
 | 最新 GitHub Actions CI | run `36170981233` 成功：Ubuntu/Windows × Python 3.11/3.12 四组合 standard-library tests 与源码编译全部通过 |
 
-安全 bootstrap 与 Drive 项目登记已完成。功能 PR 不自动合并，也不直接写 main。
+历史安全 bootstrap 与 Drive 项目登记已完成；当前权威治理为 `security_status=NO_PROJECT_SECURITY_GATE`，目标分支已正式移除 `SECURITY_POLICY.md`，其缺失不构成阻塞，也不得恢复旧安全基线。功能 PR 不自动合并，也不直接写 main。
 
 Provider-evidence 门禁当前同时要求：成功接口具有非空 schema 与正行数；样本证券代码落在 Invest v1 支持的沪深主板格式范围；样本结束日期不得晚于证据执行日期；`executed_at` 必须使用与 `Asia/Shanghai` 市场时间契约一致的 `+08:00` UTC offset；`daily`、`adj_factor`、`stk_limit`、`trade_cal` 四个当前核心接口全部存在；标记成功的核心接口必须覆盖当前适配器实际要求的字段集合；证据单位必须严格匹配当前 Tushare 适配器语义：`CNY`、`CNY/share`、输入 `lot`、输出 `share`、`Asia/Shanghai`；并且七类 market-data boundary 中任何标记 `verified` 的项，都必须绑定一个小写 64 位 supporting-evidence SHA-256。缺核心接口、缺适配器必需字段、单位契约不一致、执行时间 offset 与市场时间不一致，把 boundary 仅用自由文本升级为 verified，或授权状态缺少有效 `license_evidence_sha256` 时都保持 fail closed。
 
@@ -48,7 +48,7 @@ Provider-evidence 门禁当前同时要求：成功接口具有非空 schema 与
 | 主执行者独立 Playwright | 10 条检查全部通过，无 JavaScript 异常或 console errors |
 | Evaluation binding validator | **15 个测试方法**；历史市场环境、provider evidence 身份桥、verified boundary supporting-evidence hash 等反例 fail closed |
 | Provider evidence validator | **23 个测试方法**；新增 `executed_at` 非 `+08:00` 的 UTC/Z 与 `+09:00` 两类反例，避免样本结束日期与市场日期语义错位 |
-| 最新 GitHub Actions | **PASS**：head `c6ada411910d0e904fbaf1fbcec0ef399a1a9ea7`，run `36093418179`；Ubuntu/Windows × Python 3.11/3.12 四个 job 的 tests 与 compile source 全部通过，日志确认 **Ran 120 tests** |
+| 最新 GitHub Actions | **PASS**：head `af60cf663ad2bb5aa237d82171969832f399588b`，run `36170981233`；Ubuntu/Windows × Python 3.11/3.12 四个 job 的 tests 与 compile source 全部通过，完整测试集 **130 tests** |
 
 当前 provider evidence 测试只验证证据格式与 fail-closed 语义，**没有真实 provider call、没有真实数据、没有凭据、没有收益证据**。supporting-evidence SHA-256 只冻结 provenance identity，不证明 artifact 内容、许可或 boundary 判断真实正确。远端 Windows runner 单测/编译通过也不等同于 Windows 桌面浏览器和 `start.bat` 人工体验验收。
 
@@ -75,7 +75,7 @@ Provider-evidence 门禁当前同时要求：成功接口具有非空 schema 与
 3. 只有全部 opening blockers 关闭后才首次观察 frozen holdout；之后开始 append-only forward-paper。
 4. 合法真实数据仍不可用时，只推进与真实数据门禁直接相关的 credential-free 对抗测试、治理或研究准备，不用 mock/合成数据冒充 provider 证据。
 
-最新决策为 `governance/decisions/D021_provider_evidence_binding_bridge_gate.json`，检查点为 `governance/checkpoints/20260925_provider_evidence_binding_bridge_gate.json`。此前 runbook 许可证据哈希文字债务与 E009 narrative ledger 债务均已闭环；当前 `pending_sync` 无该两项遗留。PR #2 继续保持 Draft，合并仍需针对该具体 PR 的明确授权。
+opening continuity 的最新技术决策为 `governance/decisions/D023_provider_binding_pair_continuity_gate.json`，对应验证记录为 `governance/evaluations/E011_provider_binding_pair_continuity_gate.json`。当前治理检查点为 `governance/checkpoints/20260926_governance_text_alignment_closed.json`；Pre-flight/Handoff/README 中遗留的历史安全门禁文字已对齐现行 `NO_PROJECT_SECURITY_GATE` 状态。PR #2 继续保持 Draft，合并仍需针对该具体 PR 的明确授权。
 
 
 ## 2026-09-25 Provider 授权 provenance 门禁
