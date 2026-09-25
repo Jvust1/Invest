@@ -18,11 +18,11 @@
   "bootstrap_sha": "172803ad30cd2065719944f1fab26a952c42be54",
   "delivery_branch": "feat/a-share-research-v0.1-20260922",
   "delivery_policy": "draft PR to main; no automatic merge",
-  "implementation": "evaluation_binding_gate_and_provider_evidence_gate_remote_ci_validated_with_license_provenance_fail_closed_real_data_gate_blocked",
+  "implementation": "evaluation_binding_provider_evidence_bridge_remote_ci_validated_real_data_gate_blocked",
   "research_governance": "evaluation_protocol_v1_frozen",
   "validation": {
     "base_application_unittest": 82,
-    "current_full_suite_tests": 118,
+    "current_full_suite_tests": 120,
     "independent_groups": 8,
     "root_browser_checks": 10,
     "ui_curve_edge_cases": 3,
@@ -30,8 +30,8 @@
     "remote_ci": {
       "historical_application_head_sha": "f40b0285b1c2bb249464f2ec354e9eb3bb6b18df",
       "historical_workflow_run_id": 35701856144,
-      "latest_validated_code_head_sha": "6db24bb3cde003f937a73dc5a5eb2041181af505",
-      "latest_workflow_run_id": 36089180871,
+      "latest_validated_code_head_sha": "c6ada411910d0e904fbaf1fbcec0ef399a1a9ea7",
+      "latest_workflow_run_id": 36093418179,
       "result": "success",
       "matrix_jobs": 4,
       "platforms": [
@@ -58,16 +58,16 @@
       "status": "REMOTE_CI_VALIDATED",
       "module": "invest/evaluation.py",
       "format": "docs/EVALUATION_BINDING_FORMAT.md",
-      "tests": 13,
-      "current_full_suite_tests_at_validation": 95,
+      "tests": 15,
+      "current_full_suite_tests_at_validation": 120,
       "compile_source": "pass",
       "real_data_used": false,
       "credential_used": false,
       "real_binding_created": false,
       "historical_market_environments_required": true,
       "minimum_historical_market_environments": 3,
-      "remote_ci_head_sha": "7629e221619f22500dc2016f2bf698eb055f50f2",
-      "workflow_run_id": 35809448144,
+      "remote_ci_head_sha": "c6ada411910d0e904fbaf1fbcec0ef399a1a9ea7",
+      "workflow_run_id": 36093418179,
       "matrix_jobs": 4,
       "platforms": [
         "ubuntu-latest",
@@ -78,7 +78,10 @@
         "3.12"
       ],
       "standard_library_tests_step": "pass",
-      "compile_source_step": "pass"
+      "compile_source_step": "pass",
+      "provider_evidence_reference_required": true,
+      "provider_dataset_identity_match_required": true,
+      "verified_boundaries_require_supporting_evidence_sha256": true
     },
     "real_data_provider_validation_prep": {
       "status": "RUNBOOK_AND_EVIDENCE_VALIDATOR_READY_NO_REAL_DATA",
@@ -116,7 +119,8 @@
       "verified_boundary_provenance_gate_decision_record": "governance/decisions/D018_provider_validation_boundary_provenance_gate.json",
       "execution_timezone_gate_decision_record": "governance/decisions/D019_provider_validation_execution_timezone_gate.json",
       "license_provenance_gate_decision_record": "governance/decisions/D020_provider_validation_license_provenance_gate.json",
-      "license_provenance_addendum": "docs/PROVIDER_LICENSE_EVIDENCE_ADDENDUM.md"
+      "license_provenance_addendum": "docs/PROVIDER_LICENSE_EVIDENCE_ADDENDUM.md",
+      "binding_bridge_decision_record": "governance/decisions/D021_provider_evidence_binding_bridge_gate.json"
     },
     "provider_validation_evidence_validator": {
       "status": "REMOTE_CI_VALIDATED",
@@ -331,6 +335,26 @@
       "real_data_used": false,
       "provider_call_performed": false,
       "holdout_observed": false
+    },
+    "provider_evidence_binding_bridge_hardening": {
+      "status": "REMOTE_CI_VALIDATED",
+      "checkpoint": "governance/checkpoints/20260925_provider_evidence_binding_bridge_gate.json",
+      "decision": "governance/decisions/D021_provider_evidence_binding_bridge_gate.json",
+      "evaluation_record": "docs/EVALUATION_LEDGER.md#e010--provider-evidence--evaluation-binding-provenance-bridge-验收2026-09-25",
+      "validated_code_head_sha": "c6ada411910d0e904fbaf1fbcec0ef399a1a9ea7",
+      "workflow_run_id": 36093418179,
+      "tests_added": 2,
+      "evaluation_tests": 15,
+      "current_full_suite_tests": 120,
+      "provider_evidence_reference_required": true,
+      "license_evidence_sha256_reference_required": true,
+      "provider_dataset_identity_match_required": true,
+      "verified_binding_boundaries_require_supporting_evidence_sha256": true,
+      "real_data_used": false,
+      "provider_call_performed": false,
+      "credentials_used": false,
+      "real_binding_created": false,
+      "holdout_observed": false
     }
   },
   "external_blockers": [
@@ -350,13 +374,12 @@
     "public or LAN deployment; not implemented"
   ],
   "next_actions": [
-    "when local authorization is available, require provider.license_evidence_sha256 and all existing provider evidence gates before creating a real binding",
-    "validate real provider evidence with invest/provider_validation.py; missing or malformed license provenance keeps readiness fail-closed",
-    "before opening any frozen holdout result, create the first authorized BOUND_UNOPENED data binding and pass invest/evaluation.py validation for development/validation/holdout windows, at least three frozen historical market environments, candidate, costs, benchmark, PIT and market-data boundaries",
+    "when local authorization is available, validate real provider evidence with invest/provider_validation.py including provider.license_evidence_sha256 and all existing provider gates",
+    "before opening any frozen holdout result, create the first authorized BOUND_UNOPENED data binding and pass invest/evaluation.py with provider evidence_id/license hash linkage, matching raw/normalized/code identities, at least three frozen historical market environments, candidate, costs, benchmark, PIT and verified-boundary supporting evidence hashes",
     "after provider evidence, candidate and data binding are frozen and all opening blockers are closed, begin append-only forward-paper evidence without retroactive signal edits",
     "while licensed data is unavailable, only advance directly related credential-free governance, adversarial tests, or research preparation that does not fabricate provider evidence"
   ],
-  "latest_checkpoint": "governance/checkpoints/20260925_provider_validation_license_provenance_gate.json",
+  "latest_checkpoint": "governance/checkpoints/20260925_provider_evidence_binding_bridge_gate.json",
   "authority": {
     "code_and_state": "GitHub",
     "artifacts": "existing Drive project folder",
@@ -381,8 +404,8 @@
       "branch": "feat/a-share-research-v0.1-20260922",
       "base": "main",
       "state": "open_draft",
-      "validated_code_head_sha": "6db24bb3cde003f937a73dc5a5eb2041181af505",
-      "handling": "application/test, evaluation-binding validator and provider-evidence validator CI evidence are green; PR remains Draft and must not be auto-merged"
+      "validated_code_head_sha": "c6ada411910d0e904fbaf1fbcec0ef399a1a9ea7",
+      "handling": "application/test, provider-evidence validator and provider-evidence→binding provenance bridge CI evidence are green; PR remains Draft and must not be auto-merged"
     }
   ]
 }

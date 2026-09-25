@@ -143,3 +143,14 @@ GitHub Actions `Invest tests` run `36017899955` 已 completed/success。四个�
 代码 head `6db24bb3cde003f937a73dc5a5eb2041181af505` 要求 `provider.license_status=authorized` 时必须同时提供小写 64 位 `license_evidence_sha256`，并新增缺失/格式错误反例。GitHub Actions run `36089180871` 已完成并成功，完整测试集为 **118 tests**，其中 provider evidence 23 个测试方法。
 
 该哈希只冻结许可证据 provenance 身份，不独立证明授权真实性或适用范围。本轮没有真实 provider call、没有 Token、没有真实市场数据、没有真实 binding，也没有打开 frozen holdout。
+
+
+## E010 — Provider evidence → evaluation binding provenance bridge 验收（2026-09-25）
+
+目标：关闭 provider evidence 与首个真实 `BOUND_UNOPENED` evaluation binding 之间仍需人工对账的 provenance 缺口。此前 provider evidence 已分别冻结 license/data/code/boundary 证据身份，但 binding 可以独立填写自己的 dataset 与 boundary 文本；在首个真实 binding 尚未出现、frozen holdout 尚未打开时，适合先把两层门禁机器化连接。
+
+代码 head `c6ada411910d0e904fbaf1fbcec0ef399a1a9ea7` 新增：binding 必须包含 provider `evidence_id`、`license_evidence_sha256`、`raw_sha256`、`normalized_dataset_id`、`code_sha`；其中 raw/normalized/code 必须与 binding dataset 同名身份完全一致。binding 的七类 market-data boundary 若标记 `verified`，还必须继续携带有效 supporting-evidence SHA-256。新增 2 个 evaluation 测试方法覆盖缺失/畸形 provider evidence ID、数据/代码身份不一致，以及 verified boundary 缺失/畸形证据 hash；`unknown` boundary 可诚实省略 hash，但继续阻断 opening。
+
+GitHub Actions `Invest tests` run `36093418179` 已 completed/success；Ubuntu/Windows × Python 3.11/3.12 四个矩阵 job 的 `Standard-library tests` 与 `Compile source` 全部成功，日志确认 **Ran 120 tests**（基础 82 + evaluation 15 + provider evidence 23）。
+
+本次只加固结构和 provenance：没有 provider call、没有 Token/凭据、没有真实市场数据、没有真实 provider evidence、没有真实 binding、没有观察 frozen holdout，也没有收益证据。哈希与 identity bridge 仍不是外部真实性证明。

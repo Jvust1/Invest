@@ -11,8 +11,8 @@
 | 已完成的安全治理 bootstrap | `172803ad30cd2065719944f1fab26a952c42be54` |
 | 功能分支 | `feat/a-share-research-v0.1-20260922` |
 | 功能 PR | Draft PR #2 → `main`；未合并 |
-| Provider evidence 最新已验证代码/文档 head | `6db24bb3cde003f937a73dc5a5eb2041181af505` |
-| 最新 Provider evidence CI | run `36089180871` 成功：Ubuntu/Windows × Python 3.11/3.12 四组合 standard-library tests 与源码编译全部通过 |
+| 最新已验证代码/文档 head | `c6ada411910d0e904fbaf1fbcec0ef399a1a9ea7` |
+| 最新 GitHub Actions CI | run `36093418179` 成功：Ubuntu/Windows × Python 3.11/3.12 四组合 standard-library tests 与源码编译全部通过 |
 
 安全 bootstrap 与 Drive 项目登记已完成。功能 PR 不自动合并，也不直接写 main。
 
@@ -32,6 +32,7 @@ Provider-evidence 门禁当前同时要求：成功接口具有非空 schema 与
 - 冻结协议 v1 要求至少三个历史市场环境，binding 校验器已机器化门禁。
 - `invest/provider_validation.py` 与证据格式把真实供应商验证 runbook 的脱敏结果变成机器可检查记录；递归拒绝凭据字段，允许真实失败与 `unknown` / `not_covered` 被诚实保存。
 - Provider evidence 已依次加固：成功接口非空字段/正行数；样本主板范围和执行时间；四核心接口完整性；核心接口适配器必需字段；严格单位契约；verified market-data boundary supporting-evidence SHA-256 provenance commitment；以及 `executed_at` 必须与 `Asia/Shanghai` 的 `+08:00` 日期语义一致。
+- `BOUND_UNOPENED` evaluation binding 现在必须引用 provider evidence 的 `evidence_id` 与 `license_evidence_sha256`，并要求 provider evidence 的 raw/normalized/code 身份与 binding dataset 一致；binding 中任何 `verified` market-data boundary 也必须带 supporting-evidence SHA-256。
 
 执行范围限沪深主板格式代码、日频、现金、仅做多和单股票策略回测。代码格式通过不等于上市状态、交易资格或风险警示历史经过验证。缺日历、未知关键状态、公司行动或复权因子变化均不能被静默绕过。
 
@@ -40,14 +41,14 @@ Provider-evidence 门禁当前同时要求：成功接口具有非空 schema 与
 | 验证层 | 结果 |
 | --- | --- |
 | 基础应用 unittest | 82 PASS |
-| 当前完整测试集 | **118 tests**：基础 82 + evaluation 13 + provider evidence 23；GitHub Actions 全套 discover 通过 |
+| 当前完整测试集 | **120 tests**：基础 82 + evaluation 15 + provider evidence 23；GitHub Actions 全套 discover 通过 |
 | 独立审查 | 8 组检查通过 |
 | UI 代理 Playwright | 使用本机真实应用 API 的全流程通过 |
 | 曲线专用 fixtures | 3 组通过 |
 | 主执行者独立 Playwright | 10 条检查全部通过，无 JavaScript 异常或 console errors |
-| Evaluation binding validator | 13 个测试方法；历史市场环境等反例 fail closed |
+| Evaluation binding validator | **15 个测试方法**；历史市场环境、provider evidence 身份桥、verified boundary supporting-evidence hash 等反例 fail closed |
 | Provider evidence validator | **23 个测试方法**；新增 `executed_at` 非 `+08:00` 的 UTC/Z 与 `+09:00` 两类反例，避免样本结束日期与市场日期语义错位 |
-| 最新 Provider evidence GitHub Actions | **PASS**：head `6db24bb3cde003f937a73dc5a5eb2041181af505`，run `36089180871`；Ubuntu/Windows × Python 3.11/3.12 四个 job 的 tests 与 compile source 全部通过 |
+| 最新 GitHub Actions | **PASS**：head `c6ada411910d0e904fbaf1fbcec0ef399a1a9ea7`，run `36093418179`；Ubuntu/Windows × Python 3.11/3.12 四个 job 的 tests 与 compile source 全部通过，日志确认 **Ran 120 tests** |
 
 当前 provider evidence 测试只验证证据格式与 fail-closed 语义，**没有真实 provider call、没有真实数据、没有凭据、没有收益证据**。supporting-evidence SHA-256 只冻结 provenance identity，不证明 artifact 内容、许可或 boundary 判断真实正确。远端 Windows runner 单测/编译通过也不等同于 Windows 桌面浏览器和 `start.bat` 人工体验验收。
 
@@ -61,7 +62,7 @@ Provider-evidence 门禁当前同时要求：成功接口具有非空 schema 与
 - Frozen holdout：`NOT_OPENED`
 - Forward-paper：`NOT_STARTED`
 
-即便四个核心接口全部记录且成功，也不能把四接口本身解释为停牌、公司行动、风险警示历史、存活偏差或 PIT 全部覆盖；七类 boundary 仍须逐项有真实证据。verified boundary 的哈希只保证声明绑定到稳定 evidence identity，不保证证据本身足够。执行时间 offset 门禁只保证日期比较处于同一市场时间语义，也不证明数据真实或完整。即便 provider-side 条件全部闭环，也只说明供应商证据这一侧没有已知 blocker，真实 `BOUND_UNOPENED` binding 仍必须在任何 holdout 观察前独立冻结并通过 `invest/evaluation.py`。
+即便四个核心接口全部记录且成功，也不能把四接口本身解释为停牌、公司行动、风险警示历史、存活偏差或 PIT 全部覆盖；七类 boundary 仍须逐项有真实证据。verified boundary 的哈希只保证声明绑定到稳定 evidence identity，不保证证据本身足够。执行时间 offset 门禁只保证日期比较处于同一市场时间语义，也不证明数据真实或完整。即便 provider-side 条件全部闭环，也只说明供应商证据这一侧没有已知 blocker；真实 `BOUND_UNOPENED` binding 还必须在任何 holdout 观察前冻结并通过 `invest/evaluation.py`，且其 provider evidence 身份桥和 verified-boundary hash 必须与冻结证据一致。
 
 ## Drive 与真实数据门禁
 
@@ -70,11 +71,11 @@ Provider-evidence 门禁当前同时要求：成功接口具有非空 schema 与
 ## 下一步
 
 1. 在本地合法授权可用时，按 `docs/REAL_DATA_PROVIDER_VALIDATION_RUNBOOK.md` 执行最小真实供应商验证；`executed_at` 规范化为 `+08:00`，四个核心接口均须实际尝试，成功项字段集合与单位契约必须覆盖当前适配器需求，任何 verified boundary 必须冻结 supporting-evidence SHA-256，并提供有效 `provider.license_evidence_sha256`。
-2. 只有 provider evidence 这一侧无已知 blocker 后，才在读取 holdout 结果之前按冻结 v1 协议创建首个 `BOUND_UNOPENED` binding。
+2. 只有 provider evidence 这一侧无已知 blocker 后，才在读取 holdout 结果之前按冻结 v1 协议创建首个 `BOUND_UNOPENED` binding；binding 必须引用其 `evidence_id` / `license_evidence_sha256`，并保持 raw/normalized/code 身份一致，所有 verified boundary 继续绑定 supporting-evidence SHA-256。
 3. 只有全部 opening blockers 关闭后才首次观察 frozen holdout；之后开始 append-only forward-paper。
 4. 合法真实数据仍不可用时，只推进与真实数据门禁直接相关的 credential-free 对抗测试、治理或研究准备，不用 mock/合成数据冒充 provider 证据。
 
-最新决策为 `governance/decisions/D020_provider_validation_license_provenance_gate.json`，检查点为 `governance/checkpoints/20260925_provider_validation_license_provenance_gate.json`。本轮机器契约已要求 `provider.license_evidence_sha256`；真实供应商 runbook 的对应文字说明仍有一个非阻塞同步项，执行时以机器校验器和 evidence format 为准。PR #2 继续保持 Draft，合并仍需针对该具体 PR 的明确授权。
+最新决策为 `governance/decisions/D021_provider_evidence_binding_bridge_gate.json`，检查点为 `governance/checkpoints/20260925_provider_evidence_binding_bridge_gate.json`。此前 runbook 许可证据哈希文字债务与 E009 narrative ledger 债务均已闭环；当前 `pending_sync` 无该两项遗留。PR #2 继续保持 Draft，合并仍需针对该具体 PR 的明确授权。
 
 
 ## 2026-09-25 Provider 授权 provenance 门禁
@@ -82,3 +83,10 @@ Provider-evidence 门禁当前同时要求：成功接口具有非空 schema 与
 Provider evidence 的 `license_status=authorized` 现在必须同时绑定一个小写 64 位 `license_evidence_sha256`。该哈希用于固定本地许可证据的 provenance 身份，不独立证明授权真实性或适用范围。缺失或格式错误会使整条 evidence 结构校验失败。
 
 代码 head `6db24bb3cde003f937a73dc5a5eb2041181af505` 的 GitHub Actions run `36089180871` 已完成并成功；Ubuntu/Windows × Python 3.11/3.12 四个矩阵作业的完整测试与源码编译均通过。完整测试集为 **118 tests**，其中 provider evidence 测试方法为 **23**。本轮没有真实 provider call、没有真实市场数据、没有真实 provider evidence、没有真实 `BOUND_UNOPENED` binding，也没有打开 frozen holdout。
+
+
+## 2026-09-25 Provider evidence → binding provenance bridge
+
+代码 head `c6ada411910d0e904fbaf1fbcec0ef399a1a9ea7` 将真实 provider evidence 与首个 `BOUND_UNOPENED` evaluation binding 的 provenance 机器化绑定：binding 必须保存 provider `evidence_id` / `license_evidence_sha256`，provider raw/normalized/code 身份必须与 binding dataset 一致；任何 binding boundary 标记 `verified` 时都必须有 supporting-evidence SHA-256。
+
+GitHub Actions run `36093418179` 已 completed/success；Ubuntu/Windows × Python 3.11/3.12 四个矩阵作业的 tests 与源码编译均成功，Ubuntu/Python 3.12 日志确认 **Ran 120 tests**。本轮仍没有真实 provider call、没有凭据、没有真实行情、没有真实 provider evidence、没有真实 binding，也没有打开 frozen holdout。

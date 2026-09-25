@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "as_of": "2026-09-25",
-  "phase": "evaluation protocol v1 frozen; provider-evidence/binding provenance bridge implementation pending CI; licensed real-data gate blocked",
+  "phase": "evaluation protocol v1 frozen; provider-evidence/binding provenance bridge remote-CI validated; licensed real-data gate blocked",
   "drive_checkpoint": {
     "status": "exists_verified",
     "id": "1Iscm0akdNG5s0WNJfc83-T_eh88xIz1F"
@@ -14,8 +14,8 @@
     "number": 1,
     "status": "preserved untouched; reconcile README during eventual merge"
   },
-  "next_safe_action": "Validate the provider-evidence/binding provenance bridge in CI; then record exact green head/run and continue credential-free real-data gate hardening while licensed data remains unavailable.",
-  "latest_validated_code_head": "6db24bb3cde003f937a73dc5a5eb2041181af505",
-  "latest_validation_workflow_run_id": 36089180871,
-  "latest_governance_commit_before_this_checkpoint": "e860ae5a9d893fb0da6356bc1df8aabeb3901f66"
+  "next_safe_action": "When licensed real data is unavailable, continue credential-free adversarial hardening directly tied to the provider/binding/holdout gates; when available, validate provider evidence first and create only a provenance-linked BOUND_UNOPENED binding before any holdout observation.",
+  "latest_validated_code_head": "c6ada411910d0e904fbaf1fbcec0ef399a1a9ea7",
+  "latest_validation_workflow_run_id": 36093418179,
+  "latest_governance_commit_before_this_checkpoint": "c6ada411910d0e904fbaf1fbcec0ef399a1a9ea7"
 }

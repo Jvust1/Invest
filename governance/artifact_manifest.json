@@ -236,6 +236,21 @@
       "application_source_changed": false,
       "publication": "PR #2; follow-up commit after 44e6a318d9eed11e1e849b026c5ca306599c5523",
       "recovery": "Use GitHub commit history; preserve this checkpoint unchanged"
+    },
+    {
+      "reason": "Provider evidence to evaluation binding provenance bridge added after the frozen source checkpoint",
+      "paths": [
+        "invest/evaluation.py",
+        "tests/test_evaluation.py",
+        "docs/EVALUATION_BINDING_FORMAT.md",
+        "docs/REAL_DATA_PROVIDER_VALIDATION_RUNBOOK.md",
+        "docs/PROVIDER_VALIDATION_EVIDENCE_FORMAT.md"
+      ],
+      "application_source_changed": true,
+      "validated_code_head_sha": "c6ada411910d0e904fbaf1fbcec0ef399a1a9ea7",
+      "workflow_run_id": 36093418179,
+      "publication": "PR #2; commit c6ada411910d0e904fbaf1fbcec0ef399a1a9ea7",
+      "recovery": "Use GitHub commit history; preserve the 2026-09-22 Drive checkpoint unchanged"
     }
   ]
 }
