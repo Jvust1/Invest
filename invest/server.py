@@ -16,6 +16,7 @@ from urllib.parse import parse_qs, urlsplit
 import uuid
 
 from . import __version__
+from .backup import export_backup
 from .data import demo_dataset, fetch_tushare, parse_csv, verify_dataset_identity
 from .engine import backtest, research
 from .portfolio import PaperLedger
@@ -255,6 +256,11 @@ class InvestHandler(BaseHTTPRequestHandler):
             raise LookupError("页面或记录不存在")
 
         payload = self._json_body()
+        if path == "/api/private-backup":
+            if payload.get("confirm_private_export") is not True:
+                raise ValueError("请确认导出含模拟账本与私人研究笔记的完整备份")
+            return self._reply(200, body=export_backup(self.server.state.path.parent),
+                               content_type="application/zip", attachment="invest-private-backup.zip")
         if path == "/api/datasets/demo":
             return self._reply(200, self.server.state.save_dataset(demo_dataset()))
         if path == "/api/datasets/import":

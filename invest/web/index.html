@@ -76,6 +76,6 @@
       <div class="data-side"><div class="card form-card"><div class="card-heading"><h3>Tushare 数据接口</h3><span id="tushare-status" class="subtle-badge">检查配置中</span></div><p class="body-copy">按单一标的获取日线、复权因子、涨跌停价与交易日历。接口权限不足会明确报错。</p><p id="tushare-help" class="info-note">Token 仅从运行服务的环境变量 TUSHARE_TOKEN 读取，不在网页输入或保存。</p><form id="tushare-form"><label for="tushare-symbol">主板股票代码</label><input id="tushare-symbol" name="symbol" placeholder="600000.SH" pattern="[0-9]{6}\.(SH|SZ)" required><div class="form-grid"><div><label for="tushare-start">开始日期</label><input id="tushare-start" name="start" type="date" required></div><div><label for="tushare-end">结束日期</label><input id="tushare-end" name="end" type="date" required></div></div><p class="field-help">单次最长 366 天。当前适配器仅供研究；尚未核实的公司行动字段会阻止回测和模拟成交。真实接口还需你的数据权限与网络环境验证。</p><button type="submit" class="button secondary full-width" id="fetch-tushare" disabled>获取并检查数据</button></form></div><div class="card audit-card"><div class="card-heading"><h3>数据检查</h3><span id="audit-badge" class="subtle-badge">等待数据</span></div><div id="audit-content"><p class="muted">导入或载入数据后，查看错误、警告与阻止回测的原因。</p></div></div></div></div>
     </section>
     <footer class="footer"><span>Invest <span id="footer-version">v0.1</span> · 研究、验证、复盘</span><span>数据和账本保存在本地 · 未接入 AI 或券商 · 非实时行情</span></footer>
-  </main>
+  <section class="panel"><h2>完整本机备份</h2><p>研究导出不包括全部模拟账本和私人笔记。完整备份包含两者，请自行安全保存；恢复只创建新的数据目录。</p><button id="private-backup">导出完整私人备份 ZIP</button></section></main>
 </body>
 </html>

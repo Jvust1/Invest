@@ -593,4 +593,15 @@
     } catch (error) { showMessage(`工作台初始化未完成：${error.message}`, true); }
   }
   initialize();
+  $("#private-backup")?.addEventListener("click", event => busy(event.target, async () => {
+    if (!confirm("备份将包含模拟交易、研究笔记和已导入行情。确认保存到本机？")) return;
+    const response = await fetch("/api/private-backup", {method:"POST",credentials:"same-origin",
+      headers:{"Content-Type":"application/json","X-Invest-CSRF":state.config.csrf_token},
+      body:JSON.stringify({confirm_private_export:true})});
+    if(!response.ok) throw new Error("备份未完成，原数据保持不变。");
+    const blob = await response.blob(), url=URL.createObjectURL(blob), link=document.createElement("a");
+    link.href=url; link.download="invest-private-backup.zip";link.click();
+    setTimeout(()=>URL.revokeObjectURL(url),10000);
+    showMessage("完整备份已生成；请确认浏览器已保存文件。");
+  }));
 })();
