@@ -64,7 +64,7 @@ python -m unittest discover -s tests -v
 python -m compileall -q invest
 ```
 
-代码与治理权威为本仓库。开始接手前先读 [AGENTS.md](AGENTS.md)、[SECURITY_POLICY.md](SECURITY_POLICY.md)、[当前状态](docs/CURRENT_STATE.md) 和 [交接说明](docs/HANDOFF.md)。交易规则及成熟项目对标见 [参考资料](docs/REFERENCES_AND_RULES.md)。
+代码与治理权威为本仓库。开始接手前先读 [AGENTS.md](AGENTS.md)、[project_state](governance/project_state.json)、[当前状态](docs/CURRENT_STATE.md) 和 [交接说明](docs/HANDOFF.md)。仅当目标分支实际存在 `SECURITY_POLICY.md` 时再读取；当前治理为 `NO_PROJECT_SECURITY_GATE`，其正式缺失不构成阻塞。交易规则及成熟项目对标见 [参考资料](docs/REFERENCES_AND_RULES.md)。
 
 ## AKShare 真实历史行情
 
