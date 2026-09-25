@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "project": "Invest",
+  "date": "2026-09-26",
+  "status": "CANONICAL_STATE_SYNC_PARTIAL",
+  "completed": [
+    "tests/test_opening.py",
+    "governance/checkpoints/20260926_provider_binding_pair_adversarial_coverage.json",
+    "governance/decisions/D023_provider_binding_pair_continuity_gate.json",
+    "governance/evaluations/E011_provider_binding_pair_continuity_gate.json"
+  ],
+  "pending": [
+    "governance/project_state.json",
+    "docs/CURRENT_STATE.md",
+    "governance/pending_sync.json"
+  ],
+  "reason": "Connected write path rejected canonical project_state replacement during this run; planned writes are not reported as completed.",
+  "blocking": false,
+  "validated_code_head": "af60cf663ad2bb5aa237d82171969832f399588b",
+  "workflow_run_id": 36170981233,
+  "drive_changes": {
+    "new_objects": 0,
+    "modified_objects": 0
+  },
+  "next": "Reconcile canonical state files on the next successful write path; do not treat this checkpoint as a replacement for those files."
+}
