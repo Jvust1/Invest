@@ -149,6 +149,7 @@ def validate_evaluation_binding(binding: dict) -> dict:
         "protocol_id",
         "status",
         "created_at",
+        "provider_evidence",
         "dataset",
         "universe",
         "candidate",
@@ -171,6 +172,36 @@ def validate_evaluation_binding(binding: dict) -> dict:
     _timestamp(original["created_at"], "created_at")
     if original["holdout_first_observed_at"] is not None:
         raise ValueError("预观察 binding 的 holdout_first_observed_at 必须为 null")
+
+    provider_evidence = _mapping(original["provider_evidence"], "provider_evidence")
+    _only_keys(
+        provider_evidence,
+        "provider_evidence",
+        {
+            "evidence_id",
+            "license_evidence_sha256",
+            "raw_sha256",
+            "normalized_dataset_id",
+            "code_sha",
+        },
+    )
+    provider_evidence_id = _sha256(
+        provider_evidence["evidence_id"], "provider_evidence.evidence_id"
+    )
+    provider_license_evidence_sha256 = _sha256(
+        provider_evidence["license_evidence_sha256"],
+        "provider_evidence.license_evidence_sha256",
+    )
+    provider_raw_sha256 = _sha256(
+        provider_evidence["raw_sha256"], "provider_evidence.raw_sha256"
+    )
+    provider_normalized_dataset_id = _sha256(
+        provider_evidence["normalized_dataset_id"],
+        "provider_evidence.normalized_dataset_id",
+    )
+    provider_code_sha = _git_sha(
+        provider_evidence["code_sha"], "provider_evidence.code_sha"
+    )
 
     dataset = _mapping(original["dataset"], "dataset")
     _only_keys(
@@ -197,9 +228,19 @@ def validate_evaluation_binding(binding: dict) -> dict:
         raise ValueError("dataset.license_status 必须明确为 authorized")
     _timestamp(dataset["retrieved_at"], "dataset.retrieved_at")
     _text(dataset["raw_artifact_identity"], "dataset.raw_artifact_identity", limit=500)
-    _sha256(dataset["raw_sha256"], "dataset.raw_sha256")
-    _sha256(dataset["normalized_dataset_id"], "dataset.normalized_dataset_id")
-    _git_sha(dataset["code_sha"], "dataset.code_sha")
+    dataset_raw_sha256 = _sha256(dataset["raw_sha256"], "dataset.raw_sha256")
+    dataset_normalized_dataset_id = _sha256(
+        dataset["normalized_dataset_id"], "dataset.normalized_dataset_id"
+    )
+    dataset_code_sha = _git_sha(dataset["code_sha"], "dataset.code_sha")
+    if provider_raw_sha256 != dataset_raw_sha256:
+        raise ValueError("provider_evidence.raw_sha256 必须与 dataset.raw_sha256 一致")
+    if provider_normalized_dataset_id != dataset_normalized_dataset_id:
+        raise ValueError(
+            "provider_evidence.normalized_dataset_id 必须与 dataset.normalized_dataset_id 一致"
+        )
+    if provider_code_sha != dataset_code_sha:
+        raise ValueError("provider_evidence.code_sha 必须与 dataset.code_sha 一致")
     if dataset["currency"] != "CNY":
         raise ValueError("首个 Invest v1 binding 的 currency 必须为 CNY")
     _text(dataset["price_basis"], "dataset.price_basis", limit=100)
@@ -285,12 +326,29 @@ def validate_evaluation_binding(binding: dict) -> dict:
     boundaries = _mapping(original["market_data_boundaries"], "market_data_boundaries")
     _only_keys(boundaries, "market_data_boundaries", set(BOUNDARY_KEYS))
     automatic_blockers: list[str] = []
+    boundary_evidence_sha256: dict[str, str | None] = {}
     for key in BOUNDARY_KEYS:
         item = _mapping(boundaries[key], f"market_data_boundaries.{key}")
-        _only_keys(item, f"market_data_boundaries.{key}", {"status", "evidence"})
+        _only_keys(
+            item,
+            f"market_data_boundaries.{key}",
+            {"status", "evidence"},
+            {"evidence_sha256"},
+        )
         if item["status"] not in BOUNDARY_STATES:
             raise ValueError(f"market_data_boundaries.{key}.status 必须是 verified/unknown/not_covered")
         _text(item["evidence"], f"market_data_boundaries.{key}.evidence")
+        evidence_sha256 = item.get("evidence_sha256")
+        if item["status"] == "verified" and evidence_sha256 is None:
+            raise ValueError(
+                f"market_data_boundaries.{key}.status=verified 时必须提供 supporting evidence SHA-256"
+            )
+        if evidence_sha256 is not None:
+            boundary_evidence_sha256[key] = _sha256(
+                evidence_sha256, f"market_data_boundaries.{key}.evidence_sha256"
+            )
+        else:
+            boundary_evidence_sha256[key] = None
         if item["status"] != "verified":
             automatic_blockers.append(key)
 
@@ -313,6 +371,9 @@ def validate_evaluation_binding(binding: dict) -> dict:
 
     return {
         "binding_id": binding_id,
+        "provider_evidence_id": provider_evidence_id,
+        "provider_license_evidence_sha256": provider_license_evidence_sha256,
+        "boundary_evidence_sha256": boundary_evidence_sha256,
         "can_open_holdout": not automatic_blockers and not normalized_blockers,
         "blocking_boundary_fields": automatic_blockers,
         "known_blockers": normalized_blockers,

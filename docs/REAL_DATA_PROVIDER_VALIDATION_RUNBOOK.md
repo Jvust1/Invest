@@ -35,7 +35,7 @@
 3. 区间内应包含足够的开市日与非开市日，以验证 `trade_cal` 的覆盖和缺行判断；
 4. 若用于验证停牌、风险警示或公司行动，则必须另外选择有可核验事件的历史样本，不能从“没有观察到事件”推断覆盖完整。
 
-每次样本必须冻结：证券代码、请求区间、获取时间、代码 SHA、供应商来源、原始响应/导出身份、原始 SHA-256 与规范化数据身份。脱敏证据中的 `executed_at` 必须把真实执行瞬间规范化为 `Asia/Shanghai` 对应的 `+08:00` offset；不要把 `Z`、`+09:00` 或其它 offset 原样写入 v1 evidence。这样样本结束日期与执行日期的比较始终使用同一 A 股市场日期语义。
+每次样本必须冻结：证券代码、请求区间、获取时间、代码 SHA、供应商来源、许可状态及本地许可证据 SHA-256（`provider.license_evidence_sha256`）、原始响应/导出身份、原始 SHA-256 与规范化数据身份。脱敏证据中的 `executed_at` 必须把真实执行瞬间规范化为 `Asia/Shanghai` 对应的 `+08:00` offset；不要把 `Z`、`+09:00` 或其它 offset 原样写入 v1 evidence。这样样本结束日期与执行日期的比较始终使用同一 A 股市场日期语义。
 
 ## 4. 七类 market-data boundary 的证据要求
 
@@ -104,6 +104,7 @@
 - `daily`、`adj_factor`、`stk_limit`、`trade_cal` 四个当前核心接口的实际尝试结果，以及任何额外接口记录
 - 每个接口实际返回字段集合及行数
 - 数据单位与转换说明
+- 许可证据身份 `provider.license_evidence_sha256`（只冻结 provenance，不把哈希本身当作授权真实性证明）
 - 原始数据身份/哈希引用（原始授权数据本体可只留在本地）
 - 规范化数据身份
 - 七类 boundary 的 `verified / unknown / not_covered`
@@ -121,7 +122,7 @@
 
 只有以下条件同时满足，才进入“可以创建/完善真实 binding”的下一步：
 
-1. 数据许可明确 `authorized`；
+1. 数据许可明确 `authorized`，且 `provider.license_evidence_sha256` 是有效的小写 64 位 SHA-256；
 2. 原始与规范化数据身份被冻结；
 3. `executed_at` 已规范化为当前 v1 市场时区 `Asia/Shanghai` 对应的 `+08:00` offset；
 4. `daily`、`adj_factor`、`stk_limit`、`trade_cal` 四个当前核心接口均存在真实尝试记录且全部成功；
@@ -130,7 +131,7 @@
 7. 没有未处理的已知 blocker；
 8. 尚未读取 frozen holdout 结果。
 
-随后创建 `BOUND_UNOPENED` binding，并由 `invest/evaluation.py` 校验。只有 `can_open_holdout=true` 且项目其它 gate 也全部通过，才允许首次观察 holdout。
+随后创建 `BOUND_UNOPENED` binding，并由 `invest/evaluation.py` 校验。binding 必须显式引用已冻结 provider evidence 的 `evidence_id` 与 `license_evidence_sha256`，并把 provider evidence 的 `raw_sha256`、`normalized_dataset_id`、`code_sha` 与 binding dataset 严格对齐；binding 中任何标记 `verified` 的 market-data boundary 也必须继续携带 supporting-evidence SHA-256。只有 `can_open_holdout=true` 且项目其它 gate 也全部通过，才允许首次观察 holdout。
 
 ## 7. 当前状态
 

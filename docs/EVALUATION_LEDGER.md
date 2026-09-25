@@ -136,3 +136,10 @@ GitHub Actions `Invest tests` run `36010703814` 已 completed/success。四个�
 GitHub Actions `Invest tests` run `36017899955` 已 completed/success。四个矩阵 job（Ubuntu/Windows × Python 3.11/3.12）的 `Standard-library tests` 与 `Compile source` 均成功。完整测试集推进为 **117 tests**，其中 evaluation 13、provider evidence 22。
 
 证据边界不变：本轮没有真实 provider call、没有 Token/凭据、没有真实数据、没有真实 provider evidence、没有真实 `BOUND_UNOPENED` binding、frozen holdout 仍未打开、forward-paper 仍未开始。该门禁只确保 evidence 的日期比较与声明的市场时区使用同一基准，不证明供应商真实性、数据完整性或策略有效性。
+
+
+## E009 — Provider 授权 provenance 门禁验收（2026-09-25）
+
+代码 head `6db24bb3cde003f937a73dc5a5eb2041181af505` 要求 `provider.license_status=authorized` 时必须同时提供小写 64 位 `license_evidence_sha256`，并新增缺失/格式错误反例。GitHub Actions run `36089180871` 已完成并成功，完整测试集为 **118 tests**，其中 provider evidence 23 个测试方法。
+
+该哈希只冻结许可证据 provenance 身份，不独立证明授权真实性或适用范围。本轮没有真实 provider call、没有 Token、没有真实市场数据、没有真实 binding，也没有打开 frozen holdout。

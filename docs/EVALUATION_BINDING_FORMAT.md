@@ -21,6 +21,7 @@
 - `protocol_id`: 固定为 `invest-oos-forward-paper-v1`。
 - `status`: 新 binding 固定为 `BOUND_UNOPENED`。
 - `created_at`: 带时区 ISO-8601 时间。
+- `provider_evidence`: 已完成 provider validation 的脱敏证据身份桥；冻结 `evidence_id`、许可证据 hash、原始/规范化数据身份与代码 SHA。
 - `dataset`: 授权、来源、原始快照与规范化数据身份。
 - `universe`: 证券池描述、形成规则和 PIT 证据。
 - `candidate`: 冻结候选身份与参数哈希。
@@ -33,9 +34,19 @@
 - `holdout_first_observed_at`: 预观察 binding 必须为 `null`。
 - `binding_id`: 可选；若提供，必须等于去掉本字段后规范 JSON 的 SHA-256。
 
-## 3. dataset
+## 3. provider_evidence 与 dataset
 
-必填字段：
+`provider_evidence` 必须包含：
+
+- `evidence_id`: 已冻结 provider evidence 的规范记录 SHA-256。
+- `license_evidence_sha256`: provider evidence 已冻结的许可证据 SHA-256。
+- `raw_sha256`: provider evidence 对应原始数据身份。
+- `normalized_dataset_id`: provider evidence 对应规范化数据身份。
+- `code_sha`: 产生/校验该 evidence 的代码提交。
+
+其中 `raw_sha256`、`normalized_dataset_id`、`code_sha` 必须与下方 `dataset` 的同名身份严格一致。这样首个真实 binding 不能在 provider evidence 冻结后静默换数据或换代码。该桥只证明两个治理对象绑定到同一组稳定 provenance，不独立证明许可真实性、证据充分性或数据质量。
+
+`dataset` 必填字段：
 
 - `source`: 数据来源说明。
 - `source_kind`: 数据来源类型。
@@ -71,12 +82,14 @@
 每项包含：
 
 - `status`: `verified` / `unknown` / `not_covered`；
-- `evidence`: 对应证据或为何仍未知的说明。
+- `evidence`: 对应证据或为何仍未知的说明；
+- `evidence_sha256`: 当 `status=verified` 时必填，用于冻结 supporting-evidence artifact 的 SHA-256；`unknown` / `not_covered` 可省略。
 
-`unknown` 与 `not_covered` 是合法、诚实的记录状态，但会使 `can_open_holdout=false`。校验器不会把未知静默变成安全值。
+`unknown` 与 `not_covered` 是合法、诚实的记录状态，但会使 `can_open_holdout=false`。任何 `verified` boundary 若没有稳定 supporting-evidence SHA-256 也会直接校验失败，不能仅靠自由文本升级。
 
 ## 6. 不变式
 
+- 必须绑定 provider evidence 的稳定身份；provider evidence 的 raw/normalized/code 身份必须与 binding dataset 完全一致。
 - Development、Validation、Frozen Holdout 严格按时间向前且互不重叠。
 - 至少三个历史市场环境，名称唯一，日期真实且落在冻结总评价时间边界内；完全重复日期区间不能重复计数。
 - 至少三组成本情景，名称唯一，配置不可为空。

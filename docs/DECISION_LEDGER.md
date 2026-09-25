@@ -86,3 +86,12 @@ CSV 可用于研究查看，但未知公司行动、停牌、每日限价、因�
 因此 v1 evidence contract 新增 `provider.license_evidence_sha256`：必须为小写 64 位 SHA-256。它只把授权声明绑定到一个稳定的本地 supporting artifact 身份，不独立证明授权真实性、授权范围或持续有效性；缺失或格式错误时整条 evidence 结构校验失败。
 
 代码 head `6db24bb3cde003f937a73dc5a5eb2041181af505` 的 GitHub Actions run `36089180871` 已在 Ubuntu/Windows × Python 3.11/3.12 四矩阵通过完整测试与源码编译。完整测试集为 118，provider evidence 测试方法为 23；新增测试覆盖缺失和格式错误两种许可证据哈希反例。本变更没有真实 provider call、没有真实行情、没有创建真实 binding，也没有观察 frozen holdout。
+
+
+## D021 — Provider evidence 与 evaluation binding 必须机器绑定
+
+2026-09-25 对账发现：provider evidence 门禁已经要求许可证据、数据身份、代码身份和七类 boundary supporting-evidence SHA-256，但 `invest/evaluation.py` 的 `BOUND_UNOPENED` binding 仍可只凭自己的自由文本 boundary 声明通过，两个门禁缺少机器可验证的身份桥。
+
+由于当前尚无真实 binding、frozen holdout 未打开，因此在首个真实 binding 之前补齐此约束：binding 必须引用已冻结 provider evidence 的 `evidence_id`、`license_evidence_sha256`，并要求 provider evidence 的 `raw_sha256`、`normalized_dataset_id`、`code_sha` 与 binding dataset 一致；binding 中任何 `verified` boundary 继续要求 supporting-evidence SHA-256。这样不能在 provider evidence 冻结后静默换数据/换代码，或只靠自由文本把边界升级为 verified。
+
+该门禁仍只验证 provenance linkage，不证明许可证据本身真实、市场数据完整、策略有效或收益可复现。

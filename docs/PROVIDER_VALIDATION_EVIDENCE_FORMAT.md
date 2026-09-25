@@ -51,3 +51,10 @@
 只有 `real_data_used=true`、`license_evidence_sha256` 有效、执行时间与市场时区语义一致、样本身份与时间范围通过上述门禁、四个当前核心接口全部存在且全部成功、每个成功核心接口覆盖当前适配器所需字段、成功接口具有正行数、七类 boundary 全部 `verified` 且每个 verified boundary 都绑定有效 supporting-evidence SHA-256、`known_blockers` 为空且 `holdout_observed=false` 时，校验器才返回 `can_support_holdout_opening=true`。
 
 这个布尔值只说明**供应商证据这一侧**没有已知 opening blocker，绝不单独授权打开 frozen holdout。随后仍必须创建真实 `BOUND_UNOPENED` binding，并由 `invest/evaluation.py` 对授权、数据/代码身份、development/validation/holdout、至少三个历史市场环境、候选、成本、基准、PIT/证券池和市场边界再次 fail-closed 校验；其它项目 gate 也必须全部通过。
+
+
+## 绑定到真实 evaluation binding
+
+真实 provider evidence 完成结构校验并冻结后，后续 `BOUND_UNOPENED` evaluation binding 必须引用其 `evidence_id` 和 `license_evidence_sha256`，并复制且严格匹配 `raw_sha256`、`normalized_dataset_id`、`code_sha`。binding 的七类 market-data boundary 若标记为 `verified`，也必须继续保存对应 supporting-evidence SHA-256。
+
+这一步用于防止 provider evidence 冻结后，binding 又静默切换到另一份数据或代码身份，或只用自由文本把 boundary 升级为 verified。哈希与身份桥仍只证明 provenance commitment，不独立证明许可真实性、数据完整性或收益有效性。

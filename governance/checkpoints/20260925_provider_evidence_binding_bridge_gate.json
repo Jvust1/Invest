@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "project": "Invest",
+  "date": "2026-09-25",
+  "status": "PROVIDER_EVIDENCE_BINDING_BRIDGE_CI_PENDING",
+  "branch": "feat/a-share-research-v0.1-20260922",
+  "head_before_change": "e860ae5a9d893fb0da6356bc1df8aabeb3901f66",
+  "scope": [
+    "invest/evaluation.py",
+    "tests/test_evaluation.py",
+    "docs/EVALUATION_BINDING_FORMAT.md",
+    "docs/REAL_DATA_PROVIDER_VALIDATION_RUNBOOK.md",
+    "docs/PROVIDER_VALIDATION_EVIDENCE_FORMAT.md",
+    "docs/DECISION_LEDGER.md",
+    "docs/EVALUATION_LEDGER.md",
+    "governance/pending_sync.json"
+  ],
+  "closed_sync_debt": [
+    "PROVIDER_RUNBOOK_LICENSE_HASH_WORDING",
+    "EVALUATION_LEDGER_E009_APPEND"
+  ],
+  "new_gate": {
+    "provider_evidence_reference_required": true,
+    "provider_dataset_identity_must_match_binding": true,
+    "verified_binding_boundaries_require_supporting_evidence_sha256": true
+  },
+  "evidence_boundary": {
+    "provider_call_performed": false,
+    "credential_used": false,
+    "real_data_used": false,
+    "real_binding_created": false,
+    "frozen_holdout_opened": false,
+    "drive_new_objects": 0,
+    "drive_modified_objects": 0
+  },
+  "next_safe_action": "Run exact-head CI, then reconcile current state/checkpoint with the observed result."
+}

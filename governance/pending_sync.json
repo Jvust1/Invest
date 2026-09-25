@@ -1,25 +1,12 @@
 {
   "schema_version": 1,
   "as_of": "2026-09-25",
-  "phase": "evaluation protocol v1 frozen; provider-evidence license-provenance gate remote-CI validated; licensed real-data gate blocked",
+  "phase": "evaluation protocol v1 frozen; provider-evidence/binding provenance bridge implementation pending CI; licensed real-data gate blocked",
   "drive_checkpoint": {
     "status": "exists_verified",
     "id": "1Iscm0akdNG5s0WNJfc83-T_eh88xIz1F"
   },
-  "pending_sync": [
-    {
-      "id": "PROVIDER_RUNBOOK_LICENSE_HASH_WORDING",
-      "status": "OPEN_NON_BLOCKING",
-      "scope": "docs/REAL_DATA_PROVIDER_VALIDATION_RUNBOOK.md",
-      "reason": "wording does not yet list provider.license_evidence_sha256"
-    },
-    {
-      "id": "EVALUATION_LEDGER_E009_APPEND",
-      "status": "OPEN_NON_BLOCKING",
-      "scope": "docs/EVALUATION_LEDGER.md",
-      "reason": "E009 is currently recorded in governance/evaluations and checkpoint rather than the narrative ledger"
-    }
-  ],
+  "pending_sync": [],
   "publication_action": "Continue on Draft PR #2; keep the frozen Drive checkpoint unchanged.",
   "publication_authority": "GitHub live branch, PR and checks",
   "main_merge": "requires later explicit authorization for the specific PR; not a pending sync",
@@ -27,8 +14,8 @@
     "number": 1,
     "status": "preserved untouched; reconcile README during eventual merge"
   },
-  "next_safe_action": "Reconcile the two wording-only records, then continue credential-free provider-gate validation until licensed real data is available.",
+  "next_safe_action": "Validate the provider-evidence/binding provenance bridge in CI; then record exact green head/run and continue credential-free real-data gate hardening while licensed data remains unavailable.",
   "latest_validated_code_head": "6db24bb3cde003f937a73dc5a5eb2041181af505",
   "latest_validation_workflow_run_id": 36089180871,
-  "latest_governance_commit_before_this_checkpoint": "6db24bb3cde003f937a73dc5a5eb2041181af505"
+  "latest_governance_commit_before_this_checkpoint": "e860ae5a9d893fb0da6356bc1df8aabeb3901f66"
 }

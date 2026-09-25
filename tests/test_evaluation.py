@@ -14,6 +14,13 @@ def valid_binding():
         "protocol_id": "invest-oos-forward-paper-v1",
         "status": "BOUND_UNOPENED",
         "created_at": "2026-09-23T08:00:00+08:00",
+        "provider_evidence": {
+            "evidence_id": "e" * 64,
+            "license_evidence_sha256": "f" * 64,
+            "raw_sha256": H64,
+            "normalized_dataset_id": "c" * 64,
+            "code_sha": G40,
+        },
         "dataset": {
             "source": "authorized real-data snapshot",
             "source_kind": "provider-export",
@@ -73,7 +80,11 @@ def valid_binding():
             "definition": "同一证券池、同一数据身份和评价区间的简单基准",
         },
         "market_data_boundaries": {
-            key: {"status": "verified", "evidence": "source-specific evidence frozen before holdout"}
+            key: {
+                "status": "verified",
+                "evidence": "source-specific evidence frozen before holdout",
+                "evidence_sha256": "9" * 64,
+            }
             for key in evaluation.BOUNDARY_KEYS
         },
         "known_blockers": [],
@@ -190,6 +201,46 @@ class EvaluationBindingTests(unittest.TestCase):
         binding["dataset"]["license_status"] = "unknown"
         with self.assertRaisesRegex(ValueError, "authorized"):
             evaluation.validate_evaluation_binding(binding)
+
+    def test_provider_evidence_identity_is_required_and_must_match_dataset(self):
+        binding = valid_binding()
+        binding.pop("provider_evidence")
+        with self.assertRaisesRegex(ValueError, "provider_evidence"):
+            evaluation.validate_evaluation_binding(binding)
+
+        binding = valid_binding()
+        binding["provider_evidence"]["evidence_id"] = "not-a-sha256"
+        with self.assertRaisesRegex(ValueError, "evidence_id"):
+            evaluation.validate_evaluation_binding(binding)
+
+        for field, value in (
+            ("raw_sha256", "1" * 64),
+            ("normalized_dataset_id", "2" * 64),
+            ("code_sha", "3" * 40),
+        ):
+            binding = valid_binding()
+            binding["provider_evidence"][field] = value
+            with self.subTest(field=field), self.assertRaisesRegex(ValueError, "必须与 dataset"):
+                evaluation.validate_evaluation_binding(binding)
+
+    def test_verified_binding_boundary_requires_supporting_evidence_hash(self):
+        for mode in ("missing", "malformed"):
+            binding = valid_binding()
+            boundary = binding["market_data_boundaries"]["calendar"]
+            if mode == "missing":
+                boundary.pop("evidence_sha256")
+            else:
+                boundary["evidence_sha256"] = "not-a-sha256"
+            with self.subTest(mode=mode), self.assertRaises(ValueError):
+                evaluation.validate_evaluation_binding(binding)
+
+        binding = valid_binding()
+        boundary = binding["market_data_boundaries"]["calendar"]
+        boundary["status"] = "unknown"
+        boundary.pop("evidence_sha256")
+        result = evaluation.validate_evaluation_binding(binding)
+        self.assertFalse(result["can_open_holdout"])
+        self.assertIsNone(result["boundary_evidence_sha256"]["calendar"])
 
     def test_credentials_and_secret_like_keys_are_rejected_recursively(self):
         for container, key in (
