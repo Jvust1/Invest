@@ -9,24 +9,7 @@ concurrency:
   group: desktop-delivery-${{ github.ref }}
   cancel-in-progress: false
 jobs:
-  source:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    outputs:
-      source_commit: ${{ steps.apply.outputs.source_commit }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.sha }}
-          fetch-depth: 1
-      - name: Expand bounded source and publish normal fast-forward commit
-        id: apply
-        env:
-          DESKTOP_PATCH_SHA256: f3babd1e1fd1fc6477ea9260b2a5143044e63e0f8b7a4302371638830c270cdd
-        run: python .desktop_upgrade/apply.py
   windows:
-    needs: source
     runs-on: windows-latest
     timeout-minutes: 35
     env:
@@ -36,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ needs.source.outputs.source_commit }}
+          ref: ${{ github.sha }}
           persist-credentials: false
       - uses: actions/setup-python@v5
         with:
@@ -48,9 +31,7 @@ jobs:
         shell: pwsh
         run: |
           python -m pip install --upgrade pip
-          python -m pip install pytest
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          python -m pip install pyinstaller==6.22.3 playwright
+          python -m pip install pytest pyinstaller==6.22.3 playwright
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           python -m pip check
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
@@ -71,7 +52,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: Invest-windows-${{ needs.source.outputs.source_commit }}
+          name: Invest-windows-${{ github.sha }}
           path: delivery/
           retention-days: 14
           if-no-files-found: error

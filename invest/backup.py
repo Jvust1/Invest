@@ -1,4 +1,5 @@
 """Explicit complete local backup. Recovery creates a new directory, never overwrites."""
+from contextlib import closing
 import hashlib
 import io
 import json
@@ -20,7 +21,7 @@ def export_backup(root):
             path=root/name
             if not path.exists(): continue
             target=Path(tmp)/name
-            with sqlite3.connect(path) as src, sqlite3.connect(target) as dst:
+            with closing(sqlite3.connect(path)) as src, closing(sqlite3.connect(target)) as dst:
                 src.backup(dst)
                 if dst.execute('PRAGMA integrity_check').fetchone()[0]!='ok': raise ValueError('数据库完整性检查失败')
             if target.stat().st_size>LIMIT: raise ValueError('备份数据库超过100MB限制')
@@ -50,7 +51,7 @@ def restore_backup(raw, destination):
         with tempfile.TemporaryDirectory(dir=destination.parent) as temp:
             for name,blob in blobs.items():
                 p=Path(temp)/name;p.write_bytes(blob)
-                with sqlite3.connect(p) as conn:
+                with closing(sqlite3.connect(p)) as conn:
                     conn.execute('PRAGMA trusted_schema=OFF')
                     if conn.execute('PRAGMA integrity_check').fetchone()[0]!='ok': raise ValueError('数据库已损坏')
             destination.mkdir(exist_ok=False)
