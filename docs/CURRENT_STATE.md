@@ -1,3 +1,15 @@
+## 2026-09-25 Windows 桌面交付更新
+
+- 新增独立交付分支 `feat/desktop-delivery-20260925`；不修改 main、不自动合并。
+- Windows 交付源码固定为 `2992482fec57758b39b5aabf7a0e567e0502af0c`。
+- Windows delivery run `36147377359` 成功；原有测试 run `36147377366` 成功。
+- Windows pytest：125 passed / 0 failed；原生 EXE 自检 5 项；Microsoft Edge 实际连接 EXE 服务检查 7 项。
+- 修复 SQLite 备份/恢复在 Windows 下连接未及时关闭导致的文件占用问题；完整备份恢复与重启持久化已通过。
+- 便携包：`Invest-Windows-Portable.zip`，13,750,466 bytes，SHA-256 `01d196be5811275c3355a7d62d70ff9727ba735a80212dabc4f6f35ec402b514`。
+- Drive 完整交付归档：`Invest-Windows-完整交付-20260925.zip`，文件 ID `1Mz2DeM1kjY-fMJmBOXP_cfVIEtCo_RmQ`。
+- Draft PR #3 已创建，未合并。
+- 边界保持：默认合成样例；真实数据授权、样本外策略有效性、真实资金交易均未验收；不连接券商。
+
 # 当前状态
 
 更新时间：2026-09-25。本文记录 v0.1 当前功能分支的真实远端状态；分支、PR 与 CI 的实时事实仍以 GitHub 为准。
