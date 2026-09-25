@@ -90,3 +90,13 @@ Provider evidence 的 `license_status=authorized` 现在必须同时绑定一个
 代码 head `c6ada411910d0e904fbaf1fbcec0ef399a1a9ea7` 将真实 provider evidence 与首个 `BOUND_UNOPENED` evaluation binding 的 provenance 机器化绑定：binding 必须保存 provider `evidence_id` / `license_evidence_sha256`，provider raw/normalized/code 身份必须与 binding dataset 一致；任何 binding boundary 标记 `verified` 时都必须有 supporting-evidence SHA-256。
 
 GitHub Actions run `36093418179` 已 completed/success；Ubuntu/Windows × Python 3.11/3.12 四个矩阵作业的 tests 与源码编译均成功，Ubuntu/Python 3.12 日志确认 **Ran 120 tests**。本轮仍没有真实 provider call、没有凭据、没有真实行情、没有真实 provider evidence、没有真实 binding，也没有打开 frozen holdout。
+
+## 2026-09-26 — AKShare research connector
+
+- Added optional `akshare==1.18.97` integration for real unadjusted A-share daily bars.
+- New local endpoint: `POST /api/datasets/akshare`.
+- New web form under Data Management; no API token is required.
+- Adapter converts AKShare volume from hands to shares and cross-checks the independent trade calendar when available.
+- Missing suspension/corporate-action/price-limit/adjustment/PIT evidence remains unknown and continues to block simulated execution.
+- Unit tests use injected fake provider frames; no live provider request or real market result is claimed by this repository update.
+- Tushare provider-validation flow remains available for users with authorized credentials.

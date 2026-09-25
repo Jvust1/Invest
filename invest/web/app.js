@@ -89,6 +89,7 @@
       button.disabled = false;
       updateDatasetControls();
       $("#fetch-tushare").disabled = !state.config?.tushare_configured;
+      $("#fetch-akshare").disabled = !state.config?.akshare_available;
     }
   }
   function switchTab(name, focus = false) {
@@ -492,6 +493,14 @@
         await acceptDataset(await api("/api/datasets/import", {csv, calendar_csv: calendarCsv, source: String(data.get("source") || "").trim(), raw_prices_confirmed: data.get("raw_prices_confirmed") === "on", volume_shares_confirmed: data.get("volume_shares_confirmed") === "on"}));
       });
     });
+    $("#akshare-form").addEventListener("submit", event => {
+      event.preventDefault();
+      const data = new FormData(event.currentTarget);
+      busy($("#fetch-akshare"), async () => {
+        if (!state.config?.akshare_available) throw new Error('尚未安装 AKShare 组件。请在项目目录运行：py -m pip install -e ".[market]"，然后重启 Invest。');
+        await acceptDataset(await api("/api/datasets/akshare", {symbol: String(data.get("symbol")).trim().toUpperCase(), start: data.get("start"), end: data.get("end")}));
+      });
+    });
     $("#tushare-form").addEventListener("submit", event => {
       event.preventDefault();
       const data = new FormData(event.currentTarget);
@@ -571,6 +580,9 @@
       const version = String(state.config.version || "0.1");
       $("#version").textContent = version.startsWith("v") ? version : `v${version}`;
       $("#footer-version").textContent = $("#version").textContent;
+      $("#akshare-status").textContent = state.config.akshare_available ? "组件已安装" : "未安装";
+      $("#fetch-akshare").disabled = !state.config.akshare_available;
+      if (!state.config.akshare_available) $("#akshare-help").textContent = '先在项目目录运行 py -m pip install -e ".[market]"，然后重启 Invest。安装后无需 Token 即可获取真实历史日线；仍只作为研究数据。';
       $("#tushare-status").textContent = state.config.tushare_configured ? "服务端已配置" : "尚未配置";
       $("#fetch-tushare").disabled = !state.config.tushare_configured;
       if (!state.config.tushare_configured) $("#tushare-help").textContent = "在运行本地服务的环境中配置 TUSHARE_TOKEN 后重启服务。网页不会读取、显示或保存 Token；没有配置时可使用 CSV 和合成示例。";

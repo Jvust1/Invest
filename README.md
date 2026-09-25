@@ -65,3 +65,19 @@ python -m compileall -q invest
 ```
 
 代码与治理权威为本仓库。开始接手前先读 [AGENTS.md](AGENTS.md)、[SECURITY_POLICY.md](SECURITY_POLICY.md)、[当前状态](docs/CURRENT_STATE.md) 和 [交接说明](docs/HANDOFF.md)。交易规则及成熟项目对标见 [参考资料](docs/REFERENCES_AND_RULES.md)。
+
+## AKShare 真实历史行情
+
+Invest 现在支持一个**无需 Token 的真实 A 股历史日线研究入口**。该入口通过 AKShare 的 `stock_zh_a_hist` 获取不复权 OHLCV，并通过 `tool_trade_date_hist_sina` 获取交易日历。
+
+先安装可选市场数据组件：
+
+```powershell
+py -m pip install -e ".[market]"
+```
+
+然后正常启动 Invest，在“数据管理 → AKShare 真实历史日线”输入例如 `600000.SH` 与日期范围即可拉取真实历史行情。
+
+当前固定兼容版本为 `akshare==1.18.97`。AKShare 本身采用 MIT License；其项目声明数据用于学术/研究参考，且上游接口可能变化。Invest 因此把该通道定位为**真实行情研究数据**，不会仅凭这些日线自动认定停牌、公司行动、风险警示、逐日涨跌停、存活偏差或 PIT 特征已经完整验证。缺失的执行事实继续显示为 blocker，避免把“能拉到真实价格”误当成“已经可以可靠模拟成交”。
+
+Tushare 通道继续保留，适合已有合法 Token/权限的用户做更完整的 provider validation。两个通道都不会连接券商或执行真实交易。

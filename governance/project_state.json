@@ -4,21 +4,18 @@
   "repository": "Jvust2/Invest",
   "repository_id": 1381007406,
   "drive_folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
-  "as_of": "2026-09-25",
+  "as_of": "2026-09-26",
   "state_scope": "live feature-branch governance snapshot; live branch/PR/checks remain authoritative for publication state",
   "version": "0.1.0",
   "currency": "CNY",
-  "security_status": "REGISTERED_PROTECTED",
-  "protection_scope": [
-    "chore/security-bootstrap-20260922",
-    "descendant non-default feature branch"
-  ],
-  "main_security_pending_pr": true,
+  "security_status": "NO_PROJECT_SECURITY_GATE",
+  "protection_scope": [],
+  "main_security_pending_pr": false,
   "main_baseline_sha": "71b32347fd954b7952f748b852503779851dbf1a",
   "bootstrap_sha": "172803ad30cd2065719944f1fab26a952c42be54",
   "delivery_branch": "feat/a-share-research-v0.1-20260922",
   "delivery_policy": "draft PR to main; no automatic merge",
-  "implementation": "evaluation_binding_provider_evidence_bridge_remote_ci_validated_real_data_gate_blocked",
+  "implementation": "akshare_real_daily_research_connector_added_provider_live_call_pending",
   "research_governance": "evaluation_protocol_v1_frozen",
   "validation": {
     "base_application_unittest": 82,
@@ -355,6 +352,22 @@
       "credentials_used": false,
       "real_binding_created": false,
       "holdout_observed": false
+    },
+    "real_data_connectors": {
+      "akshare": {
+        "status": "CODE_AND_UI_INTEGRATED_LIVE_CALL_PENDING",
+        "package": "akshare==1.18.97",
+        "credential_required": false,
+        "historical_interface": "stock_zh_a_hist",
+        "calendar_interface": "tool_trade_date_hist_sina",
+        "price_adjustment": "none",
+        "input_volume_unit": "hand",
+        "output_volume_unit": "share",
+        "live_provider_call_performed": false,
+        "real_data_saved": false,
+        "simulated_execution_unlocked": false,
+        "rationale": "real OHLCV research path added; execution metadata remains incomplete"
+      }
     }
   },
   "external_blockers": [
