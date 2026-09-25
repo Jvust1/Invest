@@ -2,7 +2,7 @@
   "schema_version": 1,
   "project": "Invest",
   "date": "2026-09-26",
-  "status": "PROVIDER_BINDING_PAIR_CONTINUITY_REMOTE_CI_VALIDATED",
+  "status": "PROVIDER_BINDING_PAIR_CONTINUITY_IMPLEMENTED_CI_GREEN_TEST_DEBT_OPEN",
   "branch": "feat/a-share-research-v0.1-20260922",
   "implementation_head": "0ea25352e951cdbfc33b2e7edc2e97f0d2b3ce51",
   "workflow_run_id": 36168325134,
@@ -33,7 +33,9 @@
       "3.12"
     ],
     "tests": "pass",
-    "compile_source": "pass"
+    "compile_source": "pass",
+    "direct_behavioral_tests": 0,
+    "behavioral_test_debt": "OPEN_NON_BLOCKING"
   },
   "evidence_boundary": {
     "provider_call_performed": false,
@@ -44,5 +46,5 @@
     "drive_new_objects": 0,
     "drive_modified_objects": 0
   },
-  "next_safe_action": "Keep provider validation and holdout closed until authorized evidence exists; use the pair gate before any future holdout opening."
+  "next_safe_action": "Add direct credential-free adversarial tests for pair mismatch cases before relying on this gate for any future holdout opening; authorized provider validation remains separate."
 }
