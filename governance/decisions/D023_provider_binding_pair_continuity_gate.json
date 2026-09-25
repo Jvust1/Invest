@@ -3,7 +3,7 @@
   "id": "D023",
   "date": "2026-09-26",
   "title": "Provider evidence and evaluation binding require exact pair continuity before holdout opening",
-  "status": "REMOTE_CI_VALIDATED",
+  "status": "IMPLEMENTED_REMOTE_CI_GREEN_BEHAVIOR_TEST_DEBT_OPEN",
   "decision": [
     "Use invest/opening.py as the offline opening gate for a provider-evidence/binding pair.",
     "Revalidate both objects and require evidence/license/raw/normalized/code identities to match.",
@@ -29,6 +29,9 @@
     "full_suite_tests": 125,
     "matrix_jobs": 4,
     "tests": "pass",
-    "compile_source": "pass"
+    "compile_source": "pass",
+    "direct_behavioral_tests": 0,
+    "module_exposure_tests": 1,
+    "behavioral_test_debt": "OPEN_NON_BLOCKING"
   }
 }
