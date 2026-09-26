@@ -1,0 +1,44 @@
+{
+  "schema": "invest-growth-delivery-v1",
+  "version": "0.2.0-rc1",
+  "date": "2026-09-26",
+  "branch": "feat/g1-g5-workbench-20260926",
+  "base_research_commit": "869c320e1dedd32e064e425f6c115aced5487b40",
+  "desktop_reuse_commit": "2992482fec57758b39b5aabf7a0e567e0502af0c",
+  "implementation_scope": "OFFLINE_CAPABILITY_CANDIDATE_G1_TO_G5",
+  "roadmap_all_empirical_gates_passed": false,
+  "local_validation": {
+    "tests": 224,
+    "status": "PASS",
+    "python": "3.13.5",
+    "platform": "linux",
+    "source_compile": "PASS",
+    "javascript_syntax": "PASS",
+    "scope": "released_desktop_snapshot_plus_integrated_runtime_modules_and_growth_tests",
+    "upstream_remaining_tests": "retained_on_remote_base; re-run complete remote suite before final release"
+  },
+  "local_browser": {
+    "status": "BLOCKED_BY_ENVIRONMENT",
+    "reason": "Chromium ERR_BLOCKED_BY_ADMINISTRATOR for loopback URL; no rendering pass claimed"
+  },
+  "remote_windows_and_browser": {
+    "status": "NOT_YET_VERIFIED_IN_THIS_RECORD",
+    "authority": "GitHub Actions result for exact source commit"
+  },
+  "external_pending": [
+    "licensed_real_data_and_market_facts",
+    "three_real_market_environments",
+    "second_execution_engine",
+    "frozen_holdout_validation",
+    "forward_paper_observation",
+    "independent_review",
+    "actual_user_windows_device",
+    "real_repeated_use_value"
+  ],
+  "publication": {
+    "main_modified": false,
+    "automatic_merge": false,
+    "draft_pr_required": true
+  },
+  "guide": "docs/G1_G5_DELIVERY.md"
+}
