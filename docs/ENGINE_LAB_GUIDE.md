@@ -66,3 +66,7 @@ python tools\verify_engine_lab_source.py
 ```
 
 完整原生双引擎检查必须另外执行 `run_engine_lab.py`，不能拿mock单元测试代替。最终跨平台CI、浏览器、归档结果以 `governance/independent_engine_result.json`（存在时）为准；不存在时只能看当前实际产生的本地日志，不提前宣称CI或用户设备通过。
+
+## 中文显示与测试环境
+
+报告使用系统字体，不内嵌或分发字体文件。Windows中文环境可直接显示；精简Linux系统缺CJK字体时会出现方框，需要先安装系统中文字体。CI的Linux测试机安装`fonts-noto-cjk`后再做实际浏览器截图；字体不进入源码包或成果包。第一次无CJK字体的Linux截图作为诊断保留，不作为中文视觉验收。
