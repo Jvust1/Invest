@@ -1,0 +1,40 @@
+name: Invest RQAlpha research environment
+on:
+  push:
+    branches: [feat/rqalpha-comparison-20260927]
+    paths: [.github/workflows/rqalpha-environment.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Prepare missing wheels for isolated offline research
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p environment/wheels
+          python -m pip download --only-binary=:all: --no-deps --dest environment/wheels logbook simplejson jsonpickle methodtools wirerope rqrisk hdf5plugin setuptools setuptools_scm wheel
+          git archive --format=zip -o environment/Invest-source.zip HEAD
+          git rev-parse HEAD > environment/SOURCE_COMMIT.txt
+          python - <<'PY'
+          import hashlib,json,pathlib,sys
+          root=pathlib.Path('environment')
+          files={str(p.relative_to(root)):{'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted(root.rglob('*')) if p.is_file()}
+          (root/'MANIFEST.json').write_text(json.dumps({'purpose':'dependency transport only; not an engine acceptance','python':sys.version,'files':files},indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Invest-RQAlpha-offline-environment
+          path: environment/
+          if-no-files-found: error
+          retention-days: 3
