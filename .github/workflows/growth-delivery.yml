@@ -4,28 +4,19 @@ on:
     branches: [feat/g1-g5-workbench-20260926]
     paths: ['.growth_upgrade/**', '.github/workflows/growth-delivery.yml']
   workflow_dispatch:
-    inputs:
-      capsule_url:
-        description: Temporary authorized source-capsule transport URL (never committed)
-        required: false
-        type: string
 permissions:
   contents: read
 concurrency:
   group: invest-growth-${{ github.ref }}
   cancel-in-progress: false
 jobs:
-  register:
-    if: github.event_name == 'push'
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo 'Candidate delivery workflow registered. Dispatch with authorized capsule transport to validate source.'
   source:
-    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/feat/g1-g5-workbench-20260926'
+    if: github.ref == 'refs/heads/feat/g1-g5-workbench-20260926'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
       contents: write
+      issues: read
     outputs:
       source_commit: ${{ steps.expand.outputs.source_commit }}
     steps:
@@ -39,10 +30,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Receive only the hash-bound source capsule
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python .growth_upgrade/receive.py
       - name: Verify, expand, test and publish bounded source
         id: expand
-        env:
-          SOURCE_CAPSULE_URL: ${{ inputs.capsule_url }}
         run: python .growth_upgrade/apply.py
       - uses: actions/upload-artifact@v4
         if: always()
