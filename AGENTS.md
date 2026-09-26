@@ -1,13 +1,15 @@
 # AGENTS.md — Invest
 
-Use the current repository state and the user's current instructions as the operative project direction.
+GitHub is authoritative for source, current state and decisions. Use the existing Drive Invest folder `15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u` for materials, binaries and verified artifacts. The current repository is `Jvust/Invest`, stable ID `1381007406`.
 
-GitHub is the working source for code and project state. Google Drive folder `15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u` is used for source materials, large files, datasets, and generated artifacts.
+There is no active repository-level SECURITY_POLICY baseline, Drive safety-baseline dependency or READ_ONLY_LOCKED fallback. Do not restore retired gates from historical snapshots.
 
-There is no active repository-level SECURITY_POLICY baseline, no Drive safety-baseline ID dependency, and no READ_ONLY_LOCKED fallback. If a referenced historical file is missing, continue from the current repository and current Drive contents instead of treating that as a write blocker.
+## Restore the current project
 
-## G1–G5 integration checkpoint — 2026-09-26
+Read this file, `governance/project_state.json`, `governance/growth_delivery_result.json`, `docs/CURRENT_STATE.md`, `docs/HANDOFF.md`, `governance/artifact_manifest.json` and `governance/pending_sync.json`. Confirm live branch, PR and checks before writing.
 
-On `feat/g1-g5-workbench-20260926`, restore `governance/growth_delivery_current.json` and `docs/G1_G5_DELIVERY.md` in addition to the existing research state. The candidate integrates the research base at `869c320e1dedd32e064e425f6c115aced5487b40` with selected desktop capabilities. Historical source-transfer bootstrap failures did not change application source; their temporary receipt URL was removed. The actual application sources are ordinary tracked files, published directly.
+Current candidate: `0.2.0-rc2` on `feat/g1-g5-workbench-20260926`, Draft PR #4 based on the research branch. Verified binary source is `5075cf746019b7d107de603384c0cf02ce1ac02a`. Later metadata commits are not binary-source commits. `growth_delivery_current.json` and source archives retain at-source snapshots; later delivery_result is authoritative for artifact availability. Historical v0.1 status is preserved under docs/history and governance/checkpoints, not the current work queue.
 
-The `/` route is now the G1–G5 workbench; `/legacy` preserves the original research and paper-ledger interface. New review events are explicitly manual historical records, not verified fills or forward observations. Do not mark empirical roadmap gates as passed on the basis of implementation or synthetic tests. Verify CI against the exact source commit and read any later `governance/growth_delivery_result.json` before claiming a Windows artifact exists. Do not overwrite existing user data or merge this draft PR into main without a separate instruction.
+The root route is the Chinese G1–G5 workbench; `/legacy` preserves the earlier research and paper ledger. New review events remain manual historical records, not verified fills or forward evidence. Local PIT extension is off by default. Never claim all empirical roadmap gates from synthetic tests, split samples, arithmetic replay or a CI Windows browser alone.
+
+Preserve existing user data and frozen records. No real trading, automatic holdout opening, main modification or PR merge without the user's separate explicit instruction. Archive only changed artifacts, record hashes and verify Drive readback. Do not upload credentials or private user ledgers.

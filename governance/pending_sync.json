@@ -1,44 +1,22 @@
 {
-  "schema_version": 1,
-  "as_of": "2026-09-26",
-  "phase": "text alignment landed; canonical project_state reconciliation remains open",
+  "schema_version": 2,
+  "as_of": "2026-09-26T17:32:56.378938+00:00",
+  "phase": "G1_G5_RC2_DELIVERY_RECONCILED",
+  "pending_sync": [],
+  "source_commit": "5075cf746019b7d107de603384c0cf02ce1ac02a",
   "drive_checkpoint": {
-    "status": "exists_verified",
-    "id": "1Iscm0akdNG5s0WNJfc83-T_eh88xIz1F"
+    "file_name": "Invest-G1-G5-0.2.0-rc2-完整交付.zip",
+    "sha256": "67ee272c6439073f1a1ed757ec6ca986f385cafe1adaf314ab92290c475f00f4",
+    "bytes": 14984511,
+    "source_commit": "5075cf746019b7d107de603384c0cf02ce1ac02a",
+    "members": 36,
+    "drive_id": "1gzhcMhXqFCUChFW5nqBCTcFw0fawLEn7",
+    "drive_folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
+    "library_path": "/Google Drive/Invest/Invest-G1-G5-0.2.0-rc2-完整交付.zip",
+    "download_readback_verified": true
   },
-  "pending_sync": [
-    {
-      "id": "PROJECT_STATE_RECONCILIATION",
-      "status": "OPEN_NONBLOCKING",
-      "path": "governance/project_state.json"
-    }
-  ],
-  "publication_action": "Continue on Draft PR #2; keep the frozen Drive checkpoint unchanged.",
-  "publication_authority": "GitHub live branch, PR and checks",
-  "main_merge": "requires later explicit authorization for the specific PR; not a pending sync",
-  "parallel_roadmap_pr": {
-    "number": 1,
-    "status": "preserved untouched; reconcile README during eventual merge"
-  },
-  "next_safe_action": "Reconcile governance/project_state.json with the landed checkpoint, then continue provider-to-binding opening hardening while licensed data remains unavailable.",
-  "latest_validated_code_head": "af60cf663ad2bb5aa237d82171969832f399588b",
-  "latest_validation_workflow_run_id": 36170981233,
-  "latest_governance_commit_before_this_checkpoint": "191dff32e574409040fc52c9ef97d3aa997fa7d5",
-  "write_path_recovery": {
-    "status": "CURRENT_GOVERNANCE_APPLIED",
-    "date": "2026-09-26",
-    "reason": "AGENTS.md and project_state declare NO_PROJECT_SECURITY_GATE; retired historical gate references are not current blockers.",
-    "validated_on_non_default_branch": true,
-    "main_write": false
-  },
-  "governance_text_alignment": {
-    "status": "DOCS_ALIGNED_PROJECT_STATE_PENDING",
-    "checkpoint": "governance/checkpoints/20260926_governance_text_alignment_closed.json",
-    "paths": [
-      "docs/PRE_FLIGHT_CHECKLIST.md",
-      "docs/HANDOFF.md",
-      "README.md",
-      "docs/CURRENT_STATE.md"
-    ]
-  }
+  "current_state_reconciliation": "CLOSED_BY_THIS_METADATA_CHECKPOINT",
+  "publication_action": "Keep Draft PR #4 open; no main merge. PR #1 roadmap and PR #2 research base are separate references, not automatically merged.",
+  "unverified_growth_gates_are_not_sync_failures": true,
+  "next_safe_action": "Validate this exact portable candidate on the user device while preserving existing data."
 }

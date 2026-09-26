@@ -1,0 +1,152 @@
+{
+  "schema": "invest-growth-delivery-result-v2",
+  "as_of": "2026-09-26T17:32:56.378938+00:00",
+  "version": "0.2.0-rc2",
+  "repository": "Jvust/Invest",
+  "repository_id": 1381007406,
+  "branch": "feat/g1-g5-workbench-20260926",
+  "draft_pr": 4,
+  "result": "OFFLINE_WINDOWS_CANDIDATE_VERIFIED",
+  "source_commit": "5075cf746019b7d107de603384c0cf02ce1ac02a",
+  "source_tree": "822c5d934670c0f51aa9e7e3dd0fd5ed29321217",
+  "ci": {
+    "source_commit": "5075cf746019b7d107de603384c0cf02ce1ac02a",
+    "run_id": 36259089513,
+    "conclusion": "success",
+    "source_job_id": 108451340330,
+    "windows_job_id": 108451412229,
+    "artifacts": [
+      {
+        "id": 10911886448,
+        "name": "Invest-growth-source-evidence",
+        "bytes": 5916,
+        "sha256": "63d8a7fe1f79385222c25ee9e5a0ef47686a97907f5ae241595761cbaa825986"
+      },
+      {
+        "id": 10911528047,
+        "name": "Invest-G1-G5-Windows-5075cf746019b7d107de603384c0cf02ce1ac02a",
+        "bytes": 15509042,
+        "sha256": "227d7aa389bdc166186e2a3c6ef495812bccc6c5a4cc0af0e1113c3649a42755"
+      }
+    ]
+  },
+  "local_and_artifact_validation": {
+    "schema": "invest-delivery-local-verification-v1",
+    "status": "PASS",
+    "source_commit": "5075cf746019b7d107de603384c0cf02ce1ac02a",
+    "code_identity": "61a3d7a70a37f0d662ce0f5e3d2a9b1cff18d243ef020f203663c960084234eb",
+    "core_python_files": 16,
+    "windows_tests": {
+      "tests": 259,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "junit_aggregate_including_subtests": 484,
+    "browser_checks": 23,
+    "browser": "Microsoft Edge",
+    "native_exe_smoke": true,
+    "javascript_errors": [],
+    "real_provider_calls": 0,
+    "synthetic_comparisons": 18,
+    "source_archive_files": 137,
+    "source_archive_newline_only_files": 137,
+    "source_archive_comparison": "UTF8_LF_NORMALIZED_MATCH",
+    "portable_manifest_verified_files": 1007,
+    "exe_sha256": "53f728faf5a88ef2cc40309dae33a15cff2f231fa5b329d840e923f2dd17ff30",
+    "font_binary_files": 0,
+    "actual_user_device_tested": false,
+    "empirical_roadmap_accepted": false,
+    "cross_platform_backup_restore": "RESTORED_AND_HASH_CHAIN_REPLAYED",
+    "verification_zip_build_log_is_prefix_of_final": true,
+    "final_build_log_appended_success_receipt_bytes": 149,
+    "artifacts": {
+      "Invest-Source-and-Tests.zip": {
+        "sha256": "9ff5b6cd56e1425b7fcfb0b8980732b90910eae55d4d91fd8c5dd8e8545e5846",
+        "bytes": 301015
+      },
+      "Invest-Verification.zip": {
+        "sha256": "77dbc506e1b9776c8ce883dae18879bec813496d39100aa62ccff7e378146c27",
+        "bytes": 796298
+      },
+      "Invest-Windows-Portable.zip": {
+        "sha256": "a38bb04066320a2fcd2af4c5d15f2547aaf1b0999b6103bb5829bef6a18c08d2",
+        "bytes": 13803913
+      }
+    }
+  },
+  "drive": {
+    "file_name": "Invest-G1-G5-0.2.0-rc2-完整交付.zip",
+    "sha256": "67ee272c6439073f1a1ed757ec6ca986f385cafe1adaf314ab92290c475f00f4",
+    "bytes": 14984511,
+    "source_commit": "5075cf746019b7d107de603384c0cf02ce1ac02a",
+    "members": 36,
+    "drive_id": "1gzhcMhXqFCUChFW5nqBCTcFw0fawLEn7",
+    "drive_folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
+    "library_path": "/Google Drive/Invest/Invest-G1-G5-0.2.0-rc2-完整交付.zip",
+    "download_readback_verified": true
+  },
+  "previous_attempts": [
+    {
+      "commit": "8aac1ba64277f5cd17640ef83d0ad3873aeb459e",
+      "run_id": 36258086411,
+      "result": "WINDOWS_258_PASS_1_TEST_FIXTURE_FAILURE",
+      "cause": "Windows CRLF fixture was converted again to CRCRLF; corrected with explicit byte fixtures; no check skipped"
+    },
+    {
+      "commit": "20d4a042dcd321735c34da568857cdcbaa3de447",
+      "run_id": 36258517715,
+      "result": "259_TESTS_AND_22_BROWSER_CHECKS_PASS",
+      "visual_issue": "UI footer still said rc1; superseded by runtime-version binding and an additional browser check"
+    }
+  ],
+  "roadmap_all_empirical_gates_passed": false,
+  "external_pending": [
+    "licensed_real_data_and_market_facts",
+    "three_real_market_environments",
+    "second_independent_execution_engine",
+    "frozen_holdout_validation",
+    "continuous_forward_observation",
+    "independent_review",
+    "actual_user_windows_device",
+    "real_repeated_use_value"
+  ],
+  "main_modified": false,
+  "automatic_merge": false,
+  "user_private_data_overwritten": false,
+  "history": {
+    "AGENTS.md": {
+      "path": "docs/history/pre_growth_rc2/AGENTS.md",
+      "blob_sha": "5c3c1a8f63634346e8a10379a8be1f06937dc122"
+    },
+    "README.md": {
+      "path": "docs/history/pre_growth_rc2/README.md",
+      "blob_sha": "525c203110359a4558761d60ab6eae4bb39b5833"
+    },
+    "docs/CURRENT_STATE.md": {
+      "path": "docs/history/pre_growth_rc2/docs__CURRENT_STATE.md",
+      "blob_sha": "e2b2a3e0c0ac172c49eb155343c59875ea4d2017"
+    },
+    "docs/HANDOFF.md": {
+      "path": "docs/history/pre_growth_rc2/docs__HANDOFF.md",
+      "blob_sha": "85bebddd025ae1d7c28075948944d7ce65fa477d"
+    },
+    "docs/PRE_FLIGHT_CHECKLIST.md": {
+      "path": "docs/history/pre_growth_rc2/docs__PRE_FLIGHT_CHECKLIST.md",
+      "blob_sha": "8ec8f06686bcda96e1e29db3ed6d5b1790603cd5"
+    },
+    "governance/project_state.json": {
+      "path": "governance/checkpoints/pre_growth_rc2/project_state.json",
+      "blob_sha": "0244ec429e1b6fa641efa8e30b2baa37988d6bef"
+    },
+    "governance/pending_sync.json": {
+      "path": "governance/checkpoints/pre_growth_rc2/pending_sync.json",
+      "blob_sha": "86707168fddc8870c2357f683b58ceb1993ec427"
+    },
+    "governance/artifact_manifest.json": {
+      "path": "governance/checkpoints/pre_growth_rc2/artifact_manifest.json",
+      "blob_sha": "7d553ca0a3f4c36e5f5ffaf0a2ad21f848175b2e"
+    }
+  },
+  "source_snapshot_note": "The binary and source ZIP bind to source_commit. This later metadata-only checkpoint is not the EXE source commit. growth_delivery_current.json is preserved as its at-source snapshot."
+}

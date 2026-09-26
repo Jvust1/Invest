@@ -1,40 +1,25 @@
-# 接手说明
+# Invest 接续入口
 
-更新时间：2026-09-25。本文按 GitHub/Drive 实时状态维护；动态分支、PR 与 CI 状态接手时必须再次读取，不依赖聊天历史。
+## 先恢复真实状态
 
-## 先恢复权威状态
+读取 AGENTS、project_state、growth_delivery_result、CURRENT_STATE、artifact_manifest、pending_sync，再查真实 branch/PR/CI。当前仓库是 `Jvust/Invest`（ID1381007406），不是重新建立一个同名仓库。
 
-1. 先读取目标分支 `AGENTS.md` 与 `governance/project_state.json`；仅当当前分支实际存在 `SECURITY_POLICY.md` 时再读取。当前治理明确 `security_status=NO_PROJECT_SECURITY_GATE` 且该文件已正式移除，因此缺失不构成阻塞，不恢复旧安全文件，也不要求历史 Drive safety-baseline ID。随后按仍属现行治理的 `PRE_FLIGHT_CHECKLIST.md` 恢复项目。
-2. GitHub `Jvust2/Invest` 是代码、治理、当前状态与下一步权威；Drive 项目目录 `15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u` 保存原始资料和长期 artifact。
-3. 当前功能线为 `feat/a-share-research-v0.1-20260922`，Draft PR #2 → `main`，保持未合并；任何合并都需要针对 PR #2 的明确授权，禁止直接写 main。
-4. 并行长期路线图在 PR #1 / `docs/long-term-roadmap-20260922`，继续独立保留。
-5. 接手后读取 North Star、Current State、Architecture Invariants、Decision/Evaluation Ledgers、`governance/project_state.json`、artifact manifest 与 pending_sync。
-6. 真实数据主线另读取真实供应商 runbook、provider evidence 格式与 `governance/decisions/D011`–`D021`；这些只定义真实联调前后的证据合同，不代表真实联调已经完成。
+当前工作分支 `feat/g1-g5-workbench-20260926`，Draft PR #4；基于 `feat/a-share-research-v0.1-20260922`，没有自动合并 main。可运行 Windows 候选版源提交 `5075cf746019b7d107de603384c0cf02ce1ac02a`，构建run `36259089513`。Drive使用原目录 `15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u`；完整包身份读交付回执，不从聊天猜文件ID。
 
-## 当前已验证的软件状态
+## 已完成，不重复开发
 
-- v0.1 已实现标准库本机中文网页、CSV/交易日历审计、有限日频均线回测、人民币模拟账本和 Tushare 四接口研究导入边界。
-- 样本外与 forward-paper 方法协议 v1 已冻结；binding 校验器已远端矩阵验证。
-- Provider evidence 校验器有 23 个测试方法，evaluation binding 校验器为 15 个测试方法；opening continuity 模块有 6 个测试方法，其中 5 个直接行为测试覆盖 22 个对抗 subcase。完整测试集为 **130**。最新已验证代码 head `af60cf663ad2bb5aa237d82171969832f399588b`，Actions run `36170981233` 成功，Ubuntu/Windows × Python 3.11/3.12 四个 job 的 tests 与 compile 均成功。
-- Provider evidence 当前 fail closed 于：失败接口、成功接口空字段/0 行、成功核心接口缺当前适配器必需字段、未知/未覆盖市场边界、显式 blocker、凭据字段、超出当前沪深主板格式范围的样本代码、`sample.end_date` 晚于 `executed_at` 日期、缺少四核心接口、单位契约不匹配、`executed_at` 不是 `Asia/Shanghai` 对应的 `+08:00` offset，任何 `status=verified` 的 market-data boundary 缺少有效 supporting-evidence SHA-256，以及授权状态缺少有效 `license_evidence_sha256`。
-- `unknown` / `not_covered` boundary 仍可不带 evidence hash 诚实保存，但 provider-side readiness 保持关闭；已提供的 hash 必须是有效 SHA-256。
-- 四核心接口即使全部成功也不能替代七类 market-data boundary 的独立真实证据；supporting-evidence hash 只是 provenance commitment，不是真实性证明；执行时间 offset 门禁也只固定日期基准，不是真实数据证明。
-- 首个 `BOUND_UNOPENED` binding 现在还必须引用 provider evidence 的 `evidence_id` 与 `license_evidence_sha256`，保持 raw/normalized/code 身份一致，并为每个 `verified` boundary 保存 supporting-evidence SHA-256；这关闭了 provider evidence 与 binding 之间仅靠人工对账的缺口。
-- 没有真实 provider call、没有读取凭据、没有真实行情、没有真实收益证据。
-- 首个真实 provider evidence 与真实 `BOUND_UNOPENED` binding 均仍为 `PENDING_LICENSED_REAL_DATA`；frozen holdout=`NOT_OPENED`，forward-paper=`NOT_STARTED`。
+G1–G5 离线功能及桌面集成已在普通跟踪源码中。259项测试、23项真实浏览器检查、原生进程/重启及源码到EXE身份校验通过。已修复空代码哈希、满额幂等、备份总容量、脚本导入副作用与界面旧版标签；失败尝试保留在交付证据中。
 
-## Drive 与恢复证据
+根页面 `/` 是中文工作台，`/legacy` 保留原版研究/历史模拟。时点事实扩展默认关闭；私人数据留在本机。旧包和旧研究记录未覆盖。
 
-Drive 项目目录已经重新回读；没有发现授权真实行情数据集或真实 evaluation binding。源码检查点 `Invest_v0.1.0_source_checkpoint_20260922.zip` 的权威身份仍由 `governance/artifact_manifest.json` 记录为 Drive ID `1Iscm0akdNG5s0WNJfc83-T_eh88xIz1F`；它是冻结证据，不因后续 GitHub 可恢复增量重写。
+## 仍需推进
 
-本轮新增内容均为 GitHub 可恢复的代码、测试、文档、决策和 checkpoint，没有新的大型或不可替代二进制 artifact；Drive 不创建重复 ZIP。
+用户电脑实测与独立复现；带明确许可和市场事实的真实样本；真正第二成交引擎；三种真实市场环境；冻结的未见留出验证；持续前向观察；扩展的实际价值对照。基础源代码合同可用于准备工作，但没有证据就保持未验证。
 
-## 当前唯一主线与阻塞边界
+下一位执行者应按 `REAL_DATA_PROVIDER_VALIDATION_RUNBOOK.md` 和现有 `evaluation.py` / `opening.py` 做依赖核验，不为“完成G5”绕过前置证据，也不把历史样本补录说成已经持续运行。
 
-1. 仅在本地合法授权可用时执行真实供应商验证；`executed_at` 必须规范化为 `+08:00`，四个当前核心接口必须全部实际尝试并登记，成功接口字段集合和单位契约必须覆盖当前适配器所需语义。
-2. 所有七类 market-data boundary 仍须真实证据；若标记 verified，必须绑定 supporting-evidence SHA-256。哈希本身不能替代对证据内容和许可的审查。
-3. provider evidence 无已知 blocker 后，才能在任何 frozen holdout 结果被读取之前建立首个 `BOUND_UNOPENED` binding，并运行 `invest/evaluation.py`；binding 必须通过最新 provider-evidence provenance bridge。
-4. 只有 opening blockers 全部闭环后才首次观察 holdout；之后 append-only forward-paper，不回填事后信号。
-5. 合法真实数据仍不可用时，只推进与上述主线直接相关、可独立验证且不制造伪证据的治理、对抗测试或研究准备。
+## 变更与归档
 
-当前治理检查点为 `governance/checkpoints/20260926_governance_text_alignment_closed.json`；opening continuity 的最新技术决策为 `governance/decisions/D023_provider_binding_pair_continuity_gate.json`，对应验证记录 `governance/evaluations/E011_provider_binding_pair_continuity_gate.json`。此前遗留的 Pre-flight/Handoff 旧安全门禁文字债务已关闭；后续只按最新 GitHub/Drive 实时状态接续。
+改应用/测试/UI后运行完整回归与source-identity检查，并生成新的exact-source成品证据；不能借旧run证明新代码。metadata-only checkpoint不冒充EXE源提交。恢复仅使用新目录，保留旧数据；不要上传凭据或真实私人账本。历史v0.1状态已经归档，pending_sync中的旧状态对账项已关闭。
+
+没有活动SECURITY_POLICY或历史Drive安全门，不恢复退役规则；main及PR合并仍需用户对具体合并的明确指令。
