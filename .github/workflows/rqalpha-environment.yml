@@ -23,7 +23,8 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p environment/wheels
-          python -m pip download --only-binary=:all: --no-deps --dest environment/wheels logbook simplejson jsonpickle methodtools wirerope rqrisk hdf5plugin setuptools setuptools_scm wheel
+          python -m pip download --only-binary=:all: --no-deps --dest environment/wheels logbook simplejson jsonpickle methodtools wirerope hdf5plugin setuptools setuptools_scm wheel vcs-versioning
+          python -m pip wheel --no-deps --wheel-dir environment/wheels rqrisk
           git archive --format=zip -o environment/Invest-source.zip HEAD
           git rev-parse HEAD > environment/SOURCE_COMMIT.txt
           python - <<'PY'
