@@ -32,7 +32,7 @@
     "tests/test_desktop_runtime.py": "fb497ea7357de4d40cc9aabb27576e3b6e21c97911b83ad2094195ac1de5704f",
     "tests/test_growth.py": "4eb056511168e3d4ec3a6d9acd31534688809d4a8e3a70cfac684bdfacb33d6f",
     "tests/test_growth_http.py": "7eb0490865fae1509a372884f80ea4c2ac15e1af2ddf6f3f61f5b9be4e7f931d",
-    "tests/test_provenance.py": "95aec09a470d6210bec2d28ca9be2ed5a5bea871d369d7e0cf37046faec4a240",
+    "tests/test_provenance.py": "1dd8bc18b5897c0a242582a0845e7a576dc9a583a0fe4743564fef65890a449b",
     "tests/test_release_integrity.py": "2875b4a83e2f30e454bc92586adcc4a4846d5d8a5e50c81bc5ef2bea7b3f71bb",
     "tools/build_windows_delivery.py": "62d762b93d3d57dd9d47f88a0b5919c077d9d9eb0a98a61202bed8c86b0c6dbf",
     "tools/desktop_browser_test.py": "d90e67388bdea94f28f718e313719bacc3420751fcdbc41015e5ece4e763bd4f",

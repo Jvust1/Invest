@@ -28,9 +28,22 @@ class ProvenanceTests(unittest.TestCase):
         self.assertTrue(p.REQUIRED.issubset(self.manifest['files']))
 
     def test_cross_platform_newlines_have_same_identity(self):
+        # Start from explicit logical bytes, not OS-translated write_text output.
+        # Replacing LF blindly in a Windows CRLF file creates CRCRLF, which
+        # genuinely adds blank lines under universal-newline decoding.
+        logical = b'# synthetic source fixture\nx = 1\n'
+        for ending in (b'\n', b'\r\n', b'\r'):
+            with self.subTest(line_ending=ending):
+                expected = logical.replace(b'\n', ending)
+                for path in self.root.glob('*.py'):
+                    path.write_bytes(expected)
+                    self.assertEqual(path.read_bytes(), expected)
+                self.assertEqual(p.source_manifest(self.root)['code_identity'],
+                                 self.manifest['code_identity'])
         for path in self.root.glob('*.py'):
-            path.write_bytes(path.read_bytes().replace(b'\n',b'\r\n'))
-        self.assertEqual(p.source_manifest(self.root)['code_identity'],self.manifest['code_identity'])
+            path.write_bytes(logical.replace(b'\n', b'\r\r\n'))
+        self.assertNotEqual(p.source_manifest(self.root)['code_identity'],
+                            self.manifest['code_identity'])
 
     def test_one_source_change_changes_identity(self):
         (self.root/'engine.py').write_text('# different executable source\n',encoding='utf-8')
