@@ -1,25 +1,21 @@
-# Invest 接续入口
+# Invest 接续入口：独立执行实验室之后
 
-## 先恢复真实状态
+先读AGENTS、project_state、independent_engine_result、CURRENT_STATE、ENGINE_LAB_FINDINGS、artifact_manifest和pending_sync，再核实live分支、PR和CI。仓库 `Jvust/Invest`，稳定ID1381007406；Drive沿用 `15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u`。
 
-读取 AGENTS、project_state、growth_delivery_result、CURRENT_STATE、artifact_manifest、pending_sync，再查真实 branch/PR/CI。当前仓库是 `Jvust/Invest`（ID1381007406），不是重新建立一个同名仓库。
+## 当前工作与原程序分别恢复
 
-当前工作分支 `feat/g1-g5-workbench-20260926`，Draft PR #4；基于 `feat/a-share-research-v0.1-20260922`，没有自动合并 main。可运行 Windows 候选版源提交 `5075cf746019b7d107de603384c0cf02ce1ac02a`，构建run `36259089513`。Drive使用原目录 `15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u`；完整包身份读交付回执，不从聊天猜文件ID。
+新增实验室在 `feat/rqalpha-comparison-20260927` / Draft PR #5，基于原rc2分支PR #4，均未合并main。实验室精确源码 `bfcb1ffbed99ff92089f098f4681c6e6594591d4`，CI `36263215741`。原Windows程序仍为0.2.0-rc2 / 源码5075cf74，不因为新源码附加组件而改名或自动更新旧EXE。
 
-## 已完成，不重复开发
+完整新包已上传Drive并回读，身份从independent_engine_result取得。第三方RQAlpha完整快照已经在Github/03_Invest两分片中，复用原对象；不要重新上传相同源码。安装环境需用户确认上游实际许可，安装网络与研究运行网络分开。
 
-G1–G5 离线功能及桌面集成已在普通跟踪源码中。259项测试、23项真实浏览器检查、原生进程/重启及源码到EXE身份校验通过。已修复空代码哈希、满额幂等、备份总容量、脚本导入副作用与界面旧版标签；失败尝试保留在交付证据中。
+## 不重复开发的成果
 
-根页面 `/` 是中文工作台，`/legacy` 保留原版研究/历史模拟。时点事实扩展默认关闭；私人数据留在本机。旧包和旧研究记录未覆盖。
+312测试/平台、24原生对照（18一致+6分歧）、16未来日期扰动、重复运行、33浏览器检查/平台均通过；45份业务JSON跨Linux/Windows相同。worker运行真正上游成交、账户与风控，不接收Invest成交结果。六类差异及初次失败均保留。原工作台源码没有为制造一致而修改。
 
-## 仍需推进
+## 下一任务
 
-用户电脑实测与独立复现；带明确许可和市场事实的真实样本；真正第二成交引擎；三种真实市场环境；冻结的未见留出验证；持续前向观察；扩展的实际价值对照。基础源代码合同可用于准备工作，但没有证据就保持未验证。
+优先ENG-03版本化执行合同：共享时段容量、整笔/部分成交与剩余单、费用精度与价格取整。用新版本新样本，不覆盖原冻结协议或历史结果。ENG-04真实数据需先核验许可、原始身份、交易日历/停牌、公司行动和规则有效日期，沿用原provider_validation/evaluation/opening链。ENG-05再做独立策略信号、留出、真正前向观察。
 
-下一位执行者应按 `REAL_DATA_PROVIDER_VALIDATION_RUNBOOK.md` 和现有 `evaluation.py` / `opening.py` 做依赖核验，不为“完成G5”绕过前置证据，也不把历史样本补录说成已经持续运行。
+现有实验室只接收合成、单证券、无公司行动的固定股数合同。日线代理与全天成交量不是真实开盘已知信息；16组未来日期扰动不证明这点。CI成功不是用户电脑实测或独立审阅。没有任何全部G1–G5现实验收声明。
 
-## 变更与归档
-
-改应用/测试/UI后运行完整回归与source-identity检查，并生成新的exact-source成品证据；不能借旧run证明新代码。metadata-only checkpoint不冒充EXE源提交。恢复仅使用新目录，保留旧数据；不要上传凭据或真实私人账本。历史v0.1状态已经归档，pending_sync中的旧状态对账项已关闭。
-
-没有活动SECURITY_POLICY或历史Drive安全门，不恢复退役规则；main及PR合并仍需用户对具体合并的明确指令。
+源码运行与安装步骤见ENGINE_LAB_GUIDE；不安装扩展仍可用原rc2。后续改引擎/worker必须重新核验源身份、全部核心回归、真实第三方执行和差异预期；不要只跑mock或只对最终收益。
