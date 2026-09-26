@@ -1,0 +1,19 @@
+{
+  "schema": "invest-engine-lab-source-v1",
+  "base_commit": "36ff0ac211732e3d315854227c76962cd81536c4",
+  "normalization": "UTF-8 universal newlines to LF",
+  "files": {
+    "invest/comparison.py": "5bb2695a6a6d8bb8274a5a232baf28944d4fcef05867bf531a1ce6b86f165236",
+    "invest/comparison_scenarios.py": "2280cf6412049899923799baa1327d8eb1d38b1d6b023dcf6329998cd32196c7",
+    "integrations/rqalpha/worker.py": "2077ef539200ad247ce43e4244b4aa4f5fc233cc2d90cee7892673805286516a",
+    "integrations/rqalpha/source-lock.json": "26241062d3e27ec148322e4d91a13e9fd0a88df395427b8ff55eba1fdc7cff38",
+    "tests/test_comparison.py": "b450bd27a60fb3de966552b99c9898ec1c5425fb10f7ee6ffc7a040116a9c46e",
+    "tools/run_engine_lab.py": "0c284cae4514194a03280c15cd97090033dd969dceb520d7a854749b330fa2b8",
+    "tools/setup_engine_lab.py": "8138cf2269020947929bf444744b61264313783521445062eae96b0ac1a45249",
+    "tools/verify_engine_lab_browser.py": "d838e151e34cc860321ac7e7114f8c14703cb59e01c526a1bc27f202eccbe07e",
+    "tools/verify_engine_lab_source.py": "8277ab8a4e5c6cddd3dc8fa73439bda3d791a65e8503236ee69b9082e41e3f83",
+    ".github/workflows/independent-engine.yml": "636f6ffc730c5cd18eca59648ae16285593ff0d07454e9fa7e2b90f005a0c973",
+    "docs/RQALPHA_RESEARCH.md": "5c318ade663ba7d08ae34555923c3344fb2b80c784036f3bc6982ef5d9e7ac62",
+    "docs/ENGINE_LAB_GUIDE.md": "ee0cc4c4fc721d1fee8fb5f686be82da8c5aff2b584ab271fa4ec9a3411b96c9"
+  }
+}

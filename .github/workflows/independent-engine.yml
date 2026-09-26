@@ -1,0 +1,80 @@
+name: Invest independent engine verification
+on:
+  push:
+    branches: [feat/rqalpha-comparison-20260927]
+    paths:
+      - 'invest/comparison*.py'
+      - 'integrations/rqalpha/**'
+      - 'tests/test_comparison.py'
+      - 'tools/*engine_lab*.py'
+      - '.github/workflows/independent-engine.yml'
+      - 'governance/engine_lab_source_identity.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: invest-engine-lab-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    if: github.ref == 'refs/heads/feat/rqalpha-comparison-20260927'
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    env:
+      PYTHONUTF8: '1'
+      PYTHONIOENCODING: utf-8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Validate exact source and complete core suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p evidence
+          python tools/verify_engine_lab_source.py | tee evidence/source-identity.json
+          python -m unittest discover -s tests -v > evidence/unittest.txt 2>&1
+          python -m compileall -q invest integrations tools tests
+          git rev-parse HEAD > evidence/SOURCE_COMMIT.txt
+          git archive --format=zip -o evidence/Invest-Engine-Lab-Source.zip HEAD
+      - name: Build clean pinned optional environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          python tools/setup_engine_lab.py --environment .rqalpha-env --download-source --acknowledge-rqalpha-license > evidence/setup.txt 2>&1
+      - name: Execute native second engine and perturbation checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import os,pathlib,subprocess,sys
+          env=pathlib.Path('.rqalpha-env')
+          exe=(env/('Scripts/python.exe' if os.name=='nt' else 'bin/python')).resolve()
+          with open('evidence/lab-run.txt','w',encoding='utf-8') as log:
+              subprocess.run([sys.executable,'tools/run_engine_lab.py','--rqalpha-python',str(exe),'--acknowledge-rqalpha-license','--output','evidence/lab'],stdout=log,stderr=subprocess.STDOUT,check=True)
+          for name in ['INSTALL_IDENTITY.json','requirements-observed.txt']:
+              pathlib.Path('evidence',name).write_bytes((env/name).read_bytes())
+          PY
+      - name: Test offline Chinese report in actual browser
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install pytest playwright
+          python -m pytest -q --junitxml=evidence/pytest.xml > evidence/pytest.txt 2>&1
+          python tools/verify_engine_lab_browser.py --report-dir evidence/lab --evidence evidence/browser > evidence/browser-run.txt 2>&1
+          git diff --exit-code
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Invest-Engine-Lab-${{ matrix.os }}-${{ github.sha }}
+          path: evidence/
+          if-no-files-found: error
+          retention-days: 7
