@@ -1,0 +1,127 @@
+{
+  "schema": "invest-execution-contract-delivery-v1",
+  "status": "VERIFIED_SYNTHETIC_CONTRACT_EXTENSION",
+  "as_of": "2026-09-26T19:37:55.350328+00:00",
+  "repository": "Jvust/Invest",
+  "repository_id": 1381007406,
+  "branch": "feat/execution-contract-20260927",
+  "draft_pr": 6,
+  "version": "v0.2",
+  "source_commit": "a013549109a29fc183a3b653f09ab70f5a3b3c1a",
+  "source_tree": "6efcbaa60a3acb61d1405e51814f7419432c9f23",
+  "ci": {
+    "run_id": 36266137882,
+    "conclusion": "success",
+    "source_commit": "a013549109a29fc183a3b653f09ab70f5a3b3c1a",
+    "jobs": [
+      {
+        "id": 108471347463,
+        "platform": "linux",
+        "conclusion": "success"
+      },
+      {
+        "id": 108471347324,
+        "platform": "windows",
+        "conclusion": "success"
+      }
+    ],
+    "artifacts": [
+      {
+        "platform": "linux",
+        "artifact_id": 10914027949,
+        "path": "Invest-ENG03-Linux-CI-a0135491.zip",
+        "sha256": "910a92d49733c7bc9da41fd8e5255ff72f79a1a09e91567f88e4052158928f23",
+        "bytes": 1492010
+      },
+      {
+        "platform": "windows",
+        "artifact_id": 10913497800,
+        "path": "Invest-ENG03-Windows-CI-a0135491.zip",
+        "sha256": "a3924126601d0aa0cdc69a4d62beb3c4b6991717f86b8a6253b4344ad365864d",
+        "bytes": 1340558
+      }
+    ]
+  },
+  "validation_summary": {
+    "tests_per_os": 370,
+    "subtests_per_os": 290,
+    "new_tests": 58,
+    "test_failures": 0,
+    "combination_count": 99,
+    "native_matches": 32,
+    "native_unsupported_reference_runs": 66,
+    "expected_input_rejections": 1,
+    "unexpected_execution_errors": 0,
+    "new_future_date_probes": 8,
+    "new_repeat_check": "PASS",
+    "new_network_probe": "PASS",
+    "legacy_native_cases": 24,
+    "legacy_matches": 18,
+    "legacy_divergences": 6,
+    "legacy_future_date_probes": 16,
+    "browser_checks_per_os": 110,
+    "javascript_errors": 0,
+    "external_browser_requests": 0,
+    "new_business_json_structurally_equal": 111,
+    "legacy_business_json_structurally_equal": 45,
+    "business_comparison": "PARSED_JSON_EXACT; excludes RUN_CONTEXT and SHA256SUMS; not raw newline equality",
+    "locked_source_files": 37,
+    "rqalpha_python_files": 151,
+    "source_archive_files": 172,
+    "clean_environments": [
+      "Linux Python 3.13",
+      "Windows Python 3.13"
+    ],
+    "pip_check": "PASS",
+    "user_device_tested": false,
+    "independent_human_review": false,
+    "real_market_validated": false,
+    "visual_inspection": "READABLE_CHINESE_DESKTOP_MOBILE_AND_CAPACITY_DETAILS; wide tables scroll locally"
+  },
+  "policy_profiles": [
+    "strict-partial-v1",
+    "strict-aon-v1",
+    "native-parity-v1"
+  ],
+  "default_profile": "strict-partial-v1",
+  "native_conservative_support": false,
+  "upstream": {
+    "repository": "ricequant/rqalpha",
+    "source_commit": "0d98adefa87956e26f3e7ca5b26b5f3fc7ca834f",
+    "worker_sha256": "2077ef539200ad247ce43e4244b4aa4f5fc233cc2d90cee7892673805286516a",
+    "source_files_verified": 151,
+    "archive_reused_from_drive_folder": "1oU0O8bQDy6yaIZoQdblf1goui8laOi1I",
+    "source_reuploaded": false
+  },
+  "preserved": {
+    "desktop_version": "0.2.0-rc2",
+    "desktop_source": "5075cf746019b7d107de603384c0cf02ce1ac02a",
+    "original_engine_and_worker_unchanged": true,
+    "v1_results_unchanged": true,
+    "user_data_overwritten": false,
+    "main_modified": false,
+    "pr_merged": false
+  },
+  "limitations": [
+    "synthetic single stock without company actions",
+    "whole-day capacity is not opening-known liquidity",
+    "shared order intentions are not independent signals",
+    "native policy support is not proof of real market correctness",
+    "no real provider or brokerage calls during research",
+    "no frozen holdout opened",
+    "no forward observation started",
+    "declarations do not prove source authenticity or rights"
+  ],
+  "source_archive_note": "At-source governance snapshots retained inside source ZIP; later metadata-only commits are not an additional executed source version.",
+  "drive": {
+    "file_name": "Invest-Execution-Contract-v0.2-20260927.zip",
+    "bytes": 3833634,
+    "sha256": "5e6411a77fa86f5bb3f3fbab801aa6c7e4192add2f48e62e3c54461fb6e9ea81",
+    "members": 297,
+    "source_commit": "a013549109a29fc183a3b653f09ab70f5a3b3c1a",
+    "drive_id": "1Yj4cPGe2sP5BxOWv-LzyKaCeDIjOK961",
+    "folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
+    "library_path": "/Google Drive/Invest/Invest-Execution-Contract-v0.2-20260927.zip",
+    "download_readback_verified": true
+  }
+}

@@ -1,3 +1,15 @@
+# Invest · 当前开发：ENG-03 版本化成交合同 v0.2
+
+当前源码附加组件在 Draft PR #6，`feat/execution-contract-20260927`。离线报告见 Drive 的 `Invest-Execution-Contract-v0.2-20260927.zip` 中 `reports/index.html`。它不是新 EXE，不替换下面原0.2.0-rc2桌面程序。
+
+新增：共享成交量、部分/整笔成交政策、费用与价格精度合同、原生不支持显式拒绝、逐单容量报告。两平台370测试和110浏览器检查通过；99组合分为32原生一致、66原生不支持、1输入拒绝，不混记为全部一致。
+
+当前权威回执：`governance/execution_contract_result.json`；使用和边界：`docs/EXECUTION_CONTRACT_V2.md`；接续：`docs/HANDOFF.md`。旧v1差异和rc2程序保留，main未合并，真实数据/留出/前向/独立审阅仍待验收。
+
+---
+
+## 保留的基础工作台说明
+
 # Invest · 人民币研究与复盘工作台
 
 > 新增研究扩展：**独立RQAlpha执行实验室v0.1**（Draft PR #5，源码附加组件，不是新版EXE）。[当前状态](docs/CURRENT_STATE.md) · [直接复现](docs/ENGINE_LAB_GUIDE.md) · [六类实际分歧](docs/ENGINE_LAB_FINDINGS.md) · [精确交付回执](governance/independent_engine_result.json)。下文rc2程序信息继续有效；新的受限第二执行引擎已经实现，真实市场合同仍待验证。

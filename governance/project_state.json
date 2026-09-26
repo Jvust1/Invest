@@ -1,13 +1,13 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "project": "Invest",
   "repository": "Jvust/Invest",
   "repository_id": 1381007406,
   "drive_folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
-  "as_of": "2026-09-26T18:44:31.982603+00:00",
+  "as_of": "2026-09-26T19:37:55.940871+00:00",
   "version": "0.2.0-rc2",
   "currency": "CNY",
-  "state_scope": "RC2_DESKTOP_WITH_OPTIONAL_SYNTHETIC_INDEPENDENT_ENGINE_LAB",
+  "state_scope": "RC2_DESKTOP_WITH_VERSIONED_SYNTHETIC_EXECUTION_CONTRACTS",
   "security_status": "NO_PROJECT_SECURITY_GATE",
   "delivery_branch": "feat/g1-g5-workbench-20260926",
   "delivery_policy": {
@@ -18,8 +18,8 @@
     "main_modified": false,
     "automatic_merge": false
   },
-  "latest_validated_code_head": "bfcb1ffbed99ff92089f098f4681c6e6594591d4",
-  "latest_checkpoint": "governance/independent_engine_result.json",
+  "latest_validated_code_head": "a013549109a29fc183a3b653f09ab70f5a3b3c1a",
+  "latest_checkpoint": "governance/execution_contract_result.json",
   "validation": {
     "local_tests": 259,
     "windows_tests": 259,
@@ -64,21 +64,21 @@
     "real_repeated_use_value"
   ],
   "next_actions": [
-    "ENG-03: version a shared per-session liquidity, partial-fill, fee-rounding and tick contract; preserve existing frozen outputs.",
-    "ENG-04: obtain licensed source-bound real market data and complete effective-date market facts before a separate real-data comparison adapter.",
-    "ENG-05: independently generate strategy signals and evaluate frozen holdout/forward observation only after prerequisite evidence.",
-    "Validate the unchanged rc2 desktop and optional lab on the actual user device; independent human review remains pending."
+    "ENG-04: obtain licensed source-bound real market data, verify raw/normalized mapping and effective-date market facts before a separate real-data adapter.",
+    "ENG-03B: only if required, implement a separately versioned native conservative-fee/tick adapter; do not silently substitute native-parity for conservative contracts.",
+    "ENG-05: independent signals, untouched holdout and actual forward observation after prerequisites; no synthetic evidence promoted to empirical acceptance.",
+    "Validate unchanged rc2 desktop and optional lab on user device; independent human review remains pending."
   ],
   "authority": {
     "code": "live GitHub branch/commit",
     "current_delivery": "governance/growth_delivery_result.json",
     "artifacts": "existing Drive Invest folder",
     "chat_is_authoritative": false,
-    "current_research_extension": "governance/independent_engine_result.json"
+    "current_research_extension": "governance/execution_contract_result.json"
   },
   "historical_state": "governance/checkpoints/pre_growth_rc2/project_state.json",
-  "development_branch": "feat/rqalpha-comparison-20260927",
-  "development_pr": 5,
+  "development_branch": "feat/execution-contract-20260927",
+  "development_pr": 6,
   "latest_validated_desktop_code_head": "5075cf746019b7d107de603384c0cf02ce1ac02a",
   "engine_lab": {
     "version": "v0.1",
@@ -115,5 +115,60 @@
       "members": 213
     }
   },
-  "validation_scope_note": "The legacy validation object describes the unchanged rc2 desktop. New 312-test/native-engine evidence is in engine_lab.validation."
+  "validation_scope_note": "validation describes unchanged rc2 desktop; engine_lab describes preserved v0.1; execution_contract describes newly verified v0.2. Do not mix counts or source commits.",
+  "execution_contract": {
+    "version": "v0.2",
+    "source_commit": "a013549109a29fc183a3b653f09ab70f5a3b3c1a",
+    "ci_run": 36266137882,
+    "delivery_type": "SOURCE_EXTENSION_NOT_NEW_EXE",
+    "default_profile": "strict-partial-v1",
+    "validation": {
+      "tests_per_os": 370,
+      "subtests_per_os": 290,
+      "new_tests": 58,
+      "test_failures": 0,
+      "combination_count": 99,
+      "native_matches": 32,
+      "native_unsupported_reference_runs": 66,
+      "expected_input_rejections": 1,
+      "unexpected_execution_errors": 0,
+      "new_future_date_probes": 8,
+      "new_repeat_check": "PASS",
+      "new_network_probe": "PASS",
+      "legacy_native_cases": 24,
+      "legacy_matches": 18,
+      "legacy_divergences": 6,
+      "legacy_future_date_probes": 16,
+      "browser_checks_per_os": 110,
+      "javascript_errors": 0,
+      "external_browser_requests": 0,
+      "new_business_json_structurally_equal": 111,
+      "legacy_business_json_structurally_equal": 45,
+      "business_comparison": "PARSED_JSON_EXACT; excludes RUN_CONTEXT and SHA256SUMS; not raw newline equality",
+      "locked_source_files": 37,
+      "rqalpha_python_files": 151,
+      "source_archive_files": 172,
+      "clean_environments": [
+        "Linux Python 3.13",
+        "Windows Python 3.13"
+      ],
+      "pip_check": "PASS",
+      "user_device_tested": false,
+      "independent_human_review": false,
+      "real_market_validated": false,
+      "visual_inspection": "READABLE_CHINESE_DESKTOP_MOBILE_AND_CAPACITY_DETAILS; wide tables scroll locally"
+    },
+    "drive": {
+      "file_name": "Invest-Execution-Contract-v0.2-20260927.zip",
+      "bytes": 3833634,
+      "sha256": "5e6411a77fa86f5bb3f3fbab801aa6c7e4192add2f48e62e3c54461fb6e9ea81",
+      "members": 297,
+      "source_commit": "a013549109a29fc183a3b653f09ab70f5a3b3c1a",
+      "drive_id": "1Yj4cPGe2sP5BxOWv-LzyKaCeDIjOK961",
+      "folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
+      "library_path": "/Google Drive/Invest/Invest-Execution-Contract-v0.2-20260927.zip",
+      "download_readback_verified": true
+    },
+    "upstream_conservative_profiles_supported": false
+  }
 }
