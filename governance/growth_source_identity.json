@@ -22,8 +22,8 @@
     "invest/review.py": "1e6135740a69aedf0f9b22ce9626bb059a503d77b2664f4d1cd307a4ea9a484e",
     "invest/server.py": "91f809a908451e3353c35fbc14360fb46d3c3905fd9371f57404337399a7e41b",
     "invest/web/workbench.css": "e18e1eeb4f7b4597ef6fb30cca113fc63643673e8d4d5dbba5848e68f98d182e",
-    "invest/web/workbench.html": "cbfadf7f28029d3c1ddbc769a9ec3575286f5aa6caf1f470adec15d2e6fe4f6f",
-    "invest/web/workbench.js": "6750d43b44859e1c5bf4867f8c833a754263500bd57f3be0902ec7a95584955f",
+    "invest/web/workbench.html": "eb8ea9ad259bfd038aed48e9e8dc4faa472de59e7b186221d8a3c3b78f8a57b7",
+    "invest/web/workbench.js": "ff0aea654fd1fd19802edf37e500ab3972affb05321097f10b1e75fa4d3e02ac",
     "invest/workbench_api.py": "631120001ca9ea0d30ea30ff09f458ec6559a8d339d3be09ec3562dabfa988d4",
     "invest/workspace.py": "161cc28859bb715e42b644e382006e16936ee7c5932dbe4ee64f39c88792be01",
     "pyproject.toml": "09d6cc2db90ef0fe8fc48141849f0fc9ff451071856d84bcecda1220d9f16b37",
@@ -31,11 +31,11 @@
     "tests/test_desktop_backup.py": "faab5a699170a2ade03be54b553f708d7dde0d611e09ae308c2b1dd2f15598a8",
     "tests/test_desktop_runtime.py": "fb497ea7357de4d40cc9aabb27576e3b6e21c97911b83ad2094195ac1de5704f",
     "tests/test_growth.py": "4eb056511168e3d4ec3a6d9acd31534688809d4a8e3a70cfac684bdfacb33d6f",
-    "tests/test_growth_http.py": "7eb0490865fae1509a372884f80ea4c2ac15e1af2ddf6f3f61f5b9be4e7f931d",
+    "tests/test_growth_http.py": "ee50dabbd6cc8b18c89bcaaaf1789cfe099a8ea473276bdebc534a7069d58911",
     "tests/test_provenance.py": "1dd8bc18b5897c0a242582a0845e7a576dc9a583a0fe4743564fef65890a449b",
     "tests/test_release_integrity.py": "2875b4a83e2f30e454bc92586adcc4a4846d5d8a5e50c81bc5ef2bea7b3f71bb",
     "tools/build_windows_delivery.py": "62d762b93d3d57dd9d47f88a0b5919c077d9d9eb0a98a61202bed8c86b0c6dbf",
     "tools/desktop_browser_test.py": "d90e67388bdea94f28f718e313719bacc3420751fcdbc41015e5ece4e763bd4f",
-    "tools/growth_browser_test.py": "54087442da96eef0ede4151d9adc5135272402d0aad3dfb2b538f3596a26e270"
+    "tools/growth_browser_test.py": "01f63b79333c7e51e279462a8586bad044848ef9d3589ab8951a8c3283311160"
   }
 }

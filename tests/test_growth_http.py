@@ -71,6 +71,10 @@ class GrowthHTTPTests(unittest.TestCase):
         self.assertTrue(self.request('/api/workbench/as-of',q)[1]['core_unaffected'])
     def test_status_does_not_claim_real_acceptance(self):
         code,r=self.request('/api/workbench/status');self.assertEqual(code,200)
+        from invest import __version__
+        self.assertEqual(r['version'],__version__)
+        code,html=self.request('/');self.assertEqual(code,200)
+        self.assertIn(b'id="app-version"',html);self.assertNotIn(b'0.2.0-rc1',html)
         self.assertEqual(len(r['stages']),5);self.assertFalse(r['broker_connected']);self.assertFalse(r['real_holdout_opened']);self.assertGreater(len(r['not_accepted']),0)
     def test_query_ambiguity_and_wrong_document_kind(self):
         self.assertEqual(self.request('/api/workbench/documents?kind=facts&kind=review')[0],400)
