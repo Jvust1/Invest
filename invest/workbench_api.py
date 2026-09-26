@@ -1,4 +1,5 @@
 """HTTP routing for the five-stage workbench; inherits the host/CSRF guard."""
+from . import __version__
 from .experiments import audit_receipt, run_study
 from .fundamentals import as_of, validate_bundle
 from .review import append_event, create_review, snapshot
@@ -9,7 +10,7 @@ def dispatch(handler, path, parameter, payload=None):
     ws = server.workspace
     if payload is None:
         if path == '/api/workbench/status':
-            return handler._reply(200, {'version':'0.2.0-rc1','scope':'OFFLINE_CAPABILITY_CANDIDATE',
+            return handler._reply(200, {'version':__version__,'scope':'OFFLINE_CAPABILITY_CANDIDATE',
                 'stages':{'G1':'数据审计与身份回执','G2':'有界实验与独立算术回放','G3':'事件复盘账本与资金流',
                           'G4':'中文工作台与备份恢复','G5':'可关闭的本地PIT事实扩展'},
                 'not_accepted':['真实数据许可和完整性','真实三种市场环境与样本外有效性',

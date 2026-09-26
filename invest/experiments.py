@@ -6,19 +6,13 @@ The existing opening/evaluation validators retain responsibility for that gate.
 from __future__ import annotations
 from decimal import Decimal, ROUND_HALF_UP
 import hashlib
-from pathlib import Path
 from .data import verify_dataset_identity
 from .engine import backtest, validate_market_window, validate_parameters
 from .workspace import canonical, digest, text
+from .provenance import code_identity, SCHEME as CODE_IDENTITY_SCHEME
 
 SCHEMA = 'invest-exploratory-study-v1'
 CENT = Decimal('0.01')
-
-
-def code_identity():
-    root = Path(__file__).parent
-    return digest({p.name: hashlib.sha256(p.read_bytes()).hexdigest()
-                   for p in sorted(root.glob('*.py'))})
 
 
 def audit_receipt(dataset, declaration=None):
@@ -41,7 +35,7 @@ def audit_receipt(dataset, declaration=None):
     if original is not None and (not isinstance(original, str) or len(original.encode()) > 2 * 1024 * 1024):
         raise ValueError('原始来源文本超过限制')
     return {'schema': 'invest-audit-receipt-v1', 'dataset_id': dataset['id'],
-            'code_identity': code_identity(), 'source_kind': dataset['meta'].get('source_kind'),
+            'code_identity': code_identity(), 'code_identity_scheme': CODE_IDENTITY_SCHEME, 'source_kind': dataset['meta'].get('source_kind'),
             'source': dataset['meta'].get('source'), 'currency': dataset['meta'].get('currency'),
             'price_basis': dataset['meta'].get('price_basis'), 'volume_unit': dataset['meta'].get('volume_unit'),
             'timezone': 'Asia/Shanghai (daily date convention)',
@@ -164,6 +158,7 @@ def run_study(dataset, specification):
     protocol = {'schema':SCHEMA, 'dataset_id':dataset['id'], 'symbol':symbol, 'initial_cash':cash,
                 'candidates':checked,'costs':cost_scenarios,'periods':periods,'shared_warmup':warmup,
                 'mode':'EXPLORATORY_CHRONOLOGICAL_SLICES', 'code_identity':code_identity(),
+                'code_identity_scheme':CODE_IDENTITY_SCHEME,
                 'parameter_budget':len(checked)*9, 'frozen_holdout_opened':False}
     results = []
     for period in periods:

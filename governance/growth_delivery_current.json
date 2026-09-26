@@ -1,6 +1,6 @@
 {
-  "schema": "invest-growth-delivery-v1",
-  "version": "0.2.0-rc1",
+  "schema": "invest-growth-delivery-v2",
+  "version": "0.2.0-rc2",
   "date": "2026-09-26",
   "branch": "feat/g1-g5-workbench-20260926",
   "base_research_commit": "869c320e1dedd32e064e425f6c115aced5487b40",
@@ -8,22 +8,36 @@
   "implementation_scope": "OFFLINE_CAPABILITY_CANDIDATE_G1_TO_G5",
   "roadmap_all_empirical_gates_passed": false,
   "local_validation": {
-    "tests": 224,
     "status": "PASS",
+    "tests": 259,
+    "failures": 0,
+    "new_tests": 24,
+    "runners": [
+      "pytest default collection",
+      "unittest discover"
+    ],
     "python": "3.13.5",
     "platform": "linux",
     "source_compile": "PASS",
     "javascript_syntax": "PASS",
-    "scope": "released_desktop_snapshot_plus_integrated_runtime_modules_and_growth_tests",
-    "upstream_remaining_tests": "retained_on_remote_base; re-run complete remote suite before final release"
+    "targeted_before": {
+      "tests": 8,
+      "failures": 3,
+      "errors": 3
+    },
+    "targeted_after": {
+      "tests": 8,
+      "failures": 0,
+      "errors": 0
+    }
   },
   "local_browser": {
     "status": "BLOCKED_BY_ENVIRONMENT",
     "reason": "Chromium ERR_BLOCKED_BY_ADMINISTRATOR for loopback URL; no rendering pass claimed"
   },
   "remote_windows_and_browser": {
-    "status": "NOT_YET_VERIFIED_IN_THIS_RECORD",
-    "authority": "GitHub Actions result for exact source commit"
+    "status_at_source_commit": "PENDING_EXACT_SOURCE_CI",
+    "subsequent_authority": "governance/growth_delivery_result.json and exact Actions source commit"
   },
   "external_pending": [
     "licensed_real_data_and_market_facts",
@@ -40,5 +54,20 @@
     "automatic_merge": false,
     "draft_pr_required": true
   },
-  "guide": "docs/G1_G5_DELIVERY.md"
+  "guide": "docs/G1_G5_RC2.md",
+  "repository": "Jvust/Invest",
+  "repository_id": 1381007406,
+  "draft_pr": 4,
+  "previous_implementation_commit": "519f30b09bc8a6addc4db038addf48c9cf203b4f",
+  "previous_release": {
+    "source_commit": "519f30b09bc8a6addc4db038addf48c9cf203b4f",
+    "windows_run": 36252240721,
+    "windows_tests": 235,
+    "browser_checks": 22,
+    "ci_result": "success",
+    "packaged_code_identity": "CONFIRMED_EMPTY_MAP_NOT_VALID_PROVENANCE",
+    "drive_id": "1T4gnwxDzVWCBhqcbmeWIlvyG31512zky",
+    "archive_sha256": "405d0147b9b85c5ec82e8320b7fb80011d1e1d0ea19400fa61e598876f4f3226",
+    "archive_bytes": 14710947
+  }
 }

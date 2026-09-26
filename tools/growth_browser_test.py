@@ -6,10 +6,10 @@ from pathlib import Path
 import sys
 import tempfile
 import threading
-from playwright.sync_api import sync_playwright, expect
 
 
 def exercise(page, base, out):
+    from playwright.sync_api import expect
     out=Path(out);out.mkdir(parents=True,exist_ok=True)
     checks=[]
     def record(label):checks.append(label)
@@ -99,6 +99,7 @@ def exercise(page, base, out):
 
 
 def main():
+    from playwright.sync_api import sync_playwright
     p=argparse.ArgumentParser();p.add_argument('--out',type=Path,default=Path('delivery/evidence'));args=p.parse_args()
     sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
     from invest.server import InvestServer

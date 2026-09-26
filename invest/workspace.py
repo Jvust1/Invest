@@ -135,14 +135,15 @@ CREATE TRIGGER IF NOT EXISTS growth_events_no_delete BEFORE DELETE ON growth_eve
         with self.connection() as db:
             db.execute('BEGIN IMMEDIATE')
             records = self.events_in(db, stream)
-            if len(records) >= 10000:
-                raise ValueError('单个复盘账户超过10000条事件限制')
             for record in records:
                 if record['event_key'] == key:
                     if canonical(record['event']) != canonical(event):
                         raise ValueError('同一幂等键不能对应不同内容')
                     db.commit()
                     return record
+            # Existing committed retries remain valid when the stream is full.
+            if len(records) >= 10000:
+                raise ValueError('单个复盘账户超过10000条事件限制')
             validator([r['event'] for r in records] + [event])
             record = {'stream': stream, 'sequence': len(records) + 1, 'event_key': key,
                       'event': event, 'previous_hash': records[-1]['hash'] if records else '0' * 64,

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "invest-local-research"
-version = "0.2.0rc1"
+version = "0.2.0rc2"
 description = "人民币 A 股研究、可审计日频回测与模拟账本"
 requires-python = ">=3.11"
 dependencies = []
@@ -20,3 +20,6 @@ include = ["invest*"]
 
 [tool.setuptools.package-data]
 invest = ["web/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

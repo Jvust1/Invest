@@ -2,6 +2,15 @@ name: Invest G1-G5 verified candidate
 on:
   push:
     branches: [feat/g1-g5-workbench-20260926]
+    paths:
+      - "invest/**"
+      - "tests/**"
+      - "tools/**"
+      - "desktop*.py"
+      - "restore_backup.py"
+      - "pyproject.toml"
+      - ".github/workflows/**"
+      - "governance/growth_source_identity.json"
   workflow_dispatch:
 permissions:
   contents: read
@@ -74,7 +83,7 @@ jobs:
       - name: Full integrated-source Windows regression
         shell: pwsh
         run: |
-          python -m pytest tests -ra --junitxml=delivery/evidence/pytest.xml 2>&1 | Tee-Object delivery/evidence/pytest.txt
+          python -m pytest -ra --junitxml=delivery/evidence/pytest.xml 2>&1 | Tee-Object delivery/evidence/pytest.txt
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Build EXE and verify actual process, browser and restart
         shell: pwsh
