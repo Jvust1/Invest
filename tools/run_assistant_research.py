@@ -1,8 +1,7 @@
-"""Cloud research job used by ChatGPT/GitHub integration.
+"""ChatGPT-controlled cloud research job for Invest.
 
-This module intentionally produces PUBLIC_RESEARCH_ONLY evidence.  It must not
-create an evaluation binding, open a holdout, authorize trading, or pretend
-that public-web data has independently verified licensing/market facts.
+Every run is PUBLIC_RESEARCH_ONLY. Provider selection is explicit; failures are
+retained and never silently retried against another data source.
 """
 from __future__ import annotations
 
@@ -12,6 +11,7 @@ from datetime import date, datetime, timezone
 import hashlib
 import json
 import math
+import os
 from pathlib import Path
 import re
 import statistics
@@ -24,7 +24,8 @@ from invest.data import is_mainboard_symbol
 SCHEMA = "invest-assistant-job-v1"
 RESULT_SCHEMA = "invest-public-research-result-v1"
 MAX_DAYS = 366
-ALLOWED = {"schema", "job_id", "operation", "symbol", "start_date", "end_date"}
+PROVIDERS = {"akshare_eastmoney", "akshare_tencent"}
+ALLOWED = {"schema", "job_id", "operation", "symbol", "start_date", "end_date", "provider"}
 
 
 class JobError(ValueError):
@@ -55,6 +56,10 @@ def load_request(path: Path) -> dict:
     symbol = request.get("symbol")
     if not is_mainboard_symbol(symbol):
         raise JobError("only the Invest main-board symbol contract is accepted")
+    provider = request.get("provider", "akshare_eastmoney")
+    if provider not in PROVIDERS:
+        raise JobError("unsupported public research provider")
+    request["provider"] = provider
     start = _parse_date(request.get("start_date"), "start_date")
     end = _parse_date(request.get("end_date"), "end_date")
     if start > end:
@@ -83,33 +88,48 @@ def _finite(value: object, name: str) -> float:
     return number
 
 
-def normalize_frame(frame) -> list[dict]:
-    required = {"日期", "开盘", "收盘", "最高", "最低"}
+def _column_map(provider: str) -> dict:
+    if provider == "akshare_eastmoney":
+        return {
+            "date": "日期", "open": "开盘", "close": "收盘", "high": "最高", "low": "最低",
+            "volume": "成交量", "amount": "成交额", "turnover": "换手率", "change_pct": "涨跌幅",
+        }
+    if provider == "akshare_tencent":
+        return {
+            "date": "date", "open": "open", "close": "close", "high": "high", "low": "low",
+            "volume": "volume", "amount": "amount", "turnover": "turnover",
+        }
+    raise JobError("unsupported public research provider")
+
+
+def normalize_frame(frame, provider: str = "akshare_eastmoney") -> list[dict]:
+    mapping = _column_map(provider)
     if frame is None or getattr(frame, "empty", True):
         raise JobError("provider returned no rows")
     columns = {str(c) for c in frame.columns}
+    required = {mapping[key] for key in ("date", "open", "close", "high", "low")}
     missing = required - columns
     if missing:
         raise JobError("provider response missing columns: " + ",".join(sorted(missing)))
     rows: list[dict] = []
     for _, source in frame.iterrows():
         row = {
-            "date": _as_date(source["日期"]),
-            "open": _finite(source["开盘"], "open"),
-            "close": _finite(source["收盘"], "close"),
-            "high": _finite(source["最高"], "high"),
-            "low": _finite(source["最低"], "low"),
+            "date": _as_date(source[mapping["date"]]),
+            "open": _finite(source[mapping["open"]], "open"),
+            "close": _finite(source[mapping["close"]], "close"),
+            "high": _finite(source[mapping["high"]], "high"),
+            "low": _finite(source[mapping["low"]], "low"),
         }
         if min(row["open"], row["close"], row["high"], row["low"]) <= 0:
             raise JobError("provider returned non-positive prices")
         if row["low"] > min(row["open"], row["close"]) or row["high"] < max(row["open"], row["close"]):
             raise JobError("provider OHLC relation is invalid")
-        for src, dst in (("成交量", "volume_provider_unit"), ("成交额", "amount"),
-                         ("换手率", "turnover_rate_pct"), ("涨跌幅", "change_pct")):
-            if src in columns:
-                value = source[src]
+        for key, dst in (("volume", "volume_provider_value"), ("amount", "amount_provider_value"),
+                         ("turnover", "turnover_provider_value"), ("change_pct", "change_pct_provider_value")):
+            src = mapping.get(key)
+            if src and src in columns:
                 try:
-                    row[dst] = _finite(value, dst)
+                    row[dst] = _finite(source[src], dst)
                 except JobError:
                     row[dst] = None
         rows.append(row)
@@ -167,8 +187,8 @@ def _canonical(value: object) -> bytes:
 
 
 def write_csv(rows: list[dict], path: Path) -> None:
-    fields = ["date", "open", "high", "low", "close", "volume_provider_unit",
-              "amount", "turnover_rate_pct", "change_pct"]
+    fields = ["date", "open", "high", "low", "close", "volume_provider_value",
+              "amount_provider_value", "turnover_provider_value", "change_pct_provider_value"]
     with path.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=fields, extrasaction="ignore", lineterminator="\n")
         writer.writeheader()
@@ -179,15 +199,45 @@ def _pct(value: float | None) -> str:
     return "N/A" if value is None else f"{value*100:.2f}%"
 
 
+def _provider_spec(ak, request: dict):
+    provider = request["provider"]
+    digits = request["symbol"][:6]
+    start = request["start_date"].replace("-", "")
+    end = request["end_date"].replace("-", "")
+    if provider == "akshare_eastmoney":
+        frame = ak.stock_zh_a_hist(symbol=digits, period="daily", start_date=start, end_date=end, adjust="")
+        return frame, {
+            "provider_key": provider,
+            "name": "AKShare / Eastmoney interface",
+            "interface": "stock_zh_a_hist",
+            "upstream_family": "Eastmoney",
+            "price_basis": "unadjusted",
+            "provider_unit_note": "values are preserved from AKShare output and not promoted to execution facts",
+        }
+    if provider == "akshare_tencent":
+        frame = ak.stock_zh_a_hist_tx(symbol=digits, start_date=start, end_date=end, adjust="", timeout=30)
+        return frame, {
+            "provider_key": provider,
+            "name": "AKShare / Tencent interface",
+            "interface": "stock_zh_a_hist_tx",
+            "upstream_family": "Tencent Securities",
+            "price_basis": "unadjusted",
+            "provider_unit_note": "AKShare interface normalizes Tencent volume to shares and amount to CNY; still PUBLIC_RESEARCH_ONLY",
+        }
+    raise JobError("unsupported public research provider")
+
+
 def render_report(result: dict) -> str:
     s = result["summary"]
+    p = result["provider"]
     return f"""# Invest 云端公开研究报告
 
 - Job：{result['job_id']}
 - 标的：{result['symbol']}
 - 区间：{s['first_date']} → {s['last_date']}
 - 数据层级：**PUBLIC_RESEARCH_ONLY**
-- 数据接口：AKShare `stock_zh_a_hist`，版本 {result['provider']['akshare_version']}
+- 数据接口：{p['name']} / `{p['interface']}`
+- AKShare 版本：{p['akshare_version']}
 - 运行源码：{result['repository']['commit']}
 
 ## 客观统计
@@ -204,11 +254,12 @@ def render_report(result: dict) -> str:
 
 ## 边界
 
-这份结果用于公开数据研究和 ChatGPT ↔ Invest 云端协作验证。它**不是**经独立许可审阅的真实执行数据，
-不提供完整停复牌、公司行动、历史有效交易规则或券商成本事实，因此不会送入 Invest 的正式执行回测、
-evaluation binding、frozen holdout 或交易授权链。AKShare 自身也将其数据接口定位为研究用途并提示数据风险。
+这份结果只用于公开数据研究和 ChatGPT ↔ Invest 云端协作。它不是经独立许可审阅的执行级数据，
+不补造停复牌、公司行动、历史有效交易规则或券商成本事实，因此不会进入正式 execution contract、
+evaluation binding、frozen holdout 或交易授权链。
 
-没有买卖结论、收益承诺或自动下单。
+数据源切换必须通过新的显式 job 请求完成；本任务失败时不会静默换源。
+没有自动买卖结论、收益承诺或下单。
 """
 
 
@@ -218,18 +269,17 @@ def run(request_path: Path, output: Path) -> dict:
     (output / "request.json").write_bytes(_canonical(request) + b"\n")
     try:
         import akshare as ak
-        frame = ak.stock_zh_a_hist(
-            symbol=request["symbol"][:6],
-            period="daily",
-            start_date=request["start_date"].replace("-", ""),
-            end_date=request["end_date"].replace("-", ""),
-            adjust="",
-        )
-        rows = normalize_frame(frame)
+        frame, provider = _provider_spec(ak, request)
+        rows = normalize_frame(frame, request["provider"])
         summary = summarize(rows)
         csv_path = output / "market-data.csv"
         write_csv(rows, csv_path)
         csv_hash = hashlib.sha256(csv_path.read_bytes()).hexdigest()
+        provider.update({
+            "akshare_version": getattr(ak, "__version__", "UNKNOWN"),
+            "license_or_rights_independently_verified": False,
+            "data_scope": "PUBLIC_RESEARCH_ONLY",
+        })
         result = {
             "schema": RESULT_SCHEMA,
             "status": "PASS",
@@ -238,17 +288,10 @@ def run(request_path: Path, output: Path) -> dict:
             "symbol": request["symbol"],
             "requested_range": {"start": request["start_date"], "end": request["end_date"]},
             "summary": summary,
-            "provider": {
-                "name": "AKShare",
-                "interface": "stock_zh_a_hist",
-                "akshare_version": getattr(ak, "__version__", "UNKNOWN"),
-                "license_or_rights_independently_verified": False,
-                "data_scope": "PUBLIC_RESEARCH_ONLY",
-                "raw_provider_units_preserved": True,
-            },
+            "provider": provider,
             "repository": {
-                "commit": __import__("os").environ.get("GITHUB_SHA", "LOCAL"),
-                "workflow_run_id": __import__("os").environ.get("GITHUB_RUN_ID"),
+                "commit": os.environ.get("GITHUB_SHA", "LOCAL"),
+                "workflow_run_id": os.environ.get("GITHUB_RUN_ID"),
             },
             "artifacts": {"normalized_csv_sha256": csv_hash, "rows": len(rows)},
             "gates": {
@@ -261,7 +304,7 @@ def run(request_path: Path, output: Path) -> dict:
             "limitations": [
                 "public research data is not independently licensed/verified execution evidence",
                 "suspension/company actions/effective-date market rules are not completed by this job",
-                "provider volume units are preserved as provider output and are not promoted to Invest execution volume",
+                "provider auxiliary units are retained for research and are not silently promoted to execution facts",
                 "this job computes descriptive statistics only and does not issue a buy/sell recommendation",
             ],
         }
@@ -274,6 +317,7 @@ def run(request_path: Path, output: Path) -> dict:
             "status": "FAILED",
             "job_id": request["job_id"],
             "symbol": request["symbol"],
+            "provider": request["provider"],
             "error_type": type(exc).__name__,
             "error": str(exc)[:1000],
             "execution_authorized": False,
@@ -293,8 +337,8 @@ def main(argv=None) -> int:
         print(f"ASSISTANT_RESEARCH_FAILED: {type(exc).__name__}: {exc}", file=sys.stderr)
         return 2
     print(json.dumps({"status": result["status"], "job_id": result["job_id"],
-                      "symbol": result["symbol"], "sessions": result["summary"]["sessions"]},
-                     ensure_ascii=False))
+                      "symbol": result["symbol"], "provider": result["provider"]["provider_key"],
+                      "sessions": result["summary"]["sessions"]}, ensure_ascii=False))
     return 0
 
 

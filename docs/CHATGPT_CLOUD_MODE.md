@@ -1,40 +1,39 @@
 # ChatGPT 云端研究模式
 
-目标：让用户直接在 ChatGPT 对话中使用 Invest，而不是在本机运行采集脚本。
+目标：用户直接在 ChatGPT 对话中使用 Invest，而不是维护本地 Python、CMD 或行情采集目录。
 
 ## 架构
 
 `ChatGPT → GitHub request commit → GitHub Actions → public research artifact → ChatGPT analysis → optional Drive archive`
 
-GitHub 继续是代码与治理权威；Drive 继续保存长期成果。Actions artifact 是短期运输层，不是长期权威存储。
+GitHub 是代码/治理权威；Drive 是长期成果库；Actions artifact 只是运输层。
 
-## 两条数据路线必须分开
+## 公开研究模式
 
-### 公开研究模式
+无需用户 Token。当前支持显式选择：
+- `akshare_tencent`：Tencent Securities 日线接口；
+- `akshare_eastmoney`：Eastmoney 日线接口。
 
-无需用户 Token。ChatGPT 创建任务，云端使用固定版本公开财经接口获取研究数据并做描述性统计。结果明确标记 `PUBLIC_RESEARCH_ONLY`。
+源选择写入 request 和结果。某一源失败时不会在同一次运行里偷偷切换；ChatGPT 若改用另一源，会新建第二个任务并保留第一份失败证据。
 
-它适合：
-- 价格区间复盘；
-- 收益、回撤、波动、移动均线等描述性统计；
-- 为后续研究选择需要进一步核验的问题。
+输出只做价格区间、收益变化、回撤、波动率和移动均线等描述统计，标记 `PUBLIC_RESEARCH_ONLY`。
 
-它不适合：
-- 冒充有明确授权的执行级数据；
-- 自动回测正式成交合同；
+## 正式证据模式仍独立存在
+
+ENG-04A/04B 不删除。只有未来取得明确适用的数据权利并补齐日历、停复牌、公司行动、历史有效规则等证据后，才可单独推进正式 provider/binding 适配。
+
+公开云端研究永不：
+- 冒充执行级数据；
 - 打开 holdout；
-- 自动交易。
+- 连接券商；
+- 下单；
+- 自动输出买卖结论。
 
-### 正式证据模式
+## 对话体验
 
-原 ENG-04A/04B 不删除。未来如果取得明确适用的数据权利和完整市场事实，仍走原来的原始字节、许可、交易日历、停复牌、公司行动、历史规则核验链。
-
-## 用户体验
-
-以后用户可以直接说：
-
+用户以后只需要说：
 - “用 Invest 看 600000.SH 最近三个月。”
-- “把 000001.SZ 最近一年做一份研究报告。”
-- “继续分析上次那个标的。”
+- “换另一个公开源交叉看一下。”
+- “继续分析上次标的。”
 
-ChatGPT 负责建立 job、等待云端执行结果、读取 artifact、解释结果以及按需同步 Drive。用户不需要维护本地 Python 环境。
+ChatGPT 负责建立任务、读取结果和管理项目证据。
