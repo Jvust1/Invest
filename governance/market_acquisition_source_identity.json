@@ -9,6 +9,6 @@
     "tests/test_market_acquisition.py": "b843d3080619e793cdc93dbe7679f904ea8360248eb6f236293db3cbaf7d2372",
     "Collect-Market-Data-Windows.cmd": "e09dfb2fce80cdc1afa828152ab46a117c9509ec705d99e8f92fec9ce1d3c979",
     "docs/MARKET_DATA_COLLECTION.md": "7326f42efc58f4b9a6a014ca0ff40e35a87f6ec968ba14a216e6c286e6103f0b",
-    ".github/workflows/market-acquisition.yml": "761e5ea822d4e8dec1e47ac074af3b2fd92d43edd0702cf0b1ab4845b567ae8f"
+    ".github/workflows/market-acquisition.yml": "e1c7b051adb0274e18799f9607a51f679ab3388fd36447e19a8e05dea4287c05"
   }
 }
