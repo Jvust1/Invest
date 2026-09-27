@@ -19,7 +19,7 @@ invest = "invest.server:main"
 include = ["invest*"]
 
 [tool.setuptools.package-data]
-invest = ["web/*"]
+invest = ["web/*", "upstream_registry.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
