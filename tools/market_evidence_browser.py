@@ -40,6 +40,7 @@ def main():
         page.goto((root/'cases'/'baseline'/'index.html').as_uri())
         check('mobile_no_body_overflow',page.evaluate('document.documentElement.scrollWidth <= innerWidth+1'))
         check('wide_trace_locally_scrolls',page.locator('.trace').evaluate('(e)=>e.parentElement.scrollWidth>e.parentElement.clientWidth'))
+        check('mobile_dates_do_not_fragment',page.locator('.trace tbody td').first.evaluate("(e)=>getComputedStyle(e).whiteSpace==='nowrap'"))
         page.screenshot(path=str(a.output/'intake-mobile.png'),full_page=True)
         check('no_javascript_errors',not errors);check('no_external_requests',not external)
         browser.close()

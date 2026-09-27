@@ -45,6 +45,7 @@ main{{max-width:1140px;margin:auto;padding:32px 24px}}h1{{font-size:32px;line-he
 .notice{{border-left:5px solid #c28a23;padding:16px;background:#fff7e8}}.grid{{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:24px 0}}
 .card{{background:white;border:1px solid #dce4e8;border-radius:10px;padding:18px}}small{{color:#56707c;display:block}}strong{{display:block;margin-top:8px;font-size:18px}}
 .scroll{{overflow-x:auto;max-width:100%;border:1px solid #dce4e8;border-radius:8px;background:white}}table{{border-collapse:collapse;width:100%}}td,th{{text-align:left;vertical-align:top;padding:12px 16px;border-bottom:1px solid #e4eaed}}th{{background:#edf3f5}}td{{overflow-wrap:anywhere}}.hash{{font:12px/1.6 monospace;overflow-wrap:anywhere}}a{{color:#176079}}
+.trace th:first-child,.trace td:first-child{{min-width:125px;white-space:nowrap}}
 @media(max-width:700px){{main{{padding:18px 14px}}h1{{font-size:26px}}.grid{{grid-template-columns:1fr}}.trace{{min-width:700px}}}}
 </style><main><small>INVEST / ENG-04A · LOCAL DATA INTAKE</small><h1>原始数据与证据核验</h1>
 <p class="notice">本报告不认证真实行情或数据许可，也不授权交易。执行字段保持未知；没有券商调用，没有打开留出集。<br>来源：{label(report.get('origin','UNREAD'))}</p>
