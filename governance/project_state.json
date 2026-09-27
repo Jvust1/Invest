@@ -6,14 +6,14 @@
   "version": "0.2.0-rc2",
   "currency": "CNY",
   "security_status": "NO_PROJECT_SECURITY_GATE",
-  "schema_version": 6,
-  "as_of": "2026-09-27T12:04:33+00:00",
-  "state_scope": "RC2_WITH_CHATGPT_CLOUD_PUBLIC_RESEARCH_AND_OPTIONAL_FORMAL_EVIDENCE_TOOLING",
+  "schema_version": 7,
+  "as_of": "2026-09-27T14:56:59+00:00",
+  "state_scope": "RC2_WITH_CHATGPT_CLOUD_PUBLIC_RESEARCH_AND_CURATED_OPEN_SOURCE_ECOSYSTEM",
   "development_branch": "feat/chatgpt-cloud-research-20260927",
   "development_pr": 9,
   "latest_validated_desktop_code_head": "5075cf746019b7d107de603384c0cf02ce1ac02a",
-  "latest_validated_code_head": "f2ab93b6a23c57517d1348e4efe5dd8703386289",
-  "latest_checkpoint": "governance/assistant_cloud_result.json",
+  "latest_validated_code_head": "f1bc308f7f63090f383bbd966db96537fe0a7d81",
+  "latest_checkpoint": "governance/upstream_ecosystem_result.json",
   "delivery_policy": {
     "rc2_pr": 4,
     "main_modified": false,
@@ -23,9 +23,17 @@
     "code": "live GitHub branch/commit",
     "current_delivery": "governance/growth_delivery_result.json",
     "current_research_extension": "governance/assistant_cloud_result.json",
+    "upstream_ecosystem": "governance/upstream_ecosystem_result.json",
     "formal_data_tooling": "governance/market_acquisition_result.json",
     "artifacts": "existing Drive Invest folder",
     "chat_is_authoritative": false
+  },
+  "product_north_star": {
+    "default_currency": "CNY",
+    "flagship_prompt": "我现在有 500 元，怎么投？",
+    "target_output": "amount-level executable reviewable investment decision support",
+    "automatic_broker_execution": false,
+    "guaranteed_return_claims": false
   },
   "assistant_cloud": {
     "version": "v0.1",
@@ -52,6 +60,36 @@
       "download_readback_verified": true
     }
   },
+  "upstream_ecosystem": {
+    "status": "VERIFIED_REGISTRY_AND_ROUTING",
+    "project_count": 33,
+    "validated_head": "f1bc308f7f63090f383bbd966db96537fe0a7d81",
+    "validation_run": 36327696881,
+    "validation_matrix": [
+      "ubuntu-latest/python-3.11",
+      "ubuntu-latest/python-3.12",
+      "windows-latest/python-3.11",
+      "windows-latest/python-3.12"
+    ],
+    "registry": "invest/upstream_registry.json",
+    "routing": "invest/upstreams.py",
+    "tests": "tests/test_upstreams.py",
+    "documentation": "docs/OPEN_SOURCE_ECOSYSTEM.md",
+    "receipt": "governance/upstream_ecosystem_result.json",
+    "direct_source_vendoring_default": false,
+    "priority_projects": [
+      "PyPortfolio/PyPortfolioOpt",
+      "dcajasn/Riskfolio-Lib",
+      "skfolio/skfolio",
+      "gerrymanoim/exchange_calendars",
+      "rsheftel/pandas_market_calendars",
+      "ranaroussi/quantstats",
+      "stefan-jansen/empyrical-reloaded",
+      "fasiondog/hikyuu",
+      "stefan-jansen/zipline-reloaded",
+      "microsoft/qlib"
+    ]
+  },
   "research_governance": {
     "all_empirical_gates_passed": false,
     "frozen_holdout": "NOT_OPENED",
@@ -73,10 +111,13 @@
     "real_repeated_use_value"
   ],
   "next_actions": [
-    "Use the verified ChatGPT cloud path for ordinary public stock research; the user does not need local Python or tokens.",
-    "When cross-checking a provider, create a separate explicitly named job and retain failures instead of silently falling back.",
-    "Keep ENG-04A/04B as the separate formal-data evidence track if independently usable rights and complete market facts become available.",
-    "Independent signals, untouched holdout, genuine forward observation, native conservative adapters, independent review and user-device acceptance remain separate pending work."
+    "Implement PyPortfolioOpt, Riskfolio-Lib and skfolio adapters for candidate allocation generation.",
+    "Add discrete CNY sizing with lot-size, commission, tax, liquidity and residual-cash constraints for the 500 CNY goal.",
+    "Add dual calendar and dual risk/performance cross-checks.",
+    "Add Hikyuu, Zipline-reloaded and bt as independent validation paths before using model-derived allocations.",
+    "Add Qlib/Alphalens factor research after executable-allocation constraints are complete.",
+    "Keep public cloud provider changes explicit and retain failures; never silently fallback.",
+    "Keep ENG-04A/04B separate for formal licensed execution-data evidence."
   ],
   "component_result_paths": {
     "desktop": "governance/growth_delivery_result.json",
@@ -84,7 +125,8 @@
     "execution_contract": "governance/execution_contract_result.json",
     "raw_evidence_intake": "governance/market_evidence_result.json",
     "local_acquisition": "governance/market_acquisition_result.json",
-    "assistant_cloud": "governance/assistant_cloud_result.json"
+    "assistant_cloud": "governance/assistant_cloud_result.json",
+    "upstream_ecosystem": "governance/upstream_ecosystem_result.json"
   },
   "previous_full_state": "governance/checkpoints/pre_local_acquisition/governance__project_state.json"
 }
