@@ -1,7 +1,7 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "project": "Jvust/Invest",
-  "as_of": "2026-09-27T01:42:43.839219+00:00",
+  "as_of": "2026-09-27T12:04:33+00:00",
   "current_desktop": {
     "file_name": "Invest-G1-G5-0.2.0-rc2-完整交付.zip",
     "sha256": "67ee272c6439073f1a1ed757ec6ca986f385cafe1adaf314ab92290c475f00f4",
@@ -14,26 +14,33 @@
     "download_readback_verified": true
   },
   "current_research_extension": {
-    "file_name": "Invest-Local-Acquisition-v0.1-20260927.zip",
-    "bytes": 1457142,
-    "sha256": "2bbc5799da33f26150ff0846c6922bc4369267702028976262087ccfcd3099de",
-    "members": 201,
-    "source_commit": "6742f30d89e12d887ebe5c2d078527b9358f1970",
-    "drive_id": "1lGGDtBLsI-3YwshXF5wL6bG9tGXfrCKT",
+    "file_name": "Invest-ChatGPT-Cloud-Research-v0.1-20260927.zip",
+    "bytes": 8279,
+    "members": 6,
+    "sha256": "66a4a45b570a29bd95afa1bca35751d2d088b59a44b9483a441476a325b3d0ca",
+    "source_commit": "f2ab93b6a23c57517d1348e4efe5dd8703386289",
+    "drive_id": "1kumrq8YMaRZWbaf12HpWdCOo4F9itvjh",
     "folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
-    "library_path": "/Google Drive/Invest/Invest-Local-Acquisition-v0.1-20260927.zip",
+    "library_path": "/Google Drive/Invest/Invest-ChatGPT-Cloud-Research-v0.1-20260927.zip",
     "download_readback_verified": true
   },
-  "research_extension_result": "governance/market_acquisition_result.json",
+  "research_extension_result": "governance/assistant_cloud_result.json",
+  "formal_data_tooling": {
+    "file_name": "Invest-Local-Acquisition-v0.1-20260927.zip",
+    "drive_id": "1lGGDtBLsI-3YwshXF5wL6bG9tGXfrCKT",
+    "result_receipt": "governance/market_acquisition_result.json",
+    "live_acquisition_status": "NOT_PERFORMED"
+  },
   "preserved_component_receipts": {
     "desktop": "governance/growth_delivery_result.json",
     "native_engine_lab": "governance/independent_engine_result.json",
     "execution_contract": "governance/execution_contract_result.json",
     "raw_evidence_intake": "governance/market_evidence_result.json",
-    "local_acquisition": "governance/market_acquisition_result.json"
+    "local_acquisition": "governance/market_acquisition_result.json",
+    "assistant_cloud": "governance/assistant_cloud_result.json"
   },
-  "previous_full_manifest": "governance/checkpoints/pre_local_acquisition/governance__artifact_manifest.json",
   "contains_real_user_data": false,
-  "contains_synthetic_rehearsals": true,
+  "contains_credentials": false,
+  "contains_public_research_evidence": true,
   "third_party_source_reuploaded": false
 }

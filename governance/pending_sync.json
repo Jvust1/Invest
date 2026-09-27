@@ -1,29 +1,29 @@
 {
-  "schema_version": 3,
-  "as_of": "2026-09-27T01:42:43.839219+00:00",
-  "phase": "LOCAL_ACQUISITION_SOFTWARE_ARCHIVED_REAL_DATA_PENDING",
+  "schema_version": 4,
+  "as_of": "2026-09-27T12:04:33+00:00",
+  "phase": "CHATGPT_CLOUD_PUBLIC_RESEARCH_ARCHIVED_FORMAL_REAL_DATA_PENDING",
   "pending_sync": [],
-  "source_commit": "6742f30d89e12d887ebe5c2d078527b9358f1970",
+  "source_commit": "f2ab93b6a23c57517d1348e4efe5dd8703386289",
   "drive_checkpoint": {
-    "file_name": "Invest-Local-Acquisition-v0.1-20260927.zip",
-    "bytes": 1457142,
-    "sha256": "2bbc5799da33f26150ff0846c6922bc4369267702028976262087ccfcd3099de",
-    "members": 201,
-    "source_commit": "6742f30d89e12d887ebe5c2d078527b9358f1970",
-    "drive_id": "1lGGDtBLsI-3YwshXF5wL6bG9tGXfrCKT",
+    "file_name": "Invest-ChatGPT-Cloud-Research-v0.1-20260927.zip",
+    "bytes": 8279,
+    "members": 6,
+    "sha256": "66a4a45b570a29bd95afa1bca35751d2d088b59a44b9483a441476a325b3d0ca",
+    "drive_id": "1kumrq8YMaRZWbaf12HpWdCOo4F9itvjh",
     "folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
-    "library_path": "/Google Drive/Invest/Invest-Local-Acquisition-v0.1-20260927.zip",
+    "library_path": "/Google Drive/Invest/Invest-ChatGPT-Cloud-Research-v0.1-20260927.zip",
     "download_readback_verified": true
   },
-  "publication_action": "Keep Draft PR #8 and all prior PRs unmerged; no main write.",
+  "publication_action": "Keep Draft PR #9 and all prior stacked PRs unmerged; no main write.",
+  "public_cloud_research": "VERIFIED_TENCENT_SMOKE",
+  "eastmoney_first_attempt": "FAILED_AND_PRESERVED",
   "real_acquisition": "NOT_PERFORMED",
-  "real_data_and_license_review": "PENDING_USER_AUTHORIZED_ENVIRONMENT",
+  "real_data_and_license_review": "OPTIONAL_FORMAL_TRACK_STILL_PENDING",
   "next_actions": [
-    "Use the existing collector in the actual rights-holder environment to acquire a small authorized historical sample; credentials remain local and must not be requested in chat.",
-    "Review applicable license and original contents, apply the unchanged lineage checker, and obtain independent calendar, suspension, corporate-action and effective-date facts.",
-    "Only after evidence review design the separately versioned downstream provider/binding bridge. Capture success never opens holdout or authorizes execution.",
-    "Native conservative-policy adapters, independent signals, untouched holdout, genuine forward observation and actual user-device acceptance remain separate pending work."
+    "Use the verified ChatGPT cloud path for ordinary public research.",
+    "Create a separate explicit job for provider cross-checks; never silently fallback.",
+    "Use the formal ENG-04A/04B evidence track only when suitable rights and complete market facts are available.",
+    "Do not open frozen holdout or connect a broker from public-research results."
   ],
-  "previous_full_pending": "governance/checkpoints/pre_local_acquisition/governance__pending_sync.json",
-  "note": "Empty sync queue means source/artifact metadata synchronized, not real market or investment acceptance."
+  "note": "Empty sync queue means cloud source/evidence metadata is synchronized. It does not mean formal real-market, strategy or trading acceptance."
 }

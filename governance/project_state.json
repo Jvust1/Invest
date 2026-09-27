@@ -6,38 +6,61 @@
   "version": "0.2.0-rc2",
   "currency": "CNY",
   "security_status": "NO_PROJECT_SECURITY_GATE",
-  "delivery_branch": "feat/g1-g5-workbench-20260926",
+  "schema_version": 6,
+  "as_of": "2026-09-27T12:04:33+00:00",
+  "state_scope": "RC2_WITH_CHATGPT_CLOUD_PUBLIC_RESEARCH_AND_OPTIONAL_FORMAL_EVIDENCE_TOOLING",
+  "development_branch": "feat/chatgpt-cloud-research-20260927",
+  "development_pr": 9,
+  "latest_validated_desktop_code_head": "5075cf746019b7d107de603384c0cf02ce1ac02a",
+  "latest_validated_code_head": "f2ab93b6a23c57517d1348e4efe5dd8703386289",
+  "latest_checkpoint": "governance/assistant_cloud_result.json",
   "delivery_policy": {
-    "pr": 4,
-    "draft": true,
-    "base_branch": "feat/a-share-research-v0.1-20260922",
-    "base_sha": "869c320e1dedd32e064e425f6c115aced5487b40",
+    "rc2_pr": 4,
     "main_modified": false,
     "automatic_merge": false
   },
-  "validation": {
-    "local_tests": 259,
-    "windows_tests": 259,
-    "new_tests_vs_rc1": 24,
-    "browser_checks": 23,
-    "failures": 0,
-    "exact_source_ci_run": 36259089513,
-    "native_exe": "PASS",
-    "source_and_packaged_core_identity": "PASS",
-    "backup_cross_platform_replay": "PASS",
-    "user_device": "NOT_TESTED",
-    "independent_review": "NOT_CLAIMED"
+  "authority": {
+    "code": "live GitHub branch/commit",
+    "current_delivery": "governance/growth_delivery_result.json",
+    "current_research_extension": "governance/assistant_cloud_result.json",
+    "formal_data_tooling": "governance/market_acquisition_result.json",
+    "artifacts": "existing Drive Invest folder",
+    "chat_is_authoritative": false
   },
-  "drive_delivery": {
-    "file_name": "Invest-G1-G5-0.2.0-rc2-完整交付.zip",
-    "sha256": "67ee272c6439073f1a1ed757ec6ca986f385cafe1adaf314ab92290c475f00f4",
-    "bytes": 14984511,
-    "source_commit": "5075cf746019b7d107de603384c0cf02ce1ac02a",
-    "members": 36,
-    "drive_id": "1gzhcMhXqFCUChFW5nqBCTcFw0fawLEn7",
-    "drive_folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
-    "library_path": "/Google Drive/Invest/Invest-G1-G5-0.2.0-rc2-完整交付.zip",
-    "download_readback_verified": true
+  "assistant_cloud": {
+    "version": "v0.1",
+    "code_commit": "f2ab93b6a23c57517d1348e4efe5dd8703386289",
+    "test_run": 36315941217,
+    "tests_per_matrix_job": 491,
+    "successful_request_commit": "e093baa3265bae4d00239932c47def79be2a55b1",
+    "successful_run": 36316010850,
+    "successful_provider": "akshare_tencent",
+    "successful_symbol": "600000.SH",
+    "sessions": 39,
+    "public_research_only": true,
+    "silent_fallback": false,
+    "user_local_python_required": false,
+    "user_token_required": false,
+    "drive": {
+      "file_name": "Invest-ChatGPT-Cloud-Research-v0.1-20260927.zip",
+      "bytes": 8279,
+      "members": 6,
+      "sha256": "66a4a45b570a29bd95afa1bca35751d2d088b59a44b9483a441476a325b3d0ca",
+      "drive_id": "1kumrq8YMaRZWbaf12HpWdCOo4F9itvjh",
+      "folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
+      "library_path": "/Google Drive/Invest/Invest-ChatGPT-Cloud-Research-v0.1-20260927.zip",
+      "download_readback_verified": true
+    }
+  },
+  "research_governance": {
+    "all_empirical_gates_passed": false,
+    "frozen_holdout": "NOT_OPENED",
+    "forward_observation": "NOT_STARTED",
+    "broker_connected": false,
+    "real_user_license_verified": false,
+    "public_cloud_research_enabled": true,
+    "public_cloud_provider_runs": 2,
+    "public_cloud_successes": 1
   },
   "external_blockers": [
     "licensed_real_data_and_market_facts",
@@ -49,82 +72,19 @@
     "actual_user_windows_device",
     "real_repeated_use_value"
   ],
-  "latest_validated_desktop_code_head": "5075cf746019b7d107de603384c0cf02ce1ac02a",
-  "schema_version": 5,
-  "as_of": "2026-09-27T01:42:43.839219+00:00",
-  "state_scope": "RC2_WITH_OPTIONAL_LOCAL_ACQUISITION_AND_EVIDENCE_TOOLING",
-  "development_branch": "feat/local-data-acquisition-20260927",
-  "development_pr": 8,
-  "latest_validated_code_head": "6742f30d89e12d887ebe5c2d078527b9358f1970",
-  "latest_checkpoint": "governance/market_acquisition_result.json",
   "next_actions": [
-    "Use the existing collector in the actual rights-holder environment to acquire a small authorized historical sample; credentials remain local and must not be requested in chat.",
-    "Review applicable license and original contents, apply the unchanged lineage checker, and obtain independent calendar, suspension, corporate-action and effective-date facts.",
-    "Only after evidence review design the separately versioned downstream provider/binding bridge. Capture success never opens holdout or authorizes execution.",
-    "Native conservative-policy adapters, independent signals, untouched holdout, genuine forward observation and actual user-device acceptance remain separate pending work."
+    "Use the verified ChatGPT cloud path for ordinary public stock research; the user does not need local Python or tokens.",
+    "When cross-checking a provider, create a separate explicitly named job and retain failures instead of silently falling back.",
+    "Keep ENG-04A/04B as the separate formal-data evidence track if independently usable rights and complete market facts become available.",
+    "Independent signals, untouched holdout, genuine forward observation, native conservative adapters, independent review and user-device acceptance remain separate pending work."
   ],
-  "authority": {
-    "code": "live GitHub branch/commit",
-    "current_delivery": "governance/growth_delivery_result.json",
-    "current_research_extension": "governance/market_acquisition_result.json",
-    "artifacts": "existing Drive Invest folder",
-    "chat_is_authoritative": false
-  },
-  "research_governance": {
-    "all_empirical_gates_passed": false,
-    "frozen_holdout": "NOT_OPENED",
-    "forward_observation": "NOT_STARTED",
-    "broker_connected": false,
-    "authenticated_market_requests_this_delivery": 0,
-    "real_user_license_verified": false
-  },
-  "market_acquisition": {
-    "version": "local-acquisition-v0.1",
-    "source_commit": "6742f30d89e12d887ebe5c2d078527b9358f1970",
-    "ci_run": 36286072515,
-    "validation": {
-      "tests_per_os": 481,
-      "subtests_per_os": 334,
-      "new_tests": 44,
-      "failures": 0,
-      "synthetic_rehearsals_per_os": 5,
-      "windows_launcher_cancellation": "PASS",
-      "archived_incomplete_markers_per_os": 3,
-      "identical_cross_platform_summaries": [
-        "plan.json",
-        "rehearsal/SUMMARY.json"
-      ],
-      "source_archive_files": 193,
-      "new_locked_files": 7,
-      "prior_intake_locked_files": 10,
-      "prior_execution_locked_files": 37,
-      "new_browser_checks": 0,
-      "new_native_engine_run": false,
-      "authenticated_market_requests": 0,
-      "real_credentials_used": false,
-      "user_device_tested": false,
-      "real_access_independently_verified": false
-    },
-    "drive": {
-      "file_name": "Invest-Local-Acquisition-v0.1-20260927.zip",
-      "bytes": 1457142,
-      "sha256": "2bbc5799da33f26150ff0846c6922bc4369267702028976262087ccfcd3099de",
-      "members": 201,
-      "source_commit": "6742f30d89e12d887ebe5c2d078527b9358f1970",
-      "drive_id": "1lGGDtBLsI-3YwshXF5wL6bG9tGXfrCKT",
-      "folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
-      "library_path": "/Google Drive/Invest/Invest-Local-Acquisition-v0.1-20260927.zip",
-      "download_readback_verified": true
-    },
-    "live_acquisition_status": "NOT_PERFORMED"
-  },
   "component_result_paths": {
     "desktop": "governance/growth_delivery_result.json",
     "native_engine_lab": "governance/independent_engine_result.json",
     "execution_contract": "governance/execution_contract_result.json",
     "raw_evidence_intake": "governance/market_evidence_result.json",
-    "local_acquisition": "governance/market_acquisition_result.json"
+    "local_acquisition": "governance/market_acquisition_result.json",
+    "assistant_cloud": "governance/assistant_cloud_result.json"
   },
-  "previous_full_state": "governance/checkpoints/pre_local_acquisition/governance__project_state.json",
-  "state_format_note": "Schema v5 references unchanged component result receipts instead of duplicating their historical counts. Full previous state is preserved byte-for-byte; validation still describes the unchanged rc2 desktop."
+  "previous_full_state": "governance/checkpoints/pre_local_acquisition/governance__project_state.json"
 }
