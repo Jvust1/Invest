@@ -1,10 +1,20 @@
-# Invest · 当前开发：ENG-03 版本化成交合同 v0.2
+# Invest · 当前开发：ENG-04A 原始数据与证据核验
 
-当前源码附加组件在 Draft PR #6，`feat/execution-contract-20260927`。离线报告见 Drive 的 `Invest-Execution-Contract-v0.2-20260927.zip` 中 `reports/index.html`。它不是新 EXE，不替换下面原0.2.0-rc2桌面程序。
+当前源码扩展在 Draft PR #7 / `feat/market-evidence-20260927`，不替换以下0.2.0-rc2程序或旧执行实验室。使用说明见 `docs/REAL_DATA_INTAKE.md`，实际结果读 `governance/market_evidence_result.json` 和 `docs/CURRENT_STATE.md`。
+
+原Invest Drive目录新增 `Invest-Market-Evidence-v0.1-20260927.zip`；解压后打开 `reports/index.html`，无需Python或网络。完整源码包含四响应本机组包、逐字段来源/规范化对照、许可及事实声明核验。干净两平台各437测试、22人工案例、77浏览器检查通过。实际源码1c8250a9，CI36284039387。
+
+**没有取得真实行情或确认用户许可。** 示例全部人工构造，工具只检查字节/转换/声明，不授予交易、数据权利或留出开启。下一阶段需要实际有权使用的本地原始数据和独立审阅。新代码与旧EXE的身份分开保存；没有合并main。
+
+---
+
+## 保留的 ENG-03 版本化成交合同 v0.2
+
+上一阶段源码附加组件在 Draft PR #6，`feat/execution-contract-20260927`。离线报告见 Drive 的 `Invest-Execution-Contract-v0.2-20260927.zip` 中 `reports/index.html`。它不是新 EXE，不替换下面原0.2.0-rc2桌面程序。
 
 新增：共享成交量、部分/整笔成交政策、费用与价格精度合同、原生不支持显式拒绝、逐单容量报告。两平台370测试和110浏览器检查通过；99组合分为32原生一致、66原生不支持、1输入拒绝，不混记为全部一致。
 
-当前权威回执：`governance/execution_contract_result.json`；使用和边界：`docs/EXECUTION_CONTRACT_V2.md`；接续：`docs/HANDOFF.md`。旧v1差异和rc2程序保留，main未合并，真实数据/留出/前向/独立审阅仍待验收。
+ENG-03阶段回执：`governance/execution_contract_result.json`；使用和边界：`docs/EXECUTION_CONTRACT_V2.md`；接续：`docs/HANDOFF.md`。旧v1差异和rc2程序保留，main未合并，真实数据/留出/前向/独立审阅仍待验收。
 
 ---
 
@@ -12,9 +22,9 @@
 
 # Invest · 人民币研究与复盘工作台
 
-> 新增研究扩展：**独立RQAlpha执行实验室v0.1**（Draft PR #5，源码附加组件，不是新版EXE）。[当前状态](docs/CURRENT_STATE.md) · [直接复现](docs/ENGINE_LAB_GUIDE.md) · [六类实际分歧](docs/ENGINE_LAB_FINDINGS.md) · [精确交付回执](governance/independent_engine_result.json)。下文rc2程序信息继续有效；新的受限第二执行引擎已经实现，真实市场合同仍待验证。
+> 保留的研究扩展：**独立RQAlpha执行实验室v0.1**（Draft PR #5，源码附加组件，不是新版EXE）。[当前状态](docs/CURRENT_STATE.md) · [直接复现](docs/ENGINE_LAB_GUIDE.md) · [六类实际分歧](docs/ENGINE_LAB_FINDINGS.md) · [精确交付回执](governance/independent_engine_result.json)。下文rc2程序信息继续有效；新的受限第二执行引擎已经实现，真实市场合同仍待验证。
 
-当前版本 **0.2.0-rc2**。G1–G5 离线工程能力已经集成，Windows 候选程序已验证；**不表示全部真实成长门槛通过**。不连接券商、不自动下单、不承诺收益。
+桌面程序版本 **0.2.0-rc2**。G1–G5 离线工程能力已经集成，Windows 候选程序已验证；**不表示全部真实成长门槛通过**。不连接券商、不自动下单、不承诺收益。
 
 ## 启动
 

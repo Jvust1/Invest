@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "project": "Jvust/Invest",
-  "as_of": "2026-09-26T19:37:55.940871+00:00",
+  "as_of": "2026-09-27T01:03:31.389176+00:00",
   "artifact_type": "current_delivery_index",
   "current": {
     "file_name": "Invest-G1-G5-0.2.0-rc2-完整交付.zip",
@@ -54,17 +54,17 @@
   },
   "original_frozen_source_manifest": "governance/checkpoints/pre_growth_rc2/artifact_manifest.json",
   "current_research_extension": {
-    "file_name": "Invest-Execution-Contract-v0.2-20260927.zip",
-    "bytes": 3833634,
-    "sha256": "5e6411a77fa86f5bb3f3fbab801aa6c7e4192add2f48e62e3c54461fb6e9ea81",
-    "members": 297,
-    "source_commit": "a013549109a29fc183a3b653f09ab70f5a3b3c1a",
-    "drive_id": "1Yj4cPGe2sP5BxOWv-LzyKaCeDIjOK961",
+    "file_name": "Invest-Market-Evidence-v0.1-20260927.zip",
+    "bytes": 3019870,
+    "sha256": "187e4dfa20c592df5777503dddacf951fdc972a0d1fdb6cec1803d90eae512a7",
+    "members": 143,
+    "source_commit": "1c8250a9a89fc08c37abb021fd16f51c3fcf5725",
+    "drive_id": "1jKepJL6k9iKiQTRmD-psh0IpHHBb_ALa",
     "folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
-    "library_path": "/Google Drive/Invest/Invest-Execution-Contract-v0.2-20260927.zip",
+    "library_path": "/Google Drive/Invest/Invest-Market-Evidence-v0.1-20260927.zip",
     "download_readback_verified": true
   },
-  "research_extension_result": "governance/execution_contract_result.json",
+  "research_extension_result": "governance/market_evidence_result.json",
   "third_party_source_reused": {
     "repository": "ricequant/rqalpha",
     "commit": "0d98adefa87956e26f3e7ca5b26b5f3fc7ca834f",
@@ -86,5 +86,17 @@
     "download_readback_verified": true,
     "source_commit": "bfcb1ffbed99ff92089f098f4681c6e6594591d4",
     "members": 213
-  }
+  },
+  "previous_execution_contract_extension": {
+    "file_name": "Invest-Execution-Contract-v0.2-20260927.zip",
+    "bytes": 3833634,
+    "sha256": "5e6411a77fa86f5bb3f3fbab801aa6c7e4192add2f48e62e3c54461fb6e9ea81",
+    "members": 297,
+    "source_commit": "a013549109a29fc183a3b653f09ab70f5a3b3c1a",
+    "drive_id": "1Yj4cPGe2sP5BxOWv-LzyKaCeDIjOK961",
+    "folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
+    "library_path": "/Google Drive/Invest/Invest-Execution-Contract-v0.2-20260927.zip",
+    "download_readback_verified": true
+  },
+  "current_research_extension_type": "OFFLINE_SOURCE_TOOL_WITH_SYNTHETIC_EXAMPLES_NOT_REAL_MARKET_DATA"
 }

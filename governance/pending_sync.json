@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
-  "as_of": "2026-09-26T19:37:55.940871+00:00",
-  "phase": "ENG03_VERSIONED_CONTRACT_DELIVERY_RECONCILED",
+  "as_of": "2026-09-27T01:03:31.389176+00:00",
+  "phase": "ENG04A_SOURCE_REPORT_EVIDENCE_DELIVERY_RECONCILED",
   "pending_sync": [],
   "source_commit": "5075cf746019b7d107de603384c0cf02ce1ac02a",
   "drive_checkpoint": {
@@ -16,9 +16,9 @@
     "download_readback_verified": true
   },
   "current_state_reconciliation": "CLOSED_BY_THIS_METADATA_CHECKPOINT",
-  "publication_action": "Keep Draft PR #4, #5 and #6 open; no main merge.",
+  "publication_action": "Keep stacked Draft PRs #4, #5, #6 and #7 open; no main merge.",
   "unverified_growth_gates_are_not_sync_failures": true,
-  "next_safe_action": "ENG-04 licensed data and market facts; optional separately versioned conservative native adapter remains unsupported, not silently accepted.",
+  "next_safe_action": "ENG-04B: obtain genuinely authorized local four-endpoint responses and applicable license evidence; preserve original bytes and capture times. Do not request credentials in chat.",
   "engine_lab_drive_checkpoint": {
     "drive_id": "1_hgS5-VBSEfRiis4Yv2h4UkX0B_3o9qr",
     "folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
@@ -39,6 +39,17 @@
     "drive_id": "1Yj4cPGe2sP5BxOWv-LzyKaCeDIjOK961",
     "folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
     "library_path": "/Google Drive/Invest/Invest-Execution-Contract-v0.2-20260927.zip",
+    "download_readback_verified": true
+  },
+  "market_evidence_drive_checkpoint": {
+    "file_name": "Invest-Market-Evidence-v0.1-20260927.zip",
+    "bytes": 3019870,
+    "sha256": "187e4dfa20c592df5777503dddacf951fdc972a0d1fdb6cec1803d90eae512a7",
+    "members": 143,
+    "source_commit": "1c8250a9a89fc08c37abb021fd16f51c3fcf5725",
+    "drive_id": "1jKepJL6k9iKiQTRmD-psh0IpHHBb_ALa",
+    "folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
+    "library_path": "/Google Drive/Invest/Invest-Market-Evidence-v0.1-20260927.zip",
     "download_readback_verified": true
   }
 }
