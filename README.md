@@ -1,11 +1,30 @@
-# Invest · 人民币研究与复盘
+# Invest · ChatGPT 云端投研工作台
 
-当前新增：**本机授权采集入口 v0.1**。它连接“范围预览 → 本机权限确认与隐藏凭据 → 四接口原始保存 → 自动离线核验”。已验证软件，不代表已经取得真实数据或许可。原 Windows 0.2.0-rc2 EXE 与账本未替换。
+**默认使用方式：直接在 ChatGPT 里调用 Invest。**
 
-从原 Drive Invest 文件夹取得 `Invest-Local-Acquisition-v0.1-20260927.zip`，完整解压后进入 `source`，双击 `Collect-Market-Data-Windows.cmd`。需要已有 Python 3.11+ 和适用供应商权限；Token 只在本机隐藏输入，不发聊天、不写命令参数。没有权限时仍可使用原工作台，不编造材料。
+你可以直接说：
+- “用 Invest 看 600000.SH 最近三个月。”
+- “把 000001.SZ 最近一年做一份研究报告。”
+- “换另一个公开数据源交叉核对。”
+- “继续分析上次那个标的。”
 
-命令入口：`python tools/collect_market_data.py wizard`。只预览用 `plan`，不会访问凭据或网络。说明见 [采集操作](docs/MARKET_DATA_COLLECTION.md)。
+ChatGPT 会在 Invest 的非 main 分支建立唯一任务，GitHub Actions 云端执行，结果进入短期 artifact，再由 ChatGPT 读取、解释并按需归档 Drive。普通公开研究**不需要你本机 Python、CMD 或数据 Token**。
 
-两平台各481项测试、334子测试及5种人工采集链路通过；Windows向导取消通过。真正有凭据接口、本机网络和用户设备尚未验证。采集或映射成功不自动授权回测、交易、分享或留出开启。
+当前云端公开研究固定 AKShare 1.18.97。数据源必须显式声明；首次 Eastmoney 路径因远端断连失败并保留证据，第二个独立 Tencent 任务成功。详情见 [ChatGPT 云端模式](docs/CHATGPT_CLOUD_MODE.md)。
 
-最新权威入口：[当前状态](docs/CURRENT_STATE.md)、[采集交付回执](governance/market_acquisition_result.json)、[接续](docs/HANDOFF.md)。源码扩展保留在 Draft PR #8，未合并 main。旧桌面、双引擎、成交合同和原始证据工具各自的交付回执继续保留。
+## 已验证
+
+- 云端运行代码：`f2ab93b6a23c57517d1348e4efe5dd8703386289`
+- Windows/Linux × Python 3.11/3.12：每组 491 tests，全部通过
+- 首次成功任务：`600000.SH`，2026-08-01～2026-09-25
+- 成功接口：AKShare `stock_zh_a_hist_tx`
+- 实际得到 39 个交易日并生成 JSON、CSV 和中文 Markdown 报告
+- Draft PR #9，未合并 main
+
+## 边界
+
+云端公开模式统一标记 `PUBLIC_RESEARCH_ONLY`。它适合行情复盘、收益/回撤/波动/均线等描述性研究，但不是独立许可审阅后的执行级行情，不会自动进入正式成交合同、evaluation binding、frozen holdout、券商或下单链，也不会自动给出买卖结论。
+
+如果未来取得明确的数据权利和完整市场事实，原 ENG-04A/04B 正式证据链继续使用；本机采集工具不删除，但不再是普通 ChatGPT 投研的前置要求。
+
+权威入口：[当前状态](docs/CURRENT_STATE.md)、[云端交付回执](governance/assistant_cloud_result.json)、[接续](docs/HANDOFF.md)。

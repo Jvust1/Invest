@@ -1,19 +1,25 @@
 # AGENTS.md — Invest
 
-GitHub is authoritative for code, current state and decisions; chat is not. Repository `Jvust/Invest`, stable ID `1381007406`. Artifacts use the existing Drive Invest folder `15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u`. No active repository SECURITY_POLICY baseline, retired Drive safety dependency or READ_ONLY_LOCKED fallback; do not restore obsolete gates.
+GitHub is authoritative for code, current state and decisions; chat is not. Repository `Jvust/Invest`, stable ID `1381007406`. Long-lived artifacts use Drive folder `15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u`. No active repository SECURITY_POLICY baseline or retired Drive safety fallback.
 
 ## Restore current work
 
-Read `governance/project_state.json`, `governance/market_acquisition_result.json`, `docs/CURRENT_STATE.md`, `docs/HANDOFF.md`, `governance/artifact_manifest.json` and `governance/pending_sync.json`; verify live refs/PR/CI before writes. Current branch is `feat/local-data-acquisition-20260927`, stacked Draft PR #8 over PR #7. Exact tested source `6742f30d89e12d887ebe5c2d078527b9358f1970`, CI `36286072515`. Later metadata-only commits are not new execution evidence.
+Read `governance/project_state.json`, `governance/assistant_cloud_result.json`, `docs/CURRENT_STATE.md`, `docs/HANDOFF.md`, `governance/artifact_manifest.json`, `governance/pending_sync.json`; then verify live branch/PR/CI.
 
-Local acquisition v0.1 is optional SOURCE tooling, not a new EXE. Both OS passed 481 tests, 334 subtests and five artificial-transport rehearsals; Windows launcher cancellation passed. Three incomplete markers per OS are verified in final archives. No authenticated market acquisition, real user credential use, license verification or actual user-device test occurred. Do not claim ENG-04B real-data acceptance from these tests.
+Current development is `feat/chatgpt-cloud-research-20260927`, Draft PR #9 over PR #8. Exact cloud-runtime code is `f2ab93b6a23c57517d1348e4efe5dd8703386289`; CI run `36315941217` passed 491 tests on Windows/Linux × Python 3.11/3.12. First successful public-research request is `e093baa3265bae4d00239932c47def79be2a55b1`, run `36316010850`.
 
-Only explicit collect/wizard consent can invoke the fixed HTTPS collector on the user's authorized local machine. Plan/import never read credentials or issue requests. Never solicit tokens in chat or upload real capture directories without examining rights/privacy scope. Preserve incomplete and failed batches; no silent retries, source substitution or overwrite. Unchanged intake leaves license review and execution market facts unverified even after mapping success.
+## Default interaction
 
-## Preserve earlier components
+For ordinary public research, keep the user in ChatGPT. Do not send them back to local Python/CMD merely to use Invest. ChatGPT creates one request under `assistant_jobs/requests/`, GitHub Actions runs it, ChatGPT reads the artifact and explains it.
 
-Original rc2 EXE source remains `5075cf746019b7d107de603384c0cf02ce1ac02a`. Historical desktop, native RQAlpha, versioned execution and raw-intake evidence remain in their separate `*_result.json` receipts. Do not reuse their browser/native counts as new tests. Original runtime, worker, results and user data were not replaced. Schema v5 current state references historical receipts; complete prior metadata is retained under `governance/checkpoints/pre_local_acquisition`.
+Provider selection is explicit. A failed provider run is retained; switching source requires a new job. Never silently fallback. The first Eastmoney cloud attempt failed and remains archived; the separately declared Tencent job succeeded.
 
-No broker orders, automatic holdout opening, main modification or PR merge without separate explicit user instruction. Archive changed artifacts only and verify download readback. No credentials, private ledgers, font files or redundant upstream source bundles in deliveries.
+All assistant-cloud output is `PUBLIC_RESEARCH_ONLY`: descriptive research, not independently licensed execution data. It must not create a real evaluation binding, open frozen holdout, connect a broker, place orders or automatically issue buy/sell recommendations.
 
-Next priority is actual rights-holder local acquisition and independent evidence review; do not repeat building another synthetic-only intake collector. Native conservative adapters and independent signal/holdout/forward work remain separate pending tasks.
+## Formal evidence track remains separate
+
+ENG-04A/04B raw-evidence and local-acquisition tooling remains archived for a future formally source-bound/licensed execution-data track. No user token should be requested in chat. Public cloud research does not satisfy license, suspension, corporate-action or effective-date market-rule gates.
+
+Original rc2 EXE source remains `5075cf746019b7d107de603384c0cf02ce1ac02a`. Native RQAlpha, execution-contract, raw-evidence and local-acquisition receipts remain separate. Do not reuse their counts as current tests or overwrite historical outputs.
+
+No broker orders, automatic holdout opening, main modification or PR merge without separate explicit user instruction. No credentials, private ledgers, font files or redundant upstream bundles in deliveries.
