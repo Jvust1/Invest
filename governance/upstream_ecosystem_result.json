@@ -1,0 +1,54 @@
+{
+  "schema": "invest-upstream-ecosystem-v1",
+  "as_of": "2026-09-27",
+  "repository": "Jvust/Invest",
+  "branch": "feat/chatgpt-cloud-research-20260927",
+  "status": "CURATED_REGISTRY_AND_ROUTING_ADDED",
+  "project_count": 33,
+  "capabilities": {
+    "china_data_and_quotes": 6,
+    "independent_backtest_and_architecture": 10,
+    "portfolio_and_allocation": 5,
+    "risk_and_performance": 4,
+    "factor_ml_automation": 4,
+    "news_sentiment": 2,
+    "calendars_indicators": 4
+  },
+  "priority_integrations": [
+    "PyPortfolio/PyPortfolioOpt",
+    "dcajasn/Riskfolio-Lib",
+    "skfolio/skfolio",
+    "gerrymanoim/exchange_calendars",
+    "rsheftel/pandas_market_calendars",
+    "ranaroussi/quantstats",
+    "stefan-jansen/empyrical-reloaded",
+    "fasiondog/hikyuu",
+    "stefan-jansen/zipline-reloaded",
+    "microsoft/qlib"
+  ],
+  "policy": {
+    "vendor_third_party_source_by_default": false,
+    "permissive_adapter_licenses": [
+      "MIT",
+      "Apache-2.0",
+      "BSD-2-Clause",
+      "BSD-3-Clause"
+    ],
+    "copyleft_or_unconfirmed_license": "REFERENCE_ONLY_UNTIL_SEPARATE_REVIEW",
+    "market_data_rights_are_separate": true,
+    "broker_connection_added": false,
+    "automatic_ordering_added": false
+  },
+  "files": [
+    "invest/upstream_registry.json",
+    "invest/upstreams.py",
+    "tests/test_upstreams.py",
+    "docs/OPEN_SOURCE_ECOSYSTEM.md"
+  ],
+  "next_actions": [
+    "Implement P0 allocation adapters and discrete CNY allocation layer.",
+    "Add dual calendar and dual performance-metric cross-checks.",
+    "Add Hikyuu/Zipline/bt independent portfolio validation.",
+    "Add Qlib/Alphalens research adapters after P0 executable-allocation work."
+  ]
+}
