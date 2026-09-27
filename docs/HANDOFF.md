@@ -1,13 +1,26 @@
-# Invest 接续：本机采集入口之后
+# Invest 接续：ChatGPT 云端研究模式
 
-先读AGENTS、project_state、market_acquisition_result、CURRENT_STATE、artifact_manifest、pending_sync，再核实live分支/PR/CI。当前 `Jvust/Invest` ID1381007406，Drive沿用 `15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u`。
+先读 AGENTS、project_state、assistant_cloud_result、CURRENT_STATE、artifact_manifest、pending_sync，并核实 live PR/CI。当前仓库 `Jvust/Invest`，开发分支 `feat/chatgpt-cloud-research-20260927` / Draft PR #9，基于 PR #8。
 
-当前分支 `feat/local-data-acquisition-20260927` / Draft PR #8，基于PR #7。执行源码6742f30d、CI36286072515；后续治理提交不是新运行。原rc2 EXE仍是5075cf74，不因源码工具而自动更新。
+## 默认操作
 
-已交付的采集器、向导、四接口原始保存、固定错误码、失败标记及自动核验不需要重做。两平台481测试/334子测试/5人工链路与Windows取消通过；实际有凭据采集未做。完整源码和原始CI证据在Drive新包，回执有精确哈希与下载回读。
+当用户说“用 Invest 分析某只股票”时，优先使用 ChatGPT 云端公开研究模式，不要求用户本地运行采集器：
 
-**下一动作需要真实材料：** 由实际持权用户在本机运行 `Collect-Market-Data-Windows.cmd` 或 `python tools/collect_market_data.py wizard`。不在聊天索取Token，不假造访问证明。核实样本范围和各接口权限，失败保留原批次，重试新建目录。当前直连HTTPS不使用代理环境变量；不暗中改系统代理/证书或回退明文。
+1. 验证请求属于当前支持证券和日期范围；
+2. 明确选择 provider；
+3. 在 `assistant_jobs/requests/` 创建唯一 JSON；
+4. 等待 `Invest assistant cloud research` workflow；
+5. 获取 artifact，核对 `result.json` 或 `failure.json`；
+6. 由 ChatGPT 解释结果；需要长期保存时按 Drive 去重规则归档。
 
-随后审阅适用许可、同源对应、日历、停复牌、公司行动、历史有效规则，再单独设计下游provider/binding桥接。当前工具永不以采集成功代替执行授权或未见样本开启。无法取得材料时保持真实数据待办，不通过增加人工测试宣称完成。
+当前已验证 provider：`akshare_tencent`。Eastmoney 首次云端尝试失败证据保留。换源必须创建新 job，不静默 fallback。
 
-旧源码/包/结果不覆盖，主分支和PR合并仍需明确指令。原生保守策略适配、独立信号、留出和持续前向是独立任务，不借旧验证计数。上版完整治理在 `governance/checkpoints/pre_local_acquisition`；各组件详细结果继续看其历史回执。
+运行代码 `f2ab93b6a23c57517d1348e4efe5dd8703386289`；四矩阵测试 run `36315941217` 每组 491 tests 全绿。成功 smoke request commit `e093baa3265bae4d00239932c47def79be2a55b1` / run `36316010850`。
+
+Drive 云端模式证据包：`Invest-ChatGPT-Cloud-Research-v0.1-20260927.zip`，ID `1kumrq8YMaRZWbaf12HpWdCOo4F9itvjh`，SHA256 `66a4a45b570a29bd95afa1bca35751d2d088b59a44b9483a441476a325b3d0ca`，已回读验证。
+
+## 不要混淆
+
+公开云端研究不等于正式授权行情。不得据此创建正式 evaluation binding、打开 holdout、连接券商或下单。ENG-04A/04B 的本地/许可证据工具仍保留，但仅在未来需要正式 execution-data 证据时使用；不要再把它当普通用户使用 Invest 的前置步骤。
+
+原 rc2、RQAlpha、成交合同和历史成果保持不变；main 与所有 PR 未自动合并。
