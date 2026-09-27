@@ -1,0 +1,89 @@
+name: Invest raw market evidence intake
+on:
+  push:
+    branches: [feat/market-evidence-20260927]
+    paths:
+      - 'integrations/market_evidence/**'
+      - 'tools/market_evidence*.py'
+      - 'tests/test_market_evidence.py'
+      - 'docs/REAL_DATA_INTAKE.md'
+      - 'governance/market_evidence_source_identity.json'
+      - '.github/workflows/market-evidence.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: market-evidence-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    env:
+      PYTHONUTF8: '1'
+      PYTHONIOENCODING: utf-8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Core regression and exact-source verification
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p evidence
+          python tools/verify_execution_contract_source.py
+          python - <<'PY'
+          import hashlib,json,pathlib
+          manifest=json.loads(pathlib.Path('governance/market_evidence_source_identity.json').read_text(encoding='utf-8'))
+          for name,expected in manifest['files'].items():
+              actual=hashlib.sha256(pathlib.Path(name).read_text(encoding='utf-8').encode('utf-8')).hexdigest()
+              assert actual==expected,name
+          print('Intake source identity: PASS',len(manifest['files']))
+          PY
+          python -m unittest discover -s tests -v > evidence/unittest.txt 2>&1
+          python -m compileall -q invest integrations tools tests
+          git rev-parse HEAD > evidence/SOURCE_COMMIT.txt
+          git archive --format=zip -o evidence/Invest-Market-Evidence-Source.zip HEAD
+      - name: Generate synthetic raw-evidence examples
+        shell: bash
+        run: |
+          set -euo pipefail
+          python tools/market_evidence_suite.py --output evidence/intake
+      - name: Install browser verification dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install pytest playwright
+          python -m pip check
+          python -m pip freeze > evidence/dependencies.txt
+          python -m playwright install chromium
+      - name: Linux browser display dependencies
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m playwright install-deps chromium
+          sudo apt-get update -qq
+          sudo apt-get install -y fonts-noto-cjk
+      - name: Full tests and real file navigation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pytest -q --junitxml=evidence/pytest.xml > evidence/pytest.txt 2>&1
+          python tools/market_evidence_browser.py --reports evidence/intake/reports --output evidence/browser
+          git diff --exit-code
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Invest-Market-Evidence-${{ matrix.os }}-${{ github.sha }}
+          path: evidence/
+          if-no-files-found: error
+          retention-days: 7
