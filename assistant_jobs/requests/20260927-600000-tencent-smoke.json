@@ -1,0 +1,9 @@
+{
+  "schema": "invest-assistant-job-v1",
+  "job_id": "20260927-600000-tencent-smoke",
+  "operation": "public_stock_research",
+  "symbol": "600000.SH",
+  "start_date": "2026-08-01",
+  "end_date": "2026-09-25",
+  "provider": "akshare_tencent"
+}
