@@ -6,7 +6,7 @@
     "integrations/market_evidence/acquisition.py": "cc54731a4b071d313ffc4a6c9d622e0bc291e02500e053933cb068c5fd6ff7f0",
     "tools/collect_market_data.py": "4c11dbf7fad13d990fb6c377e544f14a11bd16223ab158daac73cb5cb8135558",
     "tools/market_acquisition_rehearsal.py": "6fd3db80c171d548994e28308f1aa46ca6ae2ea04514feddd1af5a283cc3758f",
-    "tests/test_market_acquisition.py": "464c03402a41b5a801ac66c90d6905230386d8b5e23fb9690067aa5ccee4ae70",
+    "tests/test_market_acquisition.py": "b843d3080619e793cdc93dbe7679f904ea8360248eb6f236293db3cbaf7d2372",
     "Collect-Market-Data-Windows.cmd": "e09dfb2fce80cdc1afa828152ab46a117c9509ec705d99e8f92fec9ce1d3c979",
     "docs/MARKET_DATA_COLLECTION.md": "7326f42efc58f4b9a6a014ca0ff40e35a87f6ec968ba14a216e6c286e6103f0b",
     ".github/workflows/market-acquisition.yml": "761e5ea822d4e8dec1e47ac074af3b2fd92d43edd0702cf0b1ab4845b567ae8f"

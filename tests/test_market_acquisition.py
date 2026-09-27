@@ -352,7 +352,7 @@ class AcquisitionTests(unittest.TestCase):
 
     def test_import_has_no_network_and_no_prompt(self):
         root=Path(__file__).resolve().parents[1]
-        script="import socket,getpass; socket.socket=lambda *a,**k: (_ for _ in ()).throw(AssertionError('network')); getpass.getpass=lambda *a,**k: (_ for _ in ()).throw(AssertionError('prompt')); import integrations.market_evidence.acquisition; import tools.collect_market_data"
+        script="import ssl,socket,getpass; socket.socket=lambda *a,**k: (_ for _ in ()).throw(AssertionError('network')); getpass.getpass=lambda *a,**k: (_ for _ in ()).throw(AssertionError('prompt')); import integrations.market_evidence.acquisition; import tools.collect_market_data"
         r=subprocess.run([sys.executable,'-c',script],cwd=root,capture_output=True,text=True)
         self.assertEqual(r.returncode,0,r.stderr)
 
