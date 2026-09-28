@@ -2,7 +2,7 @@
   "schema": "invest-upstream-ecosystem-v1",
   "as_of": "2026-09-28T04:06:47.384Z",
   "repository": "Jvust/Invest",
-  "branch": "docs/invest-progress-sync-20260928",
+  "branch": "feat/500cny-dual-calendar-20260928",
   "status": "P0_AMOUNT_SIZING_OPTIMIZERS_AND_DUAL_CALENDAR_VERIFIED",
   "project_count": 33,
   "validated_head": "c29dbd0b1cdb0bdc6247ffb6b4ab1f1406840cde",
@@ -81,5 +81,7 @@
     "dual_risk_performance_metrics": "PENDING",
     "independent_engine_validation": "PENDING",
     "licensed_real_market_evidence": "PENDING"
-  }
+  },
+  "status_sync_branch": "docs/invest-progress-sync-20260928",
+  "status_sync_pr": 14
 }
