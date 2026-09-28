@@ -30,6 +30,8 @@
     "base_pr": 13,
     "drive_document_id": "1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk",
     "drive_revision_id": "ANLCKQl-h5kKwDhARTo7heeunZBGDEgy66fflrcVh-IxLFyznGOPFTrmTNaKCQyoVuPBzrdZZ6uSefcpTWgZDjJN-WAXgbjFvBUwjHTuKAA",
-    "readback_pending": true
+    "readback_pending": false,
+    "pr_number": 14,
+    "drive_readback_verified": true
   }
 }
