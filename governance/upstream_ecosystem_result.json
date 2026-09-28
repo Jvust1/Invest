@@ -1,10 +1,18 @@
 {
   "schema": "invest-upstream-ecosystem-v1",
-  "as_of": "2026-09-27",
+  "as_of": "2026-09-28T01:47:25+00:00",
   "repository": "Jvust/Invest",
   "branch": "feat/chatgpt-cloud-research-20260927",
-  "status": "CURATED_REGISTRY_AND_ROUTING_ADDED",
+  "status": "VERIFIED_REGISTRY_ROUTING_AND_DRIVE_CHECKPOINT",
   "project_count": 33,
+  "validated_head": "5f6865b47967448651525cb992249003e2654721",
+  "validation_run": 36327856647,
+  "validation_matrix": [
+    "ubuntu-latest/python-3.11",
+    "ubuntu-latest/python-3.12",
+    "windows-latest/python-3.11",
+    "windows-latest/python-3.12"
+  ],
   "capabilities": {
     "china_data_and_quotes": 6,
     "independent_backtest_and_architecture": 10,
@@ -43,8 +51,17 @@
     "invest/upstream_registry.json",
     "invest/upstreams.py",
     "tests/test_upstreams.py",
-    "docs/OPEN_SOURCE_ECOSYSTEM.md"
+    "docs/OPEN_SOURCE_ECOSYSTEM.md",
+    "docs/PROJECT_NORTH_STAR.md"
   ],
+  "drive": {
+    "title": "Invest-500CNY-OpenSource-Ecosystem-Checkpoint-20260928",
+    "drive_id": "1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk",
+    "folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
+    "drive_url": "https://docs.google.com/document/d/1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk/edit?usp=drivesdk",
+    "content_readback_verified": true,
+    "third_party_source_included": false
+  },
   "next_actions": [
     "Implement P0 allocation adapters and discrete CNY allocation layer.",
     "Add dual calendar and dual performance-metric cross-checks.",
