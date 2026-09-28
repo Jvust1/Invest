@@ -79,6 +79,9 @@
     ],
     "new_release_binary_created": false,
     "main_modified": false,
-    "third_party_source_reuploaded": false
+    "third_party_source_reuploaded": false,
+    "drive_readback_verified": true,
+    "status_sync_pr": 14,
+    "status_sync_head": "see live Draft PR #14"
   }
 }
