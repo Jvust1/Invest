@@ -14,6 +14,7 @@ market = ["akshare==1.18.97"]
 optimization = ["pyportfolioopt==1.6.0", "packaging==25.0"]
 optimization-riskfolio = ["riskfolio-lib==7.3.0"]
 optimization-skfolio = ["skfolio==1.4.2"]
+calendars = ["exchange_calendars==4.13.2", "pandas_market_calendars==5.4.0"]
 optimization-all = ["pyportfolioopt==1.6.0", "packaging==25.0", "riskfolio-lib==7.3.0", "skfolio==1.4.2"]
 
 [project.scripts]
