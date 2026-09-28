@@ -1,6 +1,5 @@
 """Input integrity and disagreement tests independent of optional backends."""
 from datetime import date, timedelta
-import math
 import unittest
 from unittest.mock import patch
 
@@ -20,7 +19,7 @@ def fixture(constant=False):
                               for i, d in enumerate(days)]}
 
 
-def fake_metrics(series, sharpe_defined):
+def fake_metrics(days, values, sharpe_defined):
     return {"version": "test", "metrics": {"annual_volatility": 0.15,
             "max_drawdown": -0.04, "sharpe_zero_rf": 0.4 if sharpe_defined else None}}
 
@@ -36,8 +35,8 @@ class RiskMetricsContractTests(unittest.TestCase):
         self.assertEqual(result["assumptions"]["periods_per_year"], 252)
         self.assertEqual(result["data_scope"], "PUBLIC_RESEARCH_ONLY")
         self.assertEqual(len(result["history_sha256"]), 64)
-        self.assertEqual(empyrical.call_args.args[0].index.tolist(),
-                         quantstats.call_args.args[0].index.tolist())
+        self.assertEqual(empyrical.call_args.args[0], quantstats.call_args.args[0])
+        self.assertEqual(empyrical.call_args.args[1], quantstats.call_args.args[1])
 
     @patch("invest.risk_metrics._from_quantstats", side_effect=fake_metrics)
     @patch("invest.risk_metrics._from_empyrical")
@@ -57,7 +56,7 @@ class RiskMetricsContractTests(unittest.TestCase):
         self.assertEqual(result["comparison_status"], "PARTIAL_UNDEFINED")
         self.assertEqual(result["comparison"]["sharpe_zero_rf"]["status"], "UNDEFINED")
         self.assertIsNone(result["backends"]["quantstats"]["metrics"]["sharpe_zero_rf"])
-        self.assertFalse(quantstats.call_args.args[1])
+        self.assertFalse(quantstats.call_args.args[2])
 
     def test_rejects_future_leak_duplicates_scope_and_nonfinite_values(self):
         for change in (lambda h: h["daily_returns"].append(h["daily_returns"][-1].copy()),
