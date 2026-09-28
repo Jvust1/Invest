@@ -126,13 +126,15 @@ def _run_bt(days, prices, cash, trades):
                       integer_positions=True, progress_bar=False)
     run.run()
     replay = run.strategy
-    positions = replay.positions
+    # Read each security directly: bt 1.2.3's aggregate positions property
+    # uses chained assignment under pandas 3 Copy-on-Write.
+    positions = {s: replay[s].positions for s in symbols}
     # Select only supplied observations; bt prepends a bootstrap date that is
     # not an actual market observation and must not appear in our output.
     curve = [{"date": day, "cash_cny": float(replay.cash.loc[stamp]),
               "equity_cny": float(replay.values.loc[stamp]),
               "fees_cny": float(replay.fees.loc[stamp]),
-              "positions": {s: float(positions.loc[stamp, s]) for s in symbols}}
+              "positions": {s: float(positions[s].loc[stamp]) for s in symbols}}
              for day, stamp in zip(days, frame.index)]
     return {"version": version("bt"), "curve": curve}
 
