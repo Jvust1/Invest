@@ -6,19 +6,20 @@
   "version": "0.2.0-rc2",
   "currency": "CNY",
   "security_status": "NO_PROJECT_SECURITY_GATE",
-  "schema_version": 8,
-  "as_of": "2026-09-28T01:47:25+00:00",
-  "state_scope": "RC2_WITH_CHATGPT_CLOUD_PUBLIC_RESEARCH_CURATED_OPEN_SOURCE_ECOSYSTEM_AND_500CNY_NORTH_STAR",
-  "development_branch": "feat/chatgpt-cloud-research-20260927",
-  "development_pr": 9,
+  "schema_version": 9,
+  "as_of": "2026-09-28T04:06:47.384Z",
+  "state_scope": "DRAFT_STACK_9_TO_13_AMOUNT_SIZING_OPTIMIZER_AND_CALENDAR_VALIDATED",
+  "development_branch": "docs/invest-progress-sync-20260928",
+  "development_pr": 14,
   "latest_validated_desktop_code_head": "5075cf746019b7d107de603384c0cf02ce1ac02a",
   "latest_validated_code_head": "5f6865b47967448651525cb992249003e2654721",
-  "latest_validation_run": 36327856647,
-  "latest_checkpoint": "governance/upstream_ecosystem_result.json",
+  "latest_validation_run": 36375284697,
+  "latest_checkpoint": "governance/checkpoints/20260928_allocation_calendar_progress.json",
   "delivery_policy": {
     "rc2_pr": 4,
     "main_modified": false,
-    "automatic_merge": false
+    "automatic_merge": false,
+    "all_prs_draft": true
   },
   "authority": {
     "code": "live GitHub branch/commit",
@@ -130,13 +131,10 @@
     "real_repeated_use_value"
   ],
   "next_actions": [
-    "Implement PyPortfolioOpt, Riskfolio-Lib and skfolio adapters for candidate allocation generation.",
-    "Add discrete CNY sizing with lot-size, commission, tax, liquidity and residual-cash constraints for the 500 CNY goal.",
-    "Add dual calendar and dual risk/performance cross-checks.",
-    "Add Hikyuu, Zipline-reloaded and bt as independent validation paths before using model-derived allocations.",
-    "Add Qlib/Alphalens factor research after executable-allocation constraints are complete.",
-    "Keep public cloud provider changes explicit and retain failures; never silently fallback.",
-    "Keep ENG-04A/04B separate for formal licensed execution-data evidence."
+    "Implement QuantStats and Empyrical risk/performance cross-checks with explicit metric/input contracts.",
+    "Evaluate Hikyuu, Zipline-reloaded and bt as independent validation paths; document supported environments and data limitations.",
+    "Only proceed to real-market evidence after licensed data and provenance are available; retain security status, corporate actions and rule effective dates.",
+    "Keep frozen holdout closed until a valid evaluation binding is reviewed; forward observation and independent review remain pending."
   ],
   "component_result_paths": {
     "desktop": "governance/growth_delivery_result.json",
@@ -147,5 +145,65 @@
     "assistant_cloud": "governance/assistant_cloud_result.json",
     "upstream_ecosystem": "governance/upstream_ecosystem_result.json"
   },
-  "previous_full_state": "governance/checkpoints/pre_local_acquisition/governance__project_state.json"
+  "previous_full_state": "governance/checkpoints/pre_local_acquisition/governance__project_state.json",
+  "latest_code_head": "c29dbd0b1cdb0bdc6247ffb6b4ab1f1406840cde",
+  "stacked_draft_prs": [
+    {
+      "number": 9,
+      "branch": "feat/chatgpt-cloud-research-20260927",
+      "head": "f9c50b595567436f913767430157738c2f496c35",
+      "status": "OPEN_DRAFT_UNMERGED",
+      "purpose": "ChatGPT public research"
+    },
+    {
+      "number": 10,
+      "branch": "feat/500cny-allocation-scenario-20260928",
+      "head": "d732a1b3efe46086903886ab7f2398e0f308bab7",
+      "status": "OPEN_DRAFT_UNMERGED",
+      "purpose": "discrete amount sizing"
+    },
+    {
+      "number": 11,
+      "branch": "feat/500cny-pypfopt-bridge-20260928",
+      "head": "dab5f6f4ff3b86cbf405517c787166b4a975418c",
+      "status": "OPEN_DRAFT_UNMERGED",
+      "purpose": "PyPortfolioOpt adapter"
+    },
+    {
+      "number": 12,
+      "branch": "feat/500cny-optimizer-crosscheck-20260928",
+      "head": "21d76f9a0fe889e4a0ce38ae6042a3947450c47b",
+      "status": "OPEN_DRAFT_UNMERGED",
+      "purpose": "Riskfolio and skfolio crosscheck"
+    },
+    {
+      "number": 13,
+      "branch": "feat/500cny-dual-calendar-20260928",
+      "head": "c29dbd0b1cdb0bdc6247ffb6b4ab1f1406840cde",
+      "status": "OPEN_DRAFT_UNMERGED",
+      "purpose": "dual Shanghai calendar"
+    }
+  ],
+  "completed_amount_level_work": [
+    {
+      "item": "discrete sizing with lot, fees, liquidity and residual cash",
+      "pr": 10,
+      "verification": "main matrix passed at PR #13 head"
+    },
+    {
+      "item": "PyPortfolioOpt minimum variance adapter",
+      "pr": 11,
+      "verification": "run 36375284652 passed"
+    },
+    {
+      "item": "Riskfolio-Lib and skfolio crosscheck",
+      "pr": 12,
+      "verification": "run 36375284617 all 3 jobs passed"
+    },
+    {
+      "item": "XSHG/SSE calendar comparison",
+      "pr": 13,
+      "verification": "run 36375284696 passed; main matrix 36375284697 passed"
+    }
+  ]
 }
