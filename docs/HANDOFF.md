@@ -1,26 +1,31 @@
-# Invest 接续：ChatGPT 云端研究模式
+# Invest 接续：500 元决策终态 + ChatGPT 云端研究 + 开源生态
 
-先读 AGENTS、project_state、assistant_cloud_result、CURRENT_STATE、artifact_manifest、pending_sync，并核实 live PR/CI。当前仓库 `Jvust/Invest`，开发分支 `feat/chatgpt-cloud-research-20260927` / Draft PR #9，基于 PR #8。
+先读 `AGENTS.md`、`governance/project_state.json`、`governance/assistant_cloud_result.json`、`governance/upstream_ecosystem_result.json`、`docs/CURRENT_STATE.md`、`docs/PROJECT_NORTH_STAR.md`、`docs/OPEN_SOURCE_ECOSYSTEM.md`、`governance/artifact_manifest.json`、`governance/pending_sync.json`，然后核实 live PR/CI。
 
-## 默认操作
+当前仓库 `Jvust/Invest`，开发分支 `feat/chatgpt-cloud-research-20260927` / Draft PR #9，未合并 main。当前已验证 head `5f6865b47967448651525cb992249003e2654721`，CI run `36327856647`，Ubuntu/Windows × Python 3.11/3.12 全部成功。
 
-当用户说“用 Invest 分析某只股票”时，优先使用 ChatGPT 云端公开研究模式，不要求用户本地运行采集器：
+## 产品 North Star
 
-1. 验证请求属于当前支持证券和日期范围；
-2. 明确选择 provider；
-3. 在 `assistant_jobs/requests/` 创建唯一 JSON；
-4. 等待 `Invest assistant cloud research` workflow；
-5. 获取 artifact，核对 `result.json` 或 `failure.json`；
-6. 由 ChatGPT 解释结果；需要长期保存时按 Drive 去重规则归档。
+当用户说“我现在有 500 元，怎么投？”时，目标不是只返回行情指标，而是把研究结果转成金额级、可执行、可复盘的人民币投资决策支持：现金保留、资产/标的资格、金额、分批、最小交易单位、手续费/税费、流动性、主要风险、失效条件和重新评估条件。
 
-当前已验证 provider：`akshare_tencent`。Eastmoney 首次云端尝试失败证据保留。换源必须创建新 job，不静默 fallback。
+如果真实交易约束不满足，允许答案是暂不交易、只投入一部分、改用更适合小资金的 ETF / 现金方案，或等待资金积累。
 
-运行代码 `f2ab93b6a23c57517d1348e4efe5dd8703386289`；四矩阵测试 run `36315941217` 每组 491 tests 全绿。成功 smoke request commit `e093baa3265bae4d00239932c47def79be2a55b1` / run `36316010850`。
+## 默认研究操作
 
-Drive 云端模式证据包：`Invest-ChatGPT-Cloud-Research-v0.1-20260927.zip`，ID `1kumrq8YMaRZWbaf12HpWdCOo4F9itvjh`，SHA256 `66a4a45b570a29bd95afa1bca35751d2d088b59a44b9483a441476a325b3d0ca`，已回读验证。
+普通公开研究继续优先走 ChatGPT 云端路径，不要求用户本地 Python/CMD/Token。provider 必须显式；失败保留证据，换源创建独立 job，不静默 fallback。当前验证成功 provider 为 `akshare_tencent`。
+
+## 开源生态
+
+机器清单 `invest/upstream_registry.json`，统一路由 `invest/upstreams.py`，当前纳入 33 个项目。P0 是 PyPortfolioOpt / Riskfolio-Lib / skfolio + 真实离散金额与交易成本层；P1 是双日历、双风险指标以及 Hikyuu / Zipline / bt 独立验证；P2 再扩展 Qlib / Alphalens / FinGPT / FinBERT / RD-Agent / FinRL。
+
+默认不 vendor 第三方源码。MIT/Apache/BSD 可作为 adapter 候选；GPL/AGPL/许可证不明确先 reference-only。软件许可与行情数据权利分开判断。
+
+## Drive 长期成果
+
+原云端研究包仍是 `Invest-ChatGPT-Cloud-Research-v0.1-20260927.zip`，ID `1kumrq8YMaRZWbaf12HpWdCOo4F9itvjh`。
+
+本轮新增 Drive 快照：`Invest-500CNY-OpenSource-Ecosystem-Checkpoint-20260928`，ID `1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk`，位于 Invest 文件夹，已完成内容回读验证。该快照只保存成果与身份信息，不复制第三方仓库源码。
 
 ## 不要混淆
 
-公开云端研究不等于正式授权行情。不得据此创建正式 evaluation binding、打开 holdout、连接券商或下单。ENG-04A/04B 的本地/许可证据工具仍保留，但仅在未来需要正式 execution-data 证据时使用；不要再把它当普通用户使用 Invest 的前置步骤。
-
-原 rc2、RQAlpha、成交合同和历史成果保持不变；main 与所有 PR 未自动合并。
+公开云端研究不等于正式授权执行行情。不要据此自动打开 frozen holdout、连接券商或下单。正式 execution-data、真实许可、三种真实市场环境、样本外/前向观察与独立评审仍是独立工作线。
