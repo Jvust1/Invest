@@ -73,13 +73,22 @@ def _input(history, as_of):
     return days, values, source.strip(), digest
 
 
-def _from_quantstats(series, sharpe_defined):
+def _series(days, values):
+    try:
+        import pandas as pd
+    except ImportError as exc:
+        raise RuntimeError("缺少 pandas；请安装 risk-metrics 额外依赖") from exc
+    return pd.Series(values, index=pd.to_datetime(days, format="%Y-%m-%d"), dtype=float)
+
+
+def _from_quantstats(days, values, sharpe_defined):
     try:
         import quantstats as qs
         from importlib.metadata import version
     except ImportError as exc:
         raise RuntimeError("缺少 QuantStats；请安装 risk-metrics 额外依赖") from exc
     stats = qs.stats
+    series = _series(days, values)
     return {"version": version("quantstats"), "metrics": {
         "annual_volatility": stats.volatility(series, periods=252, annualize=True),
         "max_drawdown": stats.max_drawdown(series),
@@ -88,12 +97,13 @@ def _from_quantstats(series, sharpe_defined):
     }}
 
 
-def _from_empyrical(series, sharpe_defined):
+def _from_empyrical(days, values, sharpe_defined):
     try:
         import empyrical
         from importlib.metadata import version
     except ImportError as exc:
         raise RuntimeError("缺少 Empyrical Reloaded；请安装 risk-metrics 额外依赖") from exc
+    series = _series(days, values)
     return {"version": version("empyrical-reloaded"), "metrics": {
         "annual_volatility": empyrical.annual_volatility(series, period="daily", annualization=252),
         "max_drawdown": empyrical.max_drawdown(series),
@@ -110,14 +120,9 @@ def compare_risk_metrics(history: dict, *, as_of: str) -> dict:
     daily returns. A constant stream has no defined Sharpe ratio.
     """
     days, values, source, digest = _input(history, as_of)
-    try:
-        import pandas as pd
-    except ImportError as exc:
-        raise RuntimeError("缺少 pandas；请安装 risk-metrics 额外依赖") from exc
-    series = pd.Series(values, index=pd.to_datetime(days, format="%Y-%m-%d"), dtype=float)
     sharpe_defined = min(values) != max(values)
-    raw = {"quantstats": _from_quantstats(series.copy(deep=True), sharpe_defined),
-           "empyrical_reloaded": _from_empyrical(series.copy(deep=True), sharpe_defined)}
+    raw = {"quantstats": _from_quantstats(days.copy(), values.copy(), sharpe_defined),
+           "empyrical_reloaded": _from_empyrical(days.copy(), values.copy(), sharpe_defined)}
     backends = {}
     for name, result in raw.items():
         if not isinstance(result, dict) or set(result) != {"version", "metrics"} or not isinstance(result["version"], str) or not result["version"] or not isinstance(result["metrics"], dict) or set(result["metrics"]) != set(_METRICS):
