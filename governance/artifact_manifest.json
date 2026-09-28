@@ -1,7 +1,7 @@
 {
-  "schema_version": 4,
+  "schema_version": 5,
   "project": "Jvust/Invest",
-  "as_of": "2026-09-27T12:04:33+00:00",
+  "as_of": "2026-09-28T01:47:25+00:00",
   "current_desktop": {
     "file_name": "Invest-G1-G5-0.2.0-rc2-完整交付.zip",
     "sha256": "67ee272c6439073f1a1ed757ec6ca986f385cafe1adaf314ab92290c475f00f4",
@@ -24,7 +24,20 @@
     "library_path": "/Google Drive/Invest/Invest-ChatGPT-Cloud-Research-v0.1-20260927.zip",
     "download_readback_verified": true
   },
+  "current_product_ecosystem_checkpoint": {
+    "title": "Invest-500CNY-OpenSource-Ecosystem-Checkpoint-20260928",
+    "mime_type": "application/vnd.google-apps.document",
+    "source_commit": "5f6865b47967448651525cb992249003e2654721",
+    "validation_run": 36327856647,
+    "project_count": 33,
+    "drive_id": "1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk",
+    "folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
+    "drive_url": "https://docs.google.com/document/d/1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk/edit?usp=drivesdk",
+    "content_readback_verified": true,
+    "third_party_source_included": false
+  },
   "research_extension_result": "governance/assistant_cloud_result.json",
+  "product_ecosystem_result": "governance/upstream_ecosystem_result.json",
   "formal_data_tooling": {
     "file_name": "Invest-Local-Acquisition-v0.1-20260927.zip",
     "drive_id": "1lGGDtBLsI-3YwshXF5wL6bG9tGXfrCKT",
@@ -37,7 +50,8 @@
     "execution_contract": "governance/execution_contract_result.json",
     "raw_evidence_intake": "governance/market_evidence_result.json",
     "local_acquisition": "governance/market_acquisition_result.json",
-    "assistant_cloud": "governance/assistant_cloud_result.json"
+    "assistant_cloud": "governance/assistant_cloud_result.json",
+    "upstream_ecosystem": "governance/upstream_ecosystem_result.json"
   },
   "contains_real_user_data": false,
   "contains_credentials": false,
