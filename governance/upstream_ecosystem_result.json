@@ -1,12 +1,12 @@
 {
   "schema": "invest-upstream-ecosystem-v1",
-  "as_of": "2026-09-28T04:06:47.384Z",
+  "as_of": "2026-09-28",
   "repository": "Jvust/Invest",
-  "branch": "feat/500cny-dual-calendar-20260928",
-  "status": "P0_AMOUNT_SIZING_OPTIMIZERS_AND_DUAL_CALENDAR_VERIFIED",
+  "branch": "feat/500cny-bt-replay-20260928",
+  "status": "P0_METRICS_AND_FIRST_BT_ACCOUNTING_REPLAY_VERIFIED",
   "project_count": 33,
-  "validated_head": "c29dbd0b1cdb0bdc6247ffb6b4ab1f1406840cde",
-  "validation_run": 36327856647,
+  "validated_head": "8d47799fa99efe1dae1ca189a40cc5fb2f24d8fc",
+  "validation_run": 36391507780,
   "validation_matrix": [
     "ubuntu-latest/python-3.11",
     "ubuntu-latest/python-3.12",
@@ -60,26 +60,29 @@
     "folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
     "drive_url": "https://docs.google.com/document/d/1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk/edit?usp=drivesdk",
     "content_readback_verified": true,
-    "third_party_source_included": false
+    "third_party_source_included": false,
+    "scope_note": "Drive checkpoint still represents PR #13 progress; PR #15/#16 checkpoint append pending."
   },
   "next_actions": [
-    "Implement QuantStats and Empyrical risk/performance cross-checks with explicit metric/input contracts.",
-    "Evaluate Hikyuu, Zipline-reloaded and bt as independent validation paths; document supported environments and data limitations.",
-    "Only proceed to real-market evidence after licensed data and provenance are available; retain security status, corporate actions and rule effective dates.",
-    "Keep frozen holdout closed until a valid evaluation binding is reviewed; forward observation and independent review remain pending."
+    "Connect the fixed-allocation replay curve to the existing risk-metrics contract with an explicit initial-capital/entry-fee return convention.",
+    "Build isolated Hikyuu and Zipline-reloaded synthetic-data contracts, including initialization/bundle, calendar and execution-rule differences.",
+    "Only extend to real-market conclusions after licensed data, provenance, corporate actions and effective-date rules are available.",
+    "Keep frozen holdout closed pending a reviewed evaluation binding; forward observation and independent review remain pending."
   ],
   "validation_runs": {
-    "main_matrix": 36375284697,
-    "calendar_real": 36375284696,
-    "optimizer_real_contracts": 36375284617,
-    "pypfopt_real": 36375284652
+    "main_matrix": 36391507780,
+    "bt_real": 36391507753,
+    "risk_metrics_real": 36391507884,
+    "calendar_real": 36391507916,
+    "optimizer_real_contracts": 36391507899,
+    "pypfopt_real": 36391507828
   },
   "progress": {
     "amount_sizing": "COMPLETE_IN_DRAFT_PR_10",
     "optimizer_adapters": "PYPFOPTOPT_RISKFOLIO_SKFOLIO_REAL_CONTRACTS_PASSED_IN_DRAFT_PRS_11_12",
     "shanghai_calendar": "XSHG_SSE_REAL_LIBRARY_TEST_PASSED_IN_DRAFT_PR_13",
-    "dual_risk_performance_metrics": "PENDING",
-    "independent_engine_validation": "PENDING",
+    "dual_risk_performance_metrics": "QUANTSTATS_EMPYRICAL_REAL_CONTRACT_PASSED_IN_DRAFT_PR_15",
+    "independent_engine_validation": "BT_FIXED_ALLOCATION_ACCOUNTING_ONLY_VERIFIED_PR_16; HIKYUU_ZIPLINE_AND_REAL_MARKET_PENDING",
     "licensed_real_market_evidence": "PENDING"
   },
   "status_sync_branch": "docs/invest-progress-sync-20260928",

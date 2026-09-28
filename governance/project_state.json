@@ -6,15 +6,15 @@
   "version": "0.2.0-rc2",
   "currency": "CNY",
   "security_status": "NO_PROJECT_SECURITY_GATE",
-  "schema_version": 9,
-  "as_of": "2026-09-28T04:09:45.193Z",
-  "state_scope": "DRAFT_STACK_9_TO_13_AMOUNT_SIZING_OPTIMIZER_AND_CALENDAR_VALIDATED",
-  "development_branch": "feat/500cny-dual-calendar-20260928",
-  "development_pr": 13,
+  "schema_version": 10,
+  "as_of": "2026-09-28",
+  "state_scope": "DRAFT_STACK_THROUGH_16_RISK_METRICS_AND_BT_FIXED_ALLOCATION_REPLAY",
+  "development_branch": "feat/500cny-bt-replay-20260928",
+  "development_pr": 16,
   "latest_validated_desktop_code_head": "5075cf746019b7d107de603384c0cf02ce1ac02a",
-  "latest_validated_code_head": "c29dbd0b1cdb0bdc6247ffb6b4ab1f1406840cde",
-  "latest_validation_run": 36375284697,
-  "latest_checkpoint": "governance/checkpoints/20260928_allocation_calendar_progress.json",
+  "latest_validated_code_head": "8d47799fa99efe1dae1ca189a40cc5fb2f24d8fc",
+  "latest_validation_run": 36391507780,
+  "latest_checkpoint": "governance/checkpoints/20260928_bt_replay_progress.json",
   "delivery_policy": {
     "rc2_pr": 4,
     "main_modified": false,
@@ -131,10 +131,10 @@
     "real_repeated_use_value"
   ],
   "next_actions": [
-    "Implement QuantStats and Empyrical risk/performance cross-checks with explicit metric/input contracts.",
-    "Evaluate Hikyuu, Zipline-reloaded and bt as independent validation paths; document supported environments and data limitations.",
-    "Only proceed to real-market evidence after licensed data and provenance are available; retain security status, corporate actions and rule effective dates.",
-    "Keep frozen holdout closed until a valid evaluation binding is reviewed; forward observation and independent review remain pending."
+    "Connect the fixed-allocation replay curve to the existing risk-metrics contract with an explicit initial-capital/entry-fee return convention.",
+    "Build isolated Hikyuu and Zipline-reloaded synthetic-data contracts, including initialization/bundle, calendar and execution-rule differences.",
+    "Only extend to real-market conclusions after licensed data, provenance, corporate actions and effective-date rules are available.",
+    "Keep frozen holdout closed pending a reviewed evaluation binding; forward observation and independent review remain pending."
   ],
   "component_result_paths": {
     "desktop": "governance/growth_delivery_result.json",
@@ -143,10 +143,11 @@
     "raw_evidence_intake": "governance/market_evidence_result.json",
     "local_acquisition": "governance/market_acquisition_result.json",
     "assistant_cloud": "governance/assistant_cloud_result.json",
-    "upstream_ecosystem": "governance/upstream_ecosystem_result.json"
+    "upstream_ecosystem": "governance/upstream_ecosystem_result.json",
+    "bt_replay": "governance/checkpoints/20260928_bt_replay_progress.json"
   },
   "previous_full_state": "governance/checkpoints/pre_local_acquisition/governance__project_state.json",
-  "latest_code_head": "c29dbd0b1cdb0bdc6247ffb6b4ab1f1406840cde",
+  "latest_code_head": "8d47799fa99efe1dae1ca189a40cc5fb2f24d8fc",
   "stacked_draft_prs": [
     {
       "number": 9,
@@ -182,6 +183,27 @@
       "head": "c29dbd0b1cdb0bdc6247ffb6b4ab1f1406840cde",
       "status": "OPEN_DRAFT_UNMERGED",
       "purpose": "dual Shanghai calendar"
+    },
+    {
+      "number": 14,
+      "branch": "docs/invest-progress-sync-20260928",
+      "head": "f3acf1d53b0b964743fc36b71ab318cce029b691",
+      "status": "OPEN_DRAFT_UNMERGED",
+      "purpose": "progress documentation sync"
+    },
+    {
+      "number": 15,
+      "branch": "feat/500cny-risk-metrics-crosscheck-20260928",
+      "head": "68bce0a5a2fd5e608b7a666406cc99d1a15098da",
+      "status": "OPEN_DRAFT_UNMERGED",
+      "purpose": "QuantStats/Empyrical risk metric crosscheck"
+    },
+    {
+      "number": 16,
+      "branch": "feat/500cny-bt-replay-20260928",
+      "head": "8d47799fa99efe1dae1ca189a40cc5fb2f24d8fc",
+      "status": "OPEN_DRAFT_UNMERGED",
+      "purpose": "bt fixed-allocation cash/position/valuation replay"
     }
   ],
   "completed_amount_level_work": [
@@ -204,11 +226,30 @@
       "item": "XSHG/SSE calendar comparison",
       "pr": 13,
       "verification": "run 36375284696 passed; main matrix 36375284697 passed"
+    },
+    {
+      "item": "QuantStats/Empyrical daily risk metric crosscheck",
+      "pr": 15,
+      "verification": "real upstream run 36389918330 passed; reverified on PR #16"
+    },
+    {
+      "item": "bt fixed-allocation accounting replay",
+      "pr": 16,
+      "verification": "three real synthetic cases passed in run 36391507753; not strategy or real-market validation"
     }
   ],
   "status_sync": {
     "branch": "docs/invest-progress-sync-20260928",
     "pull_request": 14,
     "status": "OPEN_DRAFT_UNMERGED"
-  }
+  },
+  "current_validation_runs": {
+    "main_matrix": 36391507780,
+    "bt_real": 36391507753,
+    "risk_metrics_real": 36391507884,
+    "calendar_real": 36391507916,
+    "optimizer_real_contracts": 36391507899,
+    "pypfopt_real": 36391507828
+  },
+  "head_record_note": "Recorded feature code head; the final metadata commit is discoverable from live PR #16. No self-referential commit assertion."
 }
