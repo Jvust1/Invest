@@ -59,6 +59,29 @@ class OptimizerBridgeTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 min_variance_scenario(history, sizing)
 
+    def test_explicit_backends_and_crosscheck_preserve_disagreement(self):
+        from invest.allocation_optimizer import compare_min_variance_backends
+        history, sizing = inputs()
+        with patch("invest.allocation_optimizer._weights_from_riskfolio",
+                   return_value=({"DEMO.ETF": 0.7, "SECOND.ETF": 0.3}, "stub-r")), \
+             patch("invest.allocation_optimizer._weights_from_skfolio",
+                   return_value=({"DEMO.ETF": 0.4, "SECOND.ETF": 0.6}, "stub-s")):
+            result = compare_min_variance_backends(history, sizing,
+                                                    backends=("riskfolio", "skfolio"))
+        self.assertEqual([r["backend"] for r in result["results"]], ["Riskfolio-Lib", "skfolio"])
+        self.assertEqual(result["pairwise_gaps"]["Riskfolio-Lib vs skfolio"]["max_absolute_weight_gap"], "0.3")
+        self.assertTrue(all(r["allocation"]["status"] == "SCENARIO_ONLY" for r in result["results"]))
+
+    def test_crosscheck_does_not_silently_replace_failed_backend(self):
+        from invest.allocation_optimizer import compare_min_variance_backends
+        history, sizing = inputs()
+        with patch("invest.allocation_optimizer._weights_from_riskfolio",
+                   side_effect=ValueError("solver failed")):
+            with self.assertRaisesRegex(ValueError, "solver failed"):
+                compare_min_variance_backends(history, sizing, backends=("riskfolio", "skfolio"))
+        with self.assertRaises(ValueError):
+            min_variance_scenario(history, sizing, backend="unknown")
+
     def test_missing_optional_dependency_is_explicit(self):
         from invest.allocation_optimizer import _weights_from_pypfopt
         with patch.dict(sys.modules, {"pypfopt": None}):
