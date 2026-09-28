@@ -1,9 +1,9 @@
 {
-  "schema_version": 5,
-  "as_of": "2026-09-28T01:47:25+00:00",
-  "phase": "OPEN_SOURCE_ECOSYSTEM_ARCHIVED_500CNY_ALLOCATION_IMPLEMENTATION_PENDING",
+  "schema_version": 6,
+  "as_of": "2026-09-28T04:06:47.384Z",
+  "phase": "AMOUNT_SIZING_OPTIMIZERS_AND_DUAL_CALENDAR_VERIFIED_NEXT_RISK_CROSSCHECK",
   "pending_sync": [],
-  "source_commit": "5f6865b47967448651525cb992249003e2654721",
+  "source_commit": "c29dbd0b1cdb0bdc6247ffb6b4ab1f1406840cde",
   "drive_checkpoint": {
     "title": "Invest-500CNY-OpenSource-Ecosystem-Checkpoint-20260928",
     "mime_type": "application/vnd.google-apps.document",
@@ -15,15 +15,21 @@
   },
   "publication_action": "Keep Draft PR #9 and all prior stacked PRs unmerged; no main write.",
   "public_cloud_research": "VERIFIED_TENCENT_SMOKE",
-  "upstream_ecosystem": "VERIFIED_REGISTRY_ROUTING_AND_DRIVE_CHECKPOINT",
+  "upstream_ecosystem": "P0_AMOUNT_SIZING_OPTIMIZERS_AND_DUAL_CALENDAR_VERIFIED",
   "real_acquisition": "NOT_PERFORMED",
   "real_data_and_license_review": "OPTIONAL_FORMAL_TRACK_STILL_PENDING",
   "next_actions": [
-    "Implement PyPortfolioOpt, Riskfolio-Lib and skfolio adapters.",
-    "Implement discrete 500 CNY sizing with lot-size, fees, taxes, liquidity and residual cash.",
-    "Add dual calendar and risk/performance cross-checks.",
-    "Add Hikyuu/Zipline/bt independent validation before model-derived allocations.",
-    "Keep formal execution-data evidence, frozen holdout and broker connectivity separate."
+    "Implement QuantStats and Empyrical risk/performance cross-checks with explicit metric/input contracts.",
+    "Evaluate Hikyuu, Zipline-reloaded and bt as independent validation paths; document supported environments and data limitations.",
+    "Only proceed to real-market evidence after licensed data and provenance are available; retain security status, corporate actions and rule effective dates.",
+    "Keep frozen holdout closed until a valid evaluation binding is reviewed; forward observation and independent review remain pending."
   ],
-  "note": "Empty sync queue means GitHub governance and the Drive ecosystem checkpoint are synchronized. It does not mean the 500 CNY allocation engine, formal real-market validation or trading acceptance is complete."
+  "note": "Sync queue is clear for the Drive checkpoint and GitHub status documents. PR #14 remains a draft docs-only sync over feature PR #13; no main write or release package replacement. Empirical market gates remain pending.",
+  "status_sync": {
+    "branch": "docs/invest-progress-sync-20260928",
+    "base_pr": 13,
+    "drive_document_id": "1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk",
+    "drive_revision_id": "ANLCKQl-h5kKwDhARTo7heeunZBGDEgy66fflrcVh-IxLFyznGOPFTrmTNaKCQyoVuPBzrdZZ6uSefcpTWgZDjJN-WAXgbjFvBUwjHTuKAA",
+    "readback_pending": true
+  }
 }
