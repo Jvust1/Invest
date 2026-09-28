@@ -1,0 +1,89 @@
+{
+  "schema": "invest-allocation-calendar-progress-v1",
+  "as_of": "2026-09-28T04:06:47.384Z",
+  "repository": "Jvust/Invest",
+  "feature_head": "c29dbd0b1cdb0bdc6247ffb6b4ab1f1406840cde",
+  "feature_prs": [
+    {
+      "number": 9,
+      "status": "OPEN_DRAFT_UNMERGED",
+      "branch": "feat/chatgpt-cloud-research-20260927"
+    },
+    {
+      "number": 10,
+      "status": "OPEN_DRAFT_UNMERGED",
+      "branch": "feat/500cny-allocation-scenario-20260928"
+    },
+    {
+      "number": 11,
+      "status": "OPEN_DRAFT_UNMERGED",
+      "branch": "feat/500cny-pypfopt-bridge-20260928"
+    },
+    {
+      "number": 12,
+      "status": "OPEN_DRAFT_UNMERGED",
+      "branch": "feat/500cny-optimizer-crosscheck-20260928"
+    },
+    {
+      "number": 13,
+      "status": "OPEN_DRAFT_UNMERGED",
+      "branch": "feat/500cny-dual-calendar-20260928"
+    }
+  ],
+  "implementation": {
+    "discrete_sizing": "VERIFIED",
+    "pyportfolioopt": "REAL_SOLVER_TEST_PASSED",
+    "riskfolio_skfolio": "REAL_CONTRACTS_AND_CROSSCHECK_PASSED",
+    "shanghai_dual_calendar": "REAL_LIBRARY_TEST_PASSED"
+  },
+  "ci": {
+    "main_matrix": {
+      "run_id": 36375284697,
+      "result": "SUCCESS",
+      "jobs": [
+        "ubuntu-python-3.11",
+        "ubuntu-python-3.12",
+        "windows-python-3.11",
+        "windows-python-3.12"
+      ]
+    },
+    "calendar_real": {
+      "run_id": 36375284696,
+      "result": "SUCCESS"
+    },
+    "optimizer_contracts": {
+      "run_id": 36375284617,
+      "result": "SUCCESS",
+      "jobs": [
+        "riskfolio",
+        "skfolio",
+        "all-backend-crosscheck"
+      ]
+    },
+    "pypfopt_real": {
+      "run_id": 36375284652,
+      "result": "SUCCESS"
+    }
+  },
+  "drive": {
+    "document_id": "1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk",
+    "url": "https://docs.google.com/document/d/1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk/edit",
+    "revision_id": "ANLCKQl-h5kKwDhARTo7heeunZBGDEgy66fflrcVh-IxLFyznGOPFTrmTNaKCQyoVuPBzrdZZ6uSefcpTWgZDjJN-WAXgbjFvBUwjHTuKAA",
+    "append_verified": true
+  },
+  "pending": [
+    "QuantStats/Empyrical risk-performance crosscheck",
+    "Hikyuu/Zipline-reloaded/bt independent validation",
+    "licensed real-market provenance and security-level trading status",
+    "frozen holdout/forward observation/independent review"
+  ],
+  "boundaries": {
+    "scope": "PUBLIC_RESEARCH_ONLY",
+    "scenario_only": true,
+    "broker_connected": false,
+    "automatic_orders": false,
+    "frozen_holdout_opened": false,
+    "main_modified": false,
+    "all_feature_prs_draft": true
+  }
+}
