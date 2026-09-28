@@ -6,7 +6,7 @@ GitHub is authoritative for code, current state and decisions; chat is not. Repo
 
 Read `governance/project_state.json`, `governance/assistant_cloud_result.json`, `governance/upstream_ecosystem_result.json`, `docs/CURRENT_STATE.md`, `docs/PROJECT_NORTH_STAR.md`, `docs/OPEN_SOURCE_ECOSYSTEM.md`, `docs/HANDOFF.md`, `governance/artifact_manifest.json`, `governance/pending_sync.json`; then verify live branch/PR/CI.
 
-Current development is `feat/chatgpt-cloud-research-20260927`, Draft PR #9 over PR #8. The last verified cloud-runtime code baseline is `f2ab93b6a23c57517d1348e4efe5dd8703386289`; CI run `36315941217` passed 491 tests on Windows/Linux × Python 3.11/3.12. First successful public-research request is `e093baa3265bae4d00239932c47def79be2a55b1`, run `36316010850`. Newer open-source-ecosystem changes must use their live CI status rather than reusing this old count.
+Current functional chain: Draft PRs #9–#13 remain open and unmerged; latest feature head is `c29dbd0b1cdb0bdc6247ffb6b4ab1f1406840cde` on `feat/500cny-dual-calendar-20260928`. The status-sync branch is `docs/invest-progress-sync-20260928`, based on that feature head (Draft PR #14). Current PR #13 matrix run `36375284697` passed Ubuntu/Windows × Python 3.11/3.12; real calendar run `36375284696`, optimizer contract run `36375284617`, and PyPortfolioOpt run `36375284652` passed. PR #9 remains the public cloud research layer; do not reuse its historical test counts for newer changes. Use live CI for each head.
 
 ## Product North Star
 
