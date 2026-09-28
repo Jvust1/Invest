@@ -1,57 +1,36 @@
-# Invest 当前状态：500 元决策终态 + ChatGPT 云端研究 + 开源量化生态
+# Invest 当前状态｜500 元金额级决策支持
 
-当前开发分支 `feat/chatgpt-cloud-research-20260927`，Draft PR #9，未合并 main。
+更新时间：2026-09-28 12:06:47 CST。GitHub `Jvust/Invest` 为代码、当前状态和决策的权威来源；Drive 保存长期成果与快照。
 
-## 最终产品方向
+## 当前开发链
 
-North Star 已明确：用户只需要告诉 ChatGPT 当前可投资的人民币资金，例如“我现在有 500 元，怎么投？”，ChatGPT + Invest 应输出金额级、可执行、可解释、可复盘的方案，包括现金保留、候选资产、投入金额、分批方式、交易约束、主要风险、失效条件和重新评估条件。
+- 最近功能 head：`c29dbd0b1cdb0bdc6247ffb6b4ab1f1406840cde`，Draft PR #13（双日历）；PR #9–#13 均 Open、Draft、Unmerged。
+- 本状态同步走独立 Draft PR #14，基于 PR #13；main 未修改。
+- PR #13 主矩阵 run `36375284697`：Ubuntu/Windows × Python 3.11/3.12 四项通过。
+- 双日历真实依赖 run `36375284696`、三个优化器真实合同 run `36375284617`、PyPortfolioOpt 真实求解器 run `36375284652` 均通过。
 
-系统允许在用户明确请求时给出具体金额级决策支持，但不自动下单、不连接券商、不承诺收益。
+## 产品目标与已完成实现
 
-## 当前验证身份
+产品目标：用户输入可投资人民币金额（当前示例 500 元），获得可解释、可复盘的配置情景，说明留存现金、资产候选、金额、交易单位、成本、流动性、风险与复评条件。
 
-- 已验证 head：`5f6865b47967448651525cb992249003e2654721`
-- CI run：`36327856647`
-- Ubuntu/Windows × Python 3.11/3.12：全部成功
-- Draft PR：#9
-- main：未修改
+- PR #9：ChatGPT → GitHub Actions → Invest artifact 公开研究链路。Tencent smoke 成功 39 个交易日；Eastmoney 失败记录保留，provider 不静默回退。
+- PR #10：报价、整手、费用、流动性、现金约束下的离散配置层，并回报股数、成本和剩余现金；仅情景计算。
+- PR #11：PyPortfolioOpt 可选最小方差适配；拒绝不完整/非法输入及静默回退。
+- PR #12：Riskfolio-Lib、skfolio 适配，并对三种后端权重及金额结果做交叉比较；分歧只作复核信号。
+- PR #13：XSHG 与 SSE 两套日历会话逐项比较，保留版本、日期差集、输入观测缺口。周末区间终点缺陷已修复并由真实库测试覆盖。
 
-## ChatGPT 云端公开研究
+## 尚未完成
 
-普通公开研究不要求本机 Python、CMD 或 Token。provider 显式写入任务；失败不静默换源。首次 Eastmoney 云端尝试失败并保留证据；独立 Tencent 任务成功。
+- P0：QuantStats / Empyrical 风险与绩效指标交叉检查。
+- P1：Hikyuu、Zipline-reloaded、bt 独立回测或第二引擎核对。
+- 真实授权行情与许可证据、个券停复牌/公司行动/交易规则有效性、至少三个真实市场环境、frozen holdout、持续 forward observation、独立审查和真实设备验收仍未关闭。
 
-成功 smoke：`600000.SH`，请求 2026-08-01～2026-09-25，实际 39 个交易日。该结果只用于链路验收和描述性研究，不代表收益保证或策略接受。
+## 治理边界
 
-## 开源生态扩展
+公开数据结果仍为 `PUBLIC_RESEARCH_ONLY`，离散金额例子为 `SCENARIO_ONLY`。算法输出不证明个券当前可成交，也不保证未来收益。没有券商连接、自动订单或 frozen holdout 开启。所有功能 PR 与状态同步 PR 保持 Draft，未合并 main。
 
-当前机器可读能力池纳入 33 个 GitHub 项目，覆盖中国市场数据、A 股/独立回测、组合优化、风险绩效、交易日历、技术指标、因子/机器学习、自动研究和金融文本。
+## 下一步
 
-核心文件：
-- `docs/PROJECT_NORTH_STAR.md`
-- `docs/OPEN_SOURCE_ECOSYSTEM.md`
-- `invest/upstream_registry.json`
-- `invest/upstreams.py`
-- `tests/test_upstreams.py`
-- `governance/upstream_ecosystem_result.json`
-
-P0：PyPortfolioOpt / Riskfolio-Lib / skfolio + 500 元离散金额、最小交易单位、佣金、税费、流动性和剩余现金。
-
-P1：exchange_calendars + pandas_market_calendars 双日历，QuantStats + Empyrical 风险交叉检查，Hikyuu / Zipline / bt 独立历史验证。
-
-P2：Qlib / Alphalens 因子研究，以及 FinGPT / FinBERT / RD-Agent / FinRL 实验支线。
-
-## Drive 长期归档
-
-新增快照：`Invest-500CNY-OpenSource-Ecosystem-Checkpoint-20260928`
-
-- Drive ID：`1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk`
-- 位于 Invest 文件夹
-- 内容已回读验证
-- 对应已验证 source commit：`5f6865b47967448651525cb992249003e2654721`
-- 不包含任何第三方仓库源码
-
-原有 rc2、Engine Lab、Execution Contract、Market Evidence、Local Acquisition、ChatGPT Cloud Research 归档均保留。
-
-## 边界
-
-公开云端数据继续标记 `PUBLIC_RESEARCH_ONLY`。正式 execution-data、frozen holdout、forward observation、broker 连接和真实下单均未启用。GPL/AGPL 或许可证不明确的第三方项目保持 reference-only，软件许可与行情数据权利分开治理。
+1. 加入 QuantStats / Empyrical 双指标合同与真实库测试，明确输入口径及缺失数据行为。
+2. 再做 Hikyuu / Zipline-reloaded / bt 中可在当前环境运行的独立复核，并记录兼容边界。
+3. 真实行情工作只在授权证据可用时进行；先绑定 provenance 与规则有效期，再讨论任何非公开研究结论。
