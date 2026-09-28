@@ -11,7 +11,7 @@ dependencies = []
 
 [project.optional-dependencies]
 market = ["akshare==1.18.97"]
-optimization = ["pyportfolioopt==1.6.0"]
+optimization = ["pyportfolioopt==1.6.0", "packaging==25.0"]
 
 [project.scripts]
 invest = "invest.server:main"
