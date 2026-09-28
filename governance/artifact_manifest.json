@@ -34,7 +34,22 @@
     "folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
     "drive_url": "https://docs.google.com/document/d/1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk/edit?usp=drivesdk",
     "content_readback_verified": true,
-    "third_party_source_included": false
+    "third_party_source_included": false,
+    "latest_sync_feature_head": "28eb16994d784162d0c96944cc5f9da356a3e702",
+    "latest_sync_validation_runs": {
+      "main_matrix": 36391774329,
+      "bt_real": 36391774331,
+      "risk_metrics_real": 36391774665,
+      "calendar_real": 36391774808,
+      "optimizer_real_contracts": 36391774377,
+      "pypfopt_real": 36391774326
+    },
+    "latest_drive_revision_id": "ANLCKQk8k7ln9Hc1fe9_DAVYAbSmCl4t5gIIC0HHNda-rH3T0WCryINeokt6DbTbnW_Lcz5Bs872ukVynkZOZWGjtz2LbDTEHE14STQ3-gY",
+    "latest_append_readback_verified": true,
+    "latest_append_prs": [
+      15,
+      16
+    ]
   },
   "research_extension_result": "governance/assistant_cloud_result.json",
   "product_ecosystem_result": "governance/upstream_ecosystem_result.json",
@@ -58,8 +73,8 @@
   "contains_public_research_evidence": true,
   "third_party_source_reuploaded": false,
   "current_development_sync": {
-    "status": "GITHUB_UPDATED_DRIVE_CHECKPOINT_APPEND_PENDING",
-    "feature_head": "8d47799fa99efe1dae1ca189a40cc5fb2f24d8fc",
+    "status": "GITHUB_AND_DRIVE_CHECKPOINT_SYNCED",
+    "feature_head": "28eb16994d784162d0c96944cc5f9da356a3e702",
     "feature_prs": [
       9,
       10,
@@ -73,18 +88,28 @@
     "development_pr": 16,
     "development_branch": "feat/500cny-bt-replay-20260928",
     "drive_checkpoint_id": "1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk",
+    "drive_revision_id": "ANLCKQk8k7ln9Hc1fe9_DAVYAbSmCl4t5gIIC0HHNda-rH3T0WCryINeokt6DbTbnW_Lcz5Bs872ukVynkZOZWGjtz2LbDTEHE14STQ3-gY",
     "validation_runs": [
-      36391507780,
-      36391507753,
-      36391507884,
-      36391507916,
-      36391507899,
-      36391507828
+      36391774329,
+      36391774331,
+      36391774665,
+      36391774808,
+      36391774377,
+      36391774326
     ],
+    "validation_run_map": {
+      "main_matrix": 36391774329,
+      "bt_real": 36391774331,
+      "risk_metrics_real": 36391774665,
+      "calendar_real": 36391774808,
+      "optimizer_real_contracts": 36391774377,
+      "pypfopt_real": 36391774326
+    },
+    "documentation_sync_parent": "28eb16994d784162d0c96944cc5f9da356a3e702",
     "new_release_binary_created": false,
     "main_modified": false,
     "third_party_source_reuploaded": false,
-    "drive_readback_verified": false
+    "drive_readback_verified": true
   },
   "previous_development_sync": {
     "status": "GITHUB_DRAFT_BRANCH_AND_DRIVE_CHECKPOINT_UPDATED",

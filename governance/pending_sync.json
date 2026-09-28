@@ -1,16 +1,9 @@
 {
   "schema_version": 7,
   "as_of": "2026-09-28",
-  "phase": "RISK_METRICS_AND_BT_REPLAY_VERIFIED",
-  "pending_sync": [
-    {
-      "target": "existing Invest Drive checkpoint",
-      "drive_document_id": "1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk",
-      "scope": "Append PR #15 risk metrics and PR #16 bt accounting replay with validation receipts",
-      "status": "PENDING"
-    }
-  ],
-  "source_commit": "8d47799fa99efe1dae1ca189a40cc5fb2f24d8fc",
+  "phase": "PR15_PR16_GITHUB_AND_DRIVE_SYNC_COMPLETE",
+  "pending_sync": [],
+  "source_commit": "28eb16994d784162d0c96944cc5f9da356a3e702",
   "drive_checkpoint": {
     "title": "Invest-500CNY-OpenSource-Ecosystem-Checkpoint-20260928",
     "mime_type": "application/vnd.google-apps.document",
@@ -18,7 +11,14 @@
     "folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
     "drive_url": "https://docs.google.com/document/d/1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk/edit?usp=drivesdk",
     "content_readback_verified": true,
-    "project_count": 33
+    "project_count": 33,
+    "latest_revision_id": "ANLCKQk8k7ln9Hc1fe9_DAVYAbSmCl4t5gIIC0HHNda-rH3T0WCryINeokt6DbTbnW_Lcz5Bs872ukVynkZOZWGjtz2LbDTEHE14STQ3-gY",
+    "latest_append_readback_verified": true,
+    "appended_prs": [
+      15,
+      16
+    ],
+    "source_feature_head": "28eb16994d784162d0c96944cc5f9da356a3e702"
   },
   "publication_action": "Keep Draft PR #9 and all prior stacked PRs unmerged; no main write.",
   "public_cloud_research": "VERIFIED_TENCENT_SMOKE",
@@ -31,7 +31,7 @@
     "Only extend to real-market conclusions after licensed data, provenance, corporate actions and effective-date rules are available.",
     "Keep frozen holdout closed pending a reviewed evaluation binding; forward observation and independent review remain pending."
   ],
-  "note": "GitHub progress updated for PR #15/#16. Existing Drive checkpoint is preserved; its latest append is pending. No new release binary or main merge.",
+  "note": "PR #15/#16 results appended to the existing Drive checkpoint and read back at revision ANLCKQk8k7ln9Hc1fe9_DAVYAbSmCl4t5gIIC0HHNda-rH3T0WCryINeokt6DbTbnW_Lcz5Bs872ukVynkZOZWGjtz2LbDTEHE14STQ3-gY. GitHub remains authoritative; no main write, merge, or new release binary.",
   "status_sync": {
     "branch": "docs/invest-progress-sync-20260928",
     "base_pr": 13,

@@ -12,8 +12,8 @@
   "development_branch": "feat/500cny-bt-replay-20260928",
   "development_pr": 16,
   "latest_validated_desktop_code_head": "5075cf746019b7d107de603384c0cf02ce1ac02a",
-  "latest_validated_code_head": "8d47799fa99efe1dae1ca189a40cc5fb2f24d8fc",
-  "latest_validation_run": 36391507780,
+  "latest_validated_code_head": "28eb16994d784162d0c96944cc5f9da356a3e702",
+  "latest_validation_run": 36391774329,
   "latest_checkpoint": "governance/checkpoints/20260928_bt_replay_progress.json",
   "delivery_policy": {
     "rc2_pr": 4,
@@ -147,7 +147,7 @@
     "bt_replay": "governance/checkpoints/20260928_bt_replay_progress.json"
   },
   "previous_full_state": "governance/checkpoints/pre_local_acquisition/governance__project_state.json",
-  "latest_code_head": "8d47799fa99efe1dae1ca189a40cc5fb2f24d8fc",
+  "latest_code_head": "28eb16994d784162d0c96944cc5f9da356a3e702",
   "stacked_draft_prs": [
     {
       "number": 9,
@@ -201,7 +201,7 @@
     {
       "number": 16,
       "branch": "feat/500cny-bt-replay-20260928",
-      "head": "8d47799fa99efe1dae1ca189a40cc5fb2f24d8fc",
+      "head": "28eb16994d784162d0c96944cc5f9da356a3e702",
       "status": "OPEN_DRAFT_UNMERGED",
       "purpose": "bt fixed-allocation cash/position/valuation replay"
     }
@@ -230,12 +230,12 @@
     {
       "item": "QuantStats/Empyrical daily risk metric crosscheck",
       "pr": 15,
-      "verification": "real upstream run 36389918330 passed; reverified on PR #16"
+      "verification": "real upstream recheck run 36391774665 passed on PR #16 feature head 28eb16994d784162d0c96944cc5f9da356a3e702"
     },
     {
       "item": "bt fixed-allocation accounting replay",
       "pr": 16,
-      "verification": "three real synthetic cases passed in run 36391507753; not strategy or real-market validation"
+      "verification": "three real synthetic cases passed in run 36391774331 on 28eb16994d784162d0c96944cc5f9da356a3e702; not strategy or real-market validation"
     }
   ],
   "status_sync": {
@@ -244,12 +244,23 @@
     "status": "OPEN_DRAFT_UNMERGED"
   },
   "current_validation_runs": {
-    "main_matrix": 36391507780,
-    "bt_real": 36391507753,
-    "risk_metrics_real": 36391507884,
-    "calendar_real": 36391507916,
-    "optimizer_real_contracts": 36391507899,
-    "pypfopt_real": 36391507828
+    "main_matrix": 36391774329,
+    "bt_real": 36391774331,
+    "risk_metrics_real": 36391774665,
+    "calendar_real": 36391774808,
+    "optimizer_real_contracts": 36391774377,
+    "pypfopt_real": 36391774326
   },
-  "head_record_note": "Recorded feature code head; the final metadata commit is discoverable from live PR #16. No self-referential commit assertion."
+  "head_record_note": "Recorded the fully regression-verified feature/code head; the later checkpoint-sync commit changes only documentation/governance, so use live PR #16 for the current branch tip.",
+  "drive_checkpoint_sync": {
+    "status": "COMPLETE",
+    "document_id": "1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk",
+    "revision_id": "ANLCKQk8k7ln9Hc1fe9_DAVYAbSmCl4t5gIIC0HHNda-rH3T0WCryINeokt6DbTbnW_Lcz5Bs872ukVynkZOZWGjtz2LbDTEHE14STQ3-gY",
+    "readback_verified": true,
+    "appended_prs": [
+      15,
+      16
+    ],
+    "feature_head": "28eb16994d784162d0c96944cc5f9da356a3e702"
+  }
 }

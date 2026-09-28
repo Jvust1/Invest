@@ -5,8 +5,8 @@
   "branch": "feat/500cny-bt-replay-20260928",
   "status": "P0_METRICS_AND_FIRST_BT_ACCOUNTING_REPLAY_VERIFIED",
   "project_count": 33,
-  "validated_head": "8d47799fa99efe1dae1ca189a40cc5fb2f24d8fc",
-  "validation_run": 36391507780,
+  "validated_head": "28eb16994d784162d0c96944cc5f9da356a3e702",
+  "validation_run": 36391774329,
   "validation_matrix": [
     "ubuntu-latest/python-3.11",
     "ubuntu-latest/python-3.12",
@@ -61,7 +61,14 @@
     "drive_url": "https://docs.google.com/document/d/1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk/edit?usp=drivesdk",
     "content_readback_verified": true,
     "third_party_source_included": false,
-    "scope_note": "Drive checkpoint still represents PR #13 progress; PR #15/#16 checkpoint append pending."
+    "scope_note": "PR #15/#16 appendix added and content readback verified at revision ANLCKQk8k7ln9Hc1fe9_DAVYAbSmCl4t5gIIC0HHNda-rH3T0WCryINeokt6DbTbnW_Lcz5Bs872ukVynkZOZWGjtz2LbDTEHE14STQ3-gY.",
+    "latest_revision_id": "ANLCKQk8k7ln9Hc1fe9_DAVYAbSmCl4t5gIIC0HHNda-rH3T0WCryINeokt6DbTbnW_Lcz5Bs872ukVynkZOZWGjtz2LbDTEHE14STQ3-gY",
+    "latest_append_readback_verified": true,
+    "appended_prs": [
+      15,
+      16
+    ],
+    "source_feature_head": "28eb16994d784162d0c96944cc5f9da356a3e702"
   },
   "next_actions": [
     "Connect the fixed-allocation replay curve to the existing risk-metrics contract with an explicit initial-capital/entry-fee return convention.",
@@ -70,12 +77,12 @@
     "Keep frozen holdout closed pending a reviewed evaluation binding; forward observation and independent review remain pending."
   ],
   "validation_runs": {
-    "main_matrix": 36391507780,
-    "bt_real": 36391507753,
-    "risk_metrics_real": 36391507884,
-    "calendar_real": 36391507916,
-    "optimizer_real_contracts": 36391507899,
-    "pypfopt_real": 36391507828
+    "main_matrix": 36391774329,
+    "bt_real": 36391774331,
+    "risk_metrics_real": 36391774665,
+    "calendar_real": 36391774808,
+    "optimizer_real_contracts": 36391774377,
+    "pypfopt_real": 36391774326
   },
   "progress": {
     "amount_sizing": "COMPLETE_IN_DRAFT_PR_10",
