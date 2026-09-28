@@ -7,12 +7,12 @@
   "currency": "CNY",
   "security_status": "NO_PROJECT_SECURITY_GATE",
   "schema_version": 9,
-  "as_of": "2026-09-28T04:06:47.384Z",
+  "as_of": "2026-09-28T04:09:45.193Z",
   "state_scope": "DRAFT_STACK_9_TO_13_AMOUNT_SIZING_OPTIMIZER_AND_CALENDAR_VALIDATED",
-  "development_branch": "docs/invest-progress-sync-20260928",
-  "development_pr": 14,
+  "development_branch": "feat/500cny-dual-calendar-20260928",
+  "development_pr": 13,
   "latest_validated_desktop_code_head": "5075cf746019b7d107de603384c0cf02ce1ac02a",
-  "latest_validated_code_head": "5f6865b47967448651525cb992249003e2654721",
+  "latest_validated_code_head": "c29dbd0b1cdb0bdc6247ffb6b4ab1f1406840cde",
   "latest_validation_run": 36375284697,
   "latest_checkpoint": "governance/checkpoints/20260928_allocation_calendar_progress.json",
   "delivery_policy": {
@@ -205,5 +205,10 @@
       "pr": 13,
       "verification": "run 36375284696 passed; main matrix 36375284697 passed"
     }
-  ]
+  ],
+  "status_sync": {
+    "branch": "docs/invest-progress-sync-20260928",
+    "pull_request": 14,
+    "status": "OPEN_DRAFT_UNMERGED"
+  }
 }
