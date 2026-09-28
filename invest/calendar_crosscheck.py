@@ -26,7 +26,7 @@ def _exchange_sessions(start, end):
     except ImportError as exc:
         raise RuntimeError("缺少 exchange_calendars 可选依赖") from exc
     calendar = xcals.get_calendar("XSHG", start=start, end=end)
-    return {timestamp.date().isoformat() for timestamp in calendar.sessions_in_range(start, end)}, version("exchange_calendars")
+    return {timestamp.date().isoformat() for timestamp in calendar.sessions}, version("exchange_calendars")
 
 
 def _pandas_sessions(start, end):
