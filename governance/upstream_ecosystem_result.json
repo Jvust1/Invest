@@ -1,11 +1,11 @@
 {
   "schema": "invest-upstream-ecosystem-v1",
-  "as_of": "2026-09-28T01:47:25+00:00",
+  "as_of": "2026-09-28T04:06:47.384Z",
   "repository": "Jvust/Invest",
-  "branch": "feat/chatgpt-cloud-research-20260927",
-  "status": "VERIFIED_REGISTRY_ROUTING_AND_DRIVE_CHECKPOINT",
+  "branch": "docs/invest-progress-sync-20260928",
+  "status": "P0_AMOUNT_SIZING_OPTIMIZERS_AND_DUAL_CALENDAR_VERIFIED",
   "project_count": 33,
-  "validated_head": "5f6865b47967448651525cb992249003e2654721",
+  "validated_head": "c29dbd0b1cdb0bdc6247ffb6b4ab1f1406840cde",
   "validation_run": 36327856647,
   "validation_matrix": [
     "ubuntu-latest/python-3.11",
@@ -63,9 +63,23 @@
     "third_party_source_included": false
   },
   "next_actions": [
-    "Implement P0 allocation adapters and discrete CNY allocation layer.",
-    "Add dual calendar and dual performance-metric cross-checks.",
-    "Add Hikyuu/Zipline/bt independent portfolio validation.",
-    "Add Qlib/Alphalens research adapters after P0 executable-allocation work."
-  ]
+    "Implement QuantStats and Empyrical risk/performance cross-checks with explicit metric/input contracts.",
+    "Evaluate Hikyuu, Zipline-reloaded and bt as independent validation paths; document supported environments and data limitations.",
+    "Only proceed to real-market evidence after licensed data and provenance are available; retain security status, corporate actions and rule effective dates.",
+    "Keep frozen holdout closed until a valid evaluation binding is reviewed; forward observation and independent review remain pending."
+  ],
+  "validation_runs": {
+    "main_matrix": 36375284697,
+    "calendar_real": 36375284696,
+    "optimizer_real_contracts": 36375284617,
+    "pypfopt_real": 36375284652
+  },
+  "progress": {
+    "amount_sizing": "COMPLETE_IN_DRAFT_PR_10",
+    "optimizer_adapters": "PYPFOPTOPT_RISKFOLIO_SKFOLIO_REAL_CONTRACTS_PASSED_IN_DRAFT_PRS_11_12",
+    "shanghai_calendar": "XSHG_SSE_REAL_LIBRARY_TEST_PASSED_IN_DRAFT_PR_13",
+    "dual_risk_performance_metrics": "PENDING",
+    "independent_engine_validation": "PENDING",
+    "licensed_real_market_evidence": "PENDING"
+  }
 }
