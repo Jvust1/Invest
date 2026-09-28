@@ -1,7 +1,7 @@
 {
-  "schema_version": 5,
+  "schema_version": 6,
   "project": "Jvust/Invest",
-  "as_of": "2026-09-28T01:47:25+00:00",
+  "as_of": "2026-09-28T04:06:47.384Z",
   "current_desktop": {
     "file_name": "Invest-G1-G5-0.2.0-rc2-完整交付.zip",
     "sha256": "67ee272c6439073f1a1ed757ec6ca986f385cafe1adaf314ab92290c475f00f4",
@@ -56,5 +56,29 @@
   "contains_real_user_data": false,
   "contains_credentials": false,
   "contains_public_research_evidence": true,
-  "third_party_source_reuploaded": false
+  "third_party_source_reuploaded": false,
+  "current_development_sync": {
+    "status": "GITHUB_DRAFT_BRANCH_AND_DRIVE_CHECKPOINT_UPDATED",
+    "feature_head": "c29dbd0b1cdb0bdc6247ffb6b4ab1f1406840cde",
+    "feature_prs": [
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "status_sync_branch": "docs/invest-progress-sync-20260928",
+    "status_sync_base_pr": 13,
+    "drive_checkpoint_id": "1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk",
+    "drive_revision_id": "ANLCKQl-h5kKwDhARTo7heeunZBGDEgy66fflrcVh-IxLFyznGOPFTrmTNaKCQyoVuPBzrdZZ6uSefcpTWgZDjJN-WAXgbjFvBUwjHTuKAA",
+    "validation_runs": [
+      36375284697,
+      36375284696,
+      36375284617,
+      36375284652
+    ],
+    "new_release_binary_created": false,
+    "main_modified": false,
+    "third_party_source_reuploaded": false
+  }
 }
