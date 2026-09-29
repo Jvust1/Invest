@@ -30,7 +30,7 @@ def hikyuu_synthetic_contract() -> dict:
     if closes != [1.90, 1.93, 1.87]:
         raise ValueError("Hikyuu 临时 K 线读取值不一致")
 
-    fee_model = hku.TC_FixedETF(commission=0.00025, lowestCommission=5.0)
+    fee_model = hku.TC_FixedETF(commission=0.00025, lowest_commission=5.0)
     buy_cost = fee_model.get_buy_cost(hku.Datetime("2025-01-02"), stock, 1.90, 200)
     if abs(float(buy_cost.commission) - 5.0) > 1e-12:
         raise ValueError("Hikyuu ETF 最低佣金合同变化")
@@ -54,7 +54,7 @@ def hikyuu_synthetic_contract() -> dict:
             "backend_total_cost_cny": float(buy_cost.total),
         },
         "limitations": [
-            "只验证临时内存 K 线和费用原语；没有调用 Hikyuu 数据下载、实盘代理或用户本地数据库。",
+            "只验证临时内存 K 线和费用原语；没有调用 Hikyuu 行情下载、实盘代理或用户本地数据库。Hikyuu 首次初始化可能自行拉取其 hub 策略仓库，这是框架初始化副作用，不是行情输入。",
             "未把 Hikyuu 的系统信号/成交时序等价为 Invest；事件驱动策略回放仍是后续 gate。",
         ],
     }
