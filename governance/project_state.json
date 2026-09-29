@@ -6,15 +6,15 @@
   "version": "0.2.0-rc2",
   "currency": "CNY",
   "security_status": "NO_PROJECT_SECURITY_GATE",
-  "schema_version": 10,
-  "as_of": "2026-09-28",
-  "state_scope": "DRAFT_STACK_THROUGH_16_RISK_METRICS_AND_BT_FIXED_ALLOCATION_REPLAY",
-  "development_branch": "feat/500cny-bt-replay-20260928",
-  "development_pr": 16,
+  "schema_version": 11,
+  "as_of": "2026-09-29",
+  "state_scope": "DRAFT_STACK_THROUGH_17_FEE_AWARE_REPLAY_TO_SIX_METRIC_RISK_REPORT",
+  "development_branch": "feat/500cny-replay-risk-report-20260929",
+  "development_pr": 17,
   "latest_validated_desktop_code_head": "5075cf746019b7d107de603384c0cf02ce1ac02a",
-  "latest_validated_code_head": "28eb16994d784162d0c96944cc5f9da356a3e702",
-  "latest_validation_run": 36391774329,
-  "latest_checkpoint": "governance/checkpoints/20260928_bt_replay_progress.json",
+  "latest_validated_code_head": "735b1638c2e00ef5a14ce9b0e37b180f3946ddc7",
+  "latest_validation_run": 36531969490,
+  "latest_checkpoint": "governance/checkpoints/20260929_replay_risk_report_progress.json",
   "delivery_policy": {
     "rc2_pr": 4,
     "main_modified": false,
@@ -131,7 +131,6 @@
     "real_repeated_use_value"
   ],
   "next_actions": [
-    "Connect the fixed-allocation replay curve to the existing risk-metrics contract with an explicit initial-capital/entry-fee return convention.",
     "Build isolated Hikyuu and Zipline-reloaded synthetic-data contracts, including initialization/bundle, calendar and execution-rule differences.",
     "Only extend to real-market conclusions after licensed data, provenance, corporate actions and effective-date rules are available.",
     "Keep frozen holdout closed pending a reviewed evaluation binding; forward observation and independent review remain pending."
@@ -144,10 +143,11 @@
     "local_acquisition": "governance/market_acquisition_result.json",
     "assistant_cloud": "governance/assistant_cloud_result.json",
     "upstream_ecosystem": "governance/upstream_ecosystem_result.json",
-    "bt_replay": "governance/checkpoints/20260928_bt_replay_progress.json"
+    "bt_replay": "governance/checkpoints/20260928_bt_replay_progress.json",
+    "replay_risk": "governance/checkpoints/20260929_replay_risk_report_progress.json"
   },
   "previous_full_state": "governance/checkpoints/pre_local_acquisition/governance__project_state.json",
-  "latest_code_head": "28eb16994d784162d0c96944cc5f9da356a3e702",
+  "latest_code_head": "735b1638c2e00ef5a14ce9b0e37b180f3946ddc7",
   "stacked_draft_prs": [
     {
       "number": 9,
@@ -204,6 +204,13 @@
       "head": "28eb16994d784162d0c96944cc5f9da356a3e702",
       "status": "OPEN_DRAFT_UNMERGED",
       "purpose": "bt fixed-allocation cash/position/valuation replay"
+    },
+    {
+      "number": 17,
+      "branch": "feat/500cny-replay-risk-report-20260929",
+      "head": "735b1638c2e00ef5a14ce9b0e37b180f3946ddc7",
+      "status": "OPEN_DRAFT_UNMERGED",
+      "purpose": "fee-aware replay returns and six-metric risk report"
     }
   ],
   "completed_amount_level_work": [
@@ -236,6 +243,11 @@
       "item": "bt fixed-allocation accounting replay",
       "pr": 16,
       "verification": "three real synthetic cases passed in run 36391774331 on 28eb16994d784162d0c96944cc5f9da356a3e702; not strategy or real-market validation"
+    },
+    {
+      "item": "fee-aware fixed-allocation replay to six-metric risk report",
+      "pr": 17,
+      "verification": "main matrix 36531969490 and real bt+QuantStats+Empyrical run 36531969541 passed on 735b1638c2e00ef5a14ce9b0e37b180f3946ddc7; synthetic contract only"
     }
   ],
   "status_sync": {
@@ -244,23 +256,25 @@
     "status": "OPEN_DRAFT_UNMERGED"
   },
   "current_validation_runs": {
-    "main_matrix": 36391774329,
-    "bt_real": 36391774331,
-    "risk_metrics_real": 36391774665,
-    "calendar_real": 36391774808,
-    "optimizer_real_contracts": 36391774377,
-    "pypfopt_real": 36391774326
+    "main_matrix": 36531969490,
+    "replay_risk_real": 36531969541,
+    "risk_metrics_real": 36531969509,
+    "bt_real": 36531969518,
+    "calendar_real": 36531969551,
+    "optimizer_real_contracts": 36531969501,
+    "pypfopt_real": 36531969530
   },
-  "head_record_note": "Recorded the fully regression-verified feature/code head; the later checkpoint-sync commit changes only documentation/governance, so use live PR #16 for the current branch tip.",
+  "head_record_note": "Recorded the fully regression-verified PR #17 feature/code head; the later governance sync commit changes only documentation/governance, so verify the live PR #17 tip before continuing.",
   "drive_checkpoint_sync": {
     "status": "COMPLETE",
     "document_id": "1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk",
-    "revision_id": "ANLCKQk8k7ln9Hc1fe9_DAVYAbSmCl4t5gIIC0HHNda-rH3T0WCryINeokt6DbTbnW_Lcz5Bs872ukVynkZOZWGjtz2LbDTEHE14STQ3-gY",
+    "revision_id": "ANLCKQm_NtGARTWf2gCAp3WZlHxCO52sRBJ9qA7e3IKyRWTEwMHLfO14T20-2VR68bxr0k8_w_tj9z8DMTIVG0kgE81p3dg1lUhn8_oqpOw",
     "readback_verified": true,
     "appended_prs": [
       15,
-      16
+      16,
+      17
     ],
-    "feature_head": "28eb16994d784162d0c96944cc5f9da356a3e702"
+    "feature_head": "735b1638c2e00ef5a14ce9b0e37b180f3946ddc7"
   }
 }

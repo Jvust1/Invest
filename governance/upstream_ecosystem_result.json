@@ -1,12 +1,12 @@
 {
   "schema": "invest-upstream-ecosystem-v1",
-  "as_of": "2026-09-28",
+  "as_of": "2026-09-29",
   "repository": "Jvust/Invest",
-  "branch": "feat/500cny-bt-replay-20260928",
-  "status": "P0_METRICS_AND_FIRST_BT_ACCOUNTING_REPLAY_VERIFIED",
+  "branch": "feat/500cny-replay-risk-report-20260929",
+  "status": "P0_REPLAY_TO_SIX_METRIC_RISK_REPORT_VERIFIED",
   "project_count": 33,
-  "validated_head": "28eb16994d784162d0c96944cc5f9da356a3e702",
-  "validation_run": 36391774329,
+  "validated_head": "735b1638c2e00ef5a14ce9b0e37b180f3946ddc7",
+  "validation_run": 36531969490,
   "validation_matrix": [
     "ubuntu-latest/python-3.11",
     "ubuntu-latest/python-3.12",
@@ -61,35 +61,36 @@
     "drive_url": "https://docs.google.com/document/d/1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk/edit?usp=drivesdk",
     "content_readback_verified": true,
     "third_party_source_included": false,
-    "scope_note": "PR #15/#16 appendix added and content readback verified at revision ANLCKQk8k7ln9Hc1fe9_DAVYAbSmCl4t5gIIC0HHNda-rH3T0WCryINeokt6DbTbnW_Lcz5Bs872ukVynkZOZWGjtz2LbDTEHE14STQ3-gY.",
-    "latest_revision_id": "ANLCKQk8k7ln9Hc1fe9_DAVYAbSmCl4t5gIIC0HHNda-rH3T0WCryINeokt6DbTbnW_Lcz5Bs872ukVynkZOZWGjtz2LbDTEHE14STQ3-gY",
+    "scope_note": "PR #15/#16/#17 appendices are present; PR #17 readback verified at revision ANLCKQm_NtGARTWf2gCAp3WZlHxCO52sRBJ9qA7e3IKyRWTEwMHLfO14T20-2VR68bxr0k8_w_tj9z8DMTIVG0kgE81p3dg1lUhn8_oqpOw.",
+    "latest_revision_id": "ANLCKQm_NtGARTWf2gCAp3WZlHxCO52sRBJ9qA7e3IKyRWTEwMHLfO14T20-2VR68bxr0k8_w_tj9z8DMTIVG0kgE81p3dg1lUhn8_oqpOw",
     "latest_append_readback_verified": true,
     "appended_prs": [
       15,
-      16
+      16,
+      17
     ],
-    "source_feature_head": "28eb16994d784162d0c96944cc5f9da356a3e702"
+    "source_feature_head": "735b1638c2e00ef5a14ce9b0e37b180f3946ddc7"
   },
   "next_actions": [
-    "Connect the fixed-allocation replay curve to the existing risk-metrics contract with an explicit initial-capital/entry-fee return convention.",
     "Build isolated Hikyuu and Zipline-reloaded synthetic-data contracts, including initialization/bundle, calendar and execution-rule differences.",
     "Only extend to real-market conclusions after licensed data, provenance, corporate actions and effective-date rules are available.",
     "Keep frozen holdout closed pending a reviewed evaluation binding; forward observation and independent review remain pending."
   ],
   "validation_runs": {
-    "main_matrix": 36391774329,
-    "bt_real": 36391774331,
-    "risk_metrics_real": 36391774665,
-    "calendar_real": 36391774808,
-    "optimizer_real_contracts": 36391774377,
-    "pypfopt_real": 36391774326
+    "main_matrix": 36531969490,
+    "replay_risk_real": 36531969541,
+    "risk_metrics_real": 36531969509,
+    "bt_real": 36531969518,
+    "calendar_real": 36531969551,
+    "optimizer_real_contracts": 36531969501,
+    "pypfopt_real": 36531969530
   },
   "progress": {
     "amount_sizing": "COMPLETE_IN_DRAFT_PR_10",
     "optimizer_adapters": "PYPFOPTOPT_RISKFOLIO_SKFOLIO_REAL_CONTRACTS_PASSED_IN_DRAFT_PRS_11_12",
     "shanghai_calendar": "XSHG_SSE_REAL_LIBRARY_TEST_PASSED_IN_DRAFT_PR_13",
-    "dual_risk_performance_metrics": "QUANTSTATS_EMPYRICAL_REAL_CONTRACT_PASSED_IN_DRAFT_PR_15",
-    "independent_engine_validation": "BT_FIXED_ALLOCATION_ACCOUNTING_ONLY_VERIFIED_PR_16; HIKYUU_ZIPLINE_AND_REAL_MARKET_PENDING",
+    "dual_risk_performance_metrics": "SIX_METRIC_QUANTSTATS_EMPYRICAL_REAL_CONTRACT_PASSED_IN_DRAFT_PR_17",
+    "independent_engine_validation": "BT_FIXED_ALLOCATION_ACCOUNTING_AND_REPLAY_TO_RISK_REPORT_VERIFIED_THROUGH_PR_17; HIKYUU_ZIPLINE_AND_REAL_MARKET_PENDING",
     "licensed_real_market_evidence": "PENDING"
   },
   "status_sync_branch": "docs/invest-progress-sync-20260928",

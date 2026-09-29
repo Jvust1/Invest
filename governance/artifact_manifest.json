@@ -1,7 +1,7 @@
 {
-  "schema_version": 7,
+  "schema_version": 8,
   "project": "Jvust/Invest",
-  "as_of": "2026-09-28",
+  "as_of": "2026-09-29",
   "current_desktop": {
     "file_name": "Invest-G1-G5-0.2.0-rc2-完整交付.zip",
     "sha256": "67ee272c6439073f1a1ed757ec6ca986f385cafe1adaf314ab92290c475f00f4",
@@ -35,20 +35,22 @@
     "drive_url": "https://docs.google.com/document/d/1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk/edit?usp=drivesdk",
     "content_readback_verified": true,
     "third_party_source_included": false,
-    "latest_sync_feature_head": "28eb16994d784162d0c96944cc5f9da356a3e702",
+    "latest_sync_feature_head": "735b1638c2e00ef5a14ce9b0e37b180f3946ddc7",
     "latest_sync_validation_runs": {
-      "main_matrix": 36391774329,
-      "bt_real": 36391774331,
-      "risk_metrics_real": 36391774665,
-      "calendar_real": 36391774808,
-      "optimizer_real_contracts": 36391774377,
-      "pypfopt_real": 36391774326
+      "main_matrix": 36531969490,
+      "replay_risk_real": 36531969541,
+      "risk_metrics_real": 36531969509,
+      "bt_real": 36531969518,
+      "calendar_real": 36531969551,
+      "optimizer_real_contracts": 36531969501,
+      "pypfopt_real": 36531969530
     },
-    "latest_drive_revision_id": "ANLCKQk8k7ln9Hc1fe9_DAVYAbSmCl4t5gIIC0HHNda-rH3T0WCryINeokt6DbTbnW_Lcz5Bs872ukVynkZOZWGjtz2LbDTEHE14STQ3-gY",
+    "latest_drive_revision_id": "ANLCKQm_NtGARTWf2gCAp3WZlHxCO52sRBJ9qA7e3IKyRWTEwMHLfO14T20-2VR68bxr0k8_w_tj9z8DMTIVG0kgE81p3dg1lUhn8_oqpOw",
     "latest_append_readback_verified": true,
     "latest_append_prs": [
       15,
-      16
+      16,
+      17
     ]
   },
   "research_extension_result": "governance/assistant_cloud_result.json",
@@ -73,6 +75,48 @@
   "contains_public_research_evidence": true,
   "third_party_source_reuploaded": false,
   "current_development_sync": {
+    "status": "GITHUB_AND_DRIVE_CHECKPOINT_SYNCED",
+    "feature_head": "735b1638c2e00ef5a14ce9b0e37b180f3946ddc7",
+    "feature_prs": [
+      9,
+      10,
+      11,
+      12,
+      13,
+      15,
+      16,
+      17
+    ],
+    "status_sync_pr": 14,
+    "development_pr": 17,
+    "development_branch": "feat/500cny-replay-risk-report-20260929",
+    "drive_checkpoint_id": "1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk",
+    "drive_revision_id": "ANLCKQm_NtGARTWf2gCAp3WZlHxCO52sRBJ9qA7e3IKyRWTEwMHLfO14T20-2VR68bxr0k8_w_tj9z8DMTIVG0kgE81p3dg1lUhn8_oqpOw",
+    "validation_runs": [
+      36531969490,
+      36531969541,
+      36531969509,
+      36531969518,
+      36531969551,
+      36531969501,
+      36531969530
+    ],
+    "validation_run_map": {
+      "main_matrix": 36531969490,
+      "replay_risk_real": 36531969541,
+      "risk_metrics_real": 36531969509,
+      "bt_real": 36531969518,
+      "calendar_real": 36531969551,
+      "optimizer_real_contracts": 36531969501,
+      "pypfopt_real": 36531969530
+    },
+    "documentation_sync_parent": "735b1638c2e00ef5a14ce9b0e37b180f3946ddc7",
+    "new_release_binary_created": false,
+    "main_modified": false,
+    "third_party_source_reuploaded": false,
+    "drive_readback_verified": true
+  },
+  "previous_development_sync": {
     "status": "GITHUB_AND_DRIVE_CHECKPOINT_SYNCED",
     "feature_head": "28eb16994d784162d0c96944cc5f9da356a3e702",
     "feature_prs": [
@@ -110,32 +154,5 @@
     "main_modified": false,
     "third_party_source_reuploaded": false,
     "drive_readback_verified": true
-  },
-  "previous_development_sync": {
-    "status": "GITHUB_DRAFT_BRANCH_AND_DRIVE_CHECKPOINT_UPDATED",
-    "feature_head": "c29dbd0b1cdb0bdc6247ffb6b4ab1f1406840cde",
-    "feature_prs": [
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "status_sync_branch": "docs/invest-progress-sync-20260928",
-    "status_sync_base_pr": 13,
-    "drive_checkpoint_id": "1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk",
-    "drive_revision_id": "ANLCKQl-h5kKwDhARTo7heeunZBGDEgy66fflrcVh-IxLFyznGOPFTrmTNaKCQyoVuPBzrdZZ6uSefcpTWgZDjJN-WAXgbjFvBUwjHTuKAA",
-    "validation_runs": [
-      36375284697,
-      36375284696,
-      36375284617,
-      36375284652
-    ],
-    "new_release_binary_created": false,
-    "main_modified": false,
-    "third_party_source_reuploaded": false,
-    "drive_readback_verified": true,
-    "status_sync_pr": 14,
-    "status_sync_head": "live PR #14 head; see GitHub"
   }
 }

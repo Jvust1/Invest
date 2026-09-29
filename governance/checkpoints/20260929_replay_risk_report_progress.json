@@ -1,0 +1,76 @@
+{
+  "schema": "invest-replay-risk-report-progress-v1",
+  "as_of": "2026-09-29",
+  "repository": "Jvust/Invest",
+  "feature_head": "735b1638c2e00ef5a14ce9b0e37b180f3946ddc7",
+  "branch": "feat/500cny-replay-risk-report-20260929",
+  "draft_pr": 17,
+  "base_pr": 16,
+  "status": "VERIFIED_SYNTHETIC_REPLAY_TO_SIX_METRIC_RISK_REPORT",
+  "validation_runs": {
+    "main_matrix": 36531969490,
+    "replay_risk_real": 36531969541,
+    "risk_metrics_real": 36531969509,
+    "bt_real": 36531969518,
+    "calendar_real": 36531969551,
+    "optimizer_real_contracts": 36531969501,
+    "pypfopt_real": 36531969530
+  },
+  "main_matrix": {
+    "tests_per_job": 532,
+    "skipped_optional_tests": 11,
+    "platforms": [
+      "Ubuntu/Python 3.11",
+      "Ubuntu/Python 3.12",
+      "Windows/Python 3.11",
+      "Windows/Python 3.12"
+    ]
+  },
+  "replay_risk_real": {
+    "tests": 2,
+    "libraries": {
+      "bt": "1.2.3",
+      "quantstats": "0.0.86",
+      "empyrical-reloaded": "0.5.12"
+    },
+    "cases": [
+      "40-session fee-aware fixed-allocation report",
+      "all-cash zero-risk with undefined Sharpe/Sortino"
+    ]
+  },
+  "report_contract": {
+    "first_return": "(equity_after_entry / initial_capital) - 1",
+    "entry_fees_included": true,
+    "minimum_sessions": 30,
+    "metrics": [
+      "cumulative_return",
+      "annualized_return",
+      "annual_volatility",
+      "max_drawdown",
+      "sharpe_zero_rf",
+      "sortino_zero_target"
+    ],
+    "replay_disagreement_fails_closed": true
+  },
+  "boundaries": {
+    "signal_validation": false,
+    "execution_market_contract_validation": false,
+    "real_market_validation": false,
+    "frozen_holdout_opened": false,
+    "broker_connected": false,
+    "main_modified": false
+  },
+  "drive_sync": {
+    "document_id": "1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk",
+    "revision_id": "ANLCKQm_NtGARTWf2gCAp3WZlHxCO52sRBJ9qA7e3IKyRWTEwMHLfO14T20-2VR68bxr0k8_w_tj9z8DMTIVG0kgE81p3dg1lUhn8_oqpOw",
+    "readback_verified": true,
+    "appended_prs": [
+      17
+    ]
+  },
+  "next_actions": [
+    "Build isolated Hikyuu and Zipline-reloaded synthetic-data contracts, including initialization/bundle, calendar and execution-rule differences.",
+    "Only extend to real-market conclusions after licensed data, provenance, corporate actions and effective-date rules are available.",
+    "Keep frozen holdout closed pending a reviewed evaluation binding; forward observation and independent review remain pending."
+  ]
+}
