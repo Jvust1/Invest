@@ -1,5 +1,5 @@
 {
-  "schema_version": 8,
+  "schema_version": 9,
   "project": "Jvust/Invest",
   "as_of": "2026-09-29",
   "current_desktop": {
@@ -35,22 +35,24 @@
     "drive_url": "https://docs.google.com/document/d/1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk/edit?usp=drivesdk",
     "content_readback_verified": true,
     "third_party_source_included": false,
-    "latest_sync_feature_head": "735b1638c2e00ef5a14ce9b0e37b180f3946ddc7",
+    "latest_sync_feature_head": "3507e511e293c3004342896272bdd576c74f00b1",
     "latest_sync_validation_runs": {
-      "main_matrix": 36531969490,
-      "replay_risk_real": 36531969541,
-      "risk_metrics_real": 36531969509,
-      "bt_real": 36531969518,
-      "calendar_real": 36531969551,
-      "optimizer_real_contracts": 36531969501,
-      "pypfopt_real": 36531969530
+      "main_matrix": 36532883762,
+      "independent_engines": 36532883781,
+      "replay_risk_real": 36532883760,
+      "risk_metrics_real": 36532883835,
+      "bt_real": 36532883848,
+      "calendar_real": 36532883859,
+      "optimizer_real_contracts": 36532883819,
+      "pypfopt_real": 36532883774
     },
-    "latest_drive_revision_id": "ANLCKQm_NtGARTWf2gCAp3WZlHxCO52sRBJ9qA7e3IKyRWTEwMHLfO14T20-2VR68bxr0k8_w_tj9z8DMTIVG0kgE81p3dg1lUhn8_oqpOw",
+    "latest_drive_revision_id": "ANLCKQmNxbR8J48dJPuptTkeRx-eRCIE3W0-_JPT0kMlqICLdeAhLrlseUWadcsR3O6NUU1x78FAglRINCNWMhxip7MPZxltmW1HE--5xss",
     "latest_append_readback_verified": true,
     "latest_append_prs": [
       15,
       16,
-      17
+      17,
+      18
     ]
   },
   "research_extension_result": "governance/assistant_cloud_result.json",
@@ -75,6 +77,51 @@
   "contains_public_research_evidence": true,
   "third_party_source_reuploaded": false,
   "current_development_sync": {
+    "status": "GITHUB_AND_DRIVE_CHECKPOINT_SYNCED",
+    "feature_head": "3507e511e293c3004342896272bdd576c74f00b1",
+    "feature_prs": [
+      9,
+      10,
+      11,
+      12,
+      13,
+      15,
+      16,
+      17,
+      18
+    ],
+    "status_sync_pr": 14,
+    "development_pr": 18,
+    "development_branch": "feat/independent-engine-contracts-20260929",
+    "drive_checkpoint_id": "1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk",
+    "drive_revision_id": "ANLCKQmNxbR8J48dJPuptTkeRx-eRCIE3W0-_JPT0kMlqICLdeAhLrlseUWadcsR3O6NUU1x78FAglRINCNWMhxip7MPZxltmW1HE--5xss",
+    "validation_runs": [
+      36532883762,
+      36532883781,
+      36532883760,
+      36532883835,
+      36532883848,
+      36532883859,
+      36532883819,
+      36532883774
+    ],
+    "validation_run_map": {
+      "main_matrix": 36532883762,
+      "independent_engines": 36532883781,
+      "replay_risk_real": 36532883760,
+      "risk_metrics_real": 36532883835,
+      "bt_real": 36532883848,
+      "calendar_real": 36532883859,
+      "optimizer_real_contracts": 36532883819,
+      "pypfopt_real": 36532883774
+    },
+    "documentation_sync_parent": "3507e511e293c3004342896272bdd576c74f00b1",
+    "new_release_binary_created": false,
+    "main_modified": false,
+    "third_party_source_reuploaded": false,
+    "drive_readback_verified": true
+  },
+  "previous_development_sync": {
     "status": "GITHUB_AND_DRIVE_CHECKPOINT_SYNCED",
     "feature_head": "735b1638c2e00ef5a14ce9b0e37b180f3946ddc7",
     "feature_prs": [
@@ -111,45 +158,6 @@
       "pypfopt_real": 36531969530
     },
     "documentation_sync_parent": "735b1638c2e00ef5a14ce9b0e37b180f3946ddc7",
-    "new_release_binary_created": false,
-    "main_modified": false,
-    "third_party_source_reuploaded": false,
-    "drive_readback_verified": true
-  },
-  "previous_development_sync": {
-    "status": "GITHUB_AND_DRIVE_CHECKPOINT_SYNCED",
-    "feature_head": "28eb16994d784162d0c96944cc5f9da356a3e702",
-    "feature_prs": [
-      9,
-      10,
-      11,
-      12,
-      13,
-      15,
-      16
-    ],
-    "status_sync_pr": 14,
-    "development_pr": 16,
-    "development_branch": "feat/500cny-bt-replay-20260928",
-    "drive_checkpoint_id": "1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk",
-    "drive_revision_id": "ANLCKQk8k7ln9Hc1fe9_DAVYAbSmCl4t5gIIC0HHNda-rH3T0WCryINeokt6DbTbnW_Lcz5Bs872ukVynkZOZWGjtz2LbDTEHE14STQ3-gY",
-    "validation_runs": [
-      36391774329,
-      36391774331,
-      36391774665,
-      36391774808,
-      36391774377,
-      36391774326
-    ],
-    "validation_run_map": {
-      "main_matrix": 36391774329,
-      "bt_real": 36391774331,
-      "risk_metrics_real": 36391774665,
-      "calendar_real": 36391774808,
-      "optimizer_real_contracts": 36391774377,
-      "pypfopt_real": 36391774326
-    },
-    "documentation_sync_parent": "28eb16994d784162d0c96944cc5f9da356a3e702",
     "new_release_binary_created": false,
     "main_modified": false,
     "third_party_source_reuploaded": false,

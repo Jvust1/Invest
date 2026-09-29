@@ -6,15 +6,15 @@
   "version": "0.2.0-rc2",
   "currency": "CNY",
   "security_status": "NO_PROJECT_SECURITY_GATE",
-  "schema_version": 11,
+  "schema_version": 12,
   "as_of": "2026-09-29",
-  "state_scope": "DRAFT_STACK_THROUGH_17_FEE_AWARE_REPLAY_TO_SIX_METRIC_RISK_REPORT",
-  "development_branch": "feat/500cny-replay-risk-report-20260929",
-  "development_pr": 17,
+  "state_scope": "DRAFT_STACK_THROUGH_18_HIKYUU_ZIPLINE_PREFLIGHT_CONTRACTS",
+  "development_branch": "feat/independent-engine-contracts-20260929",
+  "development_pr": 18,
   "latest_validated_desktop_code_head": "5075cf746019b7d107de603384c0cf02ce1ac02a",
-  "latest_validated_code_head": "735b1638c2e00ef5a14ce9b0e37b180f3946ddc7",
-  "latest_validation_run": 36531969490,
-  "latest_checkpoint": "governance/checkpoints/20260929_replay_risk_report_progress.json",
+  "latest_validated_code_head": "3507e511e293c3004342896272bdd576c74f00b1",
+  "latest_validation_run": 36532883762,
+  "latest_checkpoint": "governance/checkpoints/20260929_independent_engine_contracts_progress.json",
   "delivery_policy": {
     "rc2_pr": 4,
     "main_modified": false,
@@ -131,9 +131,9 @@
     "real_repeated_use_value"
   ],
   "next_actions": [
-    "Build isolated Hikyuu and Zipline-reloaded synthetic-data contracts, including initialization/bundle, calendar and execution-rule differences.",
-    "Only extend to real-market conclusions after licensed data, provenance, corporate actions and effective-date rules are available.",
-    "Keep frozen holdout closed pending a reviewed evaluation binding; forward observation and independent review remain pending."
+    "Extend Hikyuu temporary bars into a real synthetic TradeManager/System execution contract, documenting lot, fee-rounding, fill-timing and T+1 semantics.",
+    "Extend Zipline into a real temporary bundle ingest + run_algorithm contract with custom commission/slippage/lot semantics aligned explicitly to Invest.",
+    "Only after both event-driven contracts are explicit, proceed to licensed real-market evidence; keep frozen holdout, forward observation and broker connectivity closed."
   ],
   "component_result_paths": {
     "desktop": "governance/growth_delivery_result.json",
@@ -144,10 +144,11 @@
     "assistant_cloud": "governance/assistant_cloud_result.json",
     "upstream_ecosystem": "governance/upstream_ecosystem_result.json",
     "bt_replay": "governance/checkpoints/20260928_bt_replay_progress.json",
-    "replay_risk": "governance/checkpoints/20260929_replay_risk_report_progress.json"
+    "replay_risk": "governance/checkpoints/20260929_replay_risk_report_progress.json",
+    "independent_engines": "governance/checkpoints/20260929_independent_engine_contracts_progress.json"
   },
   "previous_full_state": "governance/checkpoints/pre_local_acquisition/governance__project_state.json",
-  "latest_code_head": "735b1638c2e00ef5a14ce9b0e37b180f3946ddc7",
+  "latest_code_head": "3507e511e293c3004342896272bdd576c74f00b1",
   "stacked_draft_prs": [
     {
       "number": 9,
@@ -211,6 +212,13 @@
       "head": "735b1638c2e00ef5a14ce9b0e37b180f3946ddc7",
       "status": "OPEN_DRAFT_UNMERGED",
       "purpose": "fee-aware replay returns and six-metric risk report"
+    },
+    {
+      "number": 18,
+      "branch": "feat/independent-engine-contracts-20260929",
+      "head": "3507e511e293c3004342896272bdd576c74f00b1",
+      "status": "OPEN_DRAFT_UNMERGED",
+      "purpose": "isolated Hikyuu 2.8.2 and Zipline Reloaded 3.1.1 synthetic preflight contracts"
     }
   ],
   "completed_amount_level_work": [
@@ -248,6 +256,11 @@
       "item": "fee-aware fixed-allocation replay to six-metric risk report",
       "pr": 17,
       "verification": "main matrix 36531969490 and real bt+QuantStats+Empyrical run 36531969541 passed on 735b1638c2e00ef5a14ce9b0e37b180f3946ddc7; synthetic contract only"
+    },
+    {
+      "item": "isolated Hikyuu and Zipline synthetic preflight contracts",
+      "pr": 18,
+      "verification": "main matrix 36532883762 plus independent-engine run 36532883781 passed on 3507e511e293c3004342896272bdd576c74f00b1; event-driven execution still pending"
     }
   ],
   "status_sync": {
@@ -256,25 +269,27 @@
     "status": "OPEN_DRAFT_UNMERGED"
   },
   "current_validation_runs": {
-    "main_matrix": 36531969490,
-    "replay_risk_real": 36531969541,
-    "risk_metrics_real": 36531969509,
-    "bt_real": 36531969518,
-    "calendar_real": 36531969551,
-    "optimizer_real_contracts": 36531969501,
-    "pypfopt_real": 36531969530
+    "main_matrix": 36532883762,
+    "independent_engines": 36532883781,
+    "replay_risk_real": 36532883760,
+    "risk_metrics_real": 36532883835,
+    "bt_real": 36532883848,
+    "calendar_real": 36532883859,
+    "optimizer_real_contracts": 36532883819,
+    "pypfopt_real": 36532883774
   },
-  "head_record_note": "Recorded the fully regression-verified PR #17 feature/code head; the later governance sync commit changes only documentation/governance, so verify the live PR #17 tip before continuing.",
+  "head_record_note": "Recorded the fully regression-verified PR #18 feature/code head; the later governance sync commit changes only documentation/governance, so verify the live PR #18 tip before continuing.",
   "drive_checkpoint_sync": {
     "status": "COMPLETE",
     "document_id": "1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk",
-    "revision_id": "ANLCKQm_NtGARTWf2gCAp3WZlHxCO52sRBJ9qA7e3IKyRWTEwMHLfO14T20-2VR68bxr0k8_w_tj9z8DMTIVG0kgE81p3dg1lUhn8_oqpOw",
+    "revision_id": "ANLCKQmNxbR8J48dJPuptTkeRx-eRCIE3W0-_JPT0kMlqICLdeAhLrlseUWadcsR3O6NUU1x78FAglRINCNWMhxip7MPZxltmW1HE--5xss",
     "readback_verified": true,
     "appended_prs": [
       15,
       16,
-      17
+      17,
+      18
     ],
-    "feature_head": "735b1638c2e00ef5a14ce9b0e37b180f3946ddc7"
+    "feature_head": "3507e511e293c3004342896272bdd576c74f00b1"
   }
 }

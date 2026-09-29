@@ -1,9 +1,9 @@
 {
-  "schema_version": 8,
+  "schema_version": 9,
   "as_of": "2026-09-29",
-  "phase": "PR17_GITHUB_AND_DRIVE_SYNC_COMPLETE",
+  "phase": "PR18_GITHUB_AND_DRIVE_SYNC_COMPLETE",
   "pending_sync": [],
-  "source_commit": "735b1638c2e00ef5a14ce9b0e37b180f3946ddc7",
+  "source_commit": "3507e511e293c3004342896272bdd576c74f00b1",
   "drive_checkpoint": {
     "title": "Invest-500CNY-OpenSource-Ecosystem-Checkpoint-20260928",
     "mime_type": "application/vnd.google-apps.document",
@@ -12,26 +12,27 @@
     "drive_url": "https://docs.google.com/document/d/1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk/edit?usp=drivesdk",
     "content_readback_verified": true,
     "project_count": 33,
-    "latest_revision_id": "ANLCKQm_NtGARTWf2gCAp3WZlHxCO52sRBJ9qA7e3IKyRWTEwMHLfO14T20-2VR68bxr0k8_w_tj9z8DMTIVG0kgE81p3dg1lUhn8_oqpOw",
+    "latest_revision_id": "ANLCKQmNxbR8J48dJPuptTkeRx-eRCIE3W0-_JPT0kMlqICLdeAhLrlseUWadcsR3O6NUU1x78FAglRINCNWMhxip7MPZxltmW1HE--5xss",
     "latest_append_readback_verified": true,
     "appended_prs": [
       15,
       16,
-      17
+      17,
+      18
     ],
-    "source_feature_head": "735b1638c2e00ef5a14ce9b0e37b180f3946ddc7"
+    "source_feature_head": "3507e511e293c3004342896272bdd576c74f00b1"
   },
-  "publication_action": "Keep Draft PR #9 through #17 unmerged; no main write.",
+  "publication_action": "Keep Draft PR #9 through #18 unmerged; no main write.",
   "public_cloud_research": "VERIFIED_TENCENT_SMOKE",
-  "upstream_ecosystem": "P0_REPLAY_TO_SIX_METRIC_RISK_REPORT_VERIFIED",
+  "upstream_ecosystem": "P0_HIKYUU_ZIPLINE_PREFLIGHT_CONTRACTS_VERIFIED",
   "real_acquisition": "NOT_PERFORMED",
   "real_data_and_license_review": "OPTIONAL_FORMAL_TRACK_STILL_PENDING",
   "next_actions": [
-    "Build isolated Hikyuu and Zipline-reloaded synthetic-data contracts, including initialization/bundle, calendar and execution-rule differences.",
-    "Only extend to real-market conclusions after licensed data, provenance, corporate actions and effective-date rules are available.",
-    "Keep frozen holdout closed pending a reviewed evaluation binding; forward observation and independent review remain pending."
+    "Extend Hikyuu temporary bars into a real synthetic TradeManager/System execution contract, documenting lot, fee-rounding, fill-timing and T+1 semantics.",
+    "Extend Zipline into a real temporary bundle ingest + run_algorithm contract with custom commission/slippage/lot semantics aligned explicitly to Invest.",
+    "Only after both event-driven contracts are explicit, proceed to licensed real-market evidence; keep frozen holdout, forward observation and broker connectivity closed."
   ],
-  "note": "PR #17 fee-aware replay-to-risk-report results were appended to the existing Drive checkpoint and read back at revision ANLCKQm_NtGARTWf2gCAp3WZlHxCO52sRBJ9qA7e3IKyRWTEwMHLfO14T20-2VR68bxr0k8_w_tj9z8DMTIVG0kgE81p3dg1lUhn8_oqpOw. GitHub remains authoritative; no main write, merge, broker action, holdout opening, or new release binary.",
+  "note": "PR #18 Hikyuu/Zipline preflight results were appended to the existing Drive checkpoint and read back at revision ANLCKQmNxbR8J48dJPuptTkeRx-eRCIE3W0-_JPT0kMlqICLdeAhLrlseUWadcsR3O6NUU1x78FAglRINCNWMhxip7MPZxltmW1HE--5xss. GitHub remains authoritative; full event-driven execution, real-market data, holdout opening, broker action, main write and merge remain out of scope.",
   "status_sync": {
     "branch": "docs/invest-progress-sync-20260928",
     "base_pr": 13,

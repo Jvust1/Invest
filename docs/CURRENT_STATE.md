@@ -4,26 +4,23 @@
 
 ## 当前开发链
 
-- 最新功能：Draft [PR #17](https://github.com/Jvust/Invest/pull/17)，分支 `feat/500cny-replay-risk-report-20260929`，基于 PR #16。
-- 完整回归验证的功能提交为 `735b1638c2e00ef5a14ce9b0e37b180f3946ddc7`；PR #9–#17 继续保持 Draft / Open / Unmerged，`main` 未修改。
-- 主矩阵 run `36531969490`：Ubuntu/Windows × Python 3.11/3.12 全过，每组 532 项，11 项可选测试跳过。
-- 新增净值→风险报告三库合同 run `36531969541`：真实 `bt==1.2.3` + `quantstats==0.0.86` + `empyrical-reloaded==0.5.12` 的 40 交易日与全现金两项合成案例通过。
-- 风险指标 run `36531969509`、bt run `36531969518`、双日历 run `36531969551`、三优化器 run `36531969501`、PyPortfolioOpt run `36531969530` 均通过。
+- 最新功能：Draft [PR #18](https://github.com/Jvust/Invest/pull/18)，分支 `feat/independent-engine-contracts-20260929`，基于 PR #17。
+- 完整回归验证的功能提交：`3507e511e293c3004342896272bdd576c74f00b1`；PR #9–#18 继续 Draft / Open / Unmerged，`main` 未修改。
+- 主矩阵 run `36532883762`：Ubuntu/Windows × Python 3.11/3.12 全过，每组 534 项，13 项可选测试跳过。
+- 独立引擎 run `36532883781`：Hikyuu 2.8.2 与 Zipline Reloaded 3.1.1 两个 job 均成功；既有 bt、风险指标、日历、优化器、净值→风险报告合同继续全绿。
 
 ## 已完成实现
 
-- #9：ChatGPT → Actions → artifact 公开研究链路；Tencent 39 日 smoke，保留 Eastmoney 失败记录。
-- #10：离散数量、整手、费用、流动性与现金约束。
-- #11–#12：PyPortfolioOpt、Riskfolio-Lib、skfolio 最小方差和金额结果交叉比较。
-- #13：XSHG/SSE 双日历及观测缺口核查。
-- #15：[QuantStats/Empyrical 指标契约](RISK_METRICS_CROSSCHECK.md)：现已扩展为累计收益、年化收益、年化波动率、最大回撤、Sharpe、Sortino 六项。
-- #16：[bt 固定配置回放](BT_ALLOCATION_REPLAY.md)：逐日核对现金、持仓、净值与费用，含全现金及不同资产费率。
-- #17：[净值→收益→风险报告闭环](REPLAY_RISK_REPORT.md)：只有 Invest/bt 逐日一致后才生成风险报告；首日收益相对初始资金计算，显式保留入场费用拖累；少于 30 个共同观测或回放分歧时 fail-closed。
+- #9–#13：公开研究链路、金额级离散配置、三优化器交叉比较、XSHG/SSE 双日历。
+- #15：QuantStats / Empyrical 六项风险与绩效指标合同。
+- #16：bt 固定配置逐日现金/持仓/净值/费用回放。
+- #17：费用感知的净值→日收益→六项风险报告闭环。
+- #18：[Hikyuu / Zipline 隔离预检](INDEPENDENT_ENGINE_CONTRACTS.md)：Hikyuu 临时内存 K 线 + ETF 费用原语通过；Zipline XSHG 日历 + 自定义 CSV bundle 注册生命周期通过。Hikyuu 首次初始化可能拉取其 hub 策略仓库，已记录为框架初始化副作用。
 
-## 下一步与未完成项
+## 当前明确未完成
 
-1. 建立 Hikyuu / Zipline-reloaded 隔离合成数据合同，明确初始化/bundle、交易日历、成交与费用规则差异。
-2. 获得真实授权行情、provenance、停复牌、公司行动和历史规则有效期证据后，才扩展真实市场结论。
-3. 三个真实市场环境、冻结 holdout、前向观察、独立审查、真实设备与重复使用价值仍待完成。
+1. Hikyuu 真实合成 TradeManager/System 事件驱动成交合同：整手、费用取整、成交时点、T+1。
+2. Zipline 真正的临时 bundle ingest + `run_algorithm`，以及与 Invest 对应的佣金/滑点/整手适配。
+3. 授权真实行情、provenance、停复牌、公司行动、历史规则有效期、冻结 holdout、前向观察、独立审查和真实设备重复使用价值。
 
-所有输出仍为 `PUBLIC_RESEARCH_ONLY` / `SCENARIO_ONLY`。本轮只证明软件合同在合成输入下成立，不代表真实收益、信号质量或成交能力。Drive 既有 checkpoint 已追加 PR #17 并回读验证，revision `ANLCKQm_NtGARTWf2gCAp3WZlHxCO52sRBJ9qA7e3IKyRWTEwMHLfO14T20-2VR68bxr0k8_w_tj9z8DMTIVG0kgE81p3dg1lUhn8_oqpOw`。
+因此 #18 是**独立引擎 preflight**，不是“完整回测已验收”。所有输出仍为 `PUBLIC_RESEARCH_ONLY` / `SCENARIO_ONLY`。Drive checkpoint 已追加 #18 并回读验证，revision `ANLCKQmNxbR8J48dJPuptTkeRx-eRCIE3W0-_JPT0kMlqICLdeAhLrlseUWadcsR3O6NUU1x78FAglRINCNWMhxip7MPZxltmW1HE--5xss`。
