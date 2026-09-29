@@ -11,9 +11,15 @@ import json
 import math
 
 
-_METRICS = ("annual_volatility", "max_drawdown", "sharpe_zero_rf")
-_TOLERANCE = {"annual_volatility": 1e-8, "max_drawdown": 1e-8,
-              "sharpe_zero_rf": 1e-8}
+_METRICS = (
+    "cumulative_return",
+    "annualized_return",
+    "annual_volatility",
+    "max_drawdown",
+    "sharpe_zero_rf",
+    "sortino_zero_target",
+)
+_TOLERANCE = {metric: 1e-8 for metric in _METRICS}
 
 
 def _day(value):
@@ -81,7 +87,7 @@ def _series(days, values):
     return pd.Series(values, index=pd.to_datetime(days, format="%Y-%m-%d"), dtype=float)
 
 
-def _from_quantstats(days, values, sharpe_defined):
+def _from_quantstats(days, values, sharpe_defined, sortino_defined):
     try:
         import quantstats as qs
         from importlib.metadata import version
@@ -90,14 +96,18 @@ def _from_quantstats(days, values, sharpe_defined):
     stats = qs.stats
     series = _series(days, values)
     return {"version": version("quantstats"), "metrics": {
+        "cumulative_return": stats.comp(series),
+        "annualized_return": stats.cagr(series, rf=0.0, compounded=True, periods=252),
         "annual_volatility": stats.volatility(series, periods=252, annualize=True),
         "max_drawdown": stats.max_drawdown(series),
         "sharpe_zero_rf": stats.sharpe(series, rf=0.0, periods=252,
                                       annualize=True, smart=False) if sharpe_defined else None,
+        "sortino_zero_target": stats.sortino(series, rf=0.0, periods=252,
+                                             annualize=True, smart=False) if sortino_defined else None,
     }}
 
 
-def _from_empyrical(days, values, sharpe_defined):
+def _from_empyrical(days, values, sharpe_defined, sortino_defined):
     try:
         import empyrical
         from importlib.metadata import version
@@ -105,34 +115,48 @@ def _from_empyrical(days, values, sharpe_defined):
         raise RuntimeError("缺少 Empyrical Reloaded；请安装 risk-metrics 额外依赖") from exc
     series = _series(days, values)
     return {"version": version("empyrical-reloaded"), "metrics": {
+        "cumulative_return": empyrical.cum_returns_final(series, starting_value=0),
+        "annualized_return": empyrical.annual_return(series, period="daily", annualization=252),
         "annual_volatility": empyrical.annual_volatility(series, period="daily", annualization=252),
         "max_drawdown": empyrical.max_drawdown(series),
         "sharpe_zero_rf": empyrical.sharpe_ratio(series, risk_free=0.0,
                                                  period="daily", annualization=252)
                           if sharpe_defined else None,
+        "sortino_zero_target": empyrical.sortino_ratio(series, required_return=0.0,
+                                                       period="daily", annualization=252)
+                               if sortino_defined else None,
     }}
 
 
 def compare_risk_metrics(history: dict, *, as_of: str) -> dict:
-    """Cross-check three metrics without selecting a preferred engine.
+    """Cross-check a standard six-metric report without selecting a preferred engine.
 
     This is an in-sample calculation on caller-supplied, noncumulative simple
-    daily returns. A constant stream has no defined Sharpe ratio.
+    daily returns. Constant streams have no defined Sharpe ratio. Streams with
+    no negative observation have no defined zero-target Sortino ratio.
     """
     days, values, source, digest = _input(history, as_of)
     sharpe_defined = min(values) != max(values)
-    raw = {"quantstats": _from_quantstats(days.copy(), values.copy(), sharpe_defined),
-           "empyrical_reloaded": _from_empyrical(days.copy(), values.copy(), sharpe_defined)}
+    sortino_defined = any(value < 0 for value in values)
+    raw = {
+        "quantstats": _from_quantstats(days.copy(), values.copy(), sharpe_defined, sortino_defined),
+        "empyrical_reloaded": _from_empyrical(days.copy(), values.copy(), sharpe_defined, sortino_defined),
+    }
     backends = {}
     for name, result in raw.items():
-        if not isinstance(result, dict) or set(result) != {"version", "metrics"} or not isinstance(result["version"], str) or not result["version"] or not isinstance(result["metrics"], dict) or set(result["metrics"]) != set(_METRICS):
+        if (not isinstance(result, dict) or set(result) != {"version", "metrics"}
+                or not isinstance(result["version"], str) or not result["version"]
+                or not isinstance(result["metrics"], dict)
+                or set(result["metrics"]) != set(_METRICS)):
             raise ValueError(f"{name} 返回不完整的指标集合")
         metrics = {}
         for metric in _METRICS:
             value = result["metrics"][metric]
-            if metric == "sharpe_zero_rf" and not sharpe_defined:
+            undefined = ((metric == "sharpe_zero_rf" and not sharpe_defined)
+                         or (metric == "sortino_zero_target" and not sortino_defined))
+            if undefined:
                 if value is not None:
-                    raise ValueError(f"{name} 在零波动样本返回了 Sharpe 值")
+                    raise ValueError(f"{name} 在未定义的 {metric} 返回了数值")
                 metrics[metric] = None
             else:
                 if isinstance(value, bool) or value is None:
@@ -145,23 +169,44 @@ def compare_risk_metrics(history: dict, *, as_of: str) -> dict:
                     raise ValueError(f"{name} 的 {metric} 非有限数值")
                 metrics[metric] = number
         backends[name] = {"version": result["version"], "metrics": metrics}
+
     comparison = {}
     for metric in _METRICS:
         left = backends["quantstats"]["metrics"][metric]
         right = backends["empyrical_reloaded"]["metrics"][metric]
         gap = abs(left - right) if left is not None and right is not None else None
-        comparison[metric] = {"absolute_gap": gap, "absolute_tolerance": _TOLERANCE[metric],
-                              "status": "UNDEFINED" if gap is None else
-                              "AGREE" if gap <= _TOLERANCE[metric] else "DISAGREE"}
-    return {"schema": "invest-risk-metrics-crosscheck-v1", "status": "SCENARIO_ONLY",
-            "data_scope": "PUBLIC_RESEARCH_ONLY", "as_of": as_of,
-            "history_source": source, "history_sha256": digest,
-            "history_sessions": len(values), "history_start": days[0], "history_end": days[-1],
-            "assumptions": {"return_type": "simple_daily_noncumulative",
-                            "periods_per_year": 252, "risk_free_rate": 0.0,
-                            "volatility_ddof": 1},
-            "backends": backends, "comparison": comparison,
-            "comparison_status": "DISAGREE" if any(x["status"] == "DISAGREE" for x in comparison.values())
-                                 else "PARTIAL_UNDEFINED" if not sharpe_defined else "AGREE",
-            "limitations": ["仅对输入样本进行指标交叉核验；未验证数据授权、完整性或样本外绩效。",
-                            "252 日年化和零无风险利率是显式研究假设，不代表未来收益或可交易结论。"]}
+        comparison[metric] = {
+            "absolute_gap": gap,
+            "absolute_tolerance": _TOLERANCE[metric],
+            "status": "UNDEFINED" if gap is None else
+                      "AGREE" if gap <= _TOLERANCE[metric] else "DISAGREE",
+        }
+    has_disagreement = any(item["status"] == "DISAGREE" for item in comparison.values())
+    has_undefined = any(item["status"] == "UNDEFINED" for item in comparison.values())
+    return {
+        "schema": "invest-risk-metrics-crosscheck-v2",
+        "status": "SCENARIO_ONLY",
+        "data_scope": "PUBLIC_RESEARCH_ONLY",
+        "as_of": as_of,
+        "history_source": source,
+        "history_sha256": digest,
+        "history_sessions": len(values),
+        "history_start": days[0],
+        "history_end": days[-1],
+        "assumptions": {
+            "return_type": "simple_daily_noncumulative",
+            "periods_per_year": 252,
+            "risk_free_rate": 0.0,
+            "sortino_target_return": 0.0,
+            "volatility_ddof": 1,
+            "compounding": True,
+        },
+        "backends": backends,
+        "comparison": comparison,
+        "comparison_status": "DISAGREE" if has_disagreement else
+                             "PARTIAL_UNDEFINED" if has_undefined else "AGREE",
+        "limitations": [
+            "仅对输入样本进行指标交叉核验；未验证数据授权、完整性或样本外绩效。",
+            "252 日年化、复利、零无风险利率和零 Sortino 目标收益是显式研究假设，不代表未来收益或可交易结论。",
+        ],
+    }
