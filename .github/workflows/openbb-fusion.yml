@@ -1,0 +1,43 @@
+name: Invest OpenBB fusion
+
+on:
+  push:
+    branches: [feat/openbb-provider-20261001]
+    paths:
+      - "invest/providers/openbb_provider.py"
+      - "invest/providers/__init__.py"
+      - "tests/test_openbb_provider.py"
+      - "pyproject.toml"
+      - "invest/upstream_registry.json"
+      - ".github/workflows/openbb-fusion.yml"
+  pull_request:
+    paths:
+      - "invest/providers/openbb_provider.py"
+      - "invest/providers/__init__.py"
+      - "tests/test_openbb_provider.py"
+      - "pyproject.toml"
+      - "invest/upstream_registry.json"
+      - ".github/workflows/openbb-fusion.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  fusion:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ["3.11", "3.12"]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install core project
+        run: python -m pip install -e .
+      - name: Run OpenBB adapter tests without network
+        run: python -m unittest tests.test_openbb_provider -v
+      - name: Compile adapter
+        run: python -m py_compile invest/providers/openbb_provider.py
