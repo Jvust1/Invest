@@ -107,6 +107,14 @@
       "path": "invest/providers/ccxt_ohlcv.py"
     },
     {
+      "repository": "ranaroussi/yfinance",
+      "revision": "0c5a6c4939c2dba36b12a6d1a19c0366a7f2afb6",
+      "license": "Apache-2.0",
+      "stars": 25402,
+      "status": "active_adapter",
+      "path": "invest/providers/yfinance_ohlcv.py"
+    },
+    {
       "repository": "kernc/backtesting.py",
       "revision": "ca2e2611621e472542ba90f7243a1fa06a7d7108",
       "license": "AGPL-3.0",

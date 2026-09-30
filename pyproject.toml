@@ -18,6 +18,7 @@ risk = ["Riskfolio-Lib>=6.0"]
 qlib = ["pyqlib>=0.9"]
 skfolio = ["skfolio>=1.4"]
 vnpy = ["vnpy>=4.0"]
+yfinance = ["yfinance>=0.2.40"]
 
 [tool.setuptools.packages.find]
 include = ["invest*"]
