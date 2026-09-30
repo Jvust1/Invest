@@ -1,0 +1,63 @@
+{
+  "date": "2026-09-30",
+  "scope": "DuckDB exact-request offline research replay",
+  "base_pr": 51,
+  "base_commit": "34ce4e4ca27369a0c4c874935ba0308ec468c760",
+  "prerequisite_pr": 48,
+  "upstream": {
+    "repo": "duckdb/duckdb",
+    "revision": "7fb68627fd223b7cd06d37b83059e571fa5f994a",
+    "license": "MIT",
+    "license_blob": "2719c9a23d2a37c1dfb7402e79f03bd615701e53",
+    "stars": 41832,
+    "stars_checked_at": "2026-09-30T18:52:00Z",
+    "pushed_at": "2026-09-30T18:04:43Z",
+    "tested_runtime_versions": [
+      "1.4.0",
+      "1.5.6"
+    ]
+  },
+  "runtime_path": [
+    "explicit_refresh",
+    "normalized_frame_validation",
+    "atomic_duckdb_snapshot",
+    "close_and_reopen_read_only",
+    "cache_only_provider",
+    "existing_research_bundle_and_sma_backtest"
+  ],
+  "validation": {
+    "full_pytest_command": "python -m pytest tests -q",
+    "passed": 590,
+    "optional_skipped": 13,
+    "passing_subtests": 410,
+    "focused_passed_per_duckdb_version": 31,
+    "focused_passing_subtests_per_duckdb_version": 62,
+    "example_rows": 120,
+    "example_synthetic_provider_calls": 1,
+    "independent_review": "two findings fixed and rechecked; no remaining actionable findings",
+    "remote_ci": "see exact-head status on the Draft PR",
+    "pandas_versions": [
+      "2.2.3",
+      "3.0.6"
+    ],
+    "ci_compatibility_fix": "Initial CI exposed DuckDB 1.4 + pandas 3 default string dtype in the generic API. Registration now normalizes only StringDtype columns losslessly; new nullable-string/index regression added."
+  },
+  "boundaries": [
+    "synthetic_data_only",
+    "no_provider_network_calls",
+    "no_credentials",
+    "no_paid_services",
+    "no_holdings_or_broker_access",
+    "no_real_trades",
+    "no_frozen_holdout_opening",
+    "no_main_writes_merge_or_deployment"
+  ],
+  "limitations": [
+    "caller-declared source and units are not authenticated or licensed by the cache",
+    "digest verifies integrity, not an attacker able to replace both data and hash",
+    "cache_only does not imply freshness; optional max_age_seconds enforces an explicit limit",
+    "latest exact-request snapshot is replaced only by explicit refresh; no version-history archive",
+    "exploratory close-to-close research is not full A-share execution semantics",
+    "bare pytest additionally collects duplicate legacy_research tests outside the declared tests target"
+  ]
+}

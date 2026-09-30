@@ -721,20 +721,22 @@
     },
     {
       "repo": "duckdb/duckdb",
-      "revision": "default-branch metadata snapshot 2026-09-30",
+      "revision": "7fb68627fd223b7cd06d37b83059e571fa5f994a",
       "license": "MIT",
-      "stars": 41818,
-      "status": "catalog_contract",
-      "path": null,
-      "target": "invest.upstream_catalog",
-      "stage": "catalog",
+      "stars": 41832,
+      "status": "active_adapter",
+      "path": "invest/providers/duckdb_cache.py",
+      "target": "invest.providers.DuckDBReplayProvider",
+      "stage": "active_adapter",
       "capabilities": [
         "analytical_storage",
-        "market_data"
+        "market_data",
+        "exact_request_offline_replay"
       ],
       "python_import": "duckdb",
-      "last_push": "2026-09-29T19:17:02Z",
-      "batch": "20260930-high-star-50"
+      "last_push": "2026-09-30T18:04:43Z",
+      "batch": "20260930-high-star-50",
+      "integration_note": "Actual optional DuckDB runtime stores exact-request snapshots, verifies integrity and replays through existing research/SMA pipelines. MIT notice in third_party/duckdb/LICENSE; docs/upstream/duckdb-replay-2026-09-30.md."
     },
     {
       "repo": "pola-rs/polars",
