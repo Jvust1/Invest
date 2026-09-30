@@ -1,0 +1,14 @@
+{
+  "purpose": "Track external projects found in the Drive Github folder and their Invest integration status.",
+  "source_snapshot": "03_Invest_full_source_20260925.zip",
+  "projects": [
+    {"repository": "akfamily/akshare", "revision": "0191689d57c667b7c7a198fd0cf97316837ef311", "license": "MIT", "status": "active_adapter", "path": "invest/providers/akshare_eastmoney.py"},
+    {"repository": "microsoft/qlib", "revision": "be725493eb1a6bbb42bf11b37aa7669f59610ff1", "license": "MIT", "status": "research_reference"},
+    {"repository": "kernc/backtesting.py", "revision": "ca2e2611621e472542ba90f7243a1fa06a7d7108", "license": "AGPL-3.0", "status": "reference_only"},
+    {"repository": "polakowo/vectorbt", "revision": "a3c0f40979648585b4581fc4694fd6e92b3fffca", "license": "Apache-2.0 + Commons Clause", "status": "reference_only"},
+    {"repository": "ricequant/rqalpha", "revision": "0d98adefa87956e26f3e7ca5b26b5f3fc7ca834f", "license": "custom commercial restriction", "status": "reference_only"},
+    {"repository": "mementum/backtrader", "revision": "b853d7c90b6721476eb5a5ea3135224e33db1f14", "license": "GPL-3.0", "status": "reference_only"},
+    {"repository": "vnpy/vnpy", "revision": "fa5206fe63836f3f8cd1ebd7168fbd19a5e2ff09", "license": "MIT", "status": "research_reference"},
+    {"repository": "AI4Finance-Foundation/FinRL", "revision": "3a0ab5cf3ddf0b59d25f7fd7e435811a18838c6c", "license": "MIT", "status": "research_reference"}
+  ]
+}
