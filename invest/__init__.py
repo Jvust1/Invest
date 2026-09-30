@@ -1,5 +1,6 @@
 """Invest: a composable research and backtesting toolkit."""
 from .calendar import exchange_sessions, trading_sessions
+from .upstream_catalog import available_catalog, catalog_summary, list_catalog
 from .features import add_stockstats_features
 from .finrl_bridge import finrl_observation, to_finrl_frame
 from .qlib_bridge import load_qlib_features, to_qlib_frame
@@ -18,6 +19,9 @@ from .vnpy_bridge import to_vnpy_bars, to_vnpy_records
 
 __all__ = [
     "add_stockstats_features",
+    "available_catalog",
+    "catalog_summary",
+    "list_catalog",
     "exchange_sessions",
     "fetch_ccxt_ohlcv",
     "fetch_yfinance_ohlcv",

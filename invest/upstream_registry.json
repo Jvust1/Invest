@@ -1,142 +1,1160 @@
 {
-  "purpose": "Track external projects used or evaluated by Invest.",
-  "source_snapshot": "03_Invest_full_source_20260925.zip",
+  "project": "Jvust/Invest",
+  "purpose": "Track external projects used or evaluated by Invest with explicit adapter and license boundaries.",
+  "as_of": "2026-09-30",
+  "batch": "20260930-high-star-50",
+  "stages": [
+    "active_adapter",
+    "reference_only",
+    "catalog"
+  ],
+  "license_policy": {
+    "permissive_adapter_allowlist": [
+      "MIT",
+      "Apache-2.0",
+      "BSD-2-Clause",
+      "BSD-3-Clause",
+      "ISC",
+      "MPL-2.0"
+    ],
+    "data_rights_separate_from_software_license": true,
+    "noassertion_requires_review": true,
+    "copyleft_requires_review": true
+  },
   "projects": [
     {
-      "repository": "akfamily/akshare",
+      "repo": "akfamily/akshare",
       "revision": "0191689d57c667b7c7a198fd0cf97316837ef311",
       "license": "MIT",
       "stars": 22794,
       "status": "active_adapter",
-      "path": "invest/providers/akshare_eastmoney.py"
+      "path": "invest/providers/akshare_eastmoney.py",
+      "target": "invest.providers.akshare_eastmoney",
+      "stage": "active_adapter",
+      "capabilities": [
+        "china_market_data",
+        "market_data"
+      ],
+      "python_import": "akshare",
+      "last_push": "2026-09-23T04:16:34Z"
     },
     {
-      "repository": "microsoft/qlib",
+      "repo": "microsoft/qlib",
       "revision": "be725493eb1a6bbb42bf11b37aa7669f59610ff1",
       "license": "MIT",
       "stars": 49065,
       "status": "active_adapter",
-      "path": "invest/qlib_bridge.py"
+      "path": "invest/qlib_bridge.py",
+      "target": "invest.qlib_bridge",
+      "stage": "active_adapter",
+      "capabilities": [
+        "factor_research",
+        "model_pipeline",
+        "backtesting"
+      ],
+      "python_import": "qlib",
+      "last_push": "2026-09-22T05:57:23Z"
     },
     {
-      "repository": "PyPortfolio/PyPortfolioOpt",
+      "repo": "PyPortfolio/PyPortfolioOpt",
       "revision": "a6638d2e06dae6f444fd022cfd4b3c528902a85b",
       "license": "MIT",
       "stars": 6065,
       "status": "active_adapter",
-      "path": "invest/portfolio.py"
+      "path": "invest/portfolio.py",
+      "target": "invest.portfolio",
+      "stage": "active_adapter",
+      "capabilities": [
+        "portfolio_optimization"
+      ],
+      "python_import": "pypfopt",
+      "last_push": "2026-07-07T21:18:14Z"
     },
     {
-      "repository": "pmorissette/ffn",
+      "repo": "pmorissette/ffn",
       "revision": "b1396bf4d426e4863549b0f76a7edd39f32ad460",
       "license": "MIT",
       "stars": 2679,
       "status": "vendored_reference",
-      "path": "third_party/ffn"
+      "path": "third_party/ffn",
+      "target": "third_party/ffn",
+      "stage": "reference_only",
+      "capabilities": [
+        "performance_analysis",
+        "risk_metrics"
+      ],
+      "python_import": "ffn",
+      "last_push": "2025-01-01T00:00:00Z"
     },
     {
-      "repository": "jealous/stockstats",
+      "repo": "jealous/stockstats",
       "revision": "67318d90e2e051aeb7838b56feacf90747fd6635",
       "license": "BSD-3-Clause",
       "stars": 1523,
       "status": "active_adapter",
-      "path": "invest/features.py"
+      "path": "invest/features.py",
+      "target": "invest.features",
+      "stage": "active_adapter",
+      "capabilities": [
+        "technical_indicators"
+      ],
+      "python_import": "stockstats",
+      "last_push": "2025-01-01T00:00:00Z"
     },
     {
-      "repository": "stefan-jansen/empyrical-reloaded",
+      "repo": "stefan-jansen/empyrical-reloaded",
       "revision": "efe60664f0abd957074b0751ef82228594a659a5",
       "license": "Apache-2.0",
       "stars": 124,
       "status": "active_adapter",
-      "path": "invest/risk.py"
+      "path": "invest/risk.py",
+      "target": "invest.risk",
+      "stage": "active_adapter",
+      "capabilities": [
+        "performance_analysis",
+        "risk_metrics"
+      ],
+      "python_import": "empyrical",
+      "last_push": "2025-01-01T00:00:00Z"
     },
     {
-      "repository": "rsheftel/pandas_market_calendars",
+      "repo": "rsheftel/pandas_market_calendars",
       "revision": "275890784073a3a3a347e4f05f4dc986456e6a75",
       "license": "MIT",
       "stars": 1001,
       "status": "active_adapter",
-      "path": "invest/calendar.py"
+      "path": "invest/calendar.py",
+      "target": "invest.calendar",
+      "stage": "active_adapter",
+      "capabilities": [
+        "market_calendar"
+      ],
+      "python_import": "pandas_market_calendars",
+      "last_push": "2026-09-26T00:00:00Z"
     },
     {
-      "repository": "gerrymanoim/exchange_calendars",
+      "repo": "gerrymanoim/exchange_calendars",
       "revision": "bbda29fed902374bdb75acab008f421fbd567823",
       "license": "Apache-2.0",
       "stars": 670,
       "status": "active_adapter",
-      "path": "invest/calendar.py"
+      "path": "invest/calendar.py",
+      "target": "invest.calendar",
+      "stage": "active_adapter",
+      "capabilities": [
+        "market_calendar"
+      ],
+      "python_import": "exchange_calendars",
+      "last_push": "2026-09-26T00:00:00Z"
     },
     {
-      "repository": "dcajasn/Riskfolio-Lib",
+      "repo": "dcajasn/Riskfolio-Lib",
       "revision": "8724297f5a252755229b7284495389223af70b95",
       "license": "BSD-3-Clause",
       "stars": 4523,
       "status": "active_adapter",
-      "path": "invest/riskfolio_adapter.py"
+      "path": "invest/riskfolio_adapter.py",
+      "target": "invest.riskfolio_adapter",
+      "stage": "active_adapter",
+      "capabilities": [
+        "portfolio_optimization",
+        "risk_metrics"
+      ],
+      "python_import": "riskfolio",
+      "last_push": "2026-09-01T00:00:00Z"
     },
     {
-      "repository": "skfolio/skfolio",
+      "repo": "skfolio/skfolio",
       "revision": "ba8417e7dcda0c79536d93a712a4b19733db0046",
       "license": "BSD-3-Clause",
       "stars": 2450,
       "status": "active_adapter",
-      "path": "invest/skfolio_adapter.py"
+      "path": "invest/skfolio_adapter.py",
+      "target": "invest.skfolio_adapter",
+      "stage": "active_adapter",
+      "capabilities": [
+        "portfolio_optimization",
+        "risk_metrics"
+      ],
+      "python_import": "skfolio",
+      "last_push": "2026-09-01T00:00:00Z"
     },
     {
-      "repository": "AI4Finance-Foundation/FinRL",
+      "repo": "AI4Finance-Foundation/FinRL",
       "revision": "e60e26e4870f00fbc704c6297edfd9d81816b3d3",
       "license": "MIT",
       "stars": 16498,
       "status": "active_adapter",
-      "path": "invest/finrl_bridge.py"
+      "path": "invest/finrl_bridge.py",
+      "target": "invest.finrl_bridge",
+      "stage": "active_adapter",
+      "capabilities": [
+        "reinforcement_learning",
+        "backtesting"
+      ],
+      "python_import": "finrl",
+      "last_push": "2026-09-01T00:00:00Z"
     },
     {
-      "repository": "vnpy/vnpy",
+      "repo": "vnpy/vnpy",
       "revision": "fa5206fe63836f3f8cd1ebd7168fbd19a5e2ff09",
       "license": "MIT",
       "stars": 45661,
       "status": "active_adapter",
-      "path": "invest/vnpy_bridge.py"
+      "path": "invest/vnpy_bridge.py",
+      "target": "invest.vnpy_bridge",
+      "stage": "active_adapter",
+      "capabilities": [
+        "execution_architecture",
+        "risk_controls"
+      ],
+      "python_import": "vnpy",
+      "last_push": "2026-09-13T06:36:50Z"
     },
     {
-      "repository": "ccxt/ccxt",
+      "repo": "ccxt/ccxt",
       "revision": "47d7b31cf935007dc79fa2243ac36643c82b15fd",
       "license": "MIT",
       "stars": 44217,
       "status": "active_adapter",
-      "path": "invest/providers/ccxt_ohlcv.py"
+      "path": "invest/providers/ccxt_ohlcv.py",
+      "target": "invest.providers.ccxt_ohlcv",
+      "stage": "active_adapter",
+      "capabilities": [
+        "crypto_market_data",
+        "market_data"
+      ],
+      "python_import": "ccxt",
+      "last_push": "2026-09-28T00:00:00Z"
     },
     {
-      "repository": "ranaroussi/yfinance",
+      "repo": "ranaroussi/yfinance",
       "revision": "0c5a6c4939c2dba36b12a6d1a19c0366a7f2afb6",
       "license": "Apache-2.0",
       "stars": 25402,
       "status": "active_adapter",
-      "path": "invest/providers/yfinance_ohlcv.py"
+      "path": "invest/providers/yfinance_ohlcv.py",
+      "target": "invest.providers.yfinance_ohlcv",
+      "stage": "active_adapter",
+      "capabilities": [
+        "global_market_data",
+        "market_data"
+      ],
+      "python_import": "yfinance",
+      "last_push": "2026-09-28T00:00:00Z"
     },
     {
-      "repository": "kernc/backtesting.py",
+      "repo": "kernc/backtesting.py",
       "revision": "ca2e2611621e472542ba90f7243a1fa06a7d7108",
       "license": "AGPL-3.0",
-      "status": "reference_only"
+      "stars": 9000,
+      "status": "reference_only",
+      "path": null,
+      "target": "reference_only",
+      "stage": "reference_only",
+      "capabilities": [
+        "backtesting"
+      ],
+      "python_import": "backtesting",
+      "last_push": "2026-08-05T12:39:16Z"
     },
     {
-      "repository": "polakowo/vectorbt",
+      "repo": "polakowo/vectorbt",
       "revision": "a3c0f40979648585b4581fc4694fd6e92b3fffca",
       "license": "Apache-2.0 + Commons Clause",
-      "status": "reference_only"
+      "stars": 19000,
+      "status": "reference_only",
+      "path": null,
+      "target": "reference_only",
+      "stage": "reference_only",
+      "capabilities": [
+        "backtesting",
+        "portfolio_optimization"
+      ],
+      "python_import": "vectorbt",
+      "last_push": "2026-01-01T00:00:00Z"
     },
     {
-      "repository": "ricequant/rqalpha",
+      "repo": "ricequant/rqalpha",
       "revision": "0d98adefa87956e26f3e7ca5b26b5f3fc7ca834f",
       "license": "custom commercial restriction",
-      "status": "reference_only"
+      "stars": 8000,
+      "status": "reference_only",
+      "path": null,
+      "target": "reference_only",
+      "stage": "reference_only",
+      "capabilities": [
+        "backtesting",
+        "china_market_data"
+      ],
+      "python_import": "rqalpha",
+      "last_push": "2026-01-01T00:00:00Z"
     },
     {
-      "repository": "mementum/backtrader",
+      "repo": "mementum/backtrader",
       "revision": "b853d7c90b6721476eb5a5ea3135224e33db1f14",
       "license": "GPL-3.0",
-      "status": "reference_only"
+      "stars": 13000,
+      "status": "reference_only",
+      "path": null,
+      "target": "reference_only",
+      "stage": "reference_only",
+      "capabilities": [
+        "backtesting"
+      ],
+      "python_import": "backtrader",
+      "last_push": "2024-08-19T17:47:36Z"
+    },
+    {
+      "repo": "goldmansachs/gs-quant",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "Apache-2.0",
+      "stars": 13031,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "quant_research",
+        "risk_models"
+      ],
+      "python_import": "gs_quant",
+      "last_push": "2026-09-22T14:13:07Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "google/tf-quant-finance",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "Apache-2.0",
+      "stars": 5515,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "quant_research",
+        "derivatives",
+        "risk_models"
+      ],
+      "python_import": "tf_quant_finance",
+      "last_push": "2026-08-06T22:18:59Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "wilsonfreitas/awesome-quant",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "NOASSERTION",
+      "stars": 29867,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "quant_research",
+        "ecosystem"
+      ],
+      "python_import": null,
+      "last_push": "2026-09-30T01:24:32Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "avhz/RustQuant",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "Apache-2.0",
+      "stars": 1823,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "quant_research",
+        "pricing"
+      ],
+      "python_import": null,
+      "last_push": "2026-09-12T12:20:21Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "TradeMaster-NTU/TradeMaster",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "Apache-2.0",
+      "stars": 3087,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "reinforcement_learning",
+        "backtesting"
+      ],
+      "python_import": "trademaster",
+      "last_push": "2025-06-04T03:57:56Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "StockSharp/StockSharp",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "NOASSERTION",
+      "stars": 10821,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "execution_architecture",
+        "backtesting"
+      ],
+      "python_import": null,
+      "last_push": "2026-09-28T21:00:24Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "fasiondog/hikyuu",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "Apache-2.0",
+      "stars": 3535,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "backtesting",
+        "execution_architecture"
+      ],
+      "python_import": "hikyuu",
+      "last_push": "2026-09-29T14:30:49Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "cvxgrp/cvxportfolio",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "GPL-3.0",
+      "stars": 1291,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "portfolio_optimization",
+        "backtesting"
+      ],
+      "python_import": "cvxportfolio",
+      "last_push": "2026-04-27T14:11:17Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "jankrepl/deepdow",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "Apache-2.0",
+      "stars": 1185,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "portfolio_optimization",
+        "deep_learning"
+      ],
+      "python_import": "deepdow",
+      "last_push": "2024-01-24T15:56:49Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "cuemacro/finmarketpy",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "Apache-2.0",
+      "stars": 3817,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "backtesting",
+        "market_data"
+      ],
+      "python_import": "finmarketpy",
+      "last_push": "2026-04-16T09:29:35Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "HKUDS/Vibe-Trading",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "MIT",
+      "stars": 34346,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "agent_research",
+        "backtesting"
+      ],
+      "python_import": null,
+      "last_push": "2026-09-29T10:59:55Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "Yvictor/TradingGym",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "MIT",
+      "stars": 1921,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "reinforcement_learning",
+        "backtesting"
+      ],
+      "python_import": "trading_gym",
+      "last_push": "2024-02-11T11:53:21Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "coding-kitties/investing-algorithm-framework",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "Apache-2.0",
+      "stars": 2136,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "backtesting",
+        "execution_architecture"
+      ],
+      "python_import": null,
+      "last_push": "2026-09-26T16:05:21Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "OpenByteInc/QuantDinger",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "Apache-2.0",
+      "stars": 12332,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "agent_research",
+        "backtesting"
+      ],
+      "python_import": null,
+      "last_push": "2026-09-28T20:16:14Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "goldspanlabs/optopsy",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "AGPL-3.0",
+      "stars": 1482,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "options_research",
+        "backtesting"
+      ],
+      "python_import": "optopsy",
+      "last_push": "2026-06-30T17:46:49Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "edtechre/pybroker",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "NOASSERTION",
+      "stars": 3549,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "backtesting",
+        "machine_learning"
+      ],
+      "python_import": "pybroker",
+      "last_push": "2026-09-28T16:15:43Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "hummingbot/hummingbot",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "Apache-2.0",
+      "stars": 20276,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "crypto_market_data",
+        "execution_architecture"
+      ],
+      "python_import": "hummingbot",
+      "last_push": "2026-09-28T10:50:41Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "ScottfreeLLC/AlphaPy",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "Apache-2.0",
+      "stars": 1757,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "machine_learning",
+        "backtesting"
+      ],
+      "python_import": "alphapy",
+      "last_push": "2025-08-24T13:55:25Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "wangzhe3224/awesome-systematic-trading",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "MIT",
+      "stars": 5225,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "quant_research",
+        "ecosystem"
+      ],
+      "python_import": null,
+      "last_push": "2026-09-29T20:17:37Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "Lumiwealth/lumibot",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "GPL-3.0",
+      "stars": 2100,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "execution_architecture",
+        "backtesting"
+      ],
+      "python_import": "lumibot",
+      "last_push": "2026-09-30T07:30:12Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "whittlem/pycryptobot",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "Apache-2.0",
+      "stars": 2057,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "crypto_market_data",
+        "execution_architecture"
+      ],
+      "python_import": null,
+      "last_push": "2026-03-26T03:53:20Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "blankly-finance/blankly",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "LGPL-3.0",
+      "stars": 2478,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "execution_architecture",
+        "backtesting"
+      ],
+      "python_import": "blankly",
+      "last_push": "2024-12-30T20:20:29Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "google/or-tools",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "Apache-2.0",
+      "stars": 14129,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "constraint_optimization",
+        "portfolio_optimization"
+      ],
+      "python_import": "ortools",
+      "last_push": "2026-09-30T06:13:09Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "optuna/optuna",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "MIT",
+      "stars": 14864,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "hyperparameter_optimization",
+        "machine_learning"
+      ],
+      "python_import": "optuna",
+      "last_push": "2026-09-30T07:26:24Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "duckdb/duckdb",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "MIT",
+      "stars": 41818,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "analytical_storage",
+        "market_data"
+      ],
+      "python_import": "duckdb",
+      "last_push": "2026-09-29T19:17:02Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "pola-rs/polars",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "MIT",
+      "stars": 39894,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "analytical_storage",
+        "market_data"
+      ],
+      "python_import": "polars",
+      "last_push": "2026-09-30T06:56:48Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "apache/arrow",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "Apache-2.0",
+      "stars": 17163,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "columnar_interchange",
+        "analytical_storage"
+      ],
+      "python_import": "pyarrow",
+      "last_push": "2026-09-30T06:43:02Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "plotly/plotly.py",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "MIT",
+      "stars": 18817,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "visualization",
+        "research_reporting"
+      ],
+      "python_import": "plotly",
+      "last_push": "2026-09-25T07:35:35Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "matplotlib/matplotlib",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "NOASSERTION",
+      "stars": 23307,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "visualization",
+        "research_reporting"
+      ],
+      "python_import": "matplotlib",
+      "last_push": "2026-09-30T03:22:33Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "mwaskom/seaborn",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "BSD-3-Clause",
+      "stars": 14052,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "visualization",
+        "research_reporting"
+      ],
+      "python_import": "seaborn",
+      "last_push": "2026-07-06T02:11:55Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "streamlit/streamlit",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "Apache-2.0",
+      "stars": 45858,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "visualization",
+        "research_workbench"
+      ],
+      "python_import": "streamlit",
+      "last_push": "2026-09-30T06:35:02Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "fastapi/fastapi",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "MIT",
+      "stars": 102718,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "service_api",
+        "research_workbench"
+      ],
+      "python_import": "fastapi",
+      "last_push": "2026-09-29T22:36:03Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "pydantic/pydantic",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "MIT",
+      "stars": 28909,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "data_validation",
+        "service_api"
+      ],
+      "python_import": "pydantic",
+      "last_push": "2026-09-29T21:56:56Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "scikit-learn/scikit-learn",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "BSD-3-Clause",
+      "stars": 67434,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "machine_learning",
+        "time_series_validation"
+      ],
+      "python_import": "sklearn",
+      "last_push": "2026-09-29T16:42:42Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "statsmodels/statsmodels",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "BSD-3-Clause",
+      "stars": 11666,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "statistics",
+        "time_series_validation"
+      ],
+      "python_import": "statsmodels",
+      "last_push": "2026-09-29T14:19:52Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "pytorch/pytorch",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "NOASSERTION",
+      "stars": 103538,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "deep_learning",
+        "reinforcement_learning"
+      ],
+      "python_import": "torch",
+      "last_push": "2026-09-30T07:33:38Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "tensorflow/tensorflow",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "Apache-2.0",
+      "stars": 200628,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "deep_learning",
+        "quant_research"
+      ],
+      "python_import": "tensorflow",
+      "last_push": "2026-09-30T07:27:00Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "dmlc/xgboost",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "Apache-2.0",
+      "stars": 28809,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "machine_learning",
+        "tabular_models"
+      ],
+      "python_import": "xgboost",
+      "last_push": "2026-09-29T23:07:59Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "catboost/catboost",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "Apache-2.0",
+      "stars": 9128,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "machine_learning",
+        "tabular_models"
+      ],
+      "python_import": "catboost",
+      "last_push": "2026-09-29T20:21:38Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "mlflow/mlflow",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "Apache-2.0",
+      "stars": 28192,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "experiment_tracking",
+        "model_registry"
+      ],
+      "python_import": "mlflow",
+      "last_push": "2026-09-30T07:21:04Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "PrefectHQ/prefect",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "Apache-2.0",
+      "stars": 23956,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "workflow_orchestration",
+        "research_workbench"
+      ],
+      "python_import": "prefect",
+      "last_push": "2026-09-30T03:12:13Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "apache/airflow",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "Apache-2.0",
+      "stars": 47015,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "workflow_orchestration",
+        "research_workbench"
+      ],
+      "python_import": "airflow",
+      "last_push": "2026-09-30T07:11:56Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "ray-project/ray",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "Apache-2.0",
+      "stars": 43955,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "distributed_compute",
+        "machine_learning"
+      ],
+      "python_import": "ray",
+      "last_push": "2026-09-30T07:22:37Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "huggingface/transformers",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "Apache-2.0",
+      "stars": 166839,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "deep_learning",
+        "nlp"
+      ],
+      "python_import": "transformers",
+      "last_push": "2026-09-30T07:22:51Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "DLR-RM/stable-baselines3",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "MIT",
+      "stars": 13862,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "reinforcement_learning",
+        "backtesting"
+      ],
+      "python_import": "stable_baselines3",
+      "last_push": "2026-09-09T14:05:40Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "Farama-Foundation/Gymnasium",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "MIT",
+      "stars": 12600,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "reinforcement_learning",
+        "backtesting"
+      ],
+      "python_import": "gymnasium",
+      "last_push": "2026-09-27T22:19:02Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "QuantConnect/Lean",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "Apache-2.0",
+      "stars": 21827,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "backtesting",
+        "execution_architecture"
+      ],
+      "python_import": null,
+      "last_push": "2026-09-29T21:10:46Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "tensortrade-org/tensortrade",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "Apache-2.0",
+      "stars": 7195,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "reinforcement_learning",
+        "backtesting"
+      ],
+      "python_import": "tensortrade",
+      "last_push": "2026-02-19T16:21:00Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "AI4Finance-Foundation/ElegantRL",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "NOASSERTION",
+      "stars": 4368,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "reinforcement_learning",
+        "deep_learning"
+      ],
+      "python_import": null,
+      "last_push": "2026-02-20T04:33:56Z",
+      "batch": "20260930-high-star-50"
+    },
+    {
+      "repo": "OpenBB-finance/OpenBB",
+      "revision": "default-branch metadata snapshot 2026-09-30",
+      "license": "NOASSERTION",
+      "stars": 73668,
+      "status": "catalog_contract",
+      "path": null,
+      "target": "invest.upstream_catalog",
+      "stage": "catalog",
+      "capabilities": [
+        "research_workbench",
+        "market_data"
+      ],
+      "python_import": "openbb",
+      "last_push": "2026-09-30T01:47:43Z",
+      "batch": "20260930-high-star-50"
     }
   ]
 }

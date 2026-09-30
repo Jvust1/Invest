@@ -28,3 +28,7 @@ applying each signal on the following bar.
 ## 融合状态
 
 [融合状态与目录边界](docs/INTEGRATION_STATUS.md)记录当前 main 已合入的高星适配器、桌面/研究归档和独立引擎合同。
+
+## 50 项高星融合目录
+
+[2026-09-30 高星开源项目 50 项融合目录](docs/HIGH_STAR_50_INTEGRATION.md)记录新批次的来源、星标、许可证和能力标签。
