@@ -1,5 +1,5 @@
 """Invest: a composable research and backtesting toolkit."""
-from .calendar import trading_sessions
+from .calendar import exchange_sessions, trading_sessions
 from .features import add_stockstats_features
 from .qlib_bridge import load_qlib_features, to_qlib_frame
 from .pipeline import (
@@ -11,9 +11,11 @@ from .pipeline import (
 from .portfolio import inverse_variance_weights, minimum_variance_weights
 from .risk import risk_report
 from .riskfolio_adapter import riskfolio_weights
+from .skfolio_adapter import skfolio_weights
 
 __all__ = [
     "add_stockstats_features",
+    "exchange_sessions",
     "inverse_variance_weights",
     "load_qlib_features",
     "minimum_variance_weights",
@@ -23,6 +25,7 @@ __all__ = [
     "riskfolio_weights",
     "run_a_share_sma_backtest",
     "run_backtest",
+    "skfolio_weights",
     "to_qlib_frame",
     "trading_sessions",
 ]

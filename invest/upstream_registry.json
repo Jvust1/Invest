@@ -59,12 +59,28 @@
       "path": "invest/calendar.py"
     },
     {
+      "repository": "gerrymanoim/exchange_calendars",
+      "revision": "bbda29fed902374bdb75acab008f421fbd567823",
+      "license": "Apache-2.0",
+      "stars": 670,
+      "status": "active_adapter",
+      "path": "invest/calendar.py"
+    },
+    {
       "repository": "dcajasn/Riskfolio-Lib",
       "revision": "8724297f5a252755229b7284495389223af70b95",
       "license": "BSD-3-Clause",
       "stars": 4523,
       "status": "active_adapter",
       "path": "invest/riskfolio_adapter.py"
+    },
+    {
+      "repository": "skfolio/skfolio",
+      "revision": "ba8417e7dcda0c79536d93a712a4b19733db0046",
+      "license": "BSD-3-Clause",
+      "stars": 2450,
+      "status": "active_adapter",
+      "path": "invest/skfolio_adapter.py"
     },
     {
       "repository": "AI4Finance-Foundation/FinRL",
