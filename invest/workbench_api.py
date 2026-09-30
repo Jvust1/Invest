@@ -15,7 +15,9 @@ def dispatch(handler, path, parameter, payload=None):
                           'G4':'中文工作台与备份恢复','G5':'可关闭的本地PIT事实扩展'},
                 'not_accepted':['真实数据许可和完整性','真实三种市场环境与样本外有效性',
                                 '持续前向模拟观察','用户Windows实机验收','独立第三方审阅'],
-                'broker_connected':False,'real_holdout_opened':False})
+                'broker_connected':False,'real_holdout_opened':False,
+                'experiment_tracking':{'enabled':server.experiment_archive is not None,
+                    'scope':'local_derivative_archive','included_in_private_backup':False}})
         if path == '/api/workbench/documents':
             kind = parameter('kind', True)
             if kind not in {'study','facts','review','receipt'}:
@@ -38,7 +40,21 @@ def dispatch(handler, path, parameter, payload=None):
             return handler._reply(409,{'error':'已有实验正在运行，请保留当前结果后重试'})
         try:
             study = run_study(dataset,payload.get('specification'))
-            return handler._reply(200,ws.put('study',study))
+            record = ws.put('study',study)
+            # Save the authoritative record before the optional derivative archive.
+            if server.experiment_archive is not None:
+                return handler._reply(200,dict(record,tracking=server.experiment_archive.archive(record)))
+            return handler._reply(200,record)
+        finally:
+            server.study_lock.release()
+    if path == '/api/workbench/track-study':
+        if not server.study_lock.acquire(blocking=False):
+            return handler._reply(409,{'error':'已有实验正在运行，请保留当前结果后重试'})
+        try:
+            record = ws.get(payload.get('study_id'),'study')
+            status = ({'status':'disabled','study_saved':True} if server.experiment_archive is None
+                      else server.experiment_archive.archive(record))
+            return handler._reply(200,{'study_id':record['id'],'tracking':status})
         finally:
             server.study_lock.release()
     if path == '/api/workbench/reviews':

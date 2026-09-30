@@ -1,0 +1,43 @@
+name: Invest local MLflow archive
+
+on:
+  pull_request:
+    paths:
+      - 'invest/mlflow_tracking.py'
+      - 'invest/server.py'
+      - 'invest/workbench_api.py'
+      - 'invest/experiments.py'
+      - 'invest/workspace.py'
+      - 'pyproject.toml'
+      - 'tests/test_mlflow_local.py'
+      - 'tests/test_mlflow_tracking.py'
+      - '.github/workflows/mlflow-local.yml'
+  push:
+    branches: ['feat/mlflow-local-studies-20260930']
+
+permissions:
+  contents: read
+
+jobs:
+  runtime:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ['3.11', '3.12']
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    env:
+      MLFLOW_DISABLE_TELEMETRY: 'true'
+      DO_NOT_TRACK: 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install real optional SDK and project
+        run: python -m pip install -e '.[mlflow,test]' 'mlflow==3.16.1'
+      - name: Run local SDK and HTTP regression proofs
+        run: python -m pytest tests/test_mlflow_local.py tests/test_mlflow_tracking.py tests/test_growth_http.py -q
+      - name: Compile tracking and server modules
+        run: python -m py_compile invest/mlflow_tracking.py invest/server.py invest/workbench_api.py

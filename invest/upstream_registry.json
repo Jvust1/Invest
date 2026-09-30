@@ -976,20 +976,23 @@
     },
     {
       "repo": "mlflow/mlflow",
-      "revision": "default-branch metadata snapshot 2026-09-30",
+      "revision": "7faf28476bddcebb68ee8b08cdcba1bee7ad6109",
       "license": "Apache-2.0",
-      "stars": 28192,
-      "status": "catalog_contract",
-      "path": null,
-      "target": "invest.upstream_catalog",
-      "stage": "catalog",
+      "stars": 28199,
+      "status": "implemented_optional_local_archive",
+      "path": "invest/mlflow_tracking.py",
+      "target": "invest.mlflow_tracking.LocalMLflowArchive",
+      "stage": "active_adapter",
       "capabilities": [
         "experiment_tracking",
-        "model_registry"
+        "local_study_archive"
       ],
       "python_import": "mlflow",
-      "last_push": "2026-09-30T07:21:04Z",
-      "batch": "20260930-high-star-50"
+      "last_push": "2026-09-30T15:57:22Z",
+      "batch": "20260930-high-star-50",
+      "license_path": "third_party/mlflow/LICENSE.txt",
+      "runtime_version": "3.16.1",
+      "notes": "Default-off workbench save calls the real local SDK after committing the immutable study. Explicit SQLite/file storage, disabled telemetry, idempotent archive and recovery; no remote tracking, model registry or trading."
     },
     {
       "repo": "PrefectHQ/prefect",

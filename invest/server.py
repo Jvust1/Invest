@@ -143,13 +143,17 @@ class InvestServer(ThreadingHTTPServer):
     daemon_threads = True
     allow_reuse_address = True
 
-    def __init__(self, address: tuple[str, int], data_dir: Path):
+    def __init__(self, address: tuple[str, int], data_dir: Path, *, track_experiments: bool = False):
         if address[0] not in {"127.0.0.1", "localhost"}:
             raise ValueError("v0.1 仅允许本机访问；不提供公开托管或未认证局域网账户访问")
         self.state = StateStore(Path(data_dir) / "state.sqlite")
         self.ledger = PaperLedger(Path(data_dir) / "paper.sqlite")
         self.workspace = Workspace(Path(data_dir) / "state.sqlite")
         self.study_lock = threading.Lock()
+        self.experiment_archive = None
+        if track_experiments:
+            from .mlflow_tracking import LocalMLflowArchive
+            self.experiment_archive = LocalMLflowArchive(data_dir)
         self.csrf_token = secrets.token_urlsafe(32)
         self.web_root = Path(__file__).parent / "web"
         super().__init__(address, InvestHandler)
@@ -339,11 +343,14 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description="Invest — 人民币 A 股研究与模拟工作台")
     parser.add_argument("--port", type=int, default=8765)
     parser.add_argument("--data-dir", type=Path, default=Path(".invest"), help="本地私密数据目录（默认 .invest）")
+    parser.add_argument("--track-experiments", action="store_true",
+                        help="可选：将已保存实验归档到本地MLflow（需要mlflow扩展；不联网）")
     parser.add_argument("--open", action="store_true", help="启动后打开本机浏览器")
     args = parser.parse_args(argv)
     if not 1024 <= args.port <= 65535:
         parser.error("端口应在 1024–65535 之间")
-    app = InvestServer(("127.0.0.1", args.port), args.data_dir)
+    app = InvestServer(("127.0.0.1", args.port), args.data_dir,
+                       track_experiments=args.track_experiments)
     print(f"Invest {__version__}: http://127.0.0.1:{app.server_port}")
     print("本机研究与模拟账本；按 Ctrl+C 停止。数据保存在：", args.data_dir.resolve())
     if args.open:
