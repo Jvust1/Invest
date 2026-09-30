@@ -1,0 +1,49 @@
+name: Invest provider fusion
+
+on:
+  push:
+    branches: [feat/akshare-provider-refresh-20260930]
+    paths:
+      - "invest/providers/akshare_native.py"
+      - "invest/providers/duckdb_cache.py"
+      - "invest/providers/__init__.py"
+      - "invest/pipeline.py"
+      - "tests/test_akshare_native_provider.py"
+      - "tests/test_pipeline_provider_fusion.py"
+      - "tests/test_duckdb_cache.py"
+      - "pyproject.toml"
+      - ".github/workflows/provider-fusion.yml"
+  pull_request:
+    paths:
+      - "invest/providers/akshare_native.py"
+      - "invest/providers/duckdb_cache.py"
+      - "invest/providers/__init__.py"
+      - "invest/pipeline.py"
+      - "tests/test_akshare_native_provider.py"
+      - "tests/test_pipeline_provider_fusion.py"
+      - "tests/test_duckdb_cache.py"
+      - "pyproject.toml"
+      - ".github/workflows/provider-fusion.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  fusion:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ["3.11", "3.12"]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install core project
+        run: python -m pip install -e .
+      - name: Run provider fusion tests
+        run: python -m unittest tests.test_akshare_native_provider tests.test_pipeline_provider_fusion tests.test_duckdb_cache -v
+      - name: Compile fused modules
+        run: python -m py_compile invest/providers/akshare_native.py invest/providers/duckdb_cache.py invest/pipeline.py
