@@ -38,3 +38,6 @@ independent-zipline = ["zipline-reloaded==3.1.1"]
 
 [tool.setuptools.packages.find]
 include = ["invest*"]
+
+[tool.setuptools.package-data]
+invest = ["upstream_registry.json", "web/*.html", "web/*.css", "web/*.js"]
