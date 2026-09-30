@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "repository": "Jvust1/Invest",
+  "as_of": "2026-09-30",
+  "capability": "workbench_walk_forward_train_only_candidate_selection",
+  "upstream": {
+    "repository": "scikit-learn/scikit-learn",
+    "stars": 67434,
+    "stars_checked_on": "2026-09-30",
+    "inspected_release": "1.8.0",
+    "inspected_commit": "646da0f072a8afef6a980aa427a710311e67eb9d",
+    "license": "BSD-3-Clause",
+    "runtime": "installed TimeSeriesSplit; version recorded in every protocol"
+  },
+  "dependency": {
+    "pull_request": "https://github.com/Jvust1/Invest/pull/48",
+    "tested_head": "1b2d415b2a18bb10f9f817d932bdd7084718af1e"
+  },
+  "local_verification": {
+    "new_deterministic_tests": 11,
+    "combined_unittest_count": 569,
+    "combined_unittest_skipped": 13,
+    "combined_unittest_failed": 0,
+    "http_end_to_end": "pass",
+    "javascript_syntax": "pass",
+    "visual_browser_qa": "blocked_by_cloud_browser_loopback_policy",
+    "remote_ci": "must_be_checked_on_published_exact_head",
+    "pytest_passed": 575,
+    "pytest_skipped": 13,
+    "pytest_inherited_failure": "test_capability_matrix_contains_allocation_and_china_data; independently reproduced on unchanged PR #48",
+    "pytest_subtests_passed": 365
+  },
+  "real_provider_calls": 0,
+  "private_holdings_used": false,
+  "frozen_holdout_opened": false,
+  "real_trades": 0,
+  "main_merged": false
+}

@@ -1,3 +1,16 @@
+## 2026-09-30 滚动验证功能分支候选
+
+新增 scikit-learn TimeSeriesSplit → 假设实验室 → 训练段选候选 → 后续评价
+→ 独立账本回放 → 不可变研究档案的完整离线链路。默认连续样本段模式保持不变。
+该候选依赖 PR #48 的应用恢复；不重复修改其修复文件，也不表示已经合入 main。
+当前仓库为 Jvust1/Invest（stable ID 1381007406）；下方早期仓库名和交付状态为历史快照。
+
+本地临时组合 PR #48 1b2d415b 后：569 unittest cases，13 skips，0 failures/errors，
+包括 HTTP 保存、下载、幂等重试与错误恢复。pytest 为575 passed / 13 skipped / 1个已在原PR #48复现的目录能力计数失败；断言未放宽。云浏览器禁止 loopback，UI 视觉验收未完成；
+远端 exact-head CI 待发布后单独核验。全部为合成测试，没有真实数据或交易。
+来源、合同和验证细节见 [滚动验证集成说明](upstream/sklearn-walkforward-2026-09-30.md)
+及 governance/checkpoints/20260930_sklearn_walkforward_pilot.json。
+
 ## 2026-09-25 Windows 桌面交付更新
 
 - 新增独立交付分支 `feat/desktop-delivery-20260925`；不修改 main、不自动合并。
