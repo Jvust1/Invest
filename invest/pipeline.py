@@ -63,21 +63,42 @@ def run_a_share_sma_backtest(
     fee_bps: float = 5.0,
     adjust: str = "qfq",
     timeout: float = 15,
+    provider: str = "direct",
+    provider_instance=None,
 ) -> tuple[pd.DataFrame, dict[str, float]]:
     """Fetch A-share history and run the Invest SMA pipeline end to end.
 
-    The provider is imported lazily so users can run local/synthetic research
-    without installing or contacting an external data service.
+    provider="direct" uses Invest's dependency-light Eastmoney HTTP adapter.
+    provider="akshare" uses the optional native AKShare package adapter.
+    A provider_instance may be injected for deterministic tests or custom runtime wiring.
     """
-    from .providers.akshare_eastmoney import fetch_a_share_daily
-
-    history = fetch_a_share_daily(
-        symbol=symbol,
-        start_date=start_date,
-        end_date=end_date,
-        adjust=adjust,
-        timeout=timeout,
-    )
+    normalized_provider = str(provider).strip().casefold()
+    if provider_instance is not None:
+        history = provider_instance.history(
+            symbol=symbol,
+            start_date=start_date,
+            end_date=end_date,
+            adjust=adjust,
+        )
+    elif normalized_provider == "direct":
+        from .providers.akshare_eastmoney import fetch_a_share_daily
+        history = fetch_a_share_daily(
+            symbol=symbol,
+            start_date=start_date,
+            end_date=end_date,
+            adjust=adjust,
+            timeout=timeout,
+        )
+    elif normalized_provider == "akshare":
+        from .providers.akshare_native import AKShareProvider
+        history = AKShareProvider().history(
+            symbol=symbol,
+            start_date=start_date,
+            end_date=end_date,
+            adjust=adjust,
+        )
+    else:
+        raise ValueError("provider must be 'direct' or 'akshare'")
     if history.empty:
         raise ValueError(f"no market data returned for symbol {symbol}")
     signal = moving_average_signal(history["close"], fast=fast, slow=slow)

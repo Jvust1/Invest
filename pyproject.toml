@@ -10,6 +10,8 @@ requires-python = ">=3.10"
 dependencies = ["numpy>=1.23", "pandas>=1.5", "requests>=2.28", "scipy>=1.9", "scikit-learn>=1.1"]
 
 [project.optional-dependencies]
+duckdb = ["duckdb>=1.4"]
+akshare = ["akshare>=1.18.97"]
 calendars = ["pandas-market-calendars>=4.0"]
 ccxt = ["ccxt>=4.0"]
 exchange = ["exchange-calendars>=4.0"]
