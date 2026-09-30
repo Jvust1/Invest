@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "checkpoint_id": "20260924_provider_validation_sample_scope_time_gate",
+  "project": "Invest",
+  "date": "2026-09-24",
+  "branch": "feat/a-share-research-v0.1-20260922",
+  "scope": "credential-free provider-evidence sample identity/time fail-closed hardening",
+  "changes": {
+    "sample_security_code_mainboard_required": true,
+    "sample_end_not_after_execution_date_required": true,
+    "shared_scope_validator": "invest.data.is_mainboard_symbol",
+    "new_adversarial_tests": 2,
+    "documentation_updated": true
+  },
+  "validation": {
+    "validated_code_head_sha": "6b27845191c62a35d5930cc56e518e9eeb187400",
+    "workflow_run_id": 35993749624,
+    "workflow_result": "success",
+    "matrix_jobs": 4,
+    "platforms": ["ubuntu-latest", "windows-latest"],
+    "python_versions": ["3.11", "3.12"],
+    "provider_evidence_tests": 17,
+    "current_full_suite_tests": 112,
+    "standard_library_tests_step": "pass",
+    "compile_source_step": "pass"
+  },
+  "external_state": {
+    "licensed_real_dataset_found_in_drive": false,
+    "provider_call_performed": false,
+    "credentials_used": false,
+    "real_data_used": false,
+    "holdout_observed": false,
+    "forward_paper_started": false
+  },
+  "open_blockers": ["LICENSED_REAL_DATA_REQUIRED"],
+  "drive": {
+    "folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
+    "new_objects": 0,
+    "changed_objects": 0,
+    "existing_checkpoint_file_id": "1Iscm0akdNG5s0WNJfc83-T_eh88xIz1F",
+    "frozen_checkpoint_preserved": true
+  },
+  "decision": "governance/decisions/D014_provider_validation_sample_scope_time_gate.json",
+  "next_action": "When authorized local provider access exists, execute the real-data provider validation runbook. Until then, continue only directly related credential-free adversarial tests, governance or research preparation without fabricating provider evidence."
+}

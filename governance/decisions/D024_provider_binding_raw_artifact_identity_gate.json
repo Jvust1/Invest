@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "id": "D024",
+  "project": "Invest",
+  "date": "2026-09-26",
+  "title": "Provider evidence and evaluation binding must preserve raw artifact identity continuity",
+  "status": "accepted",
+  "code_change_sha": "3b25024ba47ae1383d82b4b9611e8335929b26fa",
+  "validated_branch_head_sha": "10209ec6f382fd92c31d35b3679898fceb770f0b",
+  "workflow_run_id": 36199881454,
+  "rule": "provider_evidence.dataset_identity.raw_artifact_identity must exactly equal binding.dataset.raw_artifact_identity before holdout opening can be considered",
+  "fail_closed": true,
+  "truth_boundary": "Identity continuity is a provenance constraint only. It does not independently prove authorization, authenticity, completeness, or strategy validity.",
+  "provider_call_performed": false,
+  "credential_used": false,
+  "real_data_used": false,
+  "real_binding_created": false,
+  "holdout_opened": false
+}

@@ -1,0 +1,19 @@
+name: Invest replay to risk report crosscheck
+on:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  three-library-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned replay and risk libraries
+        run: python -m pip install '.[backtest-bt,risk-metrics]'
+      - name: Assert pinned libraries and run end-to-end synthetic contract
+        run: |
+          python -c "from importlib.metadata import version; assert version('bt') == '1.2.3'; assert version('quantstats') == '0.0.86'; assert version('empyrical-reloaded') == '0.5.12'"
+          python -m unittest discover -s tests -p 'test_replay_risk_integration.py' -v

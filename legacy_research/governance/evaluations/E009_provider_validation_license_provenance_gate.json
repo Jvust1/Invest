@@ -1,0 +1,40 @@
+{
+  "id": "E009",
+  "date": "2026-09-25",
+  "title": "Provider license provenance gate validation",
+  "status": "REMOTE_CI_VALIDATED",
+  "code_head_sha": "6db24bb3cde003f937a73dc5a5eb2041181af505",
+  "workflow_run_id": 36089180871,
+  "workflow_result": "success",
+  "matrix_jobs": 4,
+  "platforms": [
+    "ubuntu-latest",
+    "windows-latest"
+  ],
+  "python_versions": [
+    "3.11",
+    "3.12"
+  ],
+  "full_suite_tests": 118,
+  "provider_evidence_test_methods": 23,
+  "new_test": {
+    "method": "test_authorized_license_requires_stable_provenance_hash",
+    "negative_subcases": [
+      "missing",
+      "malformed"
+    ]
+  },
+  "gate": {
+    "field": "provider.license_evidence_sha256",
+    "format": "lowercase_sha256_64",
+    "meaning": "stable provenance identity only; not independent proof of authorization truth or scope"
+  },
+  "evidence_boundary": {
+    "provider_call_performed": false,
+    "real_data_used": false,
+    "real_provider_evidence_created": false,
+    "real_binding_created": false,
+    "frozen_holdout_opened": false,
+    "forward_paper_started": false
+  }
+}

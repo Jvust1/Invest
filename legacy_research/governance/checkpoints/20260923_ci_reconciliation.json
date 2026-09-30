@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "project": "Invest",
+  "checkpoint_type": "remote_ci_reconciliation",
+  "recorded_at": "2026-09-23T06:00:00+08:00",
+  "repository": "Jvust2/Invest",
+  "branch": "feat/a-share-research-v0.1-20260922",
+  "observed_head_sha": "f40b0285b1c2bb249464f2ec354e9eb3bb6b18df",
+  "pull_request": {
+    "number": 2,
+    "state": "open",
+    "draft": true,
+    "merged": false,
+    "base": "main",
+    "head": "feat/a-share-research-v0.1-20260922",
+    "mergeable": true
+  },
+  "ci": {
+    "workflow": "Invest tests",
+    "run_id": 35701856144,
+    "status": "completed",
+    "conclusion": "success",
+    "matrix": [
+      "windows-latest / Python 3.11: success",
+      "windows-latest / Python 3.12: success",
+      "ubuntu-latest / Python 3.11: success",
+      "ubuntu-latest / Python 3.12: success"
+    ],
+    "checks": [
+      "python -m unittest discover -s tests -v",
+      "python -m compileall -q invest"
+    ],
+    "unit_test_count_per_matrix_job": 82
+  },
+  "drive_checkpoint": {
+    "folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
+    "file_id": "1Iscm0akdNG5s0WNJfc83-T_eh88xIz1F",
+    "file_name": "Invest_v0.1.0_source_checkpoint_20260922.zip",
+    "size_bytes": 970123,
+    "status": "exists_verified"
+  },
+  "book_handoff": {
+    "repository": "Jvust2/Book",
+    "status": "COMPLETE_STRUCTURED_REVIEW",
+    "structured_review_result": "PASS",
+    "source_pdf_pages": [1, 430],
+    "switch_to_invest": true,
+    "final_drive_artifact_verified": true
+  },
+  "remaining_unverified": [
+    "licensed live Tushare credentials/permissions/responses",
+    "Windows desktop browser and start.bat manual experience",
+    "real market or frozen out-of-sample profitability",
+    "forward-paper evidence",
+    "brokerage execution; not implemented"
+  ],
+  "next_safe_actions": [
+    "Complete licensed real-data validation when local Tushare authorization is available, preserving unknown suspension/corporate-action fields as blockers.",
+    "Define and freeze an out-of-sample plus forward-paper evaluation protocol before interpreting strategy returns."
+  ],
+  "safety": {
+    "direct_main_write": false,
+    "auto_merge": false,
+    "destructive_operation": false
+  }
+}

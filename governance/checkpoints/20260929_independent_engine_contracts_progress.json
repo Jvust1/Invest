@@ -1,0 +1,70 @@
+{
+  "schema": "invest-independent-engine-contracts-progress-v1",
+  "as_of": "2026-09-29",
+  "repository": "Jvust/Invest",
+  "feature_head": "3507e511e293c3004342896272bdd576c74f00b1",
+  "branch": "feat/independent-engine-contracts-20260929",
+  "draft_pr": 18,
+  "base_pr": 17,
+  "status": "VERIFIED_HIKYUU_ZIPLINE_PREFLIGHT_ONLY",
+  "validation_runs": {
+    "main_matrix": 36532883762,
+    "independent_engines": 36532883781,
+    "replay_risk_real": 36532883760,
+    "risk_metrics_real": 36532883835,
+    "bt_real": 36532883848,
+    "calendar_real": 36532883859,
+    "optimizer_real_contracts": 36532883819,
+    "pypfopt_real": 36532883774
+  },
+  "main_matrix": {
+    "tests_per_job": 534,
+    "skipped_optional_tests": 13,
+    "platforms": [
+      "Ubuntu/Python 3.11",
+      "Ubuntu/Python 3.12",
+      "Windows/Python 3.11",
+      "Windows/Python 3.12"
+    ]
+  },
+  "hikyuu": {
+    "version": "2.8.2",
+    "result": "PASS",
+    "contract": [
+      "temporary Stock + DataFrame bars",
+      "ETF fee primitive with 0.00025 rate and 5 CNY minimum"
+    ],
+    "observed_initialization_side_effect": "may fetch Hikyuu hub strategy repository",
+    "event_driven_execution": false
+  },
+  "zipline": {
+    "version": "3.1.1",
+    "result": "PASS",
+    "contract": [
+      "XSHG calendar",
+      "isolated CSV bundle registration/remove"
+    ],
+    "bundle_ingest": false,
+    "run_algorithm": false,
+    "invest_fee_lot_adapter": false
+  },
+  "boundaries": {
+    "real_market_validation": false,
+    "frozen_holdout_opened": false,
+    "broker_connected": false,
+    "main_modified": false
+  },
+  "drive_sync": {
+    "document_id": "1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk",
+    "revision_id": "ANLCKQmNxbR8J48dJPuptTkeRx-eRCIE3W0-_JPT0kMlqICLdeAhLrlseUWadcsR3O6NUU1x78FAglRINCNWMhxip7MPZxltmW1HE--5xss",
+    "readback_verified": true,
+    "appended_prs": [
+      18
+    ]
+  },
+  "next_actions": [
+    "Extend Hikyuu temporary bars into a real synthetic TradeManager/System execution contract, documenting lot, fee-rounding, fill-timing and T+1 semantics.",
+    "Extend Zipline into a real temporary bundle ingest + run_algorithm contract with custom commission/slippage/lot semantics aligned explicitly to Invest.",
+    "Only after both event-driven contracts are explicit, proceed to licensed real-market evidence; keep frozen holdout, forward observation and broker connectivity closed."
+  ]
+}

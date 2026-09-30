@@ -1,0 +1,8 @@
+Command: python -m unittest discover -s tests -q
+Platform: Linux; Python 3.12.14
+----------------------------------------------------------------------
+Ran 82 tests in 5.830s
+
+OK
+
+python -m compileall -q invest: exit 0

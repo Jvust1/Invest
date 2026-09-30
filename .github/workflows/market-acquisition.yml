@@ -1,0 +1,82 @@
+name: Invest local acquisition verification
+on:
+  push:
+    branches: [feat/local-data-acquisition-20260927]
+    paths:
+      - 'integrations/market_evidence/acquisition.py'
+      - 'tools/collect_market_data.py'
+      - 'tools/market_acquisition_rehearsal.py'
+      - 'tests/test_market_acquisition.py'
+      - 'Collect-Market-Data-Windows.cmd'
+      - 'docs/MARKET_DATA_COLLECTION.md'
+      - 'governance/market_acquisition_source_identity.json'
+      - '.github/workflows/market-acquisition.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: acquisition-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 12
+    env:
+      PYTHONUTF8: '1'
+      PYTHONIOENCODING: utf-8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Verify source identities and full core regression
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p evidence
+          python tools/verify_execution_contract_source.py
+          python - <<'PY'
+          import hashlib,json,pathlib
+          for manifest in ['market_evidence_source_identity','market_acquisition_source_identity']:
+              value=json.loads(pathlib.Path('governance/'+manifest+'.json').read_text(encoding='utf-8'))
+              for name,expected in value['files'].items():
+                  assert hashlib.sha256(pathlib.Path(name).read_text(encoding='utf-8').encode('utf-8')).hexdigest()==expected,name
+              print(manifest,'PASS',len(value['files']))
+          PY
+          python -m unittest discover -s tests -v > evidence/unittest.txt 2>&1
+          python -m compileall -q invest integrations tools tests
+          git rev-parse HEAD > evidence/SOURCE_COMMIT.txt
+          git archive --format=zip -o evidence/Invest-Acquisition-Source.zip HEAD
+      - name: Rehearse artificial acquisition without credentials or provider calls
+        shell: bash
+        run: |
+          set -euo pipefail
+          python tools/collect_market_data.py plan --symbol 600000.SH --start-date 2024-01-02 --end-date 2024-01-08 > evidence/plan.json
+          python tools/market_acquisition_rehearsal.py --output evidence/rehearsal > evidence/rehearsal-summary.json
+          python -m pip install pytest
+          python -m pip check
+          python -m pytest -q --junitxml=evidence/pytest.xml > evidence/pytest.txt 2>&1
+          python -m pip freeze > evidence/dependencies.txt
+          git diff --exit-code
+      - name: Verify Windows launcher cancellation without credential entry
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          @('600000.SH','2024-01-02','2024-01-08','not-used.txt','not-created','NO','') | cmd /c Collect-Market-Data-Windows.cmd > evidence/launcher.txt
+          if (-not (Select-String -Path evidence/launcher.txt -Pattern 'CANCELLED' -Quiet)) { throw 'Launcher cancellation missing' }
+          if (Test-Path not-created) { throw 'Cancellation wrote files' }
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Invest-Acquisition-${{ matrix.os }}-${{ github.sha }}
+          path: evidence/
+          if-no-files-found: error
+          retention-days: 14
+          include-hidden-files: true

@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "id": "E011",
+  "date": "2026-09-26",
+  "title": "Provider-binding opening continuity gate remote CI validation",
+  "status": "REMOTE_CI_GREEN_BEHAVIOR_COVERAGE_CLOSED",
+  "implementation_head": "af60cf663ad2bb5aa237d82171969832f399588b",
+  "workflow_run_id": 36170981233,
+  "validation": {
+    "full_suite_tests": 130,
+    "platforms": [
+      "ubuntu-latest",
+      "windows-latest"
+    ],
+    "python_versions": [
+      "3.11",
+      "3.12"
+    ],
+    "tests": "pass",
+    "compile_source": "pass",
+    "opening_module_test_methods": 6,
+    "direct_behavioral_tests": 5,
+    "adversarial_subcases": 22,
+    "behavioral_test_debt": "CLOSED"
+  },
+  "scope": {
+    "module": "invest/opening.py",
+    "decision": "governance/decisions/D023_provider_binding_pair_continuity_gate.json"
+  },
+  "evidence_boundary": {
+    "provider_call_performed": false,
+    "real_data_used": false,
+    "real_binding_created": false,
+    "frozen_holdout_opened": false,
+    "profit_result_created": false
+  }
+}

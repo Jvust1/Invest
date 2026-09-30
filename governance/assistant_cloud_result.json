@@ -1,0 +1,134 @@
+{
+  "schema": "invest-assistant-cloud-delivery-v1",
+  "version": "v0.1",
+  "status": "VERIFIED_PUBLIC_RESEARCH_CLOUD_PATH",
+  "as_of": "2026-09-27T11:33:30+00:00",
+  "repository": "Jvust/Invest",
+  "repository_id": 1381007406,
+  "branch": "feat/chatgpt-cloud-research-20260927",
+  "draft_pr": 9,
+  "base_pr": 8,
+  "cloud_runtime_code_commit": "f2ab93b6a23c57517d1348e4efe5dd8703386289",
+  "cloud_runtime_code_tree": "8e70bc14e9266be377f458f1059b58152724d124",
+  "validation": {
+    "test_run": 36315941217,
+    "tests_per_matrix_job": 491,
+    "matrix": [
+      {
+        "job_id": 108610543742,
+        "os": "ubuntu-latest",
+        "python": "3.12",
+        "conclusion": "success"
+      },
+      {
+        "job_id": 108610543877,
+        "os": "ubuntu-latest",
+        "python": "3.11",
+        "conclusion": "success"
+      },
+      {
+        "job_id": 108610543930,
+        "os": "windows-latest",
+        "python": "3.12",
+        "conclusion": "success"
+      },
+      {
+        "job_id": 108610543943,
+        "os": "windows-latest",
+        "python": "3.11",
+        "conclusion": "success"
+      }
+    ],
+    "user_local_python_required": false,
+    "user_token_required": false
+  },
+  "provider_trials": [
+    {
+      "provider": "akshare_eastmoney",
+      "request_commit": "d7c10a190a3cbe862788e51120575ab8056e748a",
+      "run_id": 36315653626,
+      "job_id": 108609742893,
+      "artifact_id": 10930656841,
+      "artifact_sha256": "6fe12e62db6e7d998ab6e368b8f32a4273877381a0f21b591ed5f610c2709832",
+      "status": "FAILED",
+      "failure": "ConnectionError / RemoteDisconnected",
+      "silent_fallback": false
+    },
+    {
+      "provider": "akshare_tencent",
+      "request_commit": "e093baa3265bae4d00239932c47def79be2a55b1",
+      "run_id": 36316010850,
+      "job_id": 108610732329,
+      "artifact_id": 10930891754,
+      "artifact_sha256": "832df9afc885cad998b0828561cc48c0b7192400ff655a1b21ab9374fe450a1b",
+      "status": "PASS",
+      "symbol": "600000.SH",
+      "requested_start": "2026-08-01",
+      "requested_end": "2026-09-25",
+      "observed_start": "2026-08-03",
+      "observed_end": "2026-09-24",
+      "sessions": 39,
+      "normalized_csv_sha256": "1c11dfbb921b5af8b2797bc76ee2c730502cef4bcf0cbe896d005488c89ed017"
+    }
+  ],
+  "public_smoke_summary": {
+    "first_close": 9.63,
+    "last_close": 9,
+    "period_return": -0.06542056074766367,
+    "return_5_sessions": -0.0066225165562914245,
+    "return_20_sessions": -0.007717750826901959,
+    "max_close_drawdown": -0.06853582554517135,
+    "annualized_daily_volatility": 0.1890319312215205,
+    "ma_5": 9.02,
+    "ma_20": 9.184000000000001,
+    "ma_60": null,
+    "period_high": 9.65,
+    "period_low": 8.91
+  },
+  "provider_package": {
+    "name": "AKShare",
+    "version": "1.18.97",
+    "successful_interface": "stock_zh_a_hist_tx",
+    "data_scope": "PUBLIC_RESEARCH_ONLY"
+  },
+  "behavior": {
+    "chat_is_control_plane": true,
+    "github_actions_is_compute_plane": true,
+    "drive_is_long_term_artifact_vault": true,
+    "explicit_provider_selection": true,
+    "silent_provider_fallback": false,
+    "descriptive_research_only": true
+  },
+  "gates": {
+    "execution_authorized": false,
+    "evaluation_binding_created": false,
+    "frozen_holdout_opened": false,
+    "broker_connected": false,
+    "real_market_acceptance": false,
+    "real_user_license_verified": false
+  },
+  "drive": {
+    "file_name": "Invest-ChatGPT-Cloud-Research-v0.1-20260927.zip",
+    "bytes": 8279,
+    "members": 6,
+    "sha256": "66a4a45b570a29bd95afa1bca35751d2d088b59a44b9483a441476a325b3d0ca",
+    "drive_id": "1kumrq8YMaRZWbaf12HpWdCOo4F9itvjh",
+    "folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
+    "library_path": "/Google Drive/Invest/Invest-ChatGPT-Cloud-Research-v0.1-20260927.zip",
+    "download_readback_verified": true
+  },
+  "preserved": {
+    "desktop_version": "0.2.0-rc2",
+    "desktop_source": "5075cf746019b7d107de603384c0cf02ce1ac02a",
+    "local_acquisition_receipt": "governance/market_acquisition_result.json",
+    "main_modified": false,
+    "pr_merged": false,
+    "user_data_overwritten": false
+  },
+  "limitations": [
+    "PUBLIC_RESEARCH_ONLY does not prove underlying data rights or execution-grade market completeness.",
+    "Suspension, corporate actions, effective-date rules and broker cost facts are not completed by this cloud path.",
+    "No automatic buy/sell recommendation, broker connection, order placement, holdout opening or profit claim.",
+    "The first successful smoke result is one provider/one symbol/one historical interval, not empirical strategy acceptance."
+  ]
+}

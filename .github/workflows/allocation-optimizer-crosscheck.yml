@@ -1,0 +1,32 @@
+name: Invest optional optimizer crosscheck
+on:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  upstream-contract:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - extra: optimization-riskfolio
+            module: riskfolio
+            case: RiskfolioIntegrationTests
+          - extra: optimization-skfolio
+            module: skfolio
+            case: SkfolioIntegrationTests
+          - extra: optimization-all
+            module: pypfopt
+            case: CrossBackendIntegrationTests
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned optional backend
+        run: python -m pip install '.[${{ matrix.extra }}]'
+      - name: Assert backend installed and run real solver
+        run: |
+          python -c "import importlib.util; assert importlib.util.find_spec('${{ matrix.module }}') is not None"
+          python -m unittest discover -s tests -p 'test_allocation_optimizer_integration.py' -k '${{ matrix.case }}' -v

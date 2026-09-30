@@ -1,0 +1,100 @@
+{
+  "schema": "invest-market-evidence-delivery-v1",
+  "as_of": "2026-09-27T01:03:31.389176+00:00",
+  "project": "Jvust/Invest",
+  "repository_id": 1381007406,
+  "version": "ENG-04A-v0.1",
+  "status": "OFFLINE_INTAKE_SYNTHETICALLY_VERIFIED_REAL_EVIDENCE_PENDING",
+  "branch": "feat/market-evidence-20260927",
+  "draft_pr": 7,
+  "parent_pr": 6,
+  "source_commit": "1c8250a9a89fc08c37abb021fd16f51c3fcf5725",
+  "source_tree": "fb336e31ffcef6a243ae285ce8bf04ba16b129fa",
+  "implementation_commit": "a6728592589f45871b21d5a2f100b198a500044f",
+  "ci": {
+    "run_id": 36284039387,
+    "conclusion": "success",
+    "source_commit": "1c8250a9a89fc08c37abb021fd16f51c3fcf5725",
+    "linux_job": 108521268621,
+    "windows_job": 108521268461,
+    "artifacts": [
+      {
+        "platform": "linux",
+        "id": 10919761528,
+        "bytes": 1354789,
+        "sha256": "985ddb830dce3d3f464a16126cd2349a59ea5709ee28d5d182c9aed5ce49c1df"
+      },
+      {
+        "platform": "windows",
+        "id": 10919876481,
+        "bytes": 1055946,
+        "sha256": "d673336334a29221a935c565ad00cef8b6c5dfb43498430c00f9ea0f6c7922f9"
+      }
+    ]
+  },
+  "validation": {
+    "tests_per_os": 437,
+    "subtests_per_os": 309,
+    "new_tests": 67,
+    "synthetic_cases_per_os": 22,
+    "browser_checks_per_os": 77,
+    "test_failures": 0,
+    "javascript_errors": 0,
+    "external_browser_requests": 0,
+    "cross_platform_business_json_equal": 37,
+    "new_locked_text_files": 10,
+    "unchanged_locked_text_files": 37,
+    "exact_source_archive_files": 184,
+    "new_native_engine_execution": false,
+    "real_market_data_used": false,
+    "real_license_obtained": false,
+    "user_device_tested": false,
+    "independent_human_review": false,
+    "visual_inspection": "CHINESE_READABLE; MOBILE_DATES_UNWRAPPED; TRACE_TABLE_SCROLLS_LOCALLY"
+  },
+  "drive": {
+    "file_name": "Invest-Market-Evidence-v0.1-20260927.zip",
+    "bytes": 3019870,
+    "sha256": "187e4dfa20c592df5777503dddacf951fdc972a0d1fdb6cec1803d90eae512a7",
+    "members": 143,
+    "source_commit": "1c8250a9a89fc08c37abb021fd16f51c3fcf5725",
+    "drive_id": "1jKepJL6k9iKiQTRmD-psh0IpHHBb_ALa",
+    "folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
+    "library_path": "/Google Drive/Invest/Invest-Market-Evidence-v0.1-20260927.zip",
+    "download_readback_verified": true
+  },
+  "scope": {
+    "delivery_type": "SOURCE_TOOL_AND_OFFLINE_REPORTS_NOT_NEW_EXE",
+    "provider_calls": 0,
+    "credential_access": false,
+    "broker_connected": false,
+    "execution_authorized": false,
+    "real_binding_created": false,
+    "holdout_opened": false,
+    "forward_observation_started": false,
+    "all_empirical_growth_gates_passed": false,
+    "synthetic_fixture_evidence_is_real_license": false
+  },
+  "preserved": {
+    "desktop_version": "0.2.0-rc2",
+    "desktop_source": "5075cf746019b7d107de603384c0cf02ce1ac02a",
+    "original_engine_and_worker_unchanged": true,
+    "old_contracts_unchanged": true,
+    "user_data_overwritten": false,
+    "main_modified": false,
+    "pr_merged": false
+  },
+  "history": {
+    "initial_ci_run": 36283838583,
+    "initial_source": "a6728592589f45871b21d5a2f100b198a500044f",
+    "initial_issue": "Initial checks passed; visual review found wrapped mobile lineage dates. Fixed with column width/nowrap and a new actual browser assertion.",
+    "local_browser": "Chromium download failed; no local actual-browser success claimed."
+  },
+  "source_archive_note": "Source ZIP and CI bind to source_commit. Later metadata-only checkpoint adds actual Drive readback identity and is not a new executed version. Raw/normalized mapping and claim scope checks do not authenticate data or grant legal rights.",
+  "next_actions": [
+    "ENG-04B: obtain genuinely authorized local four-endpoint responses and applicable license evidence; preserve original bytes and capture times. Do not request credentials in chat.",
+    "Apply ENG-04A raw/normalized lineage checks, obtain independent calendar, suspension, company-action and effective-date evidence, then review actual contents rather than hash/boolean declarations.",
+    "Implement a separately versioned downstream provider-evidence/binding bridge only after genuine acquisition and independent review; current intake never grants execution or opens holdout.",
+    "ENG-03B native conservative policy support and ENG-05 independent signals/holdout/forward observation remain separate work; do not overwrite old results or the rc2 EXE."
+  ]
+}

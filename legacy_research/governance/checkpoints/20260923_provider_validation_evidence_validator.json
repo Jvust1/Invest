@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "checkpoint": "provider_validation_evidence_validator_remote_ci_validated",
+  "branch": "feat/a-share-research-v0.1-20260922",
+  "scope": "credential-free machine validation for sanitized real-provider boundary evidence before first real BOUND_UNOPENED evaluation binding",
+  "implementation": {
+    "module": "invest/provider_validation.py",
+    "format": "docs/PROVIDER_VALIDATION_EVIDENCE_FORMAT.md",
+    "decision": "governance/decisions/D012_provider_validation_evidence_validator.json",
+    "tests": "tests/test_provider_validation.py",
+    "provider_call_performed": false,
+    "credential_used": false,
+    "real_data_used": false,
+    "real_provider_evidence_created": false,
+    "real_binding_created": false,
+    "holdout_opened": false
+  },
+  "validation": {
+    "provider_evidence_test_methods": 13,
+    "current_full_suite_tests": 108,
+    "remote_ci_head_sha": "ac65138475b1ecee11388dd8d6294f53ea13ac67",
+    "workflow_run_id": 35817379641,
+    "workflow_result": "success",
+    "matrix_jobs": 4,
+    "platforms": ["ubuntu-latest", "windows-latest"],
+    "python_versions": ["3.11", "3.12"],
+    "standard_library_tests_step": "pass",
+    "compile_source_step": "pass"
+  },
+  "remaining_blocker": "LICENSED_REAL_DATA_REQUIRED",
+  "next_safe_action": "When a local authorized provider environment exists, execute REAL_DATA_PROVIDER_VALIDATION_RUNBOOK, emit a sanitized record conforming to PROVIDER_VALIDATION_EVIDENCE_FORMAT, validate it offline, then create the first BOUND_UNOPENED evaluation binding before any frozen-holdout observation."
+}

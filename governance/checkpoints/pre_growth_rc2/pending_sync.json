@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-09-26",
+  "phase": "text alignment landed; canonical project_state reconciliation remains open",
+  "drive_checkpoint": {
+    "status": "exists_verified",
+    "id": "1Iscm0akdNG5s0WNJfc83-T_eh88xIz1F"
+  },
+  "pending_sync": [
+    {
+      "id": "PROJECT_STATE_RECONCILIATION",
+      "status": "OPEN_NONBLOCKING",
+      "path": "governance/project_state.json"
+    }
+  ],
+  "publication_action": "Continue on Draft PR #2; keep the frozen Drive checkpoint unchanged.",
+  "publication_authority": "GitHub live branch, PR and checks",
+  "main_merge": "requires later explicit authorization for the specific PR; not a pending sync",
+  "parallel_roadmap_pr": {
+    "number": 1,
+    "status": "preserved untouched; reconcile README during eventual merge"
+  },
+  "next_safe_action": "Reconcile governance/project_state.json with the landed checkpoint, then continue provider-to-binding opening hardening while licensed data remains unavailable.",
+  "latest_validated_code_head": "af60cf663ad2bb5aa237d82171969832f399588b",
+  "latest_validation_workflow_run_id": 36170981233,
+  "latest_governance_commit_before_this_checkpoint": "191dff32e574409040fc52c9ef97d3aa997fa7d5",
+  "write_path_recovery": {
+    "status": "CURRENT_GOVERNANCE_APPLIED",
+    "date": "2026-09-26",
+    "reason": "AGENTS.md and project_state declare NO_PROJECT_SECURITY_GATE; retired historical gate references are not current blockers.",
+    "validated_on_non_default_branch": true,
+    "main_write": false
+  },
+  "governance_text_alignment": {
+    "status": "DOCS_ALIGNED_PROJECT_STATE_PENDING",
+    "checkpoint": "governance/checkpoints/20260926_governance_text_alignment_closed.json",
+    "paths": [
+      "docs/PRE_FLIGHT_CHECKLIST.md",
+      "docs/HANDOFF.md",
+      "README.md",
+      "docs/CURRENT_STATE.md"
+    ]
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "schema_version": 9,
+  "as_of": "2026-09-29",
+  "phase": "PR18_GITHUB_AND_DRIVE_SYNC_COMPLETE",
+  "pending_sync": [],
+  "source_commit": "3507e511e293c3004342896272bdd576c74f00b1",
+  "drive_checkpoint": {
+    "title": "Invest-500CNY-OpenSource-Ecosystem-Checkpoint-20260928",
+    "mime_type": "application/vnd.google-apps.document",
+    "drive_id": "1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk",
+    "folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
+    "drive_url": "https://docs.google.com/document/d/1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk/edit?usp=drivesdk",
+    "content_readback_verified": true,
+    "project_count": 33,
+    "latest_revision_id": "ANLCKQmNxbR8J48dJPuptTkeRx-eRCIE3W0-_JPT0kMlqICLdeAhLrlseUWadcsR3O6NUU1x78FAglRINCNWMhxip7MPZxltmW1HE--5xss",
+    "latest_append_readback_verified": true,
+    "appended_prs": [
+      15,
+      16,
+      17,
+      18
+    ],
+    "source_feature_head": "3507e511e293c3004342896272bdd576c74f00b1"
+  },
+  "publication_action": "Keep Draft PR #9 through #18 unmerged; no main write.",
+  "public_cloud_research": "VERIFIED_TENCENT_SMOKE",
+  "upstream_ecosystem": "P0_HIKYUU_ZIPLINE_PREFLIGHT_CONTRACTS_VERIFIED",
+  "real_acquisition": "NOT_PERFORMED",
+  "real_data_and_license_review": "OPTIONAL_FORMAL_TRACK_STILL_PENDING",
+  "next_actions": [
+    "Extend Hikyuu temporary bars into a real synthetic TradeManager/System execution contract, documenting lot, fee-rounding, fill-timing and T+1 semantics.",
+    "Extend Zipline into a real temporary bundle ingest + run_algorithm contract with custom commission/slippage/lot semantics aligned explicitly to Invest.",
+    "Only after both event-driven contracts are explicit, proceed to licensed real-market evidence; keep frozen holdout, forward observation and broker connectivity closed."
+  ],
+  "note": "PR #18 Hikyuu/Zipline preflight results were appended to the existing Drive checkpoint and read back at revision ANLCKQmNxbR8J48dJPuptTkeRx-eRCIE3W0-_JPT0kMlqICLdeAhLrlseUWadcsR3O6NUU1x78FAglRINCNWMhxip7MPZxltmW1HE--5xss. GitHub remains authoritative; full event-driven execution, real-market data, holdout opening, broker action, main write and merge remain out of scope.",
+  "status_sync": {
+    "branch": "docs/invest-progress-sync-20260928",
+    "base_pr": 13,
+    "drive_document_id": "1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk",
+    "drive_revision_id": "ANLCKQl-h5kKwDhARTo7heeunZBGDEgy66fflrcVh-IxLFyznGOPFTrmTNaKCQyoVuPBzrdZZ6uSefcpTWgZDjJN-WAXgbjFvBUwjHTuKAA",
+    "readback_pending": false,
+    "pr_number": 14,
+    "drive_readback_verified": true
+  }
+}

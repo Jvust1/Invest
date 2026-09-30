@@ -1,0 +1,99 @@
+name: Invest G1-G5 verified candidate
+on:
+  push:
+    branches: [feat/g1-g5-workbench-20260926]
+    paths:
+      - "invest/**"
+      - "tests/**"
+      - "tools/**"
+      - "desktop*.py"
+      - "restore_backup.py"
+      - "pyproject.toml"
+      - ".github/workflows/**"
+      - "governance/growth_source_identity.json"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: invest-growth-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  source:
+    if: github.ref == 'refs/heads/feat/g1-g5-workbench-20260926'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test complete integrated source
+        shell: bash
+        run: |
+          mkdir -p delivery/evidence
+          python tools/verify_growth_source.py | tee delivery/evidence/source-identity.json
+          python -m unittest discover -s tests -v 2>&1 | tee delivery/evidence/source-tests.txt
+          python -m compileall -q invest tests tools
+          node --check invest/web/workbench.js
+          git rev-parse HEAD > delivery/evidence/SOURCE_COMMIT.txt
+          git diff --exit-code
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Invest-growth-source-evidence
+          path: delivery/evidence/
+          if-no-files-found: error
+          retention-days: 14
+  windows:
+    needs: source
+    runs-on: windows-latest
+    timeout-minutes: 35
+    env:
+      DESKTOP_APP: Invest
+      PYTHONUTF8: '1'
+      PYTHONIOENCODING: utf-8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install existing desktop build dependencies
+        shell: pwsh
+        run: |
+          python -m pip install pytest pyinstaller==6.22.3 playwright
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python -m pip check
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python -m playwright install chromium
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          New-Item -ItemType Directory -Force delivery/evidence | Out-Null
+          python -m pip freeze | Set-Content -Encoding utf8 delivery/evidence/dependencies.txt
+      - name: Full integrated-source Windows regression
+        shell: pwsh
+        run: |
+          python -m pytest -ra --junitxml=delivery/evidence/pytest.xml 2>&1 | Tee-Object delivery/evidence/pytest.txt
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Build EXE and verify actual process, browser and restart
+        shell: pwsh
+        run: |
+          python tools/build_windows_delivery.py 2>&1 | Tee-Object delivery/evidence/build.txt
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Invest-G1-G5-Windows-${{ github.sha }}
+          path: delivery/
+          if-no-files-found: error
+          retention-days: 14

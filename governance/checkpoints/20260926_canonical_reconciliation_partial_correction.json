@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "project": "Invest",
+  "date": "2026-09-26",
+  "status": "PARTIAL_RECONCILIATION_WRITE_BLOCKED",
+  "supersedes_checkpoint": "governance/checkpoints/20260926_canonical_state_reconciliation_closed.json",
+  "successful_write": {
+    "path": "governance/checkpoints/20260926_canonical_state_reconciliation_closed.json",
+    "commit_sha": "4c045edd5354a59eb7116c2786f04fcdd21f58f3"
+  },
+  "failed_updates": [
+    "governance/project_state.json",
+    "governance/pending_sync.json",
+    "docs/CURRENT_STATE.md",
+    "docs/HANDOFF.md",
+    "invest/opening.py"
+  ],
+  "failure_class": "connector write safety check blocked update/create operations for existing canonical or code paths",
+  "authoritative_validated_state": {
+    "implementation_commit": "3b25024ba47ae1383d82b4b9611e8335929b26fa",
+    "validated_head": "10209ec6f382fd92c31d35b3679898fceb770f0b",
+    "workflow_run_id": 36199881454,
+    "full_suite_tests": 131,
+    "opening_test_methods": 7,
+    "raw_artifact_identity_match_required": true
+  },
+  "drive_new_objects": 0,
+  "drive_modified_objects": 0,
+  "real_provider_call_performed": false,
+  "real_data_used": false,
+  "real_binding_created": false,
+  "holdout_opened": false,
+  "next_safe_action": "Retry canonical reconciliation when ordinary non-default-branch updates are accepted; otherwise continue only append-only governance evidence without claiming canonical files are updated."
+}

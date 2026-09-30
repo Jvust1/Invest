@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "project": "Invest",
+  "date": "2026-09-26",
+  "status": "NON_BLOCKING_CANONICAL_STATE_SYNC_PENDING",
+  "completed": [
+    "invest/opening.py",
+    "tests/test_opening.py",
+    "governance/decisions/D023_provider_binding_pair_continuity_gate.json",
+    "governance/evaluations/E011_provider_binding_pair_continuity_gate.json",
+    "governance/checkpoints/20260926_provider_binding_pair_continuity_gate.json"
+  ],
+  "pending": [
+    "governance/project_state.json",
+    "docs/CURRENT_STATE.md",
+    "governance/pending_sync.json"
+  ],
+  "reason": "Full replacement writes for the existing canonical state files were rejected by the connected write path during this run; no planned write is reported as completed.",
+  "blocking": false,
+  "recovery": "Use the D023 decision, E011 evaluation record and 20260926 provider-binding continuity checkpoint as the factual delta, then reconcile the canonical state files on the next successful write path.",
+  "drive_changes": {
+    "new_objects": 0,
+    "modified_objects": 0
+  },
+  "validation_debt": {
+    "status": "OPEN_NON_BLOCKING",
+    "item": "Direct adversarial unit coverage for provider-binding mismatch branches",
+    "current_coverage": "Module exposure/import only; full suite and compile are green.",
+    "next": "Add direct credential-free mismatch tests before relying on the new pair gate for a future holdout opening."
+  }
+}

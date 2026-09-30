@@ -1,0 +1,13 @@
+test_cent_exact_cash_and_tplusone (__main__.Review.test_cent_exact_cash_and_tplusone) ... ok
+test_dataset_hash_recomputed (__main__.Review.test_dataset_hash_recomputed) ... ok
+test_future_prices_do_not_rewrite_past (__main__.Review.test_future_prices_do_not_rewrite_past) ... ok
+test_gap_and_actions_block (__main__.Review.test_gap_and_actions_block) ... ok
+test_history_change_rejected_and_missing_marks_null (__main__.Review.test_history_change_rejected_and_missing_marks_null) ... ok
+test_http_csrf_origin_json_and_finite_values (__main__.Review.test_http_csrf_origin_json_and_finite_values) ... ok
+test_signal_uses_previous_close_next_session (__main__.Review.test_signal_uses_previous_close_next_session) ... ok
+test_unknown_states_block (__main__.Review.test_unknown_states_block) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.550s
+
+OK

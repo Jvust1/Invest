@@ -19,6 +19,8 @@ qlib = ["pyqlib>=0.9"]
 skfolio = ["skfolio>=1.4"]
 vnpy = ["vnpy>=4.0"]
 yfinance = ["yfinance>=0.2.40"]
+independent-hikyuu = ["hikyuu==2.8.2"]
+independent-zipline = ["zipline-reloaded==3.1.1"]
 
 [tool.setuptools.packages.find]
 include = ["invest*"]

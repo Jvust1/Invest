@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "project": "Invest",
+  "checkpoint_type": "evaluation_protocol_freeze",
+  "recorded_at": "2026-09-23T07:02:29+08:00",
+  "repository": "Jvust2/Invest",
+  "branch": "feat/a-share-research-v0.1-20260922",
+  "created_from_head_sha": "94fa47706862f91ac04a21997b7eae9aac558e2b",
+  "protocol": {
+    "id": "invest-oos-forward-paper-v1",
+    "status": "FROZEN_METHOD_V1",
+    "human_readable": "docs/EVALUATION_PROTOCOL_V1.md",
+    "machine_readable": "governance/evaluation_protocol_v1.json",
+    "real_data_binding": "PENDING_LICENSED_REAL_DATA",
+    "holdout": "NOT_OPENED",
+    "forward_paper": "NOT_STARTED"
+  },
+  "reason": "Live Tushare authorization is not available in this task, so the next safe unfinished roadmap item was to freeze the evaluation method before any return interpretation.",
+  "verified_inputs": {
+    "book_monetary_finance_handoff": "COMPLETE_STRUCTURED_REVIEW",
+    "invest_remote_ci_at_previous_head": "success",
+    "drive_source_checkpoint_exists": true
+  },
+  "security_gate_note": {
+    "status": "RECOVERED_BEFORE_REF_UPDATE",
+    "event": "Two unattached Git blob objects for the protocol documents were created after an initially truncated global-safety display but before a complete line-addressable safety-baseline read was obtained.",
+    "impact": "No branch, ref, tree, file path, PR state, default branch, Drive object, or historical evidence was changed by those unattached blob creations.",
+    "recovery": "Further writes were stopped; the live global Drive baseline was then read completely through the Google Docs text API and the target-branch SECURITY_POLICY.md was read in line ranges. The branch head was re-read and confirmed unchanged at 94fa47706862f91ac04a21997b7eae9aac558e2b before continuing.",
+    "destructive": false,
+    "default_branch_touched": false
+  },
+  "next_safe_actions": [
+    "When licensed Tushare authorization is locally available, validate real provider permissions/fields/calendar/suspension/corporate-action boundaries without exposing the token.",
+    "Before opening any real holdout result, bind an authorized dataset and explicit development/validation/holdout windows in a new evaluation_run/binding manifest.",
+    "After a candidate is frozen and eligible, start append-only forward-paper evidence; do not backfill decisions."
+  ],
+  "safety": {
+    "direct_main_write": false,
+    "auto_merge": false,
+    "destructive_operation": false,
+    "drive_write_required": false
+  }
+}

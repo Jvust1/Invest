@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "project": "Invest",
+  "date": "2026-09-26",
+  "status": "NONBLOCKING_TEXT_ALIGNMENT_PENDING",
+  "paths": [
+    "docs/PRE_FLIGHT_CHECKLIST.md",
+    "docs/HANDOFF.md"
+  ],
+  "authority": [
+    "AGENTS.md",
+    "governance/project_state.json"
+  ],
+  "blocking": false
+}
