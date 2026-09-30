@@ -35,7 +35,7 @@ class QlibProviderTests(unittest.TestCase):
         self.assertIn('microsoft/qlib', capability_matrix()['market_data'])
         api = FakeDataAPI()
         result, summary = run_a_share_sma_backtest(
-            '000001', fast=1, slow=2, provider_instance=QlibMarketProvider(api))
+            '000001', fast=1, slow=2, adjust='qlib', provider_instance=QlibMarketProvider(api))
         self.assertEqual(api.calls[0][0], ['SZ000001'])
         self.assertEqual(len(result), 2)
         self.assertIn('total_return', summary)
@@ -51,6 +51,7 @@ class QlibProviderTests(unittest.TestCase):
             "000001",
             start_date="2026-09-01",
             end_date="2026-09-30",
+            adjust="qlib",
         )
         self.assertEqual(list(frame.columns), ["open", "high", "low", "close", "volume"])
         self.assertAlmostEqual(float(frame.iloc[-1]["close"]), 10.7)

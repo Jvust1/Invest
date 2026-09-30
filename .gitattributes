@@ -1,2 +1,3 @@
-# Retain the exact upstream license blob on Windows as well as Unix.
+# Retain exact third-party license bytes across Windows checkouts.
 third_party/matplotlib/LICENSE -text
+third_party/qlib/LICENSE -text

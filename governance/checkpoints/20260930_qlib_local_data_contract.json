@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "repository": "Jvust1/Invest",
+  "as_of": "2026-09-30",
+  "capability": "explicit_native_qlib_local_binary_data_into_both_existing_research_pipelines",
+  "base_commit": "36f54d76d2289a06c7c726658ddae77881f50598",
+  "upstream": {
+    "repository": "microsoft/qlib",
+    "stars": 49078,
+    "verified_at_utc": "2026-09-30T20:22:00Z",
+    "revision": "be725493eb1a6bbb42bf11b37aa7669f59610ff1",
+    "runtime_revision": "da920b7f954f48ab1bb64117c976710de198373e",
+    "runtime_package": "pyqlib==0.9.7",
+    "license": "MIT",
+    "license_blob": "9e841e7a26e4eb057b24511e7b92d42b257a80e5",
+    "integration": "actual installed D.features SDK; no implementation source copied"
+  },
+  "contract": {
+    "adjustment": "qlib_native_unconverted_only",
+    "period": "daily_only",
+    "symbols": "six_ASCII_digits_or_explicit_SH_SZ_prefix_or_suffix; explicit_exchange_preserved",
+    "source": "explicit_existing_absolute_local_qlib_directory",
+    "metadata": "selected_input_file_sha256_and_native_basis_retained_in_both_pipeline_results",
+    "worker_timeout_seconds": 45,
+    "max_total_calendar_rows": 20000,
+    "max_explicit_instruments": 16,
+    "fields": "direct_native_OHLCV_only",
+    "invalid_rows": "fail_closed; no_coercion_drop_fill_or_sort",
+    "process_isolation": "fresh_source_Python_worker; no_parent_SDK_singleton_changes",
+    "telemetry": "disabled_before_import",
+    "network": "audit_guard_denies_socket_operations_before_package_import; not_OS_sandbox",
+    "tracking": "data_only_manager; no_MLflow_client; Qlib_experiments_unsupported",
+    "coinstalled_mlflow": "3.16.1; no_downgrade_or_optional_archive_change"
+  },
+  "compatibility_changes": [
+    "factory_requires_explicit_local_directory",
+    "Qlib_pipeline_callers_must_pass_adjust_qlib",
+    "generic_load_qlib_features_no_longer_uses_global_D_or_accepts_expressions_market_aliases",
+    "ignored_instrument_prefix_now_rejected"
+  ],
+  "local_verification": {
+    "real_sdk_example": "pass: 120 fictional binary rows -> both pipelines",
+    "sdk_versions": "pyqlib0.9.7 and MLflow3.16.1",
+    "pip_check": "pass",
+    "independent_review": "pass: parent source review plus real SDK alternate field order, two distinct datasets, explicit Shanghai identity, preserved source attrs and qfq rejection",
+    "remote_ci": "must_verify_exact_published_head",
+    "additional_exact_license_provenance_test": "pass; included in final full suite; standard-library Python3.10-compatible parser",
+    "source_compile": "pass",
+    "diff_check": "pass",
+    "full_pytest_before_chart_rebase": {
+      "passed": 735,
+      "skipped": 13,
+      "passing_subtests": 348,
+      "failed": 0
+    },
+    "full_pytest": {
+      "passed": 786,
+      "skipped": 13,
+      "passing_subtests": 348,
+      "failed": 0,
+      "seconds": 201.71
+    },
+    "coinstalled_chart_sdk": "matplotlib==3.10.8",
+    "coinstalled_before_http_ordering_fix": {
+      "passed": 781,
+      "failed": 1,
+      "skipped": 13,
+      "passing_subtests": 348,
+      "failure": "inherited study_lock response-before-finally release race in test_real_http_save_sdk_readback_repeat_and_backup; corrected in base76c578e7 before publication"
+    },
+    "runtime_matrix": "local Linux Python3.12: pyqlib0.9.7, MLflow3.16.1, Matplotlib3.10.8, pandas3.0.6, numpy2.5.3",
+    "diagnostic_only_base_delta": "three files: optional archive phase profiler, its no-SDK tests, CI wiring; no production runtime changes",
+    "base_ci": "exact36f54d76: all12 PR-triggered workflows passed, including all4 real archive SDK jobs; no causal timeout-fix claim",
+    "final_diagnostic_only_rebase_checks": {
+      "passed": 133,
+      "failed": 0,
+      "runtime_code_changed": false,
+      "source_compile": "pass",
+      "diff_check": "pass"
+    }
+  },
+  "limitations": [
+    "synthetic_only_not_real_market_or_data_rights_evidence",
+    "not_strict_cash_lot_Tplus1_engine",
+    "Qlib_FILE_experiments_not_supported",
+    "frozen_executable_not_supported",
+    "operating_system_mount_provenance_not_certified",
+    "separate_DuckDB_replay_adjustment_contract_needs_explicit_extension",
+    "historical_Windows_MLflow_archive_deadline_failures; latest_base_gate_passes_but_profiler_not_proven_causal_fix"
+  ],
+  "real_provider_calls": 0,
+  "market_downloads": 0,
+  "private_holdings_used": false,
+  "secrets_used": false,
+  "real_trades": 0,
+  "main_modified": false,
+  "merged": false,
+  "deployed": false,
+  "initial_base_commit": "772fb5a58f62fbdb4ddf03a1e204a9d172cad31e",
+  "base_tree": "506ab71a26a9e028ebb69fc522acca9df3d7b9a6",
+  "base_pr": 55
+}

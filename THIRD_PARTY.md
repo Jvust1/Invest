@@ -14,3 +14,10 @@ license files.
 The vendored code is included for reproducible research. New project code in
 invest/ provides a narrow, stable integration layer and does not modify the
 upstream implementations.
+
+## Optional native Qlib data reader
+
+The Invest-authored local data reader executes the official `pyqlib==0.9.7` SDK
+(release commit `da920b7f954f48ab1bb64117c976710de198373e`). No Qlib implementation
+source is copied or modified. The exact Microsoft MIT license and source/runtime
+provenance are retained in `third_party/qlib/`; market-data rights remain separate.

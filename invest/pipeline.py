@@ -103,4 +103,7 @@ def run_a_share_sma_backtest(
         raise ValueError(f"no market data returned for symbol {symbol}")
     signal = moving_average_signal(history["close"], fast=fast, slow=slow)
     result = run_backtest(history["close"], signal, fee_bps=fee_bps)
+    if "market_data" in history.attrs:
+        from copy import deepcopy
+        result.attrs["market_data"] = deepcopy(history.attrs["market_data"])
     return result, performance_summary(result)
