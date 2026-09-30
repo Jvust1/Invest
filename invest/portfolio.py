@@ -1,9 +1,7 @@
 """Portfolio allocation adapters."""
 from __future__ import annotations
-
 import numpy as np
 import pandas as pd
-
 from ._vendor import load_vendor
 
 def inverse_variance_weights(prices: pd.DataFrame) -> dict[str, float]:
@@ -19,15 +17,8 @@ def inverse_variance_weights(prices: pd.DataFrame) -> dict[str, float]:
     weights = raw / raw.sum()
     return {str(name): float(value) for name, value in weights.items()}
 
-def minimum_variance_weights(
-    prices: pd.DataFrame,
-    weight_bounds: tuple[float, float] = (0.0, 1.0),
-) -> dict[str, float]:
-    """Use vendored PyPortfolioOpt when its optional solver stack is present.
-
-    If cvxpy or another optional solver is unavailable, a deterministic
-    inverse-variance allocation is returned instead of silently failing.
-    """
+def minimum_variance_weights(prices: pd.DataFrame, weight_bounds: tuple[float, float] = (0.0, 1.0)) -> dict[str, float]:
+    """Use vendored PyPortfolioOpt when its optional solver stack is present."""
     if not isinstance(prices, pd.DataFrame) or prices.shape[1] == 0:
         raise ValueError("prices must be a non-empty DataFrame")
     lower, upper = weight_bounds
@@ -44,3 +35,22 @@ def minimum_variance_weights(
         return {str(name): float(value) for name, value in cleaned.items()}
     except (ImportError, ModuleNotFoundError, RuntimeError, ValueError):
         return inverse_variance_weights(prices)
+
+def optimize_weights(returns, engine: str = "auto") -> dict[str, float]:
+    """Select a portfolio engine behind one stable return-weights interface."""
+    frame = pd.DataFrame(returns).astype(float)
+    if frame.empty or frame.shape[1] == 0:
+        raise ValueError("returns must contain at least one asset")
+    if engine == "inverse_variance":
+        return inverse_variance_weights((1.0 + frame).cumprod())
+    if engine == "riskfolio":
+        from .riskfolio_adapter import riskfolio_weights
+        return riskfolio_weights(frame)
+    if engine == "skfolio":
+        from .skfolio_adapter import skfolio_weights
+        return skfolio_weights(frame)
+    if engine == "pypfopt":
+        return minimum_variance_weights((1.0 + frame).cumprod())
+    if engine == "auto":
+        return optimize_weights(frame, engine="skfolio")
+    raise ValueError("engine must be one of: auto, inverse_variance, pypfopt, riskfolio, skfolio")
