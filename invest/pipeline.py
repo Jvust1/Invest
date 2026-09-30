@@ -35,11 +35,18 @@ def run_backtest(close: pd.Series, signal: pd.Series, fee_bps: float = 0.0) -> p
     })
 
 def performance_summary(result: pd.DataFrame, periods_per_year: int = 252) -> dict[str, float]:
-    """Calculate common, reproducible performance statistics."""
+    """Summarize only the supplied returns, even when result is a time slice.
+
+    The supplied equity column may include earlier training history. Rebuild
+    normalized equity from this slice's returns so neither its cumulative return
+    nor drawdown can accidentally include returns outside the evaluation window.
+    """
     if periods_per_year <= 0:
         raise ValueError("periods_per_year must be positive")
-    returns = pd.Series(result["strategy_return"], dtype="float64").dropna()
-    equity = pd.Series(result["equity"], dtype="float64").dropna()
+    returns = pd.Series(result["strategy_return"], dtype="float64")
+    if not np.isfinite(returns).all() or (returns < -1.0).any():
+        raise ValueError("strategy returns must be finite and cannot lose more than 100%")
+    equity = (1.0 + returns).cumprod()
     if returns.empty:
         return {"total_return": 0.0, "annualized_return": 0.0,
                 "annualized_volatility": 0.0, "sharpe": 0.0,
@@ -48,8 +55,8 @@ def performance_summary(result: pd.DataFrame, periods_per_year: int = 252) -> di
     years = max(len(returns) / periods_per_year, 1 / periods_per_year)
     annual = float((1.0 + total) ** (1.0 / years) - 1.0)
     volatility = float(returns.std(ddof=1) * np.sqrt(periods_per_year)) if len(returns) > 1 else 0.0
-    sharpe = float(annual / volatility) if volatility > 0 else 0.0
-    drawdown = equity / equity.cummax() - 1.0
+    sharpe = float(returns.mean() * periods_per_year / volatility) if volatility > 0 else 0.0
+    drawdown = equity / equity.cummax().clip(lower=1.0) - 1.0
     return {"total_return": total, "annualized_return": annual,
             "annualized_volatility": volatility, "sharpe": sharpe,
             "max_drawdown": float(drawdown.min())}

@@ -5,6 +5,10 @@ on:
     branches: [feat/optuna-walkforward-main-20260930]
     paths:
       - "invest/optuna_walkforward.py"
+      - "invest/pipeline.py"
+      - "invest/research_pipeline.py"
+      - "tests/test_research_pipeline.py"
+      - "tests/test_pipeline.py"
       - "tests/test_optuna_walkforward.py"
       - "pyproject.toml"
       - "invest/upstream_registry.json"
@@ -12,6 +16,10 @@ on:
   pull_request:
     paths:
       - "invest/optuna_walkforward.py"
+      - "invest/pipeline.py"
+      - "invest/research_pipeline.py"
+      - "tests/test_research_pipeline.py"
+      - "tests/test_pipeline.py"
       - "tests/test_optuna_walkforward.py"
       - "pyproject.toml"
       - "invest/upstream_registry.json"
@@ -34,8 +42,12 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - name: Install core project
-        run: python -m pip install -e .
+        run: python -m pip install -e ".[optuna]"
       - name: Run Optuna fusion tests
-        run: python -m unittest tests.test_optuna_walkforward -v
+        run: python -m unittest discover -s tests -p test_optuna_walkforward.py -v
+      - name: Run research bundle tests
+        run: python -m unittest discover -s tests -p test_research_pipeline.py -v
+      - name: Run pipeline metric tests
+        run: python -m unittest discover -s tests -p test_pipeline.py -v
       - name: Compile adapter
         run: python -m py_compile invest/optuna_walkforward.py
