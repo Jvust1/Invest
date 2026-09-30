@@ -5,6 +5,7 @@ Upstream: mlflow/mlflow @
 """
 from __future__ import annotations
 
+from contextlib import contextmanager
 from typing import Any, Mapping
 
 
@@ -58,6 +59,70 @@ WORKER_TIMEOUT = 45
 # Leave time for another process's cold schema setup or artifact commit, while
 # retaining the outer 45-second hard deadline for every worker.
 ARCHIVE_LOCK_TIMEOUT = 30
+# Fixed diagnostic vocabulary only. The journal never contains study data,
+# filesystem paths, SDK exceptions, environment values or run identifiers.
+ARCHIVE_PHASES = frozenset({
+    "worker_start", "input_read", "record_validation", "path_validation",
+    "sdk_import", "lock_wait", "client_initialization", "experiment_lookup",
+    "run_lookup", "artifact_validation", "index_write", "artifact_write",
+    "commit", "archive_returned", "response_write", "response_written",
+})
+
+
+def _write_archive_phase(path, phase):
+    if not isinstance(phase, str) or phase not in ARCHIVE_PHASES:
+        return
+    try:
+        with open(path, "w", encoding="ascii") as journal:
+            journal.write(phase)
+    except (OSError, ValueError):
+        # Diagnostic IO must not turn a successful archive into a failure.
+        pass
+
+
+def _read_archive_phase(path):
+    try:
+        with open(path, "rb") as journal:
+            value = journal.read(65).decode("ascii")
+        return value if value in ARCHIVE_PHASES else None
+    except (OSError, ValueError, UnicodeError):
+        return None
+
+
+@contextmanager
+def _archive_phase_journal():
+    from pathlib import Path
+    import tempfile
+
+    directory = None
+    try:
+        directory = tempfile.TemporaryDirectory(prefix="invest-archive-phase-",
+                                                ignore_cleanup_errors=True)
+    except OSError:
+        pass
+    try:
+        if directory is None:
+            yield None
+        else:
+            journal = Path(directory.name) / "phase"
+            _write_archive_phase(journal, "worker_start")
+            yield journal
+    finally:
+        if directory is not None:
+            try:
+                directory.cleanup()
+            except OSError:
+                pass
+
+
+def _mark_archive_phase(progress, phase):
+    if progress is not None and isinstance(phase, str) and phase in ARCHIVE_PHASES:
+        try:
+            progress(phase)
+        except Exception:
+            pass
+
+
 STUDY_MODES = {
     "invest-exploratory-study-v1": "EXPLORATORY_CHRONOLOGICAL_SLICES",
     "invest-walk-forward-study-v1": "EXPLORATORY_WALK_FORWARD",
@@ -190,12 +255,28 @@ class LocalMLflowArchive:
             env.update(MLFLOW_DISABLE_TELEMETRY="true", DO_NOT_TRACK="true",
                        MLFLOW_ENABLE_ASYNC_LOGGING="false")
             bootstrap = ("import sys; sys.path.insert(0, sys.argv[1]); "
-                         "from invest.mlflow_tracking import _worker_main; _worker_main(sys.argv[2])")
-            result = subprocess.run(
-                [sys.executable, "-I", "-c", bootstrap, str(Path(__file__).resolve().parent.parent),
-                 str(self.data_dir)], input=raw, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
-                env=env, timeout=WORKER_TIMEOUT, check=False,
-            )
+                         "from invest.mlflow_tracking import _worker_main; "
+                         "_worker_main(sys.argv[2], sys.argv[3] if len(sys.argv) > 3 else None)")
+            # Only fixed phase names go into this private temporary journal.
+            # Read it after the timed-out child has been killed/reaped by run();
+            # never interpret a pre-exit success response as committed success.
+            with _archive_phase_journal() as journal:
+                command = [sys.executable, "-I", "-c", bootstrap,
+                           str(Path(__file__).resolve().parent.parent), str(self.data_dir)]
+                if journal is not None:
+                    command.append(str(journal))
+                try:
+                    result = subprocess.run(
+                        command,
+                        input=raw, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+                        env=env, timeout=WORKER_TIMEOUT, check=False,
+                    )
+                except subprocess.TimeoutExpired:
+                    status = {"status": "failed", "reason": "archive_timeout", "study_saved": True}
+                    phase = None if journal is None else _read_archive_phase(journal)
+                    if phase is not None:
+                        status["phase"] = phase
+                    return status
             if result.returncode or len(result.stdout) > 4096:
                 raise RuntimeError("archive worker did not finish")
             status = json.loads(result.stdout)
@@ -209,7 +290,7 @@ class LocalMLflowArchive:
             return {"status": "failed", "reason": "local_archive_unavailable", "study_saved": True}
 
 
-def _archive_local(record, data_dir):
+def _archive_local(record, data_dir, *, progress=None):
     """Worker implementation. The SDK is imported only after the local guards."""
     from contextlib import closing
     from datetime import datetime
@@ -217,7 +298,9 @@ def _archive_local(record, data_dir):
     from pathlib import Path
     import sqlite3
 
+    _mark_archive_phase(progress, "record_validation")
     raw = _checked_record(record)
+    _mark_archive_phase(progress, "path_validation")
     root_parent = Path(data_dir).resolve()
     if any(c in str(root_parent) for c in "?#\0"):
         raise ValueError("archive directory cannot contain SQLite URI delimiters")
@@ -230,6 +313,7 @@ def _archive_local(record, data_dir):
     # Set, rather than setdefault: a hostile/inherited false value must not win.
     os.environ["MLFLOW_DISABLE_TELEMETRY"] = "true"
     os.environ["DO_NOT_TRACK"] = "true"
+    _mark_archive_phase(progress, "sdk_import")
     from importlib.metadata import version
     if version("mlflow") != TESTED_MLFLOW_VERSION:
         raise UnsupportedMLflowVersion("install the validated local archive extra")
@@ -242,9 +326,12 @@ def _archive_local(record, data_dir):
     uri = "sqlite:///" + database.as_posix()
     # An independent SQLite transaction serializes separate server processes.
     # The SDK writes to its own DB, not to this lock database or Workspace.
+    _mark_archive_phase(progress, "lock_wait")
     with closing(sqlite3.connect(lock_path, timeout=ARCHIVE_LOCK_TIMEOUT)) as lock:
         lock.execute("BEGIN IMMEDIATE")
+        _mark_archive_phase(progress, "client_initialization")
         client = MlflowClient(tracking_uri=uri, registry_uri=uri)
+        _mark_archive_phase(progress, "experiment_lookup")
         experiment = client.get_experiment_by_name(LOCAL_EXPERIMENT)
         if experiment is None:
             experiment = client.get_experiment(client.create_experiment(
@@ -260,6 +347,7 @@ def _archive_local(record, data_dir):
                 "invest.code_identity_scheme": protocol["code_identity_scheme"],
                 "invest.archive_schema": "invest-local-mlflow-v1", "invest.frozen_holdout_opened": "false"}
         params, metric_values = _indexed_values(study)
+        _mark_archive_phase(progress, "run_lookup")
         runs = client.search_runs([experiment.experiment_id],
             filter_string=f"tags.`invest.study_id` = '{record['id']}'",
             run_view_type=ViewType.ALL, max_results=2)
@@ -272,6 +360,7 @@ def _archive_local(record, data_dir):
         else:
             run = client.create_run(experiment.experiment_id, tags=tags,
                                     run_name="study-" + record["id"][:16])
+        _mark_archive_phase(progress, "artifact_validation")
         run_id = run.info.run_id
         path = _artifact_path(run.info.artifact_uri, artifacts)
         if path != artifacts / run_id / "artifacts":
@@ -300,6 +389,7 @@ def _archive_local(record, data_dir):
                 if metric.key in run.data.metrics and run.data.metrics[metric.key] != metric.value:
                     raise ValueError("archive summary metrics differ from the saved study")
             metrics = [m for m in metrics if m.key not in run.data.metrics]
+            _mark_archive_phase(progress, "index_write")
             client.log_batch(run_id, params=[Param(k, v) for k, v in params.items()],
                              metrics=metrics, synchronous=True)
             # Fetch current metadata again immediately before artifact IO. Never
@@ -312,9 +402,11 @@ def _archive_local(record, data_dir):
                 raise ValueError("archive artifact location changed")
             if _inside(current_path / "study.json", path) != artifact:
                 raise ValueError("archive artifact file changed")
+            _mark_archive_phase(progress, "artifact_write")
             client.log_text(run_id, raw.decode("utf-8"), "study.json")
             if artifact.read_bytes() != raw:
                 raise ValueError("archive artifact write did not match the saved study")
+            _mark_archive_phase(progress, "commit")
             client.set_terminated(run_id, status="FINISHED")
             if client.get_run(run_id).info.status != "FINISHED":
                 raise RuntimeError("archive did not finish")
@@ -324,7 +416,7 @@ def _archive_local(record, data_dir):
         return {"status": "archived", "run_id": run_id, "reused": False, "study_saved": True}
 
 
-def _worker_main(data_dir):
+def _worker_main(data_dir, phase_path=None):
     import contextlib
     import json
     import os
@@ -338,12 +430,18 @@ def _worker_main(data_dir):
             raise RuntimeError("network disabled for the local MLflow archive")
 
     sys.addaudithook(deny_network)
+    progress = None if phase_path is None else lambda name: _write_archive_phase(phase_path, name)
+    _mark_archive_phase(progress, "input_read")
     raw = sys.stdin.buffer.read(MAX_STUDY_BYTES + 1)
     try:
         if len(raw) > MAX_STUDY_BYTES:
             raise ValueError("study exceeds archive limit")
         with open(os.devnull, "w") as quiet, contextlib.redirect_stdout(quiet), contextlib.redirect_stderr(quiet):
-            result = _archive_local(json.loads(raw), data_dir)
+            if progress is None:
+                result = _archive_local(json.loads(raw), data_dir)
+            else:
+                result = _archive_local(json.loads(raw), data_dir, progress=progress)
+            _mark_archive_phase(progress, "archive_returned")
     except UnsupportedMLflowVersion:
         result = {"status": "failed", "reason": "unsupported_mlflow_version", "study_saved": True}
     except ImportError:
@@ -356,4 +454,7 @@ def _worker_main(data_dir):
                   "study_saved": True}
     except Exception:
         result = {"status": "failed", "reason": "local_archive_unavailable", "study_saved": True}
+    _mark_archive_phase(progress, "response_write")
     sys.stdout.write(json.dumps(result, separators=(",", ":")))
+    sys.stdout.flush()
+    _mark_archive_phase(progress, "response_written")
