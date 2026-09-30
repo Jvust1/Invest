@@ -293,6 +293,17 @@ class DuckDBReplayTests(unittest.TestCase):
         with self.assertRaises(TypeError):
             DuckDBReplayProvider(object(), source_id=SOURCE)
 
+    def test_generic_cache_preserves_pandas_string_columns_index_and_nulls(self):
+        frame = pd.DataFrame({"symbol": pd.Series(["000001", None], dtype="string")})
+        frame.index = pd.Index(["first", "second"], dtype="string", name="label")
+        original = frame.copy()
+        self.cache.write_frame("nullable_symbols", frame)
+        stored = self.cache.query("SELECT * FROM nullable_symbols ORDER BY label")
+        self.assertEqual(stored.label.tolist(), ["first", "second"])
+        self.assertEqual(stored.symbol.iloc[0], "000001")
+        self.assertTrue(pd.isna(stored.symbol.iloc[1]))
+        assert_frame_equal(frame, original)
+
     def test_generic_cache_and_context_lifecycle_remain_compatible(self):
         self.cache.write_frame("prices", synthetic_frame())
         result = self.cache.query('SELECT count(*) AS n FROM prices')

@@ -132,7 +132,14 @@ class DuckDBMarketCache:
         with self._lock:
             self._check_open()
             temp_name = "_invest_frame"
-            self._connection.register(temp_name, frame.reset_index())
+            registered = frame.reset_index()
+            # DuckDB 1.4 predates pandas 3's default StringDtype ("str").
+            # Object-backed strings preserve codes and missing values without
+            # changing the caller's frame or pretending nulls are strings.
+            for position, dtype in enumerate(registered.dtypes):
+                if isinstance(dtype, pd.StringDtype):
+                    registered.isetitem(position, registered.iloc[:, position].astype(object))
+            self._connection.register(temp_name, registered)
             try:
                 self._connection.execute(
                     f'CREATE OR REPLACE TABLE "{table}" AS SELECT * FROM {temp_name}'

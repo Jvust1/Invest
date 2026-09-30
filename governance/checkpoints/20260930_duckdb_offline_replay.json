@@ -27,15 +27,20 @@
   ],
   "validation": {
     "full_pytest_command": "python -m pytest tests -q",
-    "passed": 589,
+    "passed": 590,
     "optional_skipped": 13,
     "passing_subtests": 410,
-    "focused_passed_per_duckdb_version": 30,
+    "focused_passed_per_duckdb_version": 31,
     "focused_passing_subtests_per_duckdb_version": 62,
     "example_rows": 120,
     "example_synthetic_provider_calls": 1,
     "independent_review": "two findings fixed and rechecked; no remaining actionable findings",
-    "remote_ci": "see exact-head status on the Draft PR"
+    "remote_ci": "see exact-head status on the Draft PR",
+    "pandas_versions": [
+      "2.2.3",
+      "3.0.6"
+    ],
+    "ci_compatibility_fix": "Initial CI exposed DuckDB 1.4 + pandas 3 default string dtype in the generic API. Registration now normalizes only StringDtype columns losslessly; new nullable-string/index regression added."
   },
   "boundaries": [
     "synthetic_data_only",
