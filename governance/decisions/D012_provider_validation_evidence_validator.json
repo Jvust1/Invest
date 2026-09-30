@@ -1,0 +1,20 @@
+{
+  "id": "D012",
+  "date": "2026-09-23",
+  "title": "真实供应商验证证据先机器化校验，再进入 evaluation binding",
+  "status": "ACCEPTED",
+  "context": "真实数据仍不可在当前自动环境中合法取得；已有 runbook 规定脱敏供应商证据字段，但此前只有文字规范，无法在首次真实验证时自动阻止缺字段、未知边界被误当 verified、凭据字段泄漏或失败请求被误记为 opening-ready。",
+  "decision": "新增离线、credential-free 的 provider-validation evidence validator 与格式文档。它只校验真实调用后生成的脱敏记录，不发起 provider call；允许真实失败、unknown、not_covered 被诚实保存，但只有真实数据、全部接口成功、七类 boundary 全 verified、无 blocker 且 holdout 未观察时才给出 provider-side readiness。即使 provider-side readiness 为 true，仍必须另行通过 BOUND_UNOPENED evaluation binding 和其它 opening gates。",
+  "security": {
+    "provider_call_performed_in_this_change": false,
+    "credential_used": false,
+    "real_data_used": false,
+    "holdout_opened": false,
+    "sensitive_keys_rejected_recursively": true
+  },
+  "files": [
+    "invest/provider_validation.py",
+    "tests/test_provider_validation.py",
+    "docs/PROVIDER_VALIDATION_EVIDENCE_FORMAT.md"
+  ]
+}

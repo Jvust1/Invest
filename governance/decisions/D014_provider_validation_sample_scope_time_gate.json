@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "decision_id": "D014",
+  "date": "2026-09-24",
+  "title": "Provider validation samples must stay inside the supported security scope and execution time",
+  "status": "accepted",
+  "scope": "provider-validation evidence gate only",
+  "context": "The provider evidence format already required a real authorized call and a bounded sample window, but the validator accepted any nonempty security_code and did not require the sample window to have ended by the recorded execution timestamp. That allowed internally inconsistent or out-of-scope sample attestations to pass structural validation.",
+  "decision": [
+    "sample.security_code must pass the same Invest v1 Shanghai/Shenzhen main-board format gate used by invest.data.is_mainboard_symbol.",
+    "sample.end_date must not be later than the calendar date represented by executed_at.",
+    "These checks are fail-closed structural evidence checks and do not establish issuer identity, listing status, market-data completeness or strategy effectiveness.",
+    "This gate does not contact a provider, use credentials, create real provider evidence, open frozen holdout data or authorize a PR merge."
+  ],
+  "rationale": "A record describing real provider validation must be internally compatible with the project's declared v1 market scope and cannot claim a sample period extending beyond the evidence execution time.",
+  "implementation": {
+    "validator": "invest/provider_validation.py",
+    "tests": "tests/test_provider_validation.py",
+    "format": "docs/PROVIDER_VALIDATION_EVIDENCE_FORMAT.md",
+    "validated_code_head_sha": "6b27845191c62a35d5930cc56e518e9eeb187400",
+    "workflow_run_id": 35993749624,
+    "workflow_result": "success",
+    "tests_added": 2,
+    "provider_evidence_tests": 17,
+    "current_full_suite_tests": 112
+  },
+  "real_data_used": false,
+  "provider_call_performed": false,
+  "credentials_used": false,
+  "holdout_observed": false
+}

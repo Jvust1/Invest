@@ -1,0 +1,45 @@
+{
+  "id": "D020",
+  "date": "2026-09-25",
+  "title": "Provider authorized status must bind a stable license-evidence SHA-256",
+  "status": "accepted_remote_ci_validated",
+  "context": "Provider evidence previously required provider.license_status=authorized but did not bind that declaration to a stable provenance identity. A text-only authorization claim could therefore satisfy the structural gate without any machine-checkable reference to the local supporting authorization artifact.",
+  "decision": {
+    "provider_license_status_required": "authorized",
+    "license_evidence_sha256_required": true,
+    "hash_format": "lowercase_sha256_64",
+    "proof_boundary": "provenance commitment only; not independent proof of authorization truth or scope",
+    "failure_behavior": "missing or malformed license evidence hash rejects the evidence as structurally invalid"
+  },
+  "implementation": [
+    "invest/provider_validation.py",
+    "tests/test_provider_validation.py",
+    "docs/PROVIDER_VALIDATION_EVIDENCE_FORMAT.md"
+  ],
+  "validation": {
+    "code_head_sha": "6db24bb3cde003f937a73dc5a5eb2041181af505",
+    "workflow_run_id": 36089180871,
+    "workflow_result": "success",
+    "matrix_jobs": 4,
+    "platforms": [
+      "ubuntu-latest",
+      "windows-latest"
+    ],
+    "python_versions": [
+      "3.11",
+      "3.12"
+    ],
+    "provider_evidence_test_methods": 23,
+    "full_suite_tests": 118,
+    "tests_added": 1,
+    "negative_subcases": [
+      "missing license_evidence_sha256",
+      "malformed license_evidence_sha256"
+    ],
+    "real_data_used": false,
+    "provider_call_performed": false,
+    "credentials_used": false,
+    "holdout_observed": false
+  },
+  "documentation_note": "The machine-readable validator and evidence-format contract are updated. REAL_DATA_PROVIDER_VALIDATION_RUNBOOK.md still needs a wording-only synchronization for the new license hash field; no provider run is permitted to bypass the validator."
+}

@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "checkpoint": "provider_validation_execution_timezone_gate",
+  "date": "2026-09-24",
+  "repository": "Jvust2/Invest",
+  "branch": "feat/a-share-research-v0.1-20260922",
+  "validated_code_head_sha": "070ac1b536ad7b96a97b0b0b944453a6c6fbc919",
+  "workflow_run_id": 36017899955,
+  "workflow_result": "success",
+  "matrix": {
+    "jobs": 4,
+    "platforms": ["ubuntu-latest", "windows-latest"],
+    "python_versions": ["3.11", "3.12"],
+    "standard_library_tests": "pass",
+    "compile_source": "pass"
+  },
+  "change": {
+    "gap_closed": "Timezone-aware provider evidence could previously encode executed_at with an arbitrary UTC offset even though the v1 evidence contract declares Asia/Shanghai; sample.end_date comparison could therefore use a shifted calendar date.",
+    "executed_at_required_utc_offset": "+08:00",
+    "market_timezone_contract": "Asia/Shanghai",
+    "tests_added": 1,
+    "negative_subcases": 2,
+    "provider_evidence_test_methods": 22,
+    "full_suite_tests": 117
+  },
+  "evidence_boundary": {
+    "provider_call_performed": false,
+    "credentials_used": false,
+    "real_data_used": false,
+    "real_provider_evidence_created": false,
+    "real_binding_created": false,
+    "frozen_holdout_opened": false,
+    "forward_paper_started": false,
+    "licensed_real_data_required": "OPEN"
+  },
+  "drive": {
+    "new_objects": 0,
+    "modified_objects": 0,
+    "frozen_source_checkpoint_id": "1Iscm0akdNG5s0WNJfc83-T_eh88xIz1F",
+    "policy": "preserve existing frozen checkpoint; no duplicate ZIP for GitHub-recoverable increment"
+  },
+  "next_safe_action": "When licensed local authorization becomes available, execute the provider runbook and normalize executed_at to +08:00 while requiring all core interfaces, adapter fields, exact units and supporting-evidence SHA-256 for every verified boundary. Otherwise continue only directly related credential-free adversarial tests, governance or research preparation."
+}

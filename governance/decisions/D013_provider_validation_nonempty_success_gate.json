@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "decision_id": "D013",
+  "date": "2026-09-24",
+  "title": "Provider success evidence must contain a nonempty schema and positive rows",
+  "status": "accepted",
+  "scope": "provider-validation evidence gate only",
+  "context": "The existing provider evidence validator treated interface.status=success as sufficient even when fields was empty or row_count was zero. That could allow an empty provider response to participate in provider-side readiness if the surrounding attestation claimed real data and all market boundaries were verified.",
+  "decision": [
+    "A successful interface record must contain at least one nonempty field name.",
+    "A successful interface record must have row_count greater than zero.",
+    "Failed real interface attempts may still record an empty field list and zero rows and remain fail-closed.",
+    "This gate does not contact a provider, does not use credentials, does not create real provider evidence, and does not authorize opening frozen holdout data."
+  ],
+  "rationale": "Provider-side readiness is evidence about a real usable response, not merely a claimed status string. Empty successful responses are insufficient evidence and must fail closed.",
+  "implementation": {
+    "validator": "invest/provider_validation.py",
+    "tests": "tests/test_provider_validation.py",
+    "format": "docs/PROVIDER_VALIDATION_EVIDENCE_FORMAT.md",
+    "validated_code_head_sha": "4cbb66fb1c021d998368ee75f468e5be3e498f95",
+    "workflow_run_id": 35988041656,
+    "workflow_result": "success"
+  },
+  "real_data_used": false,
+  "provider_call_performed": false,
+  "credentials_used": false,
+  "holdout_observed": false
+}

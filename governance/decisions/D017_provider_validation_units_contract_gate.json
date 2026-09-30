@@ -1,0 +1,47 @@
+{
+  "id": "D017",
+  "date": "2026-09-24",
+  "title": "Provider evidence units must match the current Invest v1 Tushare adapter contract",
+  "status": "accepted_remote_ci_validated",
+  "context": "Provider evidence already required CNY currency, core interface names, positive rows and adapter-required fields, but price_unit, volume_input_unit, volume_output_unit and timezone were only required to be nonempty. A semantically wrong unit declaration could therefore participate in provider-side readiness.",
+  "decision": {
+    "exact_units_required": true,
+    "required_units": {
+      "currency": "CNY",
+      "price_unit": "CNY/share",
+      "volume_input_unit": "lot",
+      "volume_output_unit": "share",
+      "timezone": "Asia/Shanghai"
+    },
+    "conversion_notes_nonempty": true,
+    "mismatch_behavior": "reject evidence as structurally invalid",
+    "future_provider_behavior": "version or extend the evidence contract rather than silently changing v1 unit semantics"
+  },
+  "implementation": [
+    "invest/provider_validation.py",
+    "tests/test_provider_validation.py",
+    "docs/PROVIDER_VALIDATION_EVIDENCE_FORMAT.md"
+  ],
+  "validation": {
+    "code_head_sha": "1a19ab04bcc5d26f6e825e1d76bd83e9c4621f73",
+    "workflow_run_id": 36010703814,
+    "workflow_result": "success",
+    "matrix_jobs": 4,
+    "platforms": [
+      "ubuntu-latest",
+      "windows-latest"
+    ],
+    "python_versions": [
+      "3.11",
+      "3.12"
+    ],
+    "provider_evidence_test_methods": 20,
+    "full_suite_tests": 115,
+    "unit_negative_subcases": 5,
+    "real_data_used": false,
+    "provider_call_performed": false,
+    "credentials_used": false,
+    "holdout_observed": false
+  },
+  "scope_note": "This closes a credential-free unit-semantics evidence gap only. It does not prove provider permission, market-data completeness, any boundary, strategy profitability or holdout readiness."
+}

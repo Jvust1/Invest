@@ -1,0 +1,39 @@
+{
+  "id": "D016",
+  "date": "2026-09-24",
+  "title": "Successful core provider interfaces must prove adapter-required fields",
+  "status": "accepted_remote_ci_validated",
+  "context": "The provider-evidence contract already required non-empty successful schemas, positive row counts and all four core interface names, but a success record could still omit fields that the actual Invest Tushare adapter requires. That could let an interface be labelled successful in evidence even though the same schema would be rejected by invest/data.py.",
+  "decision": {
+    "successful_core_interface_field_gate": true,
+    "required_fields": {
+      "daily": ["ts_code", "trade_date", "open", "high", "low", "close", "vol"],
+      "adj_factor": ["ts_code", "trade_date", "adj_factor"],
+      "stk_limit": ["ts_code", "trade_date", "up_limit", "down_limit"],
+      "trade_cal": ["exchange", "cal_date", "is_open"]
+    },
+    "extra_fields_allowed": true,
+    "failed_interface_partial_or_empty_fields_allowed": true,
+    "missing_required_field_behavior": "reject evidence as structurally invalid; never treat it as provider-side success"
+  },
+  "implementation": [
+    "invest/provider_validation.py",
+    "tests/test_provider_validation.py",
+    "docs/PROVIDER_VALIDATION_EVIDENCE_FORMAT.md"
+  ],
+  "validation": {
+    "code_head_sha": "9d0e66fef88e6b1dc00effa8358c9c4c9225d6af",
+    "workflow_run_id": 36007383127,
+    "workflow_result": "success",
+    "matrix_jobs": 4,
+    "platforms": ["ubuntu-latest", "windows-latest"],
+    "python_versions": ["3.11", "3.12"],
+    "provider_evidence_test_methods": 19,
+    "full_suite_tests": 114,
+    "real_data_used": false,
+    "provider_call_performed": false,
+    "credentials_used": false,
+    "holdout_observed": false
+  },
+  "scope_note": "This closes a credential-free evidence-schema gap only. It does not prove provider permission, data completeness, any market-data boundary, strategy profitability or holdout readiness."
+}

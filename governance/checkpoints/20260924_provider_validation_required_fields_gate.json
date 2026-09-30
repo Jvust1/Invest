@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "checkpoint": "provider_validation_required_fields_gate",
+  "date": "2026-09-24",
+  "repository": "Jvust2/Invest",
+  "branch": "feat/a-share-research-v0.1-20260922",
+  "validated_code_head_sha": "9d0e66fef88e6b1dc00effa8358c9c4c9225d6af",
+  "workflow_run_id": 36007383127,
+  "workflow_result": "success",
+  "matrix": {
+    "jobs": 4,
+    "platforms": ["ubuntu-latest", "windows-latest"],
+    "python_versions": ["3.11", "3.12"],
+    "standard_library_tests": "pass",
+    "compile_source": "pass"
+  },
+  "change": {
+    "gap_closed": "A core interface could previously be labelled success with a non-empty but adapter-incomplete field list.",
+    "successful_core_interface_field_gate": true,
+    "required_fields": {
+      "daily": ["ts_code", "trade_date", "open", "high", "low", "close", "vol"],
+      "adj_factor": ["ts_code", "trade_date", "adj_factor"],
+      "stk_limit": ["ts_code", "trade_date", "up_limit", "down_limit"],
+      "trade_cal": ["exchange", "cal_date", "is_open"]
+    },
+    "failed_real_attempts_remain_preservable": true,
+    "tests_added": 1,
+    "provider_evidence_test_methods": 19,
+    "full_suite_tests": 114
+  },
+  "evidence_boundary": {
+    "provider_call_performed": false,
+    "credentials_used": false,
+    "real_data_used": false,
+    "real_provider_evidence_created": false,
+    "real_binding_created": false,
+    "frozen_holdout_opened": false,
+    "forward_paper_started": false,
+    "licensed_real_data_required": "OPEN"
+  },
+  "drive": {
+    "new_objects": 0,
+    "modified_objects": 0,
+    "frozen_source_checkpoint_id": "1Iscm0akdNG5s0WNJfc83-T_eh88xIz1F",
+    "policy": "preserve existing frozen checkpoint; no duplicate ZIP for GitHub-recoverable increment"
+  },
+  "next_safe_action": "If licensed local authorization becomes available, execute the runbook and require all four core interfaces plus their adapter-required fields before provider-side readiness. Otherwise continue only directly related credential-free adversarial tests, governance or research preparation without fabricating provider evidence."
+}

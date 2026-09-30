@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "project": "Invest",
+  "protocol_id": "invest-oos-forward-paper-v1",
+  "version": 1,
+  "status": "FROZEN_METHOD_V1",
+  "frozen_on": "2026-09-23",
+  "repository": "Jvust2/Invest",
+  "branch": "feat/a-share-research-v0.1-20260922",
+  "created_from_head_sha": "94fa47706862f91ac04a21997b7eae9aac558e2b",
+  "purpose": "Freeze evaluation methodology before any real-market return interpretation.",
+  "real_data_binding": {
+    "status": "PENDING_LICENSED_REAL_DATA",
+    "dataset_id": null,
+    "development_window": null,
+    "validation_window": null,
+    "frozen_holdout_window": null,
+    "holdout_first_observed_at": null
+  },
+  "search_budget": {
+    "max_active_hypothesis_families": 3,
+    "default_max_parameter_configs_per_family": 20,
+    "max_candidates_promoted_to_one_validation": 3,
+    "tuning_after_validation_first_read": "prohibited_without_new_validation_identity",
+    "tuning_after_holdout_first_read": "prohibited_for_unseen_claim"
+  },
+  "required_cost_scenarios": 3,
+  "required_historical_regimes_or_explicit_unavailability": 3,
+  "forward_paper": {
+    "status": "NOT_STARTED",
+    "minimum_trading_days_before_operational_stability_summary": 60,
+    "minimum_evaluable_decision_events": 20,
+    "retroactive_signal_edit": "prohibited",
+    "profitability_claim_from_duration_alone": "prohibited"
+  },
+  "required_metrics": [
+    "net_total_return",
+    "benchmark_difference",
+    "max_drawdown",
+    "turnover",
+    "trade_count",
+    "total_cost",
+    "rejected_or_unexecutable_orders"
+  ],
+  "fail_closed_conditions": [
+    "unknown_required_trading_calendar",
+    "unknown_required_suspension_or_limit_state",
+    "unsupported_or_unknown_corporate_action_for_execution",
+    "dataset_identity_mismatch",
+    "future_information_leakage",
+    "unexplained_survivorship_or_PIT_violation"
+  ],
+  "claim_boundary": [
+    "synthetic data and software tests are not return evidence",
+    "a frozen holdout observation is sample-specific evidence, not a future-return promise",
+    "protocol changes that affect conclusions require a new version and cannot relabel seen data as unseen"
+  ],
+  "change_control": {
+    "semantic_changes": "new_protocol_version_required",
+    "preserve_v1_history": true,
+    "evaluation_records": "docs/EVALUATION_LEDGER.md",
+    "future_binding_records": "new governance evaluation_run/binding manifests"
+  }
+}

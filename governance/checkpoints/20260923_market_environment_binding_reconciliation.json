@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-09-23",
+  "type": "evaluation_binding_protocol_reconciliation",
+  "repository": "Jvust2/Invest",
+  "branch": "feat/a-share-research-v0.1-20260922",
+  "starting_head_sha": "63d7fec410583145dcfff4b236c7d54ead2cc4ff",
+  "validated_code_head_sha": "7629e221619f22500dc2016f2bf698eb055f50f2",
+  "finding": {
+    "status": "FIXED",
+    "protocol_requirement": "EVALUATION_PROTOCOL_V1 requires at least three historical market environments to be covered or separately marked before the first holdout observation.",
+    "previous_gap": "EVALUATION_BINDING_FORMAT and invest/evaluation.py did not require a machine-readable historical market environment field, so a structurally valid binding could omit that frozen protocol requirement.",
+    "real_binding_existed_before_fix": false,
+    "frozen_holdout_opened_before_fix": false
+  },
+  "changes": [
+    "Require historical_market_environments in every protocol-v1 BOUND_UNOPENED binding.",
+    "Require at least three environments with unique names, non-duplicate date ranges, real dates, evidence text and dates within the frozen overall evaluation time boundary.",
+    "Document the field as an implementation alignment to the already-frozen method rather than a new evaluation method.",
+    "Add adversarial tests for insufficient environments, duplicate names/ranges, out-of-bound dates and reversed dates."
+  ],
+  "local_validation": {
+    "command": "python -m unittest discover -s tests -q",
+    "tests": 95,
+    "result": "PASS",
+    "compile_command": "python -m compileall -q invest",
+    "compile_result": "PASS",
+    "note": "Credential-free reconstruction used the existing frozen source checkpoint plus the current evaluation files; no provider call or real market data was used."
+  },
+  "remote_ci": {
+    "workflow_run_id": 35809448144,
+    "head_sha": "7629e221619f22500dc2016f2bf698eb055f50f2",
+    "status": "completed",
+    "conclusion": "success",
+    "matrix_jobs": 4,
+    "platforms": ["ubuntu-latest", "windows-latest"],
+    "python_versions": ["3.11", "3.12"],
+    "standard_library_tests_step": "pass",
+    "compile_source_step": "pass"
+  },
+  "drive_reconciliation": {
+    "drive_folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
+    "root_inventory_checked": true,
+    "licensed_real_dataset_found": false,
+    "real_evaluation_binding_found": false,
+    "existing_source_checkpoint_id": "1Iscm0akdNG5s0WNJfc83-T_eh88xIz1F",
+    "new_drive_write_required": false
+  },
+  "evidence_boundaries": {
+    "real_data_used": false,
+    "credential_used": false,
+    "provider_call_performed": false,
+    "frozen_holdout": "NOT_OPENED",
+    "forward_paper": "NOT_STARTED"
+  },
+  "next_safe_action": "Wait for legally authorized real provider data; then verify provider boundaries and create the first BOUND_UNOPENED binding including at least three frozen historical market environments. Keep holdout closed unless every gate passes.",
+  "merge_policy": "Draft PR only; no automatic merge and no direct main write."
+}

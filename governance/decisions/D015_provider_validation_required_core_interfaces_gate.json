@@ -1,0 +1,26 @@
+{
+  "decision_id": "D015",
+  "date": "2026-09-24",
+  "title": "Provider-side readiness requires all four current Invest v1 core interfaces",
+  "status": "ACCEPTED_REMOTE_CI_VALIDATED",
+  "context": "The provider-evidence validator previously required every recorded interface to succeed, but a record could omit one or more of the four interfaces used by the current Invest v1 adapter and still satisfy interface readiness. This could turn incomplete evidence into an apparent provider-side opening-ready record.",
+  "decision": {
+    "required_core_interfaces": ["daily", "adj_factor", "stk_limit", "trade_cal"],
+    "partial_real_attempts_may_be_preserved": true,
+    "missing_core_interface_is_structural_error": false,
+    "missing_core_interface_blocks_provider_side_readiness": true,
+    "additional_interfaces_may_supplement_but_not_replace_core": true
+  },
+  "implementation": {"module": "invest/provider_validation.py", "format": "docs/PROVIDER_VALIDATION_EVIDENCE_FORMAT.md", "runbook": "docs/REAL_DATA_PROVIDER_VALIDATION_RUNBOOK.md", "tests": "tests/test_provider_validation.py"},
+  "validation": {
+    "code_head_sha": "04f02079d3876f5a25ed9487acc56b3b0ae0b234",
+    "workflow_run_id": 36001056069,
+    "result": "success",
+    "matrix_jobs": 4,
+    "platforms": ["ubuntu-latest", "windows-latest"],
+    "python_versions": ["3.11", "3.12"],
+    "provider_evidence_tests": 18,
+    "full_suite_tests": 113
+  },
+  "evidence_boundary": "This gate is credential-free. It does not perform a provider call, validate a license in reality, create a real-data binding, observe frozen holdout results, or establish profitability."
+}
