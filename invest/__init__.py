@@ -8,7 +8,7 @@ from .pipeline import (
     run_a_share_sma_backtest,
     run_backtest,
 )
-from .portfolio import inverse_variance_weights, minimum_variance_weights
+from .portfolio import inverse_variance_weights, minimum_variance_weights, optimize_weights
 from .risk import risk_report
 from .riskfolio_adapter import riskfolio_weights
 from .skfolio_adapter import skfolio_weights
@@ -20,6 +20,7 @@ __all__ = [
     "load_qlib_features",
     "minimum_variance_weights",
     "moving_average_signal",
+    "optimize_weights",
     "performance_summary",
     "risk_report",
     "riskfolio_weights",
