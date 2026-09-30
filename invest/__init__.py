@@ -1,6 +1,7 @@
 """Invest: a composable research and backtesting toolkit."""
 from .calendar import exchange_sessions, trading_sessions
 from .features import add_stockstats_features
+from .finrl_bridge import finrl_observation, to_finrl_frame
 from .qlib_bridge import load_qlib_features, to_qlib_frame
 from .pipeline import (
     moving_average_signal,
@@ -12,10 +13,12 @@ from .portfolio import inverse_variance_weights, minimum_variance_weights, optim
 from .risk import risk_report
 from .riskfolio_adapter import riskfolio_weights
 from .skfolio_adapter import skfolio_weights
+from .vnpy_bridge import to_vnpy_bars, to_vnpy_records
 
 __all__ = [
     "add_stockstats_features",
     "exchange_sessions",
+    "finrl_observation",
     "inverse_variance_weights",
     "load_qlib_features",
     "minimum_variance_weights",
@@ -27,6 +30,9 @@ __all__ = [
     "run_a_share_sma_backtest",
     "run_backtest",
     "skfolio_weights",
+    "to_finrl_frame",
     "to_qlib_frame",
+    "to_vnpy_bars",
+    "to_vnpy_records",
     "trading_sessions",
 ]

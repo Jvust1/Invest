@@ -84,10 +84,19 @@
     },
     {
       "repository": "AI4Finance-Foundation/FinRL",
-      "revision": "3a0ab5cf3ddf0b59d25f7fd7e435811a18838c6c",
+      "revision": "e60e26e4870f00fbc704c6297edfd9d81816b3d3",
       "license": "MIT",
-      "stars": 16486,
-      "status": "research_reference"
+      "stars": 16498,
+      "status": "active_adapter",
+      "path": "invest/finrl_bridge.py"
+    },
+    {
+      "repository": "vnpy/vnpy",
+      "revision": "fa5206fe63836f3f8cd1ebd7168fbd19a5e2ff09",
+      "license": "MIT",
+      "stars": 45661,
+      "status": "active_adapter",
+      "path": "invest/vnpy_bridge.py"
     },
     {
       "repository": "kernc/backtesting.py",
@@ -112,13 +121,6 @@
       "revision": "b853d7c90b6721476eb5a5ea3135224e33db1f14",
       "license": "GPL-3.0",
       "status": "reference_only"
-    },
-    {
-      "repository": "vnpy/vnpy",
-      "revision": "fa5206fe63836f3f8cd1ebd7168fbd19a5e2ff09",
-      "license": "MIT",
-      "stars": 45660,
-      "status": "research_reference"
     }
   ]
 }
