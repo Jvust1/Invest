@@ -49,6 +49,10 @@ def run_a_share_research_bundle(
 
     signal = moving_average_signal(history["close"], fast=fast, slow=slow)
     backtest = run_backtest(history["close"], signal, fee_bps=fee_bps)
+    if "market_data" in history.attrs:
+        from copy import deepcopy
+        market.attrs["market_data"] = deepcopy(history.attrs["market_data"])
+        backtest.attrs["market_data"] = deepcopy(history.attrs["market_data"])
     return AShareResearchBundle(
         market=market,
         backtest=backtest,

@@ -43,7 +43,7 @@
       "repo": "microsoft/qlib",
       "revision": "be725493eb1a6bbb42bf11b37aa7669f59610ff1",
       "license": "MIT",
-      "stars": 49065,
+      "stars": 49078,
       "status": "active_adapter",
       "path": "invest/qlib_bridge.py",
       "target": "invest.qlib_bridge",
@@ -56,7 +56,11 @@
         "market_data"
       ],
       "python_import": "qlib",
-      "last_push": "2026-09-22T05:57:23Z"
+      "last_push": "2026-09-22T05:57:23Z",
+      "runtime_package": "pyqlib==0.9.7",
+      "runtime_revision": "da920b7f954f48ab1bb64117c976710de198373e",
+      "license_path": "third_party/qlib/LICENSE",
+      "notes": "Actual isolated local D.features reader into both existing research pipelines; explicit native adjust='qlib'; no Qlib experiments or market downloads; MLflow3.16.1 coinstalled."
     },
     {
       "repo": "PyPortfolio/PyPortfolioOpt",
