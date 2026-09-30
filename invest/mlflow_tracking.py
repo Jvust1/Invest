@@ -66,6 +66,7 @@ ARCHIVE_PHASES = frozenset({
     "sdk_import", "lock_wait", "client_initialization", "experiment_lookup",
     "run_lookup", "artifact_validation", "index_write", "artifact_write",
     "commit", "archive_returned", "response_write", "response_written",
+    "sdk_store_import", "initial_tables", "schema_upgrade", "engine_retry",
 })
 
 
@@ -112,6 +113,56 @@ def _archive_phase_journal():
             try:
                 directory.cleanup()
             except OSError:
+                pass
+
+
+@contextmanager
+def _initialization_phases(progress):
+    """Observe exact pinned-SDK log templates without formatting private args."""
+    logger = handler = None
+    active = True
+    if progress is not None:
+        try:
+            import logging
+
+            class PhaseHandler(logging.Handler):
+                def emit(self, record):
+                    try:
+                        if not active or record.name != "mlflow.store.db.utils" or type(record.msg) is not str:
+                            return
+                        phases = {
+                            "Creating initial MLflow database tables...": "initial_tables",
+                            "Updating database tables": "schema_upgrade",
+                            "SQLAlchemy engine could not be created. The following exception is caught.\n"
+                            "%s\nOperation will be retried in %.1f seconds": "engine_retry",
+                        }
+                        phase = phases.get(record.msg)
+                        if phase is not None:
+                            _mark_archive_phase(progress, phase)
+                    except Exception:
+                        # No formatting of args, SQL, errors, paths or traceback.
+                        pass
+
+            logger = logging.getLogger("mlflow.store.db.utils")
+            handler = PhaseHandler()
+            logger.addHandler(handler)
+        except Exception:
+            # Diagnostics may be unavailable, but archival must still proceed.
+            pass
+    try:
+        yield
+    finally:
+        # Disable observation before best-effort removal, including a failing
+        # logger implementation that leaves the handler attached.
+        active = False
+        if logger is not None and handler is not None:
+            try:
+                logger.removeHandler(handler)
+            except Exception:
+                pass
+            try:
+                handler.close()
+            except Exception:
                 pass
 
 
@@ -323,6 +374,14 @@ def _archive_local(record, data_dir, *, progress=None):
 
     if get_telemetry_client() is not None:
         raise RuntimeError("MLflow telemetry is not disabled")
+    # These official modules are required by the fixed SQLite backend anyway.
+    # Separate their lazy import from database initialization and do it before
+    # taking the cross-process writer lock; no store/connection is created here.
+    _mark_archive_phase(progress, "sdk_store_import")
+    from importlib import import_module
+    import_module("mlflow.store.db.utils")
+    import_module("mlflow.store.tracking.sqlalchemy_store")
+    import_module("mlflow.store.tracking.sqlalchemy_workspace_store")
     uri = "sqlite:///" + database.as_posix()
     # An independent SQLite transaction serializes separate server processes.
     # The SDK writes to its own DB, not to this lock database or Workspace.
@@ -330,7 +389,8 @@ def _archive_local(record, data_dir, *, progress=None):
     with closing(sqlite3.connect(lock_path, timeout=ARCHIVE_LOCK_TIMEOUT)) as lock:
         lock.execute("BEGIN IMMEDIATE")
         _mark_archive_phase(progress, "client_initialization")
-        client = MlflowClient(tracking_uri=uri, registry_uri=uri)
+        with _initialization_phases(progress):
+            client = MlflowClient(tracking_uri=uri, registry_uri=uri)
         _mark_archive_phase(progress, "experiment_lookup")
         experiment = client.get_experiment_by_name(LOCAL_EXPERIMENT)
         if experiment is None:
