@@ -11,8 +11,10 @@ dependencies = ["numpy>=1.23", "pandas>=1.5", "requests>=2.28", "scipy>=1.9", "s
 
 [project.optional-dependencies]
 calendars = ["pandas-market-calendars>=4.0"]
+exchange = ["exchange-calendars>=4.0"]
 risk = ["Riskfolio-Lib>=6.0"]
 qlib = ["pyqlib>=0.9"]
+skfolio = ["skfolio>=1.4"]
 
 [tool.setuptools.packages.find]
 include = ["invest*"]
