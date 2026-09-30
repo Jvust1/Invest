@@ -154,3 +154,15 @@ GitHub Actions `Invest tests` run `36017899955` 已 completed/success。四个�
 GitHub Actions `Invest tests` run `36093418179` 已 completed/success；Ubuntu/Windows × Python 3.11/3.12 四个矩阵 job 的 `Standard-library tests` 与 `Compile source` 全部成功，日志确认 **Ran 120 tests**（基础 82 + evaluation 15 + provider evidence 23）。
 
 本次只加固结构和 provenance：没有 provider call、没有 Token/凭据、没有真实市场数据、没有真实 provider evidence、没有真实 binding、没有观察 frozen holdout，也没有收益证据。哈希与 identity bridge 仍不是外部真实性证明。
+
+## E011 — scikit-learn 滚动验证离线样本
+
+2026-09-30：11 个新定向测试通过；与 PR #48 1b2d415b 的临时组合运行
+569 unittest cases，13 个可选依赖 skips，0 failures/errors。真实 loopback HTTP
+验证创建、保存、导出、幂等重试及错误锁恢复；未来价格扰动不能改变早先训练结果。
+完整预算合成探针：2500 个预热后交易日、3 候选、5 折，60 次引擎调用，15 项
+评价及独立回放全部通过；JSON 7,048,280 bytes。JS 语法通过；云浏览器 loopback
+访问被阻止，视觉验收未执行。上述为本地证据，远端 exact-head CI 单独核验。
+没有真实 provider call、私有持仓、真实交易、收益有效性或 frozen holdout 观察。
+
+补充完整 pytest：575 passed / 13 skipped / 365 passing subtests，1 个既有 china_market_data 目录数量断言失败；已在未修改 PR #48 复现，不改弱断言。

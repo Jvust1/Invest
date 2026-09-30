@@ -27,6 +27,11 @@ applying each signal on the following bar.
 
 ## 融合状态
 
+[滚动验证工作台](docs/upstream/sklearn-walkforward-2026-09-30.md)：复用 scikit-learn
+TimeSeriesSplit，在已有假设实验室中按较早训练段选择候选，再单独评价后续区间。
+支持训练/评价间隔、保留全部训练与失败记录、独立账本回放和完整 JSON 导出。
+这是探索性研究，不打开冻结留出集；桌面入口依赖 PR #48 的应用恢复。
+
 [融合状态与目录边界](docs/INTEGRATION_STATUS.md)记录当前 main 已合入的高星适配器、桌面/研究归档和独立引擎合同。
 
 ## 50 项高星融合目录

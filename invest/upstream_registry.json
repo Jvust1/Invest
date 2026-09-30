@@ -872,20 +872,21 @@
     },
     {
       "repo": "scikit-learn/scikit-learn",
-      "revision": "default-branch metadata snapshot 2026-09-30",
+      "revision": "646da0f072a8afef6a980aa427a710311e67eb9d",
       "license": "BSD-3-Clause",
       "stars": 67434,
-      "status": "catalog_contract",
-      "path": null,
-      "target": "invest.upstream_catalog",
-      "stage": "catalog",
+      "status": "active_adapter",
+      "path": "invest/walkforward.py",
+      "target": "invest.experiments.run_study",
+      "stage": "active_adapter",
       "capabilities": [
         "machine_learning",
         "time_series_validation"
       ],
       "python_import": "sklearn",
       "last_push": "2026-09-29T16:42:42Z",
-      "batch": "20260930-high-star-50"
+      "batch": "20260930-high-star-50",
+      "notes": "TimeSeriesSplit is executed in the existing workbench study path; chronological train-only candidate selection, gap and bounded rolling windows, all candidate evidence, deterministic ledger replay. Installed runtime version is recorded; inspected source is 1.8.0, not a copied fork."
     },
     {
       "repo": "statsmodels/statsmodels",

@@ -19,7 +19,28 @@ function needDataset(){if(!dataset)throw new Error('请先载入或选择数据�
 action('dataset',chooseDataset,'change');
 action('demo',async()=>{const d=await api('/api/datasets/demo',{});await loadDatasets(d.id);tell('合成演示已载入。数据与结果不代表真实投资表现。');});
 action('receipt',async()=>{const d=await api('/api/workbench/receipt',{dataset_id:needDataset(),declaration:{license_note:$('license').value}});pretty($('receipt-output'),d);tell('审计回执已保存，未把来源声明提升为独立核验。');});
-action('study-form',async()=>{const r=await api('/api/workbench/study',{dataset_id:needDataset(),specification:{symbol:$('study-symbol').value,initial_cash:Number($('study-cash').value),candidates:JSON.parse($('candidates').value),cost_model_acknowledged:$('cost-ack').checked}});lastStudy=r;const p=r.payload;metrics($('study-output'),[['计划实验',p.summary.planned],['算术回放通过',p.summary.succeeded],['保留的失败',p.summary.failed]]);const out=node('div');table(out,['样本段','候选','成本','状态','收益','买入持有','相对基准 / 失败原因'],p.results.map(row=>[row.period,row.candidate,row.cost,row.status==='PASS'?'通过':'失败',pct(row.result?.metrics.total_return),pct(row.result?.metrics.benchmark_return),row.reason||pct(row.excess_vs_buy_hold)]));$('study-output').append(out,node('p',p.limitations.join('；')));$('study-export').hidden=false;tell(`已保存 ${p.summary.planned} 项实验，失败 ${p.summary.failed} 项。未打开冻结留出集。`);},'submit');
+action('study-mode',async()=>{const disabled=$('study-mode').value!=='walk-forward';$('walk-forward-settings').hidden=disabled;$('study-gap').disabled=disabled;},'change');
+action('study-form',async()=>{
+  const specification={symbol:$('study-symbol').value,initial_cash:Number($('study-cash').value),candidates:JSON.parse($('candidates').value),cost_model_acknowledged:$('cost-ack').checked};
+  if($('study-mode').value==='walk-forward')specification.walk_forward={n_splits:3,gap:Number($('study-gap').value)};
+  const r=await api('/api/workbench/study',{dataset_id:needDataset(),specification});
+  lastStudy=r;const p=r.payload;
+  metrics($('study-output'),[['计划评价',p.summary.planned],['算术回放通过',p.summary.succeeded],['保留的失败',p.summary.failed]]);
+  const out=node('div');
+  table(out,['样本段','候选','成本','状态','收益','买入持有','相对基准 / 失败原因'],p.results.map(row=>[row.period,row.candidate,row.cost,row.status==='PASS'?'通过':'失败',pct(row.result?.metrics.total_return),pct(row.result?.metrics.benchmark_return),row.reason||pct(row.excess_vs_buy_hold)]));
+  $('study-output').append(out);
+  if(p.protocol.mode==='EXPLORATORY_WALK_FORWARD'){
+    $('study-output').append(node('h4','先训练选候选，再独立评价'));
+    const windows=node('div');
+    table(windows,['折','训练窗口','间隔交易日','评价窗口'],p.protocol.folds.map(f=>[f.fold,`${f.train.start} → ${f.train.end}`,f.gap_sessions,`${f.test.start} → ${f.test.end}`]));
+    const details=node('details'),training=node('div');
+    details.append(node('summary','查看全部训练候选（含失败）'));
+    table(training,['折','成本','候选','训练相对基准','状态 / 原因'],p.results.flatMap(row=>row.training.map(t=>[row.fold,row.cost,t.candidate,pct(t.excess_vs_buy_hold),t.reason||t.status])));
+    details.append(training);$('study-output').append(windows,details);
+  }
+  $('study-output').append(node('p',p.limitations.join('；')));$('study-export').hidden=false;
+  tell(`已保存 ${p.summary.planned} 项评价，失败 ${p.summary.failed} 项。未打开冻结留出集。`);
+},'submit');
 action('study-export',async()=>download(lastStudy,'Invest-study-'+lastStudy.id.slice(0,12)+'.json'));
 async function loadReviews(selected){const r=await api('/api/workbench/documents?kind=review');const keep=selected||$('review-select').value;$('review-select').replaceChildren(new Option('请选择复盘账户',''));r.documents.forEach(d=>$('review-select').add(new Option(d.name,d.id)));if(r.documents.some(d=>d.id===keep))$('review-select').value=keep;if($('review-select').value)await refreshReview();}
 function showReview(r){const s=r.state;metrics($('review-output'),[['现金 / 元',s.cash],['按末次价格净资产',s.net_assets_on_last_marks],['观测点时间加权收益',pct(s.time_weighted_return)]]);const detail=node('div');table(detail,['资金净流入','股息','累计费用','估值口径利润'],[[s.net_external_flows,s.cash_dividends,s.total_fees,s.profit_on_last_marks]]);$('review-output').append(detail,node('p',s.warnings.join('；')));if(s.positions.length){const ps=node('div');table(ps,['标的','股数','末次估值价格','估值时间'],s.positions.map(p=>[p.symbol,p.quantity,p.marked_price,p.marked_at]));$('review-output').append(ps);}table($('events-output'),['序号','事件','发生时间','服务器记录时间','哈希'],r.events.map(e=>[e.sequence,e.event.type,e.event.occurred_at,e.recorded_at,e.hash.slice(0,16)]));}
