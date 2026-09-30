@@ -11,6 +11,7 @@ on:
       - 'pyproject.toml'
       - 'tests/test_mlflow_local.py'
       - 'tests/test_mlflow_tracking.py'
+      - 'tests/test_archive_phases.py'
       - 'tools/profile_mlflow_archive.py'
       - '.github/workflows/mlflow-local.yml'
   push:
@@ -41,6 +42,6 @@ jobs:
       - name: Diagnose synthetic archive startup and shutdown phases
         run: python tools/profile_mlflow_archive.py
       - name: Run local SDK and HTTP regression proofs
-        run: python -m pytest tests/test_mlflow_local.py tests/test_mlflow_tracking.py tests/test_growth_http.py -q --durations=10
+        run: python -m pytest tests/test_mlflow_local.py tests/test_mlflow_tracking.py tests/test_growth_http.py tests/test_archive_phases.py -q --durations=10
       - name: Compile tracking and server modules
         run: python -m py_compile invest/mlflow_tracking.py invest/server.py invest/workbench_api.py

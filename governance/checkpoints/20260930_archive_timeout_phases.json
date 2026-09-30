@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "repository": "Jvust1/Invest",
+  "as_of_utc": "2026-09-30T22:25:00Z",
+  "capability": "privacy_safe_last_phase_from_actual_bounded_local_archive_timeout",
+  "base_pr": 57,
+  "base_commit": "cbd6508fc27e6a4da0c9a0a9bd3de901e9fdae43",
+  "base_tree": "c374e12f895609a11a4ef5978ff3e3105e391b96",
+  "prior_failure": {
+    "pr": 56,
+    "head": "df53f3f2d953f8d5198bac6abdf3a74e082728b1",
+    "run": 36782317120,
+    "job": 110115321671,
+    "reason": "archive_timeout_before_symlink_adversary",
+    "actual_phase": "not_available_in_prior_logs",
+    "rerun": false
+  },
+  "contract": {
+    "worker_timeout_seconds": 45,
+    "lock_wait_seconds": 30,
+    "success_requires_exit_zero": true,
+    "success_before_exit_is_not_accepted": true,
+    "journal_content": "one_fixed_vocabulary_phase_word_only",
+    "max_journal_read_bytes": 65,
+    "raw_study_errors_env_paths_runids_in_journal": false,
+    "temp_setup_failure": "fall_back_to_original_no_journal_worker",
+    "journal_cleanup_failure": "must_not_replace_archive_result",
+    "phase_is_root_cause": false,
+    "availability_fix_claimed": false
+  },
+  "local_verification": {
+    "actual_SDK_regression_suite": {
+      "passed": 68,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 151.15
+    },
+    "independent_phase_suite": {
+      "passed": 23
+    },
+    "independent_real_temp_failure_fallback": "pass_with_actual_MLflow_archived_response",
+    "independent_early_success_then_hang": "timeout_failure_child_reaped_journal_removed",
+    "syntax": "pass",
+    "diff_check": "pass"
+  },
+  "hosted_ci": "pending_at_local_checkpoint; verify_exact_published_head",
+  "synthetic_only": true,
+  "real_trades": 0,
+  "main_modified": false,
+  "merged": false,
+  "deployed": false
+}
