@@ -16,7 +16,7 @@ import tempfile
 from zipfile import ZipFile
 
 CHILD = r'''
-import io,json,sys,threading
+import io,json,sys,threading,subprocess
 from dataclasses import asdict
 from importlib import metadata
 from pathlib import Path
@@ -28,6 +28,7 @@ assert Path(invest.__file__).resolve().is_relative_to(target), 'source checkout 
 from invest.qlib_bridge import create_qlib_market_provider
 from invest.providers.duckdb_cache import DuckDBMarketCache,DuckDBReplayProvider,DuckDBCacheMiss
 from invest.research_pipeline import run_a_share_research_bundle
+from invest.native_research import run_and_save_native_research,validate_native_record
 from invest.pipeline import run_a_share_sma_backtest,performance_summary
 from invest.server import InvestServer
 from invest.backup import restore_backup
@@ -61,6 +62,17 @@ with DuckDBMarketCache(cache_path,read_only=True) as cache:
     for frame in (bundle.market,bundle.backtest):
         assert frame.attrs['market_data']==captured.attrs['market_data']
         assert frame.attrs['duckdb_replay']['snapshot_id']==snapshot['snapshot_id']
+    native_record=run_and_save_native_research(Workspace(root/'workbench'/'state.sqlite'),replay,
+        request['symbol'],start_date=request['start_date'],end_date=request['end_date'],input_role='synthetic',
+        optimization_trials=12,optimization_splits=3,training_fraction=.7,optimization_seed=7)
+    assert native_record['payload']['summary']==bundle.summary
+    assert native_record['payload']['optimization']['params']==bundle.optimization.params
+    assert native_record['payload']['snapshot']['snapshot_id']==snapshot['snapshot_id']
+    assert native_record['payload']['optimization']['implementation']=='optuna_tpe'
+    assert len(native_record['payload']['input']['rows'])==120
+    assert len(native_record['payload']['curve']['rows'])==36
+    validate_native_record(native_record)
+    assert Workspace(root/'workbench'/'state.sqlite').put('native_research',native_record['payload'])==native_record
     baseline,_=run_a_share_sma_backtest(**request,provider_instance=replay,
         fast=bundle.optimization.params['fast'],slow=bundle.optimization.params['slow'])
     later=baseline.iloc[84:].copy()
@@ -73,10 +85,7 @@ with DuckDBMarketCache(cache_path,read_only=True) as cache:
         pass
     else:
         raise AssertionError('exact-request cache silently matched an alias')
-native_report={'source':'SYNTHETIC_ONLY','request':request,
-    'snapshot':snapshot,'source_metadata':captured.attrs['market_data'],
-    'split':bundle.research_split,'optimization':asdict(bundle.optimization),'summary':bundle.summary}
-(root/'native-research.json').write_text(json.dumps(native_report,indent=2,allow_nan=False),encoding='utf-8')
+(root/'native-research.json').write_text(json.dumps(native_record,indent=2,allow_nan=False),encoding='utf-8')
 
 # Native normalized prices intentionally do not enter the strict cash/lot/T+1
 # engine. Its independent pilot uses the existing explicitly synthetic dataset.
@@ -94,6 +103,31 @@ try:
     assert b'workbench.js' in request_http('/')
     script=request_http('/workbench.js')
     assert all(feature in script for feature in (b'chartPicker', b'walk_forward', b'archiveControls'))
+    assert request_http('/api/workbench/document?id='+native_record['id'])==native_record
+    # Exercise the installed package's actual JS byte-export path. Parsing the
+    # Python JSON into JS numbers and stringify would destroy content identity.
+    js = """
+const fs=require('node:fs'),vm=require('node:vm');
+(async()=>{const [base,id,out]=process.argv.slice(1);
+const source=await(await fetch(base+'/workbench.js')).text();
+let result;const context={Blob,AbortSignal,encodeURIComponent,csrf:'',
+fetch:(route,opts)=>fetch(base+route,opts),download:(blob,name)=>{result={blob,name};}};
+vm.createContext(context);vm.runInContext(source.slice(source.indexOf('const MAX_DOCUMENT_BYTES='),source.indexOf('function action(')),context);
+await context.savedRecordDownload(id,'native-'+id+'.json');
+if(result.name!=='native-'+id+'.json')throw new Error('wrong saved identity filename');
+fs.writeFileSync(out,Buffer.from(await result.blob.arrayBuffer()));
+})().catch(error=>{console.error(error);process.exitCode=1;});
+"""
+    downloaded_path=root/'native-browser-download.json'
+    js_run=subprocess.run(['node','-e',js,base,native_record['id'],str(downloaded_path)],
+        capture_output=True,text=True,timeout=30)
+    assert js_run.returncode==0,js_run.stderr
+    from invest.server import encode_json
+    assert downloaded_path.read_bytes()==encode_json(native_record)
+    assert validate_native_record(json.loads(downloaded_path.read_text(encoding='utf-8')))==native_record
+    listing=request_http('/api/workbench/documents?kind=native_research')
+    assert listing['documents'][0]['id']==native_record['id']
+    assert listing['validation']=='content_identity_only; full_native_replay_on_download'
     dataset=request_http('/api/datasets/demo',{})
     assert dataset['meta']['source_kind']=='demo'
     saved=request_http('/api/workbench/study',{'dataset_id':dataset['id'],'specification':{
@@ -122,6 +156,13 @@ finally:
     server.shutdown();thread.join(10);server.server_close()
 restored=restore_backup(backup,root/'restored')
 assert Workspace(restored/'state.sqlite').get(saved['id'],'study')==saved
+assert Workspace(restored/'state.sqlite').get(native_record['id'],'native_research')==native_record
+assert not (restored/'native.duckdb').exists()
+# Report validation/JSON after restore needs no optional SDK or provider call.
+from unittest.mock import patch
+with patch('invest.providers.duckdb_cache.DuckDBReplayProvider.history',side_effect=AssertionError('provider called')), \
+     patch('invest.optuna_walkforward.optimize_sma_walkforward',side_effect=AssertionError('optimizer called')):
+    validate_native_record(Workspace(restored/'state.sqlite').get(native_record['id'],'native_research'))
 assert not (restored/'mlflow').exists(), 'derivative archive was silently added to private backup'
 # A restored authoritative record must regenerate the same derivative image and
 # rebuild the optional local archive without replaying data or copying MLflow DBs.
@@ -130,6 +171,7 @@ thread=threading.Thread(target=server.serve_forever,daemon=True);thread.start()
 base=f'http://127.0.0.1:{server.server_port}'
 try:
     assert request_http('/api/workbench/document?id='+saved['id'])==saved
+    assert request_http('/api/workbench/document?id='+native_record['id'])==native_record
     assert request_http('/api/workbench/study-chart?id='+saved['id']+'&case=0')==png
     rebuilt=request_http('/api/workbench/track-study',{'study_id':saved['id']})['tracking']
     assert rebuilt['status']=='archived' and rebuilt['reused'] is False,rebuilt
@@ -140,6 +182,9 @@ report={'schema':'invest-installed-research-stack-pilot-v1','installed_wheel_imp
     'synthetic_only':True,'versions':versions,'external_market_calls':0,'broker_connected':False,
     'native_replay_rows':120,'optimization_trials':12,'training_rows':84,'evaluation_rows':36,
     'native_source_identity_preserved':True,'native_research_json':True,
+    'native_saved_record_id':native_record['id'],'native_record_restored_and_replayed':True,
+    'native_embedded_input_rows':120,'native_full_trial_arithmetic_verified':True,
+    'native_javascript_download_byte_identity':True,
     'rolling_cases':9,'saved_study_identity':saved['id'],'mlflow_archive_reused':True,
     'png_identity_verified':True,'private_backup_restored':True,
     'restored_chart_identical':True,'restored_archive_rebuilt':True,'frozen_holdout_opened':False,
@@ -163,7 +208,7 @@ def main(argv=None):
         parser.error('expected a built invest wheel')
     with ZipFile(wheel) as archive:
         required = {'invest/web/workbench.js', 'invest/web/workbench.html', 'invest/upstream_registry.json',
-                    'invest/qlib_local.py', 'invest/study_charts.py', 'invest/walkforward.py'}
+                    'invest/qlib_local.py', 'invest/study_charts.py', 'invest/walkforward.py', 'invest/native_research.py'}
         if not required.issubset(archive.namelist()):
             raise ValueError('wheel lacks the integrated runtime modules/assets')
     repo = Path(__file__).resolve().parents[1]

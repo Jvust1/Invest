@@ -6,7 +6,7 @@ This is a coherent candidate combining the independently reviewable PR #48 repai
 
 Two end-to-end paths deliberately use different data contracts:
 
-1. **Native-price research:** explicit authorized local Qlib files → real isolated `D.features` → exact-request DuckDB snapshot → reopen with no upstream → real seeded Optuna TPE using only the training prefix → evaluate later observations → summary with both source and replay identities.
+1. **Native-price research:** explicit authorized local Qlib files → real isolated `D.features` → exact-request DuckDB snapshot → reopen with no upstream → real seeded Optuna TPE using only the training prefix → evaluate later observations → a durable native Workspace record with embedded input rows, all trial evidence, later curve and source/replay/producer identities.
 2. **Saved cash-engine research:** existing explicitly synthetic workbench dataset → real scikit-learn rolling split with gap → training-only candidate selection and later cost scenarios → immutable Workspace JSON → opt-in local MLflow archive/retry → Matplotlib PNG with identity metadata → private backup/restore.
 
 Native Qlib prices and volume remain unconverted and their dataset-defined units remain unverified. They do not enter the stricter cash/lot/T+1 engine. No frozen holdout is opened. A successful synthetic pilot establishes software behavior, not market profitability or data rights.
@@ -27,14 +27,14 @@ Python 3.10 lacks SQLite's newer exception-code attributes. Busy classification 
 python -m pip install '.[qlib,mlflow,charts,duckdb,optuna,test]' 'duckdb==1.5.6' 'optuna==5.0.0'
 python -m pip check
 python -m pytest tests -q
-node --test tests/archive_controls_ui.test.cjs tests/study_charts_ui.test.cjs
+node --test tests/archive_controls_ui.test.cjs tests/study_charts_ui.test.cjs tests/record_download_ui.test.cjs
 python -m pip wheel --no-deps --wheel-dir dist .
 python tools/research_stack_smoke.py dist
 ```
 
-Use a fresh wheel directory with one Invest wheel. The pilot creates only synthetic inputs in a temporary directory, installs the wheel into another directory without network/dependency resolution, and starts Python `-I` outside the checkout. It asserts every Invest import is from the installed wheel. Actual Qlib and MLflow workers resolve that installed package too.
+Use Node 22 and a fresh wheel directory with one Invest wheel. The pilot creates only synthetic inputs in a temporary directory, installs the wheel into another directory without network/dependency resolution, and starts Python `-I` outside the checkout. It asserts every Invest import is from the installed wheel. Actual Qlib and MLflow workers resolve that installed package too.
 
-The JSON report verifies 120 native rows, 12 actual Optuna trials, an 84/36 training/evaluation split, independently matched later-period metrics, preserved source/snapshot identities, an exact-request alias cache miss, nine rolling cash-engine cases, a reused single MLflow run, PNG identity, private-backup restore, byte-identical chart regeneration and a rebuilt local archive from the unchanged restored record. Temporary input/output files are removed after verification; no user data is read. The existing source APIs and workbench retain their normal output behavior.
+The JSON report and saved native record verify 120 native rows, 12 actual Optuna trials, an 84/36 training/evaluation split, independently matched later-period metrics, preserved source/snapshot identities, an exact-request alias cache miss, nine rolling cash-engine cases, a reused single MLflow run, PNG identity, private-backup restore, byte-identical chart regeneration and a rebuilt local archive from the unchanged restored record. Native Workspace JSON is also downloaded and restored with embedded input/trial arithmetic revalidated without provider or optimizer calls. The separate [durable source pilot](native-research-record-2026-09-30.md) retains its output; this installed-wheel verifier’s temporary input/output files are removed after verification; no user data is read. The existing source APIs and workbench retain their normal output behavior.
 
 The dedicated hosted matrix runs the full source suite plus this isolated wheel pilot with all optional SDKs coinstalled on Ubuntu/Windows and Python 3.10/3.12, including the declared minimum Python version. The existing narrower matrices remain unchanged. Check terminal results for the candidate's exact head before claiming cross-platform acceptance.
 
@@ -60,7 +60,9 @@ Exact upstream license bytes, copyright, source links and change summaries remai
 
 ## Evidence and remaining limits
 
-The final local Linux/Python 3.12 source suite passed **863 tests, 13 explicit optional skips and 454 subtests**, with zero failures; all eight UI state tests and `pip check` passed. The rebuilt installed-wheel pilot passed all six SDKs and both complete flows, including restore → byte-identical PNG → fresh local archive reconstruction. Independent review accepted the native replay metadata bridge, source identities, installed-wheel isolation, archive UI state behavior and Python 3.10 compatibility fallback; it found no remaining blocker after the qualified SQLite lock-message regression was added. Final full-suite and hosted results are recorded on the exact candidate PR, not presumed here.
+Before the later durable-record and timeout-phase extensions, the base candidate local Linux/Python 3.12 source suite passed **863 tests, 13 explicit optional skips and 454 subtests**, with zero failures; all eight UI state tests and `pip check` passed. The rebuilt installed-wheel pilot passed all six SDKs and both complete flows, including restore → byte-identical PNG → fresh local archive reconstruction. Independent review accepted the native replay metadata bridge, source identities, installed-wheel isolation, archive UI state behavior and Python 3.10 compatibility fallback; it found no remaining blocker after the qualified SQLite lock-message regression was added. Final full-suite and hosted results are recorded on the exact candidate PR, not presumed here.
+
+The later [durable native-record proof](native-research-record-2026-09-30.md) records its own final combined suite, lossless browser JSON export, installed-wheel and review evidence.
 
 Earlier chart-stack Windows CI observed intermittent local archive contention/deadline failures. A later exact head passed all SDK tests; the added phase profiler is diagnostic, not a proven causal reliability fix. A local archive timeout remains an explicit retryable failure after saving the study. Neither a profiler's zero exit nor a single green matrix is a guarantee under every resource condition.
 

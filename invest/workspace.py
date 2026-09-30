@@ -8,6 +8,7 @@ from contextlib import contextmanager
 from datetime import datetime, timezone
 import hashlib
 import json
+import math
 from pathlib import Path
 import re
 import sqlite3
@@ -79,8 +80,11 @@ CREATE TRIGGER IF NOT EXISTS growth_events_no_delete BEFORE DELETE ON growth_eve
             db.close()
 
     def put(self, kind, payload):
-        if kind not in {'study', 'facts', 'review', 'receipt'}:
+        if kind not in {'study', 'facts', 'review', 'receipt', 'native_research'}:
             raise ValueError('文档类型不支持')
+        if kind == 'native_research':
+            from .native_research import validate_native_research
+            validate_native_research(payload)
         raw = canonical(payload)
         if len(raw.encode()) > 8 * 1024 * 1024:
             raise ValueError('单个研究文档超过8MiB限制')
@@ -92,7 +96,19 @@ CREATE TRIGGER IF NOT EXISTS growth_events_no_delete BEFORE DELETE ON growth_eve
 
     @staticmethod
     def _decode(row):
-        payload = json.loads(row['payload'])
+        raw = row['payload']
+        if row['kind'] == 'native_research':
+            # Check restored native data before parse/allocation. A malicious or
+            # foreign SQLite document may bypass Workspace.put's write guard.
+            if type(raw) is not str or len(raw) > 8 * 1024 * 1024 or len(raw.encode('utf-8')) > 8 * 1024 * 1024:
+                raise ValueError('native research exceeds 8 MiB')
+            from .native_research import parse_native_json
+            payload = parse_native_json(raw)
+            if type(payload) is not dict:
+                raise ValueError('native research payload must be a JSON object')
+            instant(row['recorded_at'])
+        else:
+            payload = json.loads(raw)
         if digest({'kind': row['kind'], 'payload': payload}) != row['id']:
             raise ValueError('研究文档内容身份校验失败')
         return {'id': row['id'], 'kind': row['kind'], 'recorded_at': row['recorded_at'], 'payload': payload}
@@ -110,6 +126,34 @@ CREATE TRIGGER IF NOT EXISTS growth_events_no_delete BEFORE DELETE ON growth_eve
         with self.connection() as db:
             rows = db.execute('SELECT * FROM growth_documents WHERE kind=? ORDER BY recorded_at DESC,id LIMIT 100', (kind,)).fetchall()
         return [self._decode(r) for r in rows]
+
+    def list_summaries(self, kind):
+        """Identity-only listing with one payload resident at a time.
+
+        No arithmetic replay. A native document is fully checked on explicit
+        download/validation, rather than executing up to 100 trial suites here.
+        """
+        output = []
+        with self.connection() as db:
+            rows = db.execute('SELECT * FROM growth_documents WHERE kind=? ORDER BY recorded_at DESC,id LIMIT 100', (kind,))
+            for row in rows:
+                document = self._decode(row)
+                payload = document['payload']
+                summary = payload.get('summary')
+                name = payload.get('name', payload.get('source_name', document['id'][:12]))
+                if kind == 'native_research':
+                    # A resealed foreign row must not make the tiny list response
+                    # retain another large nested payload or arbitrary free text.
+                    name = document['id'][:12]
+                    fields = {'total_return', 'annualized_return', 'annualized_volatility', 'sharpe', 'max_drawdown'}
+                    if (type(summary) is not dict or set(summary) != fields
+                            or any(type(v) not in (int, float) or not -1e308 <= v <= 1e308
+                                   or not math.isfinite(v) for v in summary.values())):
+                        raise ValueError('native research listing summary shape is invalid')
+                output.append({'id': document['id'], 'kind': kind, 'recorded_at': document['recorded_at'],
+                    'name': name, 'summary': summary})
+                del document, payload, row, summary
+        return output
 
     @staticmethod
     def events_in(db, stream):

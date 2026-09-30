@@ -1,0 +1,104 @@
+{
+  "schema": "invest-native-research-review-evidence-v1",
+  "date_utc": "2026-09-30",
+  "synthetic_only": true,
+  "scope": "source Python and installed-wheel software behavior; not real-market or desktop acceptance",
+  "base": {
+    "remote_commit": "b79e8d12a82def150ce7479ce05f351ff0993b5a",
+    "remote_tree": "eee5cff4e2cb2383087893cf54410817e6798597",
+    "local_equivalent_commit": "b5dbcc45ff1c61fae1b589621b3c77b5fa61ce0b"
+  },
+  "final_local_full_suite": {
+    "passed": 1138,
+    "skipped": 13,
+    "subtests_passed": 454,
+    "seconds": 219.33,
+    "command": "python -m pytest tests -vv --durations=15",
+    "python": "3.12.14"
+  },
+  "earlier_interrupted_attempt": {
+    "exit_code": 137,
+    "progress_approximately_percent": 88,
+    "assertion_failure_shown_before_termination": false,
+    "cause": "unverified SIGKILL; not counted as a passed run",
+    "subsequent_exact_source_retry": "completed successfully"
+  },
+  "focused_gate": {
+    "passed": 261,
+    "command": "python -m pytest -q tests/test_record_download_http.py tests/test_native_research.py tests/test_native_research_budget.py tests/test_growth_http.py"
+  },
+  "javascript_gate": {
+    "passed": 20,
+    "command": "node --test tests/record_download_ui.test.cjs tests/archive_controls_ui.test.cjs tests/study_charts_ui.test.cjs",
+    "local_node": "v24.19.0",
+    "hosted_node_target": "22"
+  },
+  "independent_review": {
+    "native_source_and_arithmetic": "passed after hardening",
+    "raw_export": "passed; native and cash HTTP -> served JS Blob -> exact bytes -> Python validator",
+    "streaming_listing_memory_probe": {
+      "records": [
+        2,
+        20
+      ],
+      "approximate_payload_mib": 3,
+      "traced_peak_bytes": [
+        12863045,
+        12884430
+      ],
+      "each_summary_below_bytes": 1024
+    },
+    "incremental_byte_limit": "exact canonical UTF8 including escaped keys, strings and punctuation"
+  },
+  "pip_check": "No broken requirements found",
+  "wheel": {
+    "sha256": "01b0d2d038876ec83e92aaf4f10538c4f4b4693d511831b9878b8dc5d331b3e9",
+    "runtime_files_compared_byte_for_byte_with_final_worktree": 61,
+    "runtime_content_matches_final_worktree": true,
+    "pilot": {
+      "schema": "invest-installed-research-stack-pilot-v1",
+      "installed_wheel_import": true,
+      "synthetic_only": true,
+      "versions": {
+        "pyqlib": "0.9.7",
+        "mlflow": "3.16.1",
+        "matplotlib": "3.10.8",
+        "duckdb": "1.5.6",
+        "optuna": "5.0.0",
+        "scikit-learn": "1.9.1"
+      },
+      "external_market_calls": 0,
+      "broker_connected": false,
+      "native_replay_rows": 120,
+      "optimization_trials": 12,
+      "training_rows": 84,
+      "evaluation_rows": 36,
+      "native_source_identity_preserved": true,
+      "native_research_json": true,
+      "native_saved_record_id": "556493cc1a4cfaecef77395f4ac6d84cbf7b91d827c4644db586f12948d230f4",
+      "native_record_restored_and_replayed": true,
+      "native_embedded_input_rows": 120,
+      "native_full_trial_arithmetic_verified": true,
+      "native_javascript_download_byte_identity": true,
+      "rolling_cases": 9,
+      "saved_study_identity": "4f374081c661d851170a7776f7de56f90b051ca1a48a37a5c357ab160c34ecdf",
+      "mlflow_archive_reused": true,
+      "png_identity_verified": true,
+      "private_backup_restored": true,
+      "restored_chart_identical": true,
+      "restored_archive_rebuilt": true,
+      "frozen_holdout_opened": false,
+      "browser_layout_verified": false,
+      "native_prices_used_for_cash_execution": false
+    }
+  },
+  "historical_golden_record_id": "377355d52c23b5ad721bf6149ef346a718a04dfbf015bc37b41d16cf5280ab1f",
+  "limits": {
+    "new_optional_sdk_added": false,
+    "new_http_execution_endpoint": false,
+    "native_cash_engine_or_chart_acceptance": false,
+    "frozen_holdout_opened": false,
+    "browser_layout_verified": false,
+    "hosted_exact_head_ci": "not assumed by local evidence; verify the published candidate"
+  }
+}

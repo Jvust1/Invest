@@ -20,14 +20,26 @@ def dispatch(handler, path, parameter, payload=None):
                     'scope':'local_derivative_archive','included_in_private_backup':False}})
         if path == '/api/workbench/documents':
             kind = parameter('kind', True)
-            if kind not in {'study','facts','review','receipt'}:
+            if kind not in {'study','facts','review','receipt','native_research'}:
                 raise ValueError('文档类型错误')
+            if kind == 'native_research':
+                return handler._reply(200, {'documents': ws.list_summaries(kind), 'listing_limit':100,
+                    'validation':'content_identity_only; full_native_replay_on_download'})
             docs = ws.list(kind)
             return handler._reply(200, {'documents':[{'id':d['id'],'kind':kind,'recorded_at':d['recorded_at'],
                 'name':d['payload'].get('name',d['payload'].get('source_name',d['id'][:12])),
                 'summary':d['payload'].get('summary')} for d in docs], 'listing_limit':100})
         if path == '/api/workbench/document':
-            return handler._reply(200, ws.get(parameter('id',True)), attachment='invest-workbench-record.json')
+            record = ws.get(parameter('id',True))
+            if record['kind'] == 'native_research':
+                from .native_research import validate_native_record
+                if not server.study_lock.acquire(blocking=False):
+                    return handler._reply(409, {'error':'已有研究计算或校验正在运行，请稍后重试'})
+                try:
+                    validate_native_record(record)
+                finally:
+                    server.study_lock.release()
+            return handler._reply(200, record, attachment='invest-workbench-record.json')
         if path == '/api/workbench/study-chart':
             import re
             from .study_charts import ChartBusyError, ChartDependencyError, render_study_png

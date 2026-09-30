@@ -21,7 +21,7 @@ applying each signal on the following bar.
 
 [六个成熟上游的融合候选](docs/upstream/research-stack-2026-09-30.md)包含两条明确区分数据口径的流程：
 
-- 本地 Qlib 数据 → DuckDB 离线快照 → Optuna 仅训练段搜索 → 后续区间评价与来源指纹
+- 本地 Qlib 数据 → DuckDB 离线快照 → Optuna 仅训练段搜索 → 后续区间评价 → 可备份的原生研究记录
 - 合成工作台数据 → scikit-learn 滚动验证 → 已保存研究 → 本地 MLflow 归档 / 重试 → Matplotlib 图表和备份恢复
 
     python -m pip install '.[qlib,mlflow,charts,duckdb,optuna,test]' 'duckdb==1.5.6' 'optuna==5.0.0'
@@ -29,6 +29,11 @@ applying each signal on the following bar.
     python tools/research_stack_smoke.py dist
 
 该验证只生成合成数据，不连接账户或下载行情。Qlib 原生归一化价格不会进入现金 / 整手 / T+1 撮合引擎。
+[原生研究记录](docs/upstream/native-research-record-2026-09-30.md)保存原始输入行、全部训练试验和后段曲线，
+可通过工作台“原生价格探索研究”下载，随私人备份恢复；源代码示例会把合成 SDK 试跑结果留在指定目录。
+
+    python -m examples.native_research_record synthetic-pilot /tmp/invest-native-demo
+
 工作台本地归档需在源码启动时明确启用 `--track-experiments`；失败仍保留原研究，可在结果或归档列表中重试。
 
 ## 长期成长计划

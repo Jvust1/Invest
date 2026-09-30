@@ -30,3 +30,11 @@ The Invest-authored local data reader executes the official `pyqlib==0.9.7` SDK
 (release commit `da920b7f954f48ab1bb64117c976710de198373e`). No Qlib implementation
 source is copied or modified. The exact Microsoft MIT license and source/runtime
 provenance are retained in `third_party/qlib/`; market-data rights remain separate.
+
+## Durable native research composition
+
+`invest/native_research.py` is Invest-authored persistence and bounded validation
+glue for the existing Qlib / DuckDB / Optuna / scikit-learn runtime integrations.
+It vendors no new upstream source. Existing exact revisions and license notices
+remain unchanged. See `docs/upstream/native-research-record-2026-09-30.md` for the
+source/unit contract and synthetic installed-SDK evidence.
