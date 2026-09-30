@@ -309,6 +309,68 @@ def test_parallel_archive_workers_serialize_one_run(tmp_path):
     assert sorted(r["reused"] for r in results) == [False, True]
 
 
+def test_writer_lock_budget_fits_unchanged_worker_deadline():
+    from invest.mlflow_tracking import ARCHIVE_LOCK_TIMEOUT, WORKER_TIMEOUT
+    assert ARCHIVE_LOCK_TIMEOUT == 30
+    assert ARCHIVE_LOCK_TIMEOUT < WORKER_TIMEOUT == 45
+
+
+@sdk
+def test_writer_waits_past_old_ten_second_boundary(tmp_path):
+    record = saved_record(tmp_path)
+    (tmp_path/'mlflow').mkdir()
+    sdk_probe(tmp_path, r'''
+import sqlite3, threading, time
+from invest.mlflow_tracking import _archive_local
+from invest.workspace import Workspace
+record = Workspace(root/'state.sqlite').get(sys.argv[3], 'study')
+# The SDK is already imported by sdk_probe. This separate writer deterministically
+# holds the lock beyond the former 10-second limit without doing any network IO.
+lock = sqlite3.connect(root/'mlflow'/'archive-lock.sqlite', check_same_thread=False)
+lock.execute('BEGIN IMMEDIATE')
+timer = threading.Timer(12, lock.close)
+timer.start()
+started = time.monotonic()
+try:
+    result = _archive_local(record, root)
+finally:
+    timer.join()
+assert result['status'] == 'archived', result
+assert time.monotonic() - started >= 11
+assert Workspace(root/'state.sqlite').get(record['id'], 'study') == record
+''', record['id'])
+
+
+def test_worker_reports_busy_without_leaking_sqlite_details():
+    # The worker's permanent audit hook must not affect later pytest HTTP tests.
+    script = r'''
+import io, json, sqlite3, sys
+sys.path.insert(0, sys.argv[1])
+from invest import mlflow_tracking as module
+original_stdout = sys.stdout
+results = []
+for code in (sqlite3.SQLITE_BUSY, sqlite3.SQLITE_LOCKED, sqlite3.SQLITE_LOCKED | 256, sqlite3.SQLITE_IOERR):
+    def fail(*args):
+        error = sqlite3.OperationalError('private filesystem details must not leak')
+        error.sqlite_errorcode = code
+        raise error
+    module._archive_local = fail
+    sys.stdin = io.TextIOWrapper(io.BytesIO(b'{}'))
+    sys.stdout = io.StringIO()
+    module._worker_main('unused')
+    results.append(json.loads(sys.stdout.getvalue()))
+sys.stdout = original_stdout
+print(json.dumps(results))
+'''
+    result = subprocess.run([sys.executable, '-I', '-c', script, str(REPO)],
+                            capture_output=True, text=True, timeout=20)
+    assert result.returncode == 0, result.stderr
+    statuses = json.loads(result.stdout)
+    assert [r['reason'] for r in statuses] == ['archive_busy']*3 + ['local_archive_unavailable']
+    assert all(r == {'status': 'failed', 'reason': r['reason'], 'study_saved': True} for r in statuses)
+    assert 'private filesystem' not in result.stdout
+
+
 @sdk
 def test_completed_artifact_tampering_and_duplicate_run_fail_closed(tmp_path):
     record = saved_record(tmp_path)
