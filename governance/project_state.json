@@ -1,0 +1,424 @@
+{
+  "schema_version": 1,
+  "project": "Invest",
+  "repository": "Jvust2/Invest",
+  "repository_id": 1381007406,
+  "drive_folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
+  "as_of": "2026-09-25",
+  "state_scope": "live feature-branch governance snapshot; live branch/PR/checks remain authoritative for publication state",
+  "version": "0.1.0",
+  "currency": "CNY",
+  "security_status": "REGISTERED_PROTECTED",
+  "protection_scope": [
+    "chore/security-bootstrap-20260922",
+    "descendant non-default feature branch"
+  ],
+  "main_security_pending_pr": true,
+  "main_baseline_sha": "71b32347fd954b7952f748b852503779851dbf1a",
+  "bootstrap_sha": "172803ad30cd2065719944f1fab26a952c42be54",
+  "delivery_branch": "feat/a-share-research-v0.1-20260922",
+  "delivery_policy": "draft PR to main; no automatic merge",
+  "implementation": "evaluation_binding_provider_evidence_bridge_remote_ci_validated_real_data_gate_blocked",
+  "research_governance": "evaluation_protocol_v1_frozen",
+  "validation": {
+    "base_application_unittest": 82,
+    "current_full_suite_tests": 120,
+    "independent_groups": 8,
+    "root_browser_checks": 10,
+    "ui_curve_edge_cases": 3,
+    "uncaught_js_errors": 0,
+    "remote_ci": {
+      "historical_application_head_sha": "f40b0285b1c2bb249464f2ec354e9eb3bb6b18df",
+      "historical_workflow_run_id": 35701856144,
+      "latest_validated_code_head_sha": "c6ada411910d0e904fbaf1fbcec0ef399a1a9ea7",
+      "latest_workflow_run_id": 36093418179,
+      "result": "success",
+      "matrix_jobs": 4,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "python_versions": [
+        "3.11",
+        "3.12"
+      ],
+      "standard_library_tests_step": "pass",
+      "compile_source_step": "pass"
+    },
+    "evaluation_protocol": {
+      "id": "invest-oos-forward-paper-v1",
+      "status": "FROZEN_METHOD_V1",
+      "human_readable": "docs/EVALUATION_PROTOCOL_V1.md",
+      "machine_readable": "governance/evaluation_protocol_v1.json",
+      "real_data_binding": "PENDING_LICENSED_REAL_DATA",
+      "frozen_holdout": "NOT_OPENED",
+      "forward_paper": "NOT_STARTED"
+    },
+    "evaluation_binding_validator": {
+      "status": "REMOTE_CI_VALIDATED",
+      "module": "invest/evaluation.py",
+      "format": "docs/EVALUATION_BINDING_FORMAT.md",
+      "tests": 15,
+      "current_full_suite_tests_at_validation": 120,
+      "compile_source": "pass",
+      "real_data_used": false,
+      "credential_used": false,
+      "real_binding_created": false,
+      "historical_market_environments_required": true,
+      "minimum_historical_market_environments": 3,
+      "remote_ci_head_sha": "c6ada411910d0e904fbaf1fbcec0ef399a1a9ea7",
+      "workflow_run_id": 36093418179,
+      "matrix_jobs": 4,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "python_versions": [
+        "3.11",
+        "3.12"
+      ],
+      "standard_library_tests_step": "pass",
+      "compile_source_step": "pass",
+      "provider_evidence_reference_required": true,
+      "provider_dataset_identity_match_required": true,
+      "verified_boundaries_require_supporting_evidence_sha256": true
+    },
+    "real_data_provider_validation_prep": {
+      "status": "RUNBOOK_AND_EVIDENCE_VALIDATOR_READY_NO_REAL_DATA",
+      "runbook": "docs/REAL_DATA_PROVIDER_VALIDATION_RUNBOOK.md",
+      "provider_evidence_format": "docs/PROVIDER_VALIDATION_EVIDENCE_FORMAT.md",
+      "provider_evidence_validator": "invest/provider_validation.py",
+      "provider_call_performed": false,
+      "credential_used": false,
+      "real_data_used": false,
+      "real_provider_evidence_created": false,
+      "real_binding_created": false,
+      "holdout_opened": false,
+      "boundary_fields": [
+        "calendar",
+        "suspension",
+        "corporate_actions",
+        "price_limits",
+        "risk_warning_history",
+        "survivorship_bias",
+        "pit_features"
+      ],
+      "required_core_interfaces": [
+        "daily",
+        "adj_factor",
+        "stk_limit",
+        "trade_cal"
+      ],
+      "runbook_decision_record": "governance/decisions/D011_provider_validation_runbook.json",
+      "evidence_validator_decision_record": "governance/decisions/D012_provider_validation_evidence_validator.json",
+      "nonempty_success_gate_decision_record": "governance/decisions/D013_provider_validation_nonempty_success_gate.json",
+      "sample_scope_time_gate_decision_record": "governance/decisions/D014_provider_validation_sample_scope_time_gate.json",
+      "required_core_interfaces_gate_decision_record": "governance/decisions/D015_provider_validation_required_core_interfaces_gate.json",
+      "required_core_fields_gate_decision_record": "governance/decisions/D016_provider_validation_required_fields_gate.json",
+      "units_contract_gate_decision_record": "governance/decisions/D017_provider_validation_units_contract_gate.json",
+      "verified_boundary_provenance_gate_decision_record": "governance/decisions/D018_provider_validation_boundary_provenance_gate.json",
+      "execution_timezone_gate_decision_record": "governance/decisions/D019_provider_validation_execution_timezone_gate.json",
+      "license_provenance_gate_decision_record": "governance/decisions/D020_provider_validation_license_provenance_gate.json",
+      "license_provenance_addendum": "docs/PROVIDER_LICENSE_EVIDENCE_ADDENDUM.md",
+      "binding_bridge_decision_record": "governance/decisions/D021_provider_evidence_binding_bridge_gate.json"
+    },
+    "provider_validation_evidence_validator": {
+      "status": "REMOTE_CI_VALIDATED",
+      "module": "invest/provider_validation.py",
+      "format": "docs/PROVIDER_VALIDATION_EVIDENCE_FORMAT.md",
+      "tests": 23,
+      "current_full_suite_tests": 118,
+      "remote_ci_head_sha": "6db24bb3cde003f937a73dc5a5eb2041181af505",
+      "workflow_run_id": 36089180871,
+      "matrix_jobs": 4,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "python_versions": [
+        "3.11",
+        "3.12"
+      ],
+      "standard_library_tests_step": "pass",
+      "compile_source_step": "pass",
+      "success_interface_nonempty_fields_required": true,
+      "success_interface_positive_row_count_required": true,
+      "sample_security_code_mainboard_required": true,
+      "sample_end_not_after_execution_date_required": true,
+      "executed_at_required_utc_offset": "+08:00",
+      "executed_at_market_timezone_contract": "Asia/Shanghai",
+      "required_core_interfaces": [
+        "daily",
+        "adj_factor",
+        "stk_limit",
+        "trade_cal"
+      ],
+      "required_core_interface_fields": {
+        "daily": [
+          "ts_code",
+          "trade_date",
+          "open",
+          "high",
+          "low",
+          "close",
+          "vol"
+        ],
+        "adj_factor": [
+          "ts_code",
+          "trade_date",
+          "adj_factor"
+        ],
+        "stk_limit": [
+          "ts_code",
+          "trade_date",
+          "up_limit",
+          "down_limit"
+        ],
+        "trade_cal": [
+          "exchange",
+          "cal_date",
+          "is_open"
+        ]
+      },
+      "all_required_core_interfaces_must_be_present_for_readiness": true,
+      "successful_core_interfaces_require_adapter_fields": true,
+      "provider_call_performed": false,
+      "credential_used": false,
+      "real_data_used": false,
+      "holdout_opened": false,
+      "required_units": {
+        "currency": "CNY",
+        "price_unit": "CNY/share",
+        "volume_input_unit": "lot",
+        "volume_output_unit": "share",
+        "timezone": "Asia/Shanghai"
+      },
+      "units_must_match_current_adapter_contract": true,
+      "verified_boundaries_require_supporting_evidence_sha256": true,
+      "supporting_evidence_sha256_is_provenance_commitment_not_truth_proof": true,
+      "license_evidence_sha256_required": true,
+      "license_evidence_sha256_is_provenance_commitment_not_truth_proof": true
+    },
+    "provider_evidence_fail_closed_hardening": {
+      "status": "REMOTE_CI_VALIDATED",
+      "checkpoint": "governance/checkpoints/20260924_provider_validation_nonempty_success_gate.json",
+      "decision": "governance/decisions/D013_provider_validation_nonempty_success_gate.json",
+      "validated_code_head_sha": "4cbb66fb1c021d998368ee75f468e5be3e498f95",
+      "workflow_run_id": 35988041656,
+      "tests_added": 2,
+      "real_data_used": false,
+      "provider_call_performed": false,
+      "credentials_used": false,
+      "holdout_observed": false
+    },
+    "provider_evidence_sample_scope_time_hardening": {
+      "status": "REMOTE_CI_VALIDATED",
+      "checkpoint": "governance/checkpoints/20260924_provider_validation_sample_scope_time_gate.json",
+      "decision": "governance/decisions/D014_provider_validation_sample_scope_time_gate.json",
+      "validated_code_head_sha": "6b27845191c62a35d5930cc56e518e9eeb187400",
+      "workflow_run_id": 35993749624,
+      "tests_added": 2,
+      "sample_security_code_mainboard_required": true,
+      "sample_end_not_after_execution_date_required": true,
+      "real_data_used": false,
+      "provider_call_performed": false,
+      "credentials_used": false,
+      "holdout_observed": false
+    },
+    "provider_evidence_required_core_interfaces_hardening": {
+      "status": "REMOTE_CI_VALIDATED",
+      "checkpoint": "governance/checkpoints/20260924_provider_validation_required_core_interfaces_gate.json",
+      "decision": "governance/decisions/D015_provider_validation_required_core_interfaces_gate.json",
+      "validated_code_head_sha": "04f02079d3876f5a25ed9487acc56b3b0ae0b234",
+      "workflow_run_id": 36001056069,
+      "tests_added": 1,
+      "required_core_interfaces": [
+        "daily",
+        "adj_factor",
+        "stk_limit",
+        "trade_cal"
+      ],
+      "partial_real_attempts_preserved": true,
+      "missing_core_interface_blocks_readiness": true,
+      "real_data_used": false,
+      "provider_call_performed": false,
+      "credentials_used": false,
+      "holdout_observed": false
+    },
+    "provider_evidence_required_fields_hardening": {
+      "status": "REMOTE_CI_VALIDATED",
+      "checkpoint": "governance/checkpoints/20260924_provider_validation_required_fields_gate.json",
+      "decision": "governance/decisions/D016_provider_validation_required_fields_gate.json",
+      "validated_code_head_sha": "9d0e66fef88e6b1dc00effa8358c9c4c9225d6af",
+      "workflow_run_id": 36007383127,
+      "tests_added": 1,
+      "successful_core_interfaces_require_adapter_fields": true,
+      "failed_interface_partial_fields_preserved": true,
+      "real_data_used": false,
+      "provider_call_performed": false,
+      "credentials_used": false,
+      "holdout_observed": false
+    },
+    "provider_evidence_units_contract_hardening": {
+      "status": "REMOTE_CI_VALIDATED",
+      "checkpoint": "governance/checkpoints/20260924_provider_validation_units_contract_gate.json",
+      "decision": "governance/decisions/D017_provider_validation_units_contract_gate.json",
+      "validated_code_head_sha": "1a19ab04bcc5d26f6e825e1d76bd83e9c4621f73",
+      "workflow_run_id": 36010703814,
+      "tests_added": 1,
+      "unit_negative_subcases": 5,
+      "required_units": {
+        "currency": "CNY",
+        "price_unit": "CNY/share",
+        "volume_input_unit": "lot",
+        "volume_output_unit": "share",
+        "timezone": "Asia/Shanghai"
+      },
+      "real_data_used": false,
+      "provider_call_performed": false,
+      "credentials_used": false,
+      "holdout_observed": false
+    },
+    "provider_evidence_boundary_provenance_hardening": {
+      "status": "REMOTE_CI_VALIDATED",
+      "checkpoint": "governance/checkpoints/20260924_provider_validation_boundary_provenance_gate.json",
+      "decision": "governance/decisions/D018_provider_validation_boundary_provenance_gate.json",
+      "validated_code_head_sha": "5f1c3be266227d7403ef0ff10b61be4742471c5c",
+      "workflow_run_id": 36013947202,
+      "tests_added": 1,
+      "negative_subcases": 2,
+      "verified_boundary_supporting_evidence_sha256_required": true,
+      "unknown_not_covered_hash_optional": true,
+      "real_data_used": false,
+      "provider_call_performed": false,
+      "credentials_used": false,
+      "holdout_observed": false
+    },
+    "provider_evidence_execution_timezone_hardening": {
+      "status": "REMOTE_CI_VALIDATED",
+      "checkpoint": "governance/checkpoints/20260924_provider_validation_execution_timezone_gate.json",
+      "decision": "governance/decisions/D019_provider_validation_execution_timezone_gate.json",
+      "validated_code_head_sha": "070ac1b536ad7b96a97b0b0b944453a6c6fbc919",
+      "workflow_run_id": 36017899955,
+      "tests_added": 1,
+      "negative_subcases": 2,
+      "executed_at_required_utc_offset": "+08:00",
+      "declared_market_timezone": "Asia/Shanghai",
+      "real_data_used": false,
+      "provider_call_performed": false,
+      "credentials_used": false,
+      "holdout_observed": false
+    },
+    "governance_reconciliation": {
+      "drive_root_inventory_checked": true,
+      "licensed_real_dataset_found": false,
+      "real_binding_found": false,
+      "provider_call_performed": false,
+      "credential_used": false,
+      "frozen_protocol_market_environment_requirement_reconciled": true,
+      "real_data_validation_runbook_ready": true,
+      "provider_validation_evidence_validator_ready": true,
+      "reconciliation_code_head_sha": "ac65138475b1ecee11388dd8d6294f53ea13ac67",
+      "reconciliation_workflow_run_id": 35817379641,
+      "reconciliation_workflow_result": "success"
+    },
+    "provider_evidence_license_provenance_hardening": {
+      "status": "REMOTE_CI_VALIDATED",
+      "checkpoint": "governance/checkpoints/20260925_provider_validation_license_provenance_gate.json",
+      "decision": "governance/decisions/D020_provider_validation_license_provenance_gate.json",
+      "evaluation_record": "governance/evaluations/E009_provider_validation_license_provenance_gate.json",
+      "validated_code_head_sha": "6db24bb3cde003f937a73dc5a5eb2041181af505",
+      "workflow_run_id": 36089180871,
+      "tests_added": 1,
+      "negative_subcases": 2,
+      "license_evidence_sha256_required": true,
+      "real_data_used": false,
+      "provider_call_performed": false,
+      "holdout_observed": false
+    },
+    "provider_evidence_binding_bridge_hardening": {
+      "status": "REMOTE_CI_VALIDATED",
+      "checkpoint": "governance/checkpoints/20260925_provider_evidence_binding_bridge_gate.json",
+      "decision": "governance/decisions/D021_provider_evidence_binding_bridge_gate.json",
+      "evaluation_record": "docs/EVALUATION_LEDGER.md#e010--provider-evidence--evaluation-binding-provenance-bridge-验收2026-09-25",
+      "validated_code_head_sha": "c6ada411910d0e904fbaf1fbcec0ef399a1a9ea7",
+      "workflow_run_id": 36093418179,
+      "tests_added": 2,
+      "evaluation_tests": 15,
+      "current_full_suite_tests": 120,
+      "provider_evidence_reference_required": true,
+      "license_evidence_sha256_reference_required": true,
+      "provider_dataset_identity_match_required": true,
+      "verified_binding_boundaries_require_supporting_evidence_sha256": true,
+      "real_data_used": false,
+      "provider_call_performed": false,
+      "credentials_used": false,
+      "real_binding_created": false,
+      "holdout_observed": false
+    }
+  },
+  "external_blockers": [
+    {
+      "id": "LICENSED_REAL_DATA_REQUIRED",
+      "status": "OPEN",
+      "reason": "No authorized real Tushare/provider dataset or local credential-bearing execution environment is available through the connected project artifacts. Provider validation cannot be truthfully replaced by mocks or synthetic data.",
+      "safe_behavior": "Keep provider validation and frozen holdout closed; never store credentials in GitHub, chat, or shared Drive."
+    }
+  ],
+  "unverified": [
+    "live Tushare credentials/permissions/responses",
+    "Windows desktop browser and start.bat manual experience",
+    "real market or frozen out-of-sample profitability",
+    "forward-paper evidence",
+    "brokerage execution; not implemented",
+    "public or LAN deployment; not implemented"
+  ],
+  "next_actions": [
+    "when local authorization is available, validate real provider evidence with invest/provider_validation.py including provider.license_evidence_sha256 and all existing provider gates",
+    "before opening any frozen holdout result, create the first authorized BOUND_UNOPENED data binding and pass invest/evaluation.py with provider evidence_id/license hash linkage, matching raw/normalized/code identities, at least three frozen historical market environments, candidate, costs, benchmark, PIT and verified-boundary supporting evidence hashes",
+    "after provider evidence, candidate and data binding are frozen and all opening blockers are closed, begin append-only forward-paper evidence without retroactive signal edits",
+    "while licensed data is unavailable, only advance directly related credential-free governance, adversarial tests, or research preparation that does not fabricate provider evidence"
+  ],
+  "latest_checkpoint": "governance/checkpoints/20260925_provider_evidence_binding_bridge_gate.json",
+  "authority": {
+    "code_and_state": "GitHub",
+    "artifacts": "existing Drive project folder",
+    "private_ledger": "local user data only"
+  },
+  "parallel_work": [
+    {
+      "pr": 1,
+      "url": "https://github.com/Jvust2/Invest/pull/1",
+      "branch": "docs/long-term-roadmap-20260922",
+      "head_sha": "0629240f417d0f9b340ac74862bad56fc7e680f1",
+      "base": "chore/security-bootstrap-20260922",
+      "scope": [
+        "README.md",
+        "docs/LONG_TERM_ROADMAP.md"
+      ],
+      "handling": "preserved untouched; reconcile both README additions during eventual merge"
+    },
+    {
+      "pr": 2,
+      "url": "https://github.com/Jvust2/Invest/pull/2",
+      "branch": "feat/a-share-research-v0.1-20260922",
+      "base": "main",
+      "state": "open_draft",
+      "validated_code_head_sha": "c6ada411910d0e904fbaf1fbcec0ef399a1a9ea7",
+      "handling": "application/test, provider-evidence validator and provider-evidence→binding provenance bridge CI evidence are green; PR remains Draft and must not be auto-merged"
+    }
+  ],
+  "desktop_delivery": {
+    "state": "NATIVE_WINDOWS_DELIVERY_VERIFIED_ARCHIVED_USER_DEVICE_PENDING",
+    "release_source_commit": "2992482fec57758b39b5aabf7a0e567e0502af0c",
+    "release_workflow_run": 36147377359,
+    "portable_file": "Invest-Windows-Portable.zip",
+    "portable_bytes": 13750466,
+    "portable_sha256": "01d196be5811275c3355a7d62d70ff9727ba735a80212dabc4f6f35ec402b514",
+    "drive_file_id": "1Mz2DeM1kjY-fMJmBOXP_cfVIEtCo_RmQ",
+    "review_pr": 3,
+    "main_modified": false,
+    "automatic_merge": false,
+    "user_device_acceptance": false
+  }
+}

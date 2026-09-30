@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "checkpoint_id": "20260924_provider_validation_nonempty_success_gate",
+  "project": "Invest",
+  "date": "2026-09-24",
+  "branch": "feat/a-share-research-v0.1-20260922",
+  "scope": "credential-free provider-evidence fail-closed hardening",
+  "changes": {
+    "success_interface_nonempty_fields_required": true,
+    "success_interface_positive_row_count_required": true,
+    "new_adversarial_tests": 2,
+    "documentation_updated": true
+  },
+  "validation": {
+    "validated_code_head_sha": "4cbb66fb1c021d998368ee75f468e5be3e498f95",
+    "workflow_run_id": 35988041656,
+    "workflow_result": "success",
+    "matrix_jobs": 4,
+    "platforms": ["ubuntu-latest", "windows-latest"],
+    "python_versions": ["3.11", "3.12"],
+    "standard_library_tests_step": "pass",
+    "compile_source_step": "pass"
+  },
+  "external_state": {
+    "licensed_real_dataset_found_in_drive": false,
+    "provider_call_performed": false,
+    "credentials_used": false,
+    "real_data_used": false,
+    "holdout_observed": false,
+    "forward_paper_started": false
+  },
+  "open_blockers": ["LICENSED_REAL_DATA_REQUIRED"],
+  "drive": {
+    "folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
+    "new_objects": 0,
+    "changed_objects": 0,
+    "existing_checkpoint_file_id": "1Iscm0akdNG5s0WNJfc83-T_eh88xIz1F"
+  },
+  "next_action": "When authorized local provider access exists, execute the real-data provider validation runbook. Until then, continue only credential-free adversarial tests or governance directly related to the real-data gate."
+}

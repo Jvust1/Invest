@@ -1,0 +1,38 @@
+{
+  "id": "D019",
+  "date": "2026-09-24",
+  "title": "Provider evidence execution timestamps must use the market-time +08:00 offset",
+  "status": "accepted_remote_ci_validated",
+  "context": "Provider evidence already required a timezone-aware executed_at and separately required units.timezone=Asia/Shanghai. However executed_at could still be encoded with any UTC offset. Because sample.end_date is compared against executed_at.date(), an arbitrary offset could shift the calendar date away from the A-share market-date semantics declared by the evidence contract.",
+  "decision": {
+    "executed_at_timezone_required": true,
+    "executed_at_required_utc_offset": "+08:00",
+    "declared_market_timezone": "Asia/Shanghai",
+    "equivalent_instants_with_other_offsets_rejected": true,
+    "reason": "keep sample-date and execution-date comparisons on one explicit market-time basis",
+    "failure_behavior": "reject evidence as structurally invalid"
+  },
+  "implementation": [
+    "invest/provider_validation.py",
+    "tests/test_provider_validation.py",
+    "docs/PROVIDER_VALIDATION_EVIDENCE_FORMAT.md",
+    "docs/REAL_DATA_PROVIDER_VALIDATION_RUNBOOK.md"
+  ],
+  "validation": {
+    "code_head_sha": "070ac1b536ad7b96a97b0b0b944453a6c6fbc919",
+    "workflow_run_id": 36017899955,
+    "workflow_result": "success",
+    "matrix_jobs": 4,
+    "platforms": ["ubuntu-latest", "windows-latest"],
+    "python_versions": ["3.11", "3.12"],
+    "provider_evidence_test_methods": 22,
+    "full_suite_tests": 117,
+    "new_test_methods": 1,
+    "negative_subcases": ["UTC/Z execution timestamp", "+09:00 execution timestamp"],
+    "real_data_used": false,
+    "provider_call_performed": false,
+    "credentials_used": false,
+    "holdout_observed": false
+  },
+  "scope_note": "This closes a credential-free calendar-time consistency gap only. It does not prove provider permission, data completeness, boundary truth, strategy profitability or holdout readiness."
+}

@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "project": "Invest",
+  "date": "2026-09-25",
+  "status": "PROVIDER_EVIDENCE_BINDING_BRIDGE_REMOTE_CI_VALIDATED",
+  "branch": "feat/a-share-research-v0.1-20260922",
+  "head_before_change": "e860ae5a9d893fb0da6356bc1df8aabeb3901f66",
+  "scope": [
+    "invest/evaluation.py",
+    "tests/test_evaluation.py",
+    "docs/EVALUATION_BINDING_FORMAT.md",
+    "docs/REAL_DATA_PROVIDER_VALIDATION_RUNBOOK.md",
+    "docs/PROVIDER_VALIDATION_EVIDENCE_FORMAT.md",
+    "docs/DECISION_LEDGER.md",
+    "docs/EVALUATION_LEDGER.md",
+    "governance/pending_sync.json"
+  ],
+  "closed_sync_debt": [
+    "PROVIDER_RUNBOOK_LICENSE_HASH_WORDING",
+    "EVALUATION_LEDGER_E009_APPEND"
+  ],
+  "new_gate": {
+    "provider_evidence_reference_required": true,
+    "provider_dataset_identity_must_match_binding": true,
+    "verified_binding_boundaries_require_supporting_evidence_sha256": true
+  },
+  "evidence_boundary": {
+    "provider_call_performed": false,
+    "credential_used": false,
+    "real_data_used": false,
+    "real_binding_created": false,
+    "frozen_holdout_opened": false,
+    "drive_new_objects": 0,
+    "drive_modified_objects": 0
+  },
+  "next_safe_action": "Keep LICENSED_REAL_DATA_REQUIRED open until an authorized local run exists; otherwise continue credential-free adversarial validation without fabricating provider evidence.",
+  "validated_code_head_sha": "c6ada411910d0e904fbaf1fbcec0ef399a1a9ea7",
+  "workflow_run_id": 36093418179,
+  "validation": {
+    "full_suite_tests": 120,
+    "evaluation_tests": 15,
+    "provider_evidence_tests": 23,
+    "matrix_jobs": 4,
+    "standard_library_tests": "pass",
+    "compile_source": "pass"
+  }
+}

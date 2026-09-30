@@ -1,0 +1,51 @@
+{
+  "schema": "desktop_delivery_v1",
+  "repository": "Jvust2/Invest",
+  "version": "2026.09.25-rc1",
+  "scope": "desktop integration and safe local workflows",
+  "state": "NATIVE_WINDOWS_DELIVERY_VERIFIED_ARCHIVED_USER_DEVICE_PENDING",
+  "branch": "feat/desktop-delivery-20260925",
+  "verification": "The distributed binaries are pinned to release_source_commit below. This later governance-only commit is not their source identity.",
+  "release_source_commit": "2992482fec57758b39b5aabf7a0e567e0502af0c",
+  "release_workflow_run": 36147377359,
+  "original_test_workflow_run": 36147377366,
+  "verification_result": {
+    "windows_pytest_top_level_passed": 125,
+    "failed": 0,
+    "skipped": 0,
+    "junit_entries_including_subtests": 292,
+    "native_executable_checks": 5,
+    "actual_edge_browser_checks": 7,
+    "package_manifest_files_verified": 1002,
+    "zip_crc": "PASS",
+    "pe_architecture": "x64",
+    "fonts_distributed": 0,
+    "environment": "GitHub Windows Server 2025 / Microsoft Edge; not user hardware"
+  },
+  "portable": {
+    "file": "Invest-Windows-Portable.zip",
+    "bytes": 13750466,
+    "sha256": "01d196be5811275c3355a7d62d70ff9727ba735a80212dabc4f6f35ec402b514",
+    "launch": "Extract the entire archive and run Invest/Invest.exe; preserve _internal"
+  },
+  "archive": {
+    "status": "UPLOADED_METADATA_READBACK_VERIFIED",
+    "drive_folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
+    "drive_file_id": "1Mz2DeM1kjY-fMJmBOXP_cfVIEtCo_RmQ",
+    "file": "Invest-Windows-完整交付-20260925.zip",
+    "bytes": 14178048,
+    "uploaded_snapshot_sha256": "99b7b41c3a29b28850c5f66aeed6baaf61ba45c26c1abc8d0aee4d900e378fe0",
+    "github_artifact_id": 10869878255,
+    "contents": ["portable app", "exact source and tests", "verification evidence", "checksums"],
+    "readback_scope": "Drive file ID, name, bytes and parent verified; provider checksum is not exposed by metadata adapter"
+  },
+  "review_pr": 3,
+  "main_modified": false,
+  "automatic_merge": false,
+  "real_provider_calls_in_tests": 0,
+  "existing_research_quality_gates": "PRESERVED",
+  "user_device_acceptance": false,
+  "limits": ["synthetic sample by default", "licensed real-data validation pending", "out-of-sample strategy effectiveness not accepted", "no brokerage connection or trading", "unsigned executable"],
+  "pending_sync_this_release": [],
+  "other_project_pending_sync": "Unchanged; this receipt closes only the identified desktop artifacts"
+}

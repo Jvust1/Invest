@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "id": "D021",
+  "date": "2026-09-25",
+  "title": "Provider evidence and evaluation binding must share machine-verifiable provenance identities",
+  "status": "REMOTE_CI_VALIDATED",
+  "decision": [
+    "BOUND_UNOPENED binding must reference provider evidence_id and license_evidence_sha256",
+    "provider evidence raw_sha256, normalized_dataset_id and code_sha must equal binding dataset identities",
+    "every binding market-data boundary marked verified must carry supporting evidence SHA-256"
+  ],
+  "rationale": "Provider evidence and evaluation binding were independently strict but not machine-linked, allowing a later binding to switch data/code identities or upgrade boundaries with free text unless reviewers manually noticed.",
+  "migration": "No real binding exists and frozen holdout is unopened, so the bridge is added before first real binding without rewriting real evidence.",
+  "evidence_boundary": {
+    "provider_call_performed": false,
+    "real_data_used": false,
+    "real_binding_created": false,
+    "frozen_holdout_opened": false
+  },
+  "validated_code_head_sha": "c6ada411910d0e904fbaf1fbcec0ef399a1a9ea7",
+  "workflow_run_id": 36093418179,
+  "validation": {
+    "full_suite_tests": 120,
+    "evaluation_tests": 15,
+    "provider_evidence_tests": 23,
+    "matrix_jobs": 4,
+    "platforms": [
+      "ubuntu-latest",
+      "windows-latest"
+    ],
+    "python_versions": [
+      "3.11",
+      "3.12"
+    ],
+    "standard_library_tests": "pass",
+    "compile_source": "pass"
+  }
+}

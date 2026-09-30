@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "project": "Invest",
+  "date": "2026-09-25",
+  "status": "PARTIAL",
+  "branch": "feat/a-share-research-v0.1-20260922",
+  "remote_write": "limited",
+  "main_write": false,
+  "merge": false,
+  "drive_new": 0,
+  "drive_modified": 0,
+  "next_action": "retry the bounded non-destructive repository update when the write path accepts it"
+}

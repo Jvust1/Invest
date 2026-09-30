@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#152d38">
+  <meta name="description" content="Invest：以人民币计价的 A 股研究、历史回测与模拟交易工作台。">
+  <title>Invest · 人民币投资研究工作台</title>
+  <link rel="stylesheet" href="/app.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#workspace">跳到工作区</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/" aria-label="Invest 首页"><span class="brand-mark" aria-hidden="true">in<span>·</span></span><span>Invest<small>人民币投资研究工作台</small></span></a>
+      <div class="header-meta"><span class="status-dot" aria-hidden="true"></span>本地工作台<span class="version" id="version">v0.1</span></div>
+    </div>
+  </header>
+  <main id="workspace" class="workspace">
+    <section class="intro" aria-labelledby="page-title">
+      <div><p class="eyebrow">RESEARCH FIRST · CNY</p><h1 id="page-title">把判断建立在证据上。</h1><p class="intro-copy">从数据检查到策略验证，保留每一次投资判断的依据。</p></div>
+      <div class="scope-label"><span>A 股主板</span><span>人民币计价</span><span>历史模拟</span></div>
+    </section>
+
+    <div id="message" class="message hidden" role="status" aria-live="polite" tabindex="-1"></div>
+    <section class="dataset-bar" aria-label="当前研究数据">
+      <div class="dataset-choice"><label for="dataset-select">当前数据集</label><select id="dataset-select"><option value="">尚未载入数据</option></select></div>
+      <div class="dataset-actions"><button type="button" class="button secondary" id="load-demo">载入合成示例</button><button type="button" class="button ghost" id="export-data" disabled>导出数据 JSON <span aria-hidden="true">↗</span></button></div>
+    </section>
+    <div id="demo-notice" class="demo-notice hidden"><strong>合成示例 · 非真实行情</strong><span>本数据、研究指标、回测曲线和模拟估值仅用于验证功能，不能据此判断投资收益。</span></div>
+    <div id="provenance" class="provenance hidden" aria-label="数据来源与时间"></div>
+
+    <nav class="tabs" role="tablist" aria-label="工作台功能">
+      <button id="tab-research" role="tab" aria-selected="true" aria-controls="panel-research" data-tab="research" tabindex="0"><span class="tab-number">01</span> 研究概览</button>
+      <button id="tab-backtest" role="tab" aria-selected="false" aria-controls="panel-backtest" data-tab="backtest" tabindex="-1"><span class="tab-number">02</span> 策略回测</button>
+      <button id="tab-paper" role="tab" aria-selected="false" aria-controls="panel-paper" data-tab="paper" tabindex="-1"><span class="tab-number">03</span> 模拟与复盘</button>
+      <button id="tab-data" role="tab" aria-selected="false" aria-controls="panel-data" data-tab="data" tabindex="-1"><span class="tab-number">04</span> 数据管理</button>
+    </nav>
+
+    <section id="panel-research" role="tabpanel" aria-labelledby="tab-research" class="tab-panel">
+      <div class="section-heading"><div><p class="eyebrow">OBSERVE & QUESTION</p><h2>先看事实，再问反证。</h2></div><p>指标是历史描述，不是买卖建议。</p></div>
+      <div id="research-empty" class="empty-state"><div class="empty-symbol" aria-hidden="true">↗</div><h3>从一份可追溯的数据开始</h3><p>载入合成示例，体验完整研究流程；或在数据管理中导入自己的行情与交易日历。</p><button type="button" class="button primary" data-open-tab="data">打开数据管理</button><span class="empty-footnote">无需登录 · 无外部 AI 调用 · 不连接券商</span></div>
+      <div id="research-content" class="hidden"><div id="research-summary" class="metric-grid"></div><div id="research-cards" class="research-grid"></div><div class="card limitations-card"><h3>本次研究的边界</h3><ul id="research-limitations" class="plain-list"></ul></div></div>
+    </section>
+
+    <section id="panel-backtest" role="tabpanel" aria-labelledby="tab-backtest" class="tab-panel" hidden>
+      <div class="section-heading"><div><p class="eyebrow">TEST THE HYPOTHESIS</p><h2>让策略接受历史检验。</h2></div><p>双均线规则 · 收盘信号 · 下一交易日开盘执行</p></div>
+      <div class="backtest-layout">
+        <form id="backtest-form" class="card form-card">
+          <div class="card-heading"><h3>回测设置</h3><span class="subtle-badge">仅做多</span></div>
+          <label for="backtest-symbol">研究标的</label><select id="backtest-symbol" name="symbol" required data-symbol-select><option value="">请先载入数据</option></select>
+          <label for="initial-cash">初始资金（元）</label><input id="initial-cash" name="initial_cash" type="number" min="0.01" max="1000000000" step="0.01" value="100000" required>
+          <div class="form-grid"><div><label for="fast">短均线（交易日）</label><input id="fast" name="fast" type="number" min="1" max="499" value="5" required></div><div><label for="slow">长均线（交易日）</label><input id="slow" name="slow" type="number" min="2" max="500" value="20" required></div></div>
+          <div class="form-grid"><div><label for="start-date">开始日期</label><input id="start-date" name="start_date" type="date"></div><div><label for="end-date">结束日期</label><input id="end-date" name="end_date" type="date"></div></div>
+          <p class="field-help">留空使用数据区间；暖启动方式以回测假设说明为准。</p>
+          <details class="fee-details" open><summary>费用与滑点情景</summary><div class="fee-fields" data-fee-fields="backtest"></div></details>
+          <label class="check-label"><input type="checkbox" name="cost_model_acknowledged" required><span>我理解默认费率仅为固定演示情景，并非我的券商费率，也不代表历史费率。运行前已检查本次参数。</span></label>
+          <button type="submit" class="button primary full-width" data-requires-dataset disabled>运行历史回测 <span aria-hidden="true">→</span></button>
+        </form>
+        <div class="backtest-output"><div id="backtest-empty" class="empty-state compact"><div class="empty-symbol" aria-hidden="true">⌁</div><h3>规则先明确，结果才有意义</h3><p>选择数据与参数后运行。缺少交易日历、涨跌停价或公司行动信息的数据会被阻止交易。</p><span class="empty-footnote">执行约束：T+1 · 买入 100 股整数倍 · 费用扣除</span></div><div id="backtest-results" class="hidden"><div id="result-context" class="result-context"></div><div id="backtest-metrics" class="metric-grid"></div><div class="card chart-card"><div class="card-heading"><h3>账户净值</h3><div class="chart-legend"><span><i class="legend-strategy"></i>策略</span><span><i class="legend-benchmark"></i>买入持有</span></div></div><div id="equity-chart" class="equity-chart"></div><p class="field-help">人民币金额；基准采用同区间、同资金与执行成本约束。悬停或聚焦数据点可查看数值。</p></div><details class="card result-detail" open><summary>执行假设与警告</summary><ul id="backtest-assumptions" class="plain-list"></ul></details></div></div>
+      </div>
+      <div id="backtest-records" class="hidden"><div class="card table-card"><h3>成交记录</h3><div id="trade-table" class="table-scroll" tabindex="0" aria-label="回测成交记录，可横向滚动"></div></div><div class="card table-card"><h3>未成交原因</h3><div id="rejection-table" class="table-scroll" tabindex="0" aria-label="未成交原因，可横向滚动"></div></div></div>
+    </section>
+
+    <section id="panel-paper" role="tabpanel" aria-labelledby="tab-paper" class="tab-panel" hidden>
+      <div class="section-heading"><div><p class="eyebrow">RECORD & REFLECT</p><h2>记录选择，也记录改变主意的条件。</h2></div><p>本地历史模拟账本 · 没有真实资金交易</p></div>
+      <div class="paper-layout"><div class="card form-card"><h3>模拟账户</h3><label for="account-select">选择账户</label><select id="account-select"><option value="">尚未创建账户</option></select><details class="create-account" open><summary>创建新账户</summary><form id="account-form"><label for="account-name">账户名称</label><input id="account-name" name="name" placeholder="例如：主板策略观察" maxlength="80" required><label for="account-cash">初始模拟资金（元）</label><input id="account-cash" name="initial_cash" type="number" min="0.01" max="1000000000" step="0.01" value="100000" required><button type="submit" class="button secondary full-width">创建模拟账户</button></form></details></div><div id="account-snapshot" class="account-snapshot"><div class="empty-state compact"><h3>给每笔交易一个理由</h3><p>创建账户后，可以使用选定数据的历史开盘价记账。记录追加保存，现金、持仓与交易约束由程序校验。</p></div></div></div>
+      <div class="paper-layout"><form id="paper-trade-form" class="card form-card"><div class="card-heading"><h3>登记历史模拟交易</h3><span class="subtle-badge">不会真实下单</span></div><div class="form-grid"><div><label for="paper-symbol">标的</label><select id="paper-symbol" name="symbol" data-symbol-select required><option value="">请先载入数据</option></select></div><div><label for="paper-side">方向</label><select id="paper-side" name="side"><option value="BUY">买入</option><option value="SELL">卖出</option></select></div></div><div class="form-grid"><div><label for="paper-date">历史交易日期</label><input id="paper-date" name="date" type="date" required></div><div><label for="paper-quantity">数量（股）</label><input id="paper-quantity" name="quantity" type="number" min="100" max="100000000" step="100" value="100" required></div></div><label for="paper-reason">交易理由</label><textarea id="paper-reason" name="reason" rows="3" maxlength="2000" placeholder="什么证据支持这次操作？什么情况下判断会失效？" required></textarea><details class="fee-details"><summary>本笔交易费用与滑点</summary><div class="fee-fields" data-fee-fields="paper"></div></details><label class="check-label"><input name="cost_model_acknowledged" type="checkbox" required><span>已检查费用情景，理解本操作按历史开盘价及滑点模拟记账，不是真实成交。</span></label><button type="submit" class="button primary full-width" id="record-trade" disabled>记录模拟交易</button><p class="field-help">交易日期须按时间顺序追加；买入按 100 股整数倍，卖出受 T+1 与可用持仓限制。</p></form><div class="card table-card"><h3>账户交易记录</h3><div id="paper-trade-table" class="table-scroll" tabindex="0" aria-label="模拟账户交易记录，可横向滚动"><p class="muted">选择账户后查看。</p></div></div></div>
+      <div class="section-heading notes-heading"><div><p class="eyebrow">INVESTMENT JOURNAL</p><h2>研究笔记</h2></div><p>留下证据与反证，方便以后复盘。</p></div><div class="notes-layout"><form id="note-form" class="card form-card"><label for="note-symbol">标的代码</label><input id="note-symbol" name="symbol" placeholder="例如：600000.SH" maxlength="32" required><label for="note-thesis">核心判断</label><textarea id="note-thesis" name="thesis" rows="2" maxlength="4000" placeholder="用一句话写清楚你的判断。" required></textarea><label for="note-evidence">支持证据</label><textarea id="note-evidence" name="evidence" rows="2" maxlength="6000" required></textarea><label for="note-risks">风险与反证</label><textarea id="note-risks" name="risks" rows="2" maxlength="6000" required></textarea><label for="note-invalidation">判断失效条件</label><textarea id="note-invalidation" name="invalidation" rows="2" maxlength="4000" required></textarea><label for="note-source">来源链接</label><input id="note-source" name="source_url" type="url" placeholder="https://" maxlength="2000" required><button type="submit" class="button secondary full-width">保存研究笔记</button></form><div id="notes-list" class="notes-list"><div class="empty-state compact"><h3>你的判断值得被记录</h3><p>第一条研究笔记会出现在这里。</p></div></div></div>
+    </section>
+
+    <section id="panel-data" role="tabpanel" aria-labelledby="tab-data" class="tab-panel" hidden>
+      <div class="section-heading"><div><p class="eyebrow">KNOW YOUR INPUTS</p><h2>来源清楚，结果才可追溯。</h2></div><p>只接受人民币 A 股主板；首版不含 ETF、科创板、创业板和北交所。</p></div>
+      <div class="data-layout"><form id="import-form" class="card form-card"><div class="card-heading"><h3>导入本地 CSV</h3><span class="subtle-badge">UTF-8</span></div><label for="csv-file">行情 CSV</label><input id="csv-file" name="csv_file" type="file" accept=".csv,text/csv" required><label for="calendar-file">交易日历 CSV</label><input id="calendar-file" name="calendar_file" type="file" accept=".csv,text/csv"><p class="field-help">日历含 date 列或每行一个 YYYY-MM-DD 日期；无日历时仅供研究，无法回测。</p><label for="data-source">数据来源与口径</label><input id="data-source" name="source" maxlength="500" placeholder="提供方、导出日期及必要说明" required><label class="check-label"><input type="checkbox" name="raw_prices_confirmed" required><span>价格为未复权原始价格，币种为人民币。</span></label><label class="check-label"><input type="checkbox" name="volume_shares_confirmed" required><span>volume_shares 成交量单位是股，不是手。</span></label><button type="submit" class="button primary full-width">导入并检查数据</button><details class="schema-help"><summary>查看字段规范</summary><p>必填：</p><code>symbol,date,open,high,low,close,volume_shares</code><p>交易验证还需：</p><code>suspended,up_limit,down_limit,adj_factor,corporate_action</code><p>代码使用 600000.SH / 000001.SZ 格式；布尔状态请明确填写 true / false。缺失停牌、涨跌停或公司行动信息会阻止执行。日期按每个标的递增，不允许重复记录。</p></details></form>
+      <div class="data-side"><div class="card form-card"><div class="card-heading"><h3>Tushare 数据接口</h3><span id="tushare-status" class="subtle-badge">检查配置中</span></div><p class="body-copy">按单一标的获取日线、复权因子、涨跌停价与交易日历。接口权限不足会明确报错。</p><p id="tushare-help" class="info-note">Token 仅从运行服务的环境变量 TUSHARE_TOKEN 读取，不在网页输入或保存。</p><form id="tushare-form"><label for="tushare-symbol">主板股票代码</label><input id="tushare-symbol" name="symbol" placeholder="600000.SH" pattern="[0-9]{6}\.(SH|SZ)" required><div class="form-grid"><div><label for="tushare-start">开始日期</label><input id="tushare-start" name="start" type="date" required></div><div><label for="tushare-end">结束日期</label><input id="tushare-end" name="end" type="date" required></div></div><p class="field-help">单次最长 366 天。当前适配器仅供研究；尚未核实的公司行动字段会阻止回测和模拟成交。真实接口还需你的数据权限与网络环境验证。</p><button type="submit" class="button secondary full-width" id="fetch-tushare" disabled>获取并检查数据</button></form></div><div class="card audit-card"><div class="card-heading"><h3>数据检查</h3><span id="audit-badge" class="subtle-badge">等待数据</span></div><div id="audit-content"><p class="muted">导入或载入数据后，查看错误、警告与阻止回测的原因。</p></div></div></div></div>
+    </section>
+    <footer class="footer"><span>Invest <span id="footer-version">v0.1</span> · 研究、验证、复盘</span><span>数据和账本保存在本地 · 未接入 AI 或券商 · 非实时行情</span></footer>
+  <section class="panel"><h2>完整本机备份</h2><p>研究导出不包括全部模拟账本和私人笔记。完整备份包含两者，请自行安全保存；恢复只创建新的数据目录。</p><button id="private-backup">导出完整私人备份 ZIP</button></section></main>
+</body>
+</html>

@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "project": "Invest",
+  "date": "2026-09-23",
+  "checkpoint": "real_data_gate_reconciliation",
+  "status": "GOVERNANCE_RECONCILED_EXTERNAL_DATA_GATE_OPEN",
+  "recovery": {
+    "repository": "Jvust2/Invest",
+    "delivery_branch": "feat/a-share-research-v0.1-20260922",
+    "draft_pr": 2,
+    "reconciled_from_head_sha": "f98734c8ffd7ce7885c4e020062b74f15a1ad29d",
+    "reconciled_head_ci": {
+      "workflow_run_id": 35801429931,
+      "result": "success"
+    }
+  },
+  "drive_reconciliation": {
+    "folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
+    "root_children_seen": [
+      "Invest_v0.1.0_source_checkpoint_20260922.zip",
+      "05_Reference_Materials"
+    ],
+    "source_checkpoint_id": "1Iscm0akdNG5s0WNJfc83-T_eh88xIz1F",
+    "licensed_real_market_dataset_found": false,
+    "real_evaluation_binding_found": false,
+    "new_drive_write_required": false
+  },
+  "evidence_boundary": {
+    "provider_call_performed": false,
+    "credentials_used": false,
+    "real_market_data_used": false,
+    "frozen_holdout_opened": false,
+    "forward_paper_started": false,
+    "reason": "Connected project artifacts contain no authorized real provider dataset or credential-bearing local execution environment. Mocks, synthetic data and the frozen source ZIP cannot substitute for provider validation."
+  },
+  "changes": [
+    "refresh docs/HANDOFF.md from stale pre-publication snapshot to live governance state",
+    "record the real-data gate decision in docs/DECISION_LEDGER.md",
+    "make the external blocker and allowed credential-free fallback scope explicit in governance/project_state.json"
+  ],
+  "next_safe_action": "When licensed real provider data is available locally, validate provider boundaries and create the first BOUND_UNOPENED evaluation binding before any frozen holdout observation. Until then, only directly related credential-free governance, adversarial tests, or research preparation may advance; do not fabricate provider evidence.",
+  "publication": {
+    "target": "existing non-default feature branch and Draft PR #2",
+    "main_write": false,
+    "merge": false,
+    "destructive_operation": false
+  }
+}
