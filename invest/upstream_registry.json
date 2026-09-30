@@ -24,19 +24,20 @@
   "projects": [
     {
       "repo": "akfamily/akshare",
-      "revision": "0191689d57c667b7c7a198fd0cf97316837ef311",
+      "revision": "fac1e50ebf9b907960d6aab4c3df658559689f39",
       "license": "MIT",
       "stars": 22794,
       "status": "active_adapter",
-      "path": "invest/providers/akshare_eastmoney.py",
-      "target": "invest.providers.akshare_eastmoney",
+      "path": "invest/providers/akshare_native.py",
+      "target": "invest.providers.akshare_native.AKShareProvider",
       "stage": "active_adapter",
       "capabilities": [
         "china_market_data",
         "market_data"
       ],
       "python_import": "akshare",
-      "last_push": "2026-09-23T04:16:34Z"
+      "last_push": "2026-09-30T07:22:30Z",
+      "notes": "Native package adapter for history + full A-share spot snapshot; dependency-light Eastmoney history fallback retained."
     },
     {
       "repo": "microsoft/qlib",
