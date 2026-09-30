@@ -1,0 +1,402 @@
+{
+  "schema_version": 1,
+  "project": "Jvust/Invest",
+  "as_of": "2026-09-27",
+  "purpose": "Curated upstream capability registry for RMB/A-share research and small-capital allocation. Repository code is not vendored by default.",
+  "license_policy": {
+    "permissive_adapter_allowlist": [
+      "MIT",
+      "Apache-2.0",
+      "BSD-2-Clause",
+      "BSD-3-Clause"
+    ],
+    "reference_only_without_separate_review": [
+      "GPL-3.0",
+      "AGPL-3.0",
+      "NOASSERTION"
+    ],
+    "data_rights_separate_from_software_license": true
+  },
+  "stages": {
+    "active": "Already used by Invest.",
+    "adapter_next": "High-priority optional adapter target.",
+    "provider_candidate": "Potential data/provider integration; data rights and completeness must be checked separately.",
+    "research_reference": "Architecture/research reference; no direct source import by default."
+  },
+  "projects": [
+    {
+      "repo": "akfamily/akshare",
+      "capabilities": [
+        "china_market_data",
+        "public_research"
+      ],
+      "stage": "active",
+      "license": "MIT",
+      "python_import": "akshare",
+      "target": "assistant cloud public research"
+    },
+    {
+      "repo": "ricequant/rqalpha",
+      "capabilities": [
+        "a_share_backtest",
+        "independent_engine"
+      ],
+      "stage": "active",
+      "license": "NOASSERTION",
+      "python_import": "rqalpha",
+      "target": "independent validation engine; no source vendoring without license review"
+    },
+    {
+      "repo": "microsoft/qlib",
+      "capabilities": [
+        "factor_research",
+        "machine_learning",
+        "portfolio_research"
+      ],
+      "stage": "adapter_next",
+      "license": "MIT",
+      "python_import": "qlib",
+      "target": "factor/model research and cross-validation"
+    },
+    {
+      "repo": "PyPortfolio/PyPortfolioOpt",
+      "capabilities": [
+        "portfolio_optimization",
+        "black_litterman",
+        "hrp"
+      ],
+      "stage": "adapter_next",
+      "license": "MIT",
+      "python_import": "pypfopt",
+      "target": "small-capital allocation optimizer"
+    },
+    {
+      "repo": "dcajasn/Riskfolio-Lib",
+      "capabilities": [
+        "portfolio_optimization",
+        "risk_budgeting",
+        "risk_measures"
+      ],
+      "stage": "adapter_next",
+      "license": "BSD-3-Clause",
+      "python_import": "riskfolio",
+      "target": "risk-aware allocation cross-check"
+    },
+    {
+      "repo": "skfolio/skfolio",
+      "capabilities": [
+        "portfolio_optimization",
+        "cross_validation",
+        "model_selection"
+      ],
+      "stage": "adapter_next",
+      "license": "BSD-3-Clause",
+      "python_import": "skfolio",
+      "target": "portfolio model validation"
+    },
+    {
+      "repo": "ranaroussi/quantstats",
+      "capabilities": [
+        "performance_metrics",
+        "reports",
+        "drawdown"
+      ],
+      "stage": "adapter_next",
+      "license": "Apache-2.0",
+      "python_import": "quantstats",
+      "target": "portfolio/reporting metrics"
+    },
+    {
+      "repo": "stefan-jansen/empyrical-reloaded",
+      "capabilities": [
+        "risk_metrics",
+        "performance_metrics"
+      ],
+      "stage": "adapter_next",
+      "license": "Apache-2.0",
+      "python_import": "empyrical",
+      "target": "independent risk metric calculations"
+    },
+    {
+      "repo": "stefan-jansen/pyfolio-reloaded",
+      "capabilities": [
+        "portfolio_diagnostics",
+        "risk_reports"
+      ],
+      "stage": "adapter_next",
+      "license": "Apache-2.0",
+      "python_import": "pyfolio",
+      "target": "diagnostic tear sheets and risk checks"
+    },
+    {
+      "repo": "stefan-jansen/alphalens-reloaded",
+      "capabilities": [
+        "factor_evaluation",
+        "information_coefficient"
+      ],
+      "stage": "adapter_next",
+      "license": "Apache-2.0",
+      "python_import": "alphalens",
+      "target": "factor validity and decay analysis"
+    },
+    {
+      "repo": "gerrymanoim/exchange_calendars",
+      "capabilities": [
+        "exchange_calendar",
+        "session_rules"
+      ],
+      "stage": "adapter_next",
+      "license": "Apache-2.0",
+      "python_import": "exchange_calendars",
+      "target": "calendar/session cross-checks"
+    },
+    {
+      "repo": "rsheftel/pandas_market_calendars",
+      "capabilities": [
+        "exchange_calendar",
+        "session_rules"
+      ],
+      "stage": "adapter_next",
+      "license": "MIT",
+      "python_import": "pandas_market_calendars",
+      "target": "second calendar implementation for cross-checks"
+    },
+    {
+      "repo": "pmorissette/bt",
+      "capabilities": [
+        "portfolio_backtest",
+        "allocation_strategy"
+      ],
+      "stage": "adapter_next",
+      "license": "MIT",
+      "python_import": "bt",
+      "target": "portfolio-level independent backtest"
+    },
+    {
+      "repo": "pmorissette/ffn",
+      "capabilities": [
+        "financial_functions",
+        "performance_metrics"
+      ],
+      "stage": "adapter_next",
+      "license": "MIT",
+      "python_import": "ffn",
+      "target": "independent analytics calculations"
+    },
+    {
+      "repo": "stefan-jansen/zipline-reloaded",
+      "capabilities": [
+        "event_driven_backtest",
+        "strategy_validation"
+      ],
+      "stage": "adapter_next",
+      "license": "Apache-2.0",
+      "python_import": "zipline",
+      "target": "independent event-driven engine"
+    },
+    {
+      "repo": "fasiondog/hikyuu",
+      "capabilities": [
+        "a_share_backtest",
+        "strategy_analysis",
+        "high_performance"
+      ],
+      "stage": "adapter_next",
+      "license": "Apache-2.0",
+      "python_import": "hikyuu",
+      "target": "China-market-oriented independent engine"
+    },
+    {
+      "repo": "TA-Lib/ta-lib-python",
+      "capabilities": [
+        "technical_indicators",
+        "signal_features"
+      ],
+      "stage": "adapter_next",
+      "license": "BSD-2-Clause",
+      "python_import": "talib",
+      "target": "indicator implementation cross-check"
+    },
+    {
+      "repo": "yutiansut/QUANTAXIS",
+      "capabilities": [
+        "china_market_data",
+        "a_share_backtest",
+        "multi_account"
+      ],
+      "stage": "provider_candidate",
+      "license": "MIT",
+      "python_import": "QUANTAXIS",
+      "target": "A-share data/backtest comparison"
+    },
+    {
+      "repo": "shidenggui/easyquotation",
+      "capabilities": [
+        "china_realtime_quotes",
+        "public_quotes"
+      ],
+      "stage": "provider_candidate",
+      "license": "MIT",
+      "python_import": "easyquotation",
+      "target": "quote-source comparison only"
+    },
+    {
+      "repo": "mootdx/mootdx",
+      "capabilities": [
+        "tongdaxin_data",
+        "china_market_data"
+      ],
+      "stage": "provider_candidate",
+      "license": "MIT",
+      "python_import": "mootdx",
+      "target": "local/TDX data source candidate"
+    },
+    {
+      "repo": "waditu/tushare",
+      "capabilities": [
+        "china_market_data",
+        "fundamentals"
+      ],
+      "stage": "provider_candidate",
+      "license": "BSD-3-Clause",
+      "python_import": "tushare",
+      "target": "licensed/permissioned provider candidate; service rights separate"
+    },
+    {
+      "repo": "vnpy/vnpy",
+      "capabilities": [
+        "trading_architecture",
+        "event_engine",
+        "risk_management"
+      ],
+      "stage": "research_reference",
+      "license": "MIT",
+      "python_import": "vnpy",
+      "target": "execution architecture reference; no broker connection by default"
+    },
+    {
+      "repo": "wondertrader/wondertrader",
+      "capabilities": [
+        "backtest_architecture",
+        "trading_architecture"
+      ],
+      "stage": "research_reference",
+      "license": "MIT",
+      "python_import": null,
+      "target": "high-performance architecture reference"
+    },
+    {
+      "repo": "QuantConnect/Lean",
+      "capabilities": [
+        "independent_engine",
+        "execution_model",
+        "portfolio_model"
+      ],
+      "stage": "research_reference",
+      "license": "Apache-2.0",
+      "python_import": null,
+      "target": "independent engine and execution-model reference"
+    },
+    {
+      "repo": "OpenBB-finance/OpenBB",
+      "capabilities": [
+        "data_aggregation",
+        "research_platform",
+        "agent_tools"
+      ],
+      "stage": "research_reference",
+      "license": "NOASSERTION",
+      "python_import": "openbb",
+      "target": "data/research platform architecture reference; license review before direct integration"
+    },
+    {
+      "repo": "polakowo/vectorbt",
+      "capabilities": [
+        "vectorized_backtest",
+        "parameter_sweep"
+      ],
+      "stage": "research_reference",
+      "license": "NOASSERTION",
+      "python_import": "vectorbt",
+      "target": "vectorized research reference; license review before direct integration"
+    },
+    {
+      "repo": "mementum/backtrader",
+      "capabilities": [
+        "event_driven_backtest",
+        "broker_simulation"
+      ],
+      "stage": "research_reference",
+      "license": "GPL-3.0",
+      "python_import": "backtrader",
+      "target": "behavior/reference only unless copyleft implications are accepted"
+    },
+    {
+      "repo": "kernc/backtesting.py",
+      "capabilities": [
+        "strategy_backtest",
+        "parameter_optimization"
+      ],
+      "stage": "research_reference",
+      "license": "AGPL-3.0",
+      "python_import": "backtesting",
+      "target": "behavior/reference only; no source vendoring"
+    },
+    {
+      "repo": "AI4Finance-Foundation/FinRL",
+      "capabilities": [
+        "reinforcement_learning",
+        "portfolio_research"
+      ],
+      "stage": "research_reference",
+      "license": "MIT",
+      "python_import": "finrl",
+      "target": "experimental RL research, never a default small-capital allocator"
+    },
+    {
+      "repo": "AI4Finance-Foundation/FinGPT",
+      "capabilities": [
+        "financial_llm",
+        "sentiment",
+        "news_research"
+      ],
+      "stage": "research_reference",
+      "license": "MIT",
+      "python_import": null,
+      "target": "news/sentiment research reference"
+    },
+    {
+      "repo": "ProsusAI/finBERT",
+      "capabilities": [
+        "financial_sentiment",
+        "nlp"
+      ],
+      "stage": "research_reference",
+      "license": "Apache-2.0",
+      "python_import": null,
+      "target": "sentiment model reference; language/domain validation required"
+    },
+    {
+      "repo": "microsoft/RD-Agent",
+      "capabilities": [
+        "automated_research",
+        "experiment_automation"
+      ],
+      "stage": "research_reference",
+      "license": "MIT",
+      "python_import": null,
+      "target": "automated research-loop architecture reference"
+    },
+    {
+      "repo": "jealous/stockstats",
+      "capabilities": [
+        "technical_indicators",
+        "feature_engineering"
+      ],
+      "stage": "research_reference",
+      "license": "NOASSERTION",
+      "python_import": "stockstats",
+      "target": "indicator API reference; license review before direct integration"
+    }
+  ]
+}

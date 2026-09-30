@@ -1,0 +1,97 @@
+{
+  "schema": "invest-local-acquisition-delivery-v1",
+  "version": "local-acquisition-v0.1",
+  "status": "SOFTWARE_VERIFIED_REAL_ACQUISITION_NOT_PERFORMED",
+  "as_of": "2026-09-27T01:42:43.839219+00:00",
+  "repository": "Jvust/Invest",
+  "repository_id": 1381007406,
+  "branch": "feat/local-data-acquisition-20260927",
+  "draft_pr": 8,
+  "base_pr": 7,
+  "source_commit": "6742f30d89e12d887ebe5c2d078527b9358f1970",
+  "source_tree": "1ac45a14a9030863a216d38e7fe8e52bdcaa1288",
+  "ci": {
+    "run_id": 36286072515,
+    "conclusion": "success",
+    "artifacts": [
+      {
+        "platform": "linux",
+        "artifact_id": 10920219413,
+        "job_id": 108526982016,
+        "bytes": 489177,
+        "sha256": "d19e228815e9b36bb4a752cef1c732eb03551907059fe007145f0dfc321bffd1"
+      },
+      {
+        "platform": "windows",
+        "artifact_id": 10919783854,
+        "job_id": 108526982115,
+        "bytes": 492623,
+        "sha256": "67ba0957aed7cb747f30aadf2d452ec0ed2e8b4b6f1defd8397c43d2b9034022"
+      }
+    ]
+  },
+  "validation": {
+    "tests_per_os": 481,
+    "subtests_per_os": 334,
+    "new_tests": 44,
+    "failures": 0,
+    "synthetic_rehearsals_per_os": 5,
+    "windows_launcher_cancellation": "PASS",
+    "archived_incomplete_markers_per_os": 3,
+    "identical_cross_platform_summaries": [
+      "plan.json",
+      "rehearsal/SUMMARY.json"
+    ],
+    "source_archive_files": 193,
+    "new_locked_files": 7,
+    "prior_intake_locked_files": 10,
+    "prior_execution_locked_files": 37,
+    "new_browser_checks": 0,
+    "new_native_engine_run": false,
+    "authenticated_market_requests": 0,
+    "real_credentials_used": false,
+    "user_device_tested": false,
+    "real_access_independently_verified": false
+  },
+  "limitations": [
+    "No authenticated market request or user license validation.",
+    "Public unauthenticated endpoint reachability is not authenticated acquisition.",
+    "Test transport is artificial; no real user tokens or market data.",
+    "Direct HTTPS ignores HTTP_PROXY/HTTPS_PROXY; actual user network remains unverified.",
+    "Hidden credential input tested with substitutes; actual user device not tested.",
+    "Existing HTML renderer unchanged; no new browser or native-engine acceptance.",
+    "Capture and mapping success never grant trading, redistribution, holdout or downstream evaluation readiness."
+  ],
+  "preserved": {
+    "desktop_version": "0.2.0-rc2",
+    "desktop_source": "5075cf746019b7d107de603384c0cf02ce1ac02a",
+    "old_runtime_sources_unchanged": true,
+    "private_user_data_modified": false,
+    "main_modified": false,
+    "pr_merged": false
+  },
+  "history": [
+    {
+      "run_id": 36285736620,
+      "source_commit": "a61cae2a2a37ee3ed5c6b91e76061ecb189295b1",
+      "result": "ONE_SSL_IMPORT_MOCK_FIXTURE_FAILURE"
+    },
+    {
+      "run_id": 36285860770,
+      "source_commit": "b46df0243ca7d98fbe5d188c6913b1027f79a3f9",
+      "result": "BOTH_PLATFORMS_PASS_BUT_ARCHIVE_OMITTED_HIDDEN_INCOMPLETE_MARKERS"
+    }
+  ],
+  "archive_note": "Source folder and raw CI archives bind to source_commit. This later metadata checkpoint records the actual uploaded archive; it is not another executed version.",
+  "drive": {
+    "file_name": "Invest-Local-Acquisition-v0.1-20260927.zip",
+    "bytes": 1457142,
+    "sha256": "2bbc5799da33f26150ff0846c6922bc4369267702028976262087ccfcd3099de",
+    "members": 201,
+    "source_commit": "6742f30d89e12d887ebe5c2d078527b9358f1970",
+    "drive_id": "1lGGDtBLsI-3YwshXF5wL6bG9tGXfrCKT",
+    "folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
+    "library_path": "/Google Drive/Invest/Invest-Local-Acquisition-v0.1-20260927.zip",
+    "download_readback_verified": true
+  }
+}

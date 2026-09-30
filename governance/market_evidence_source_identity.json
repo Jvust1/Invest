@@ -1,0 +1,17 @@
+{
+  "schema": "invest-intake-source-identity-v1",
+  "normalization": "UTF-8 text with universal newline normalization to LF",
+  "base_commit": "31bdb8cce253c243c8ffb0860a81e14c859bf6d3",
+  "files": {
+    ".github/workflows/market-evidence.yml": "3709299fb666966764a8f27853ce05316a1a2e9f357509a7530cffc7f5ceac66",
+    "docs/REAL_DATA_INTAKE.md": "2e2cb27994b4c3d96accb5f49be0f66da2ab83d9ecc9ced7b4d352eafa91f45e",
+    "integrations/market_evidence/__init__.py": "25747f6da21cd4856a96047b728969309791d3ce6998ea52286f9d40aea3a86f",
+    "integrations/market_evidence/fixtures.py": "a9aa39c168ace50e58f2f964e1b6d0d49bfa7f85999fcbedd4474ef6d037ce24",
+    "integrations/market_evidence/intake.py": "878c65bada3efb1c08aba70c0d0de529ccf62a30ae3672b233657c1140841dfb",
+    "integrations/market_evidence/report.py": "1688e5d8bd95c6009ae07df98e3edba2a3905250bb81cb859c91c1839db653a7",
+    "tests/test_market_evidence.py": "76d813408d5c82aa2f9e4778954f153b1df95aabec537a563555f18ef13d20fe",
+    "tools/market_evidence.py": "d7a635ebd2608bdd38a1c3a04cf629140bd26e51d34031b136ede586cdc9a203",
+    "tools/market_evidence_browser.py": "00c3443518c46044992d59c40859e5e5db1d132c7404d85c60a6ccd127c572a9",
+    "tools/market_evidence_suite.py": "fa41d667a0c347b1524a826fc9fddf9298b578ba978bf6b5688841fc12c230f4"
+  }
+}

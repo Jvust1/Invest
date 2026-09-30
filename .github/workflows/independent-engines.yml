@@ -1,0 +1,32 @@
+name: Invest independent engine contracts
+on:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  hikyuu:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned Hikyuu
+        run: python -m pip install '.[independent-hikyuu]'
+      - name: Run Hikyuu synthetic contract
+        run: |
+          python -c "from importlib.metadata import version; assert version('hikyuu') == '2.8.2'"
+          python -m unittest discover -s tests -p 'test_hikyuu_contract_integration.py' -v
+  zipline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned Zipline Reloaded
+        run: python -m pip install '.[independent-zipline]'
+      - name: Run Zipline synthetic contract
+        run: |
+          python -c "from importlib.metadata import version; assert version('zipline-reloaded') == '3.1.1'"
+          python -m unittest discover -s tests -p 'test_zipline_contract_integration.py' -v

@@ -1,0 +1,102 @@
+{
+  "schema_version": 2,
+  "project": "Jvust/Invest",
+  "as_of": "2026-09-27T01:03:31.389176+00:00",
+  "artifact_type": "current_delivery_index",
+  "current": {
+    "file_name": "Invest-G1-G5-0.2.0-rc2-完整交付.zip",
+    "sha256": "67ee272c6439073f1a1ed757ec6ca986f385cafe1adaf314ab92290c475f00f4",
+    "bytes": 14984511,
+    "source_commit": "5075cf746019b7d107de603384c0cf02ce1ac02a",
+    "members": 36,
+    "drive_id": "1gzhcMhXqFCUChFW5nqBCTcFw0fawLEn7",
+    "drive_folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
+    "library_path": "/Google Drive/Invest/Invest-G1-G5-0.2.0-rc2-完整交付.zip",
+    "download_readback_verified": true
+  },
+  "source_commit": "5075cf746019b7d107de603384c0cf02ce1ac02a",
+  "components": {
+    "Invest-Source-and-Tests.zip": {
+      "sha256": "9ff5b6cd56e1425b7fcfb0b8980732b90910eae55d4d91fd8c5dd8e8545e5846",
+      "bytes": 301015
+    },
+    "Invest-Verification.zip": {
+      "sha256": "77dbc506e1b9776c8ce883dae18879bec813496d39100aa62ccff7e378146c27",
+      "bytes": 796298
+    },
+    "Invest-Windows-Portable.zip": {
+      "sha256": "a38bb04066320a2fcd2af4c5d15f2547aaf1b0999b6103bb5829bef6a18c08d2",
+      "bytes": 13803913
+    }
+  },
+  "github_ci_artifacts": [
+    {
+      "id": 10911886448,
+      "name": "Invest-growth-source-evidence",
+      "bytes": 5916,
+      "sha256": "63d8a7fe1f79385222c25ee9e5a0ef47686a97907f5ae241595761cbaa825986"
+    },
+    {
+      "id": 10911528047,
+      "name": "Invest-G1-G5-Windows-5075cf746019b7d107de603384c0cf02ce1ac02a",
+      "bytes": 15509042,
+      "sha256": "227d7aa389bdc166186e2a3c6ef495812bccc6c5a4cc0af0e1113c3649a42755"
+    }
+  ],
+  "contains_user_private_runtime_data": false,
+  "contains_synthetic_review_backup": true,
+  "previous_rc1": {
+    "drive_id": "1T4gnwxDzVWCBhqcbmeWIlvyG31512zky",
+    "sha256": "405d0147b9b85c5ec82e8320b7fb80011d1e1d0ea19400fa61e598876f4f3226",
+    "bytes": 14710947,
+    "unchanged": true,
+    "packaged_code_identity": "INVALID_EMPTY_MAP_HASH"
+  },
+  "original_frozen_source_manifest": "governance/checkpoints/pre_growth_rc2/artifact_manifest.json",
+  "current_research_extension": {
+    "file_name": "Invest-Market-Evidence-v0.1-20260927.zip",
+    "bytes": 3019870,
+    "sha256": "187e4dfa20c592df5777503dddacf951fdc972a0d1fdb6cec1803d90eae512a7",
+    "members": 143,
+    "source_commit": "1c8250a9a89fc08c37abb021fd16f51c3fcf5725",
+    "drive_id": "1jKepJL6k9iKiQTRmD-psh0IpHHBb_ALa",
+    "folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
+    "library_path": "/Google Drive/Invest/Invest-Market-Evidence-v0.1-20260927.zip",
+    "download_readback_verified": true
+  },
+  "research_extension_result": "governance/market_evidence_result.json",
+  "third_party_source_reused": {
+    "repository": "ricequant/rqalpha",
+    "commit": "0d98adefa87956e26f3e7ca5b26b5f3fc7ca834f",
+    "source_archive_sha256": "9baa67dc8a1ed195894489bac52a0b92c307c9d79c164de55da5ed59df1d2b29",
+    "archive_reused_from_drive_folder": "1oU0O8bQDy6yaIZoQdblf1goui8laOi1I",
+    "part_ids": [
+      "1rb4OfgtCEZtVZ4Fw0lF4_O7nBlMKt6tc",
+      "1YQ8bTDHexBlh1iAGqgZzyBt70LTRjaMG"
+    ],
+    "license_scope_not_automatically_granted": true
+  },
+  "previous_research_extension": {
+    "drive_id": "1_hgS5-VBSEfRiis4Yv2h4UkX0B_3o9qr",
+    "folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
+    "file_name": "Invest-Engine-Lab-v0.1-20260927.zip",
+    "library_path": "/Google Drive/Invest/Invest-Engine-Lab-v0.1-20260927.zip",
+    "bytes": 1963782,
+    "sha256": "9b2e636d9f6896d88a662a49427b95dd224725e1d2706982e17c0e5071a47b53",
+    "download_readback_verified": true,
+    "source_commit": "bfcb1ffbed99ff92089f098f4681c6e6594591d4",
+    "members": 213
+  },
+  "previous_execution_contract_extension": {
+    "file_name": "Invest-Execution-Contract-v0.2-20260927.zip",
+    "bytes": 3833634,
+    "sha256": "5e6411a77fa86f5bb3f3fbab801aa6c7e4192add2f48e62e3c54461fb6e9ea81",
+    "members": 297,
+    "source_commit": "a013549109a29fc183a3b653f09ab70f5a3b3c1a",
+    "drive_id": "1Yj4cPGe2sP5BxOWv-LzyKaCeDIjOK961",
+    "folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
+    "library_path": "/Google Drive/Invest/Invest-Execution-Contract-v0.2-20260927.zip",
+    "download_readback_verified": true
+  },
+  "current_research_extension_type": "OFFLINE_SOURCE_TOOL_WITH_SYNTHETIC_EXAMPLES_NOT_REAL_MARKET_DATA"
+}

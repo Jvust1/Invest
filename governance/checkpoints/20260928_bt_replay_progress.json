@@ -1,0 +1,61 @@
+{
+  "schema": "invest-bt-replay-progress-v1",
+  "as_of": "2026-09-28",
+  "repository": "Jvust/Invest",
+  "feature_head": "28eb16994d784162d0c96944cc5f9da356a3e702",
+  "branch": "feat/500cny-bt-replay-20260928",
+  "draft_pr": 16,
+  "base_pr": 15,
+  "status": "VERIFIED_SYNTHETIC_ACCOUNTING_REPLAY_ONLY",
+  "validation_runs": {
+    "main_matrix": 36391774329,
+    "bt_real": 36391774331,
+    "risk_metrics_real": 36391774665,
+    "calendar_real": 36391774808,
+    "optimizer_real_contracts": 36391774377,
+    "pypfopt_real": 36391774326
+  },
+  "main_matrix": {
+    "tests_per_job": 526,
+    "skipped_optional_tests": 9,
+    "platforms": [
+      "Ubuntu/Python 3.11",
+      "Ubuntu/Python 3.12",
+      "Windows/Python 3.11",
+      "Windows/Python 3.12"
+    ]
+  },
+  "bt_real": {
+    "version": "1.2.3",
+    "tests": 3,
+    "cases": [
+      "minimum commission and separately cent-rounded transfer fee",
+      "all cash when one lot is unaffordable",
+      "two assets with distinct fee schedules"
+    ],
+    "pandas_chained_assignment_warning_as_error": true
+  },
+  "boundaries": {
+    "signal_validation": false,
+    "execution_market_contract_validation": false,
+    "real_market_validation": false,
+    "frozen_holdout_opened": false,
+    "broker_connected": false,
+    "main_modified": false
+  },
+  "next_actions": [
+    "Connect the fixed-allocation replay curve to the existing risk-metrics contract with an explicit initial-capital/entry-fee return convention.",
+    "Build isolated Hikyuu and Zipline-reloaded synthetic-data contracts, including initialization/bundle, calendar and execution-rule differences.",
+    "Only extend to real-market conclusions after licensed data, provenance, corporate actions and effective-date rules are available.",
+    "Keep frozen holdout closed pending a reviewed evaluation binding; forward observation and independent review remain pending."
+  ],
+  "drive_sync": {
+    "document_id": "1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk",
+    "revision_id": "ANLCKQk8k7ln9Hc1fe9_DAVYAbSmCl4t5gIIC0HHNda-rH3T0WCryINeokt6DbTbnW_Lcz5Bs872ukVynkZOZWGjtz2LbDTEHE14STQ3-gY",
+    "readback_verified": true,
+    "appended_prs": [
+      15,
+      16
+    ]
+  }
+}

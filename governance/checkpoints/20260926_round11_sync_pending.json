@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "project": "Invest",
+  "date": "2026-09-26",
+  "status": "SYNC_PENDING",
+  "validated_head_before_round": "10209ec6f382fd92c31d35b3679898fceb770f0b",
+  "validated_workflow_run_id": 36199881454,
+  "full_suite_tests": 131,
+  "canonical_files_updated": false,
+  "remaining_sync": ["governance/project_state.json", "docs/CURRENT_STATE.md", "governance/pending_sync.json", "docs/HANDOFF.md"],
+  "drive_new_objects": 0,
+  "drive_modified_objects": 0
+}

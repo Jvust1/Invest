@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "project": "Invest",
+  "date": "2026-09-26",
+  "status": "CANONICAL_STATE_RECONCILED",
+  "branch": "feat/a-share-research-v0.1-20260922",
+  "branch_head_before_reconciliation": "abfc0eddd7d2f70c849f0b7715199f08d2b6b5fb",
+  "implementation_commit": "3b25024ba47ae1383d82b4b9611e8335929b26fa",
+  "validated_head": "10209ec6f382fd92c31d35b3679898fceb770f0b",
+  "workflow_run_id": 36199881454,
+  "full_suite_tests": 131,
+  "opening_test_methods": 7,
+  "raw_artifact_identity_match_required": true,
+  "canonical_targets": [
+    "governance/project_state.json",
+    "docs/CURRENT_STATE.md",
+    "governance/pending_sync.json",
+    "docs/HANDOFF.md"
+  ],
+  "drive_new_objects": 0,
+  "drive_modified_objects": 0,
+  "real_provider_call_performed": false,
+  "real_data_used": false,
+  "real_binding_created": false,
+  "holdout_opened": false
+}

@@ -1,0 +1,88 @@
+name: Invest versioned execution contract
+on:
+  push:
+    branches: [feat/execution-contract-20260927]
+    paths:
+      - 'integrations/execution_contract/**'
+      - 'tests/test_execution_contract.py'
+      - 'tools/*execution_contract*.py'
+      - 'governance/execution_contract_source_identity.json'
+      - '.github/workflows/execution-contract.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: invest-contract-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    if: github.ref == 'refs/heads/feat/execution-contract-20260927'
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    env:
+      PYTHONUTF8: '1'
+      PYTHONIOENCODING: utf-8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Verify contract source and retained legacy behavior
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p evidence
+          python tools/verify_execution_contract_source.py | tee evidence/source-identity.json
+          python tools/verify_engine_lab_source.py > evidence/legacy-source-identity.json
+          python -m unittest discover -s tests -v > evidence/unittest.txt 2>&1
+          python -m compileall -q invest integrations tools tests
+          git rev-parse HEAD > evidence/SOURCE_COMMIT.txt
+          git archive --format=zip -o evidence/Invest-Contract-Source.zip HEAD
+      - name: Create clean pinned native engine environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          python tools/setup_engine_lab.py --environment .rqalpha-env --download-source --acknowledge-rqalpha-license > evidence/setup.txt 2>&1
+      - name: Execute old and versioned native suites
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import os,pathlib,subprocess,sys
+          env=pathlib.Path('.rqalpha-env')
+          exe=(env/('Scripts/python.exe' if os.name=='nt' else 'bin/python')).resolve()
+          for script,target in [('tools/run_engine_lab.py','legacy'),('tools/run_execution_contract.py','contract')]:
+              with open('evidence/'+target+'-run.txt','w',encoding='utf-8') as log:
+                  subprocess.run([sys.executable,script,'--rqalpha-python',str(exe),'--acknowledge-rqalpha-license','--output','evidence/'+target],stdout=log,stderr=subprocess.STDOUT,check=True)
+          for name in ['INSTALL_IDENTITY.json','requirements-observed.txt']:
+              pathlib.Path('evidence',name).write_bytes((env/name).read_bytes())
+          PY
+      - name: Install Linux Chinese display fonts
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y fonts-noto-cjk
+      - name: Full pytest and actual browser checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install pytest playwright
+          python -m pytest -q --junitxml=evidence/pytest.xml > evidence/pytest.txt 2>&1
+          python tools/verify_execution_contract_browser.py --report-dir evidence/contract --evidence evidence/browser > evidence/browser-run.txt 2>&1
+          git diff --exit-code
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Invest-Contract-${{ matrix.os }}-${{ github.sha }}
+          path: evidence/
+          if-no-files-found: error
+          retention-days: 7

@@ -1,0 +1,295 @@
+{
+  "project": "Invest",
+  "repository": "Jvust/Invest",
+  "repository_id": 1381007406,
+  "drive_folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
+  "version": "0.2.0-rc2",
+  "currency": "CNY",
+  "security_status": "NO_PROJECT_SECURITY_GATE",
+  "schema_version": 12,
+  "as_of": "2026-09-29",
+  "state_scope": "DRAFT_STACK_THROUGH_18_HIKYUU_ZIPLINE_PREFLIGHT_CONTRACTS",
+  "development_branch": "feat/independent-engine-contracts-20260929",
+  "development_pr": 18,
+  "latest_validated_desktop_code_head": "5075cf746019b7d107de603384c0cf02ce1ac02a",
+  "latest_validated_code_head": "3507e511e293c3004342896272bdd576c74f00b1",
+  "latest_validation_run": 36532883762,
+  "latest_checkpoint": "governance/checkpoints/20260929_independent_engine_contracts_progress.json",
+  "delivery_policy": {
+    "rc2_pr": 4,
+    "main_modified": false,
+    "automatic_merge": false,
+    "all_prs_draft": true
+  },
+  "authority": {
+    "code": "live GitHub branch/commit",
+    "current_delivery": "governance/growth_delivery_result.json",
+    "current_research_extension": "governance/assistant_cloud_result.json",
+    "upstream_ecosystem": "governance/upstream_ecosystem_result.json",
+    "formal_data_tooling": "governance/market_acquisition_result.json",
+    "artifacts": "existing Drive Invest folder",
+    "chat_is_authoritative": false
+  },
+  "product_north_star": {
+    "default_currency": "CNY",
+    "flagship_prompt": "我现在有 500 元，怎么投？",
+    "target_output": "amount-level executable reviewable investment decision support",
+    "required_dimensions": [
+      "cash_retention",
+      "asset_eligibility",
+      "amount_allocation",
+      "entry_splitting",
+      "lot_size",
+      "fees_and_taxes",
+      "liquidity",
+      "risk_conditions",
+      "re_evaluation"
+    ],
+    "automatic_broker_execution": false,
+    "guaranteed_return_claims": false
+  },
+  "assistant_cloud": {
+    "version": "v0.1",
+    "code_commit": "f2ab93b6a23c57517d1348e4efe5dd8703386289",
+    "test_run": 36315941217,
+    "tests_per_matrix_job": 491,
+    "successful_request_commit": "e093baa3265bae4d00239932c47def79be2a55b1",
+    "successful_run": 36316010850,
+    "successful_provider": "akshare_tencent",
+    "successful_symbol": "600000.SH",
+    "sessions": 39,
+    "public_research_only": true,
+    "silent_fallback": false,
+    "user_local_python_required": false,
+    "user_token_required": false,
+    "drive": {
+      "file_name": "Invest-ChatGPT-Cloud-Research-v0.1-20260927.zip",
+      "bytes": 8279,
+      "members": 6,
+      "sha256": "66a4a45b570a29bd95afa1bca35751d2d088b59a44b9483a441476a325b3d0ca",
+      "drive_id": "1kumrq8YMaRZWbaf12HpWdCOo4F9itvjh",
+      "folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
+      "library_path": "/Google Drive/Invest/Invest-ChatGPT-Cloud-Research-v0.1-20260927.zip",
+      "download_readback_verified": true
+    }
+  },
+  "upstream_ecosystem": {
+    "status": "VERIFIED_REGISTRY_ROUTING_AND_DRIVE_CHECKPOINT",
+    "project_count": 33,
+    "validated_head": "5f6865b47967448651525cb992249003e2654721",
+    "validation_run": 36327856647,
+    "validation_matrix": [
+      "ubuntu-latest/python-3.11",
+      "ubuntu-latest/python-3.12",
+      "windows-latest/python-3.11",
+      "windows-latest/python-3.12"
+    ],
+    "registry": "invest/upstream_registry.json",
+    "routing": "invest/upstreams.py",
+    "tests": "tests/test_upstreams.py",
+    "documentation": "docs/OPEN_SOURCE_ECOSYSTEM.md",
+    "receipt": "governance/upstream_ecosystem_result.json",
+    "direct_source_vendoring_default": false,
+    "drive_checkpoint": {
+      "title": "Invest-500CNY-OpenSource-Ecosystem-Checkpoint-20260928",
+      "drive_id": "1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk",
+      "folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
+      "drive_url": "https://docs.google.com/document/d/1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk/edit?usp=drivesdk",
+      "content_readback_verified": true
+    },
+    "priority_projects": [
+      "PyPortfolio/PyPortfolioOpt",
+      "dcajasn/Riskfolio-Lib",
+      "skfolio/skfolio",
+      "gerrymanoim/exchange_calendars",
+      "rsheftel/pandas_market_calendars",
+      "ranaroussi/quantstats",
+      "stefan-jansen/empyrical-reloaded",
+      "fasiondog/hikyuu",
+      "stefan-jansen/zipline-reloaded",
+      "microsoft/qlib"
+    ]
+  },
+  "research_governance": {
+    "all_empirical_gates_passed": false,
+    "frozen_holdout": "NOT_OPENED",
+    "forward_observation": "NOT_STARTED",
+    "broker_connected": false,
+    "real_user_license_verified": false,
+    "public_cloud_research_enabled": true,
+    "public_cloud_provider_runs": 2,
+    "public_cloud_successes": 1
+  },
+  "external_blockers": [
+    "licensed_real_data_and_market_facts",
+    "three_real_market_environments",
+    "second_engine_real_market_contract_validation",
+    "frozen_holdout_validation",
+    "continuous_forward_observation",
+    "independent_review",
+    "actual_user_windows_device",
+    "real_repeated_use_value"
+  ],
+  "next_actions": [
+    "Extend Hikyuu temporary bars into a real synthetic TradeManager/System execution contract, documenting lot, fee-rounding, fill-timing and T+1 semantics.",
+    "Extend Zipline into a real temporary bundle ingest + run_algorithm contract with custom commission/slippage/lot semantics aligned explicitly to Invest.",
+    "Only after both event-driven contracts are explicit, proceed to licensed real-market evidence; keep frozen holdout, forward observation and broker connectivity closed."
+  ],
+  "component_result_paths": {
+    "desktop": "governance/growth_delivery_result.json",
+    "native_engine_lab": "governance/independent_engine_result.json",
+    "execution_contract": "governance/execution_contract_result.json",
+    "raw_evidence_intake": "governance/market_evidence_result.json",
+    "local_acquisition": "governance/market_acquisition_result.json",
+    "assistant_cloud": "governance/assistant_cloud_result.json",
+    "upstream_ecosystem": "governance/upstream_ecosystem_result.json",
+    "bt_replay": "governance/checkpoints/20260928_bt_replay_progress.json",
+    "replay_risk": "governance/checkpoints/20260929_replay_risk_report_progress.json",
+    "independent_engines": "governance/checkpoints/20260929_independent_engine_contracts_progress.json"
+  },
+  "previous_full_state": "governance/checkpoints/pre_local_acquisition/governance__project_state.json",
+  "latest_code_head": "3507e511e293c3004342896272bdd576c74f00b1",
+  "stacked_draft_prs": [
+    {
+      "number": 9,
+      "branch": "feat/chatgpt-cloud-research-20260927",
+      "head": "f9c50b595567436f913767430157738c2f496c35",
+      "status": "OPEN_DRAFT_UNMERGED",
+      "purpose": "ChatGPT public research"
+    },
+    {
+      "number": 10,
+      "branch": "feat/500cny-allocation-scenario-20260928",
+      "head": "d732a1b3efe46086903886ab7f2398e0f308bab7",
+      "status": "OPEN_DRAFT_UNMERGED",
+      "purpose": "discrete amount sizing"
+    },
+    {
+      "number": 11,
+      "branch": "feat/500cny-pypfopt-bridge-20260928",
+      "head": "dab5f6f4ff3b86cbf405517c787166b4a975418c",
+      "status": "OPEN_DRAFT_UNMERGED",
+      "purpose": "PyPortfolioOpt adapter"
+    },
+    {
+      "number": 12,
+      "branch": "feat/500cny-optimizer-crosscheck-20260928",
+      "head": "21d76f9a0fe889e4a0ce38ae6042a3947450c47b",
+      "status": "OPEN_DRAFT_UNMERGED",
+      "purpose": "Riskfolio and skfolio crosscheck"
+    },
+    {
+      "number": 13,
+      "branch": "feat/500cny-dual-calendar-20260928",
+      "head": "c29dbd0b1cdb0bdc6247ffb6b4ab1f1406840cde",
+      "status": "OPEN_DRAFT_UNMERGED",
+      "purpose": "dual Shanghai calendar"
+    },
+    {
+      "number": 14,
+      "branch": "docs/invest-progress-sync-20260928",
+      "head": "f3acf1d53b0b964743fc36b71ab318cce029b691",
+      "status": "OPEN_DRAFT_UNMERGED",
+      "purpose": "progress documentation sync"
+    },
+    {
+      "number": 15,
+      "branch": "feat/500cny-risk-metrics-crosscheck-20260928",
+      "head": "68bce0a5a2fd5e608b7a666406cc99d1a15098da",
+      "status": "OPEN_DRAFT_UNMERGED",
+      "purpose": "QuantStats/Empyrical risk metric crosscheck"
+    },
+    {
+      "number": 16,
+      "branch": "feat/500cny-bt-replay-20260928",
+      "head": "28eb16994d784162d0c96944cc5f9da356a3e702",
+      "status": "OPEN_DRAFT_UNMERGED",
+      "purpose": "bt fixed-allocation cash/position/valuation replay"
+    },
+    {
+      "number": 17,
+      "branch": "feat/500cny-replay-risk-report-20260929",
+      "head": "735b1638c2e00ef5a14ce9b0e37b180f3946ddc7",
+      "status": "OPEN_DRAFT_UNMERGED",
+      "purpose": "fee-aware replay returns and six-metric risk report"
+    },
+    {
+      "number": 18,
+      "branch": "feat/independent-engine-contracts-20260929",
+      "head": "3507e511e293c3004342896272bdd576c74f00b1",
+      "status": "OPEN_DRAFT_UNMERGED",
+      "purpose": "isolated Hikyuu 2.8.2 and Zipline Reloaded 3.1.1 synthetic preflight contracts"
+    }
+  ],
+  "completed_amount_level_work": [
+    {
+      "item": "discrete sizing with lot, fees, liquidity and residual cash",
+      "pr": 10,
+      "verification": "main matrix passed at PR #13 head"
+    },
+    {
+      "item": "PyPortfolioOpt minimum variance adapter",
+      "pr": 11,
+      "verification": "run 36375284652 passed"
+    },
+    {
+      "item": "Riskfolio-Lib and skfolio crosscheck",
+      "pr": 12,
+      "verification": "run 36375284617 all 3 jobs passed"
+    },
+    {
+      "item": "XSHG/SSE calendar comparison",
+      "pr": 13,
+      "verification": "run 36375284696 passed; main matrix 36375284697 passed"
+    },
+    {
+      "item": "QuantStats/Empyrical daily risk metric crosscheck",
+      "pr": 15,
+      "verification": "real upstream recheck run 36391774665 passed on PR #16 feature head 28eb16994d784162d0c96944cc5f9da356a3e702"
+    },
+    {
+      "item": "bt fixed-allocation accounting replay",
+      "pr": 16,
+      "verification": "three real synthetic cases passed in run 36391774331 on 28eb16994d784162d0c96944cc5f9da356a3e702; not strategy or real-market validation"
+    },
+    {
+      "item": "fee-aware fixed-allocation replay to six-metric risk report",
+      "pr": 17,
+      "verification": "main matrix 36531969490 and real bt+QuantStats+Empyrical run 36531969541 passed on 735b1638c2e00ef5a14ce9b0e37b180f3946ddc7; synthetic contract only"
+    },
+    {
+      "item": "isolated Hikyuu and Zipline synthetic preflight contracts",
+      "pr": 18,
+      "verification": "main matrix 36532883762 plus independent-engine run 36532883781 passed on 3507e511e293c3004342896272bdd576c74f00b1; event-driven execution still pending"
+    }
+  ],
+  "status_sync": {
+    "branch": "docs/invest-progress-sync-20260928",
+    "pull_request": 14,
+    "status": "OPEN_DRAFT_UNMERGED"
+  },
+  "current_validation_runs": {
+    "main_matrix": 36532883762,
+    "independent_engines": 36532883781,
+    "replay_risk_real": 36532883760,
+    "risk_metrics_real": 36532883835,
+    "bt_real": 36532883848,
+    "calendar_real": 36532883859,
+    "optimizer_real_contracts": 36532883819,
+    "pypfopt_real": 36532883774
+  },
+  "head_record_note": "Recorded the fully regression-verified PR #18 feature/code head; the later governance sync commit changes only documentation/governance, so verify the live PR #18 tip before continuing.",
+  "drive_checkpoint_sync": {
+    "status": "COMPLETE",
+    "document_id": "1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk",
+    "revision_id": "ANLCKQmNxbR8J48dJPuptTkeRx-eRCIE3W0-_JPT0kMlqICLdeAhLrlseUWadcsR3O6NUU1x78FAglRINCNWMhxip7MPZxltmW1HE--5xss",
+    "readback_verified": true,
+    "appended_prs": [
+      15,
+      16,
+      17,
+      18
+    ],
+    "feature_head": "3507e511e293c3004342896272bdd576c74f00b1"
+  }
+}

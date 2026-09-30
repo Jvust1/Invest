@@ -1,0 +1,100 @@
+{
+  "schema": "invest-independent-engine-verified-delivery-v1",
+  "project": "Jvust/Invest",
+  "repository_id": 1381007406,
+  "extension_version": "engine-lab-v0.1",
+  "app_version_unchanged": "0.2.0-rc2",
+  "delivery_type": "SOURCE_EXTENSION_AND_OFFLINE_HTML_REPORTS_NOT_NEW_EXE",
+  "source_commit": "bfcb1ffbed99ff92089f098f4681c6e6594591d4",
+  "source_tree": "1f80add1d88beed81741748ccc6ae2bc879aa8cc",
+  "implementation_commit": "07bd0898b0e2b6a23fa52af03ecc2dee18f454bc",
+  "branch": "feat/rqalpha-comparison-20260927",
+  "draft_pr": 5,
+  "parent_candidate_pr": 4,
+  "ci": {
+    "run_id": 36263215741,
+    "conclusion": "success",
+    "linux_job_id": 108462851960,
+    "windows_job_id": 108462851847,
+    "artifacts": [
+      {
+        "platform": "linux",
+        "id": 10913256994,
+        "bytes": 1228388,
+        "sha256": "16d748fd6eb2d0c86b75c9d6d2425c154a28ae13ad5db470bbf0e3a4b7951388"
+      },
+      {
+        "platform": "windows",
+        "id": 10912718123,
+        "bytes": 906345,
+        "sha256": "60a35854be14d7f28d77c23f375769850ba5d07e59d881b8ad3180edb4dcaa3b"
+      }
+    ]
+  },
+  "verification": {
+    "full_tests_per_os": 312,
+    "new_tests": 53,
+    "subtests_per_os": 277,
+    "native_cases_per_os": 24,
+    "matching_cases": 18,
+    "divergent_cases": 6,
+    "execution_errors": 0,
+    "future_date_perturbations": 16,
+    "browser_checks_per_os": 33,
+    "identical_cross_platform_business_json": 45,
+    "real_provider_calls": 0,
+    "python_source_files_verified": 151,
+    "clean_environment_pip_check": "PASS",
+    "visual_inspection": "CHINESE_VISIBLE_DESKTOP_AND_MOBILE_HEADER; NARROW_TABLES_REQUIRE_SCROLL",
+    "user_device_tested": false,
+    "independent_human_review": false
+  },
+  "rqalpha": {
+    "repository": "ricequant/rqalpha",
+    "commit": "0d98adefa87956e26f3e7ca5b26b5f3fc7ca834f",
+    "source_archive_sha256": "9baa67dc8a1ed195894489bac52a0b92c307c9d79c164de55da5ed59df1d2b29",
+    "archive_reused_from_drive_folder": "1oU0O8bQDy6yaIZoQdblf1goui8laOi1I",
+    "part_ids": [
+      "1rb4OfgtCEZtVZ4Fw0lF4_O7nBlMKt6tc",
+      "1YQ8bTDHexBlh1iAGqgZzyBt70LTRjaMG"
+    ],
+    "license_scope_not_automatically_granted": true
+  },
+  "scope": {
+    "synthetic_only": true,
+    "independent_execution_implementation": true,
+    "independent_signal_generation": false,
+    "independent_data_sources": false,
+    "real_intraday_liquidity": false,
+    "all_empirical_growth_gates_passed": false,
+    "holdout_opened": false,
+    "forward_observation_started": false,
+    "broker_connected": false,
+    "main_modified": false,
+    "old_data_modified": false
+  },
+  "history": {
+    "first_clean_run": 36262857210,
+    "first_clean_run_scope": "engines and 33 DOM/browser checks passed, Linux CJK visual deficiency found and fixed in final run",
+    "local_exploration": "development-diagnostics; not final empirical evidence"
+  },
+  "archive_note": "The code ZIP and CI bind to source_commit. This later metadata-only checkpoint adds the actual Drive identity; the archive DELIVERY_RESULT predates upload and is not substituted for this readback receipt.",
+  "as_of": "2026-09-26T18:44:31.982603+00:00",
+  "result": "SYNTHETIC_INDEPENDENT_ENGINE_LAB_VERIFIED",
+  "drive": {
+    "drive_id": "1_hgS5-VBSEfRiis4Yv2h4UkX0B_3o9qr",
+    "folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
+    "file_name": "Invest-Engine-Lab-v0.1-20260927.zip",
+    "library_path": "/Google Drive/Invest/Invest-Engine-Lab-v0.1-20260927.zip",
+    "bytes": 1963782,
+    "sha256": "9b2e636d9f6896d88a662a49427b95dd224725e1d2706982e17c0e5071a47b53",
+    "download_readback_verified": true,
+    "source_commit": "bfcb1ffbed99ff92089f098f4681c6e6594591d4",
+    "members": 213
+  },
+  "next_actions": [
+    "ENG-03: version a shared per-session liquidity, partial-fill, fee-rounding and tick contract; preserve existing frozen outputs.",
+    "ENG-04: obtain licensed source-bound real market data and complete effective-date market facts before a separate real-data comparison adapter.",
+    "ENG-05: independently generate strategy signals and evaluate frozen holdout/forward observation only after prerequisite evidence."
+  ]
+}

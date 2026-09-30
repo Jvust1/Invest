@@ -1,0 +1,70 @@
+name: Invest assistant cloud research
+
+on:
+  push:
+    paths:
+      - "assistant_jobs/requests/*.json"
+
+permissions:
+  contents: read
+
+jobs:
+  public-research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Resolve exactly one ChatGPT request
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t files < <(git show --pretty="" --name-only "$GITHUB_SHA" -- 'assistant_jobs/requests/*.json' | sed '/^$/d')
+          if [ "${#files[@]}" -ne 1 ]; then
+            echo "Expected exactly one assistant request in this commit, got ${#files[@]}" >&2
+            exit 2
+          fi
+          echo "REQUEST_FILE=${files[0]}" >> "$GITHUB_ENV"
+          mkdir -p evidence
+
+      - name: Install pinned public research provider
+        run: |
+          python -m pip install --disable-pip-version-check --no-input "akshare==1.18.97"
+          python - <<'PY'
+          import akshare
+          print("AKShare", akshare.__version__)
+          PY
+
+      - name: Run public research job
+        id: research
+        shell: bash
+        run: |
+          set +e
+          python tools/run_assistant_research.py --request "$REQUEST_FILE" --output evidence/result
+          code=$?
+          set -e
+          echo "$code" > evidence/EXIT_CODE.txt
+          git rev-parse HEAD > evidence/SOURCE_COMMIT.txt
+          python -m pip freeze > evidence/python-freeze.txt
+
+      - name: Upload research evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Invest-Assistant-Research-${{ github.sha }}
+          path: evidence/
+          retention-days: 14
+          if-no-files-found: error
+
+      - name: Enforce job result
+        shell: bash
+        run: |
+          test -f evidence/EXIT_CODE.txt
+          test "$(cat evidence/EXIT_CODE.txt)" = "0"

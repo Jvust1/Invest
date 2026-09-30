@@ -1,0 +1,40 @@
+{
+  "id": "D018",
+  "date": "2026-09-24",
+  "title": "Verified provider market-data boundaries require stable supporting-evidence SHA-256 provenance",
+  "status": "accepted_remote_ci_validated",
+  "context": "Provider evidence already required all seven market-data boundaries to be explicitly classified, but a boundary marked verified could participate in provider-side readiness with only free-text evidence. The machine gate could not distinguish a stable supporting artifact commitment from a prose-only assertion.",
+  "decision": {
+    "verified_boundary_supporting_evidence_sha256_required": true,
+    "hash_format": "lowercase 64-hex SHA-256",
+    "unknown_or_not_covered_hash_optional": true,
+    "supplied_optional_hash_must_be_valid": true,
+    "raw_supporting_artifact_may_remain_local": true,
+    "provenance_hash_is_not_truth_proof": true,
+    "missing_verified_hash_behavior": "reject evidence as structurally invalid"
+  },
+  "implementation": [
+    "invest/provider_validation.py",
+    "tests/test_provider_validation.py",
+    "docs/PROVIDER_VALIDATION_EVIDENCE_FORMAT.md",
+    "docs/REAL_DATA_PROVIDER_VALIDATION_RUNBOOK.md"
+  ],
+  "validation": {
+    "code_head_sha": "5f1c3be266227d7403ef0ff10b61be4742471c5c",
+    "workflow_run_id": 36013947202,
+    "workflow_result": "success",
+    "matrix_jobs": 4,
+    "platforms": ["ubuntu-latest", "windows-latest"],
+    "python_versions": ["3.11", "3.12"],
+    "provider_evidence_test_methods": 21,
+    "full_suite_tests": 116,
+    "new_test_methods": 1,
+    "negative_subcases": ["missing verified evidence_sha256", "malformed verified evidence_sha256"],
+    "honest_open_state_case": "unknown boundary may omit evidence_sha256 and remains fail-closed",
+    "real_data_used": false,
+    "provider_call_performed": false,
+    "credentials_used": false,
+    "holdout_observed": false
+  },
+  "scope_note": "This closes a credential-free boundary-provenance commitment gap only. It does not prove supporting artifact truth, licensing, completeness, provider permission, strategy profitability or holdout readiness."
+}

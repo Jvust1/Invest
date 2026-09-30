@@ -1,0 +1,100 @@
+{
+  "schema": "invest-upstream-ecosystem-v1",
+  "as_of": "2026-09-29",
+  "repository": "Jvust/Invest",
+  "branch": "feat/independent-engine-contracts-20260929",
+  "status": "P0_HIKYUU_ZIPLINE_PREFLIGHT_CONTRACTS_VERIFIED",
+  "project_count": 33,
+  "validated_head": "3507e511e293c3004342896272bdd576c74f00b1",
+  "validation_run": 36532883762,
+  "validation_matrix": [
+    "ubuntu-latest/python-3.11",
+    "ubuntu-latest/python-3.12",
+    "windows-latest/python-3.11",
+    "windows-latest/python-3.12"
+  ],
+  "capabilities": {
+    "china_data_and_quotes": 6,
+    "independent_backtest_and_architecture": 10,
+    "portfolio_and_allocation": 5,
+    "risk_and_performance": 4,
+    "factor_ml_automation": 4,
+    "news_sentiment": 2,
+    "calendars_indicators": 4
+  },
+  "priority_integrations": [
+    "PyPortfolio/PyPortfolioOpt",
+    "dcajasn/Riskfolio-Lib",
+    "skfolio/skfolio",
+    "gerrymanoim/exchange_calendars",
+    "rsheftel/pandas_market_calendars",
+    "ranaroussi/quantstats",
+    "stefan-jansen/empyrical-reloaded",
+    "fasiondog/hikyuu",
+    "stefan-jansen/zipline-reloaded",
+    "microsoft/qlib"
+  ],
+  "policy": {
+    "vendor_third_party_source_by_default": false,
+    "permissive_adapter_licenses": [
+      "MIT",
+      "Apache-2.0",
+      "BSD-2-Clause",
+      "BSD-3-Clause"
+    ],
+    "copyleft_or_unconfirmed_license": "REFERENCE_ONLY_UNTIL_SEPARATE_REVIEW",
+    "market_data_rights_are_separate": true,
+    "broker_connection_added": false,
+    "automatic_ordering_added": false
+  },
+  "files": [
+    "invest/upstream_registry.json",
+    "invest/upstreams.py",
+    "tests/test_upstreams.py",
+    "docs/OPEN_SOURCE_ECOSYSTEM.md",
+    "docs/PROJECT_NORTH_STAR.md"
+  ],
+  "drive": {
+    "title": "Invest-500CNY-OpenSource-Ecosystem-Checkpoint-20260928",
+    "drive_id": "1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk",
+    "folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
+    "drive_url": "https://docs.google.com/document/d/1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk/edit?usp=drivesdk",
+    "content_readback_verified": true,
+    "third_party_source_included": false,
+    "scope_note": "PR #15/#16/#17/#18 appendices are present; PR #18 readback verified at revision ANLCKQmNxbR8J48dJPuptTkeRx-eRCIE3W0-_JPT0kMlqICLdeAhLrlseUWadcsR3O6NUU1x78FAglRINCNWMhxip7MPZxltmW1HE--5xss.",
+    "latest_revision_id": "ANLCKQmNxbR8J48dJPuptTkeRx-eRCIE3W0-_JPT0kMlqICLdeAhLrlseUWadcsR3O6NUU1x78FAglRINCNWMhxip7MPZxltmW1HE--5xss",
+    "latest_append_readback_verified": true,
+    "appended_prs": [
+      15,
+      16,
+      17,
+      18
+    ],
+    "source_feature_head": "3507e511e293c3004342896272bdd576c74f00b1"
+  },
+  "next_actions": [
+    "Extend Hikyuu temporary bars into a real synthetic TradeManager/System execution contract, documenting lot, fee-rounding, fill-timing and T+1 semantics.",
+    "Extend Zipline into a real temporary bundle ingest + run_algorithm contract with custom commission/slippage/lot semantics aligned explicitly to Invest.",
+    "Only after both event-driven contracts are explicit, proceed to licensed real-market evidence; keep frozen holdout, forward observation and broker connectivity closed."
+  ],
+  "validation_runs": {
+    "main_matrix": 36532883762,
+    "independent_engines": 36532883781,
+    "replay_risk_real": 36532883760,
+    "risk_metrics_real": 36532883835,
+    "bt_real": 36532883848,
+    "calendar_real": 36532883859,
+    "optimizer_real_contracts": 36532883819,
+    "pypfopt_real": 36532883774
+  },
+  "progress": {
+    "amount_sizing": "COMPLETE_IN_DRAFT_PR_10",
+    "optimizer_adapters": "PYPFOPTOPT_RISKFOLIO_SKFOLIO_REAL_CONTRACTS_PASSED_IN_DRAFT_PRS_11_12",
+    "shanghai_calendar": "XSHG_SSE_REAL_LIBRARY_TEST_PASSED_IN_DRAFT_PR_13",
+    "dual_risk_performance_metrics": "SIX_METRIC_QUANTSTATS_EMPYRICAL_REAL_CONTRACT_PASSED_IN_DRAFT_PR_17",
+    "independent_engine_validation": "BT_ACCOUNTING_AND_REPLAY_RISK_VERIFIED; HIKYUU_2_8_2_TEMP_BARS_AND_FEE_PRIMITIVE_VERIFIED; ZIPLINE_3_1_1_XSHG_CALENDAR_AND_BUNDLE_REGISTRATION_VERIFIED; FULL_EVENT_DRIVEN_EXECUTION_PENDING",
+    "licensed_real_market_evidence": "PENDING"
+  },
+  "status_sync_branch": "docs/invest-progress-sync-20260928",
+  "status_sync_pr": 14
+}

@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "project": "Invest",
+  "date": "2026-09-26",
+  "status": "PROVIDER_BINDING_PAIR_ADVERSARIAL_COVERAGE_REMOTE_CI_GREEN",
+  "branch": "feat/a-share-research-v0.1-20260922",
+  "validated_code_head": "af60cf663ad2bb5aa237d82171969832f399588b",
+  "workflow_run_id": 36170981233,
+  "validation": {
+    "full_suite_tests": 130,
+    "opening_module_test_methods": 6,
+    "direct_behavioral_tests": 5,
+    "adversarial_subcases": 22,
+    "matrix_jobs": 4,
+    "platforms": ["ubuntu-latest", "windows-latest"],
+    "python_versions": ["3.11", "3.12"],
+    "tests": "pass",
+    "compile_source": "pass",
+    "behavioral_test_debt": "CLOSED"
+  },
+  "covered_fail_closed_cases": [
+    "provider/binding provenance identity mismatch",
+    "all seven boundary status mismatches",
+    "all seven boundary supporting hash mismatches",
+    "either readiness side false"
+  ],
+  "evidence_boundary": {
+    "provider_call_performed": false,
+    "real_data_used": false,
+    "real_binding_created": false,
+    "frozen_holdout_opened": false,
+    "drive_new_objects": 0,
+    "drive_modified_objects": 0
+  },
+  "next_safe_action": "Use the exact-pair opening gate before any future holdout observation; otherwise continue only directly related credential-free hardening."
+}

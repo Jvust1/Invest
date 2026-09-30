@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "project": "Invest",
+  "date": "2026-09-26",
+  "status": "TEXT_ALIGNMENT_CLOSED_CANONICAL_PROJECT_STATE_SYNC_PENDING",
+  "security_status": "NO_PROJECT_SECURITY_GATE",
+  "paths_updated": [
+    "docs/PRE_FLIGHT_CHECKLIST.md",
+    "docs/HANDOFF.md",
+    "README.md",
+    "docs/CURRENT_STATE.md"
+  ],
+  "project_state_updated": false,
+  "project_state_blocker": "Full canonical project_state replacement was rejected by the current GitHub write safety path.",
+  "latest_validated_code_head": "af60cf663ad2bb5aa237d82171969832f399588b",
+  "latest_validation_workflow_run_id": 36170981233,
+  "full_suite_tests": 130,
+  "code_changed": false,
+  "tests_changed": false,
+  "drive_new_objects": 0,
+  "drive_modified_objects": 0,
+  "licensed_real_data_used": false,
+  "provider_call_performed": false,
+  "real_binding_created": false,
+  "holdout_observed": false
+}

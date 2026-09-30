@@ -1,0 +1,166 @@
+{
+  "schema_version": 9,
+  "project": "Jvust/Invest",
+  "as_of": "2026-09-29",
+  "current_desktop": {
+    "file_name": "Invest-G1-G5-0.2.0-rc2-完整交付.zip",
+    "sha256": "67ee272c6439073f1a1ed757ec6ca986f385cafe1adaf314ab92290c475f00f4",
+    "bytes": 14984511,
+    "source_commit": "5075cf746019b7d107de603384c0cf02ce1ac02a",
+    "members": 36,
+    "drive_id": "1gzhcMhXqFCUChFW5nqBCTcFw0fawLEn7",
+    "drive_folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
+    "library_path": "/Google Drive/Invest/Invest-G1-G5-0.2.0-rc2-完整交付.zip",
+    "download_readback_verified": true
+  },
+  "current_research_extension": {
+    "file_name": "Invest-ChatGPT-Cloud-Research-v0.1-20260927.zip",
+    "bytes": 8279,
+    "members": 6,
+    "sha256": "66a4a45b570a29bd95afa1bca35751d2d088b59a44b9483a441476a325b3d0ca",
+    "source_commit": "f2ab93b6a23c57517d1348e4efe5dd8703386289",
+    "drive_id": "1kumrq8YMaRZWbaf12HpWdCOo4F9itvjh",
+    "folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
+    "library_path": "/Google Drive/Invest/Invest-ChatGPT-Cloud-Research-v0.1-20260927.zip",
+    "download_readback_verified": true
+  },
+  "current_product_ecosystem_checkpoint": {
+    "title": "Invest-500CNY-OpenSource-Ecosystem-Checkpoint-20260928",
+    "mime_type": "application/vnd.google-apps.document",
+    "source_commit": "5f6865b47967448651525cb992249003e2654721",
+    "validation_run": 36327856647,
+    "project_count": 33,
+    "drive_id": "1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk",
+    "folder_id": "15ypjgfIv3Xl0BWlxcEVm4OvP9XoyK30u",
+    "drive_url": "https://docs.google.com/document/d/1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk/edit?usp=drivesdk",
+    "content_readback_verified": true,
+    "third_party_source_included": false,
+    "latest_sync_feature_head": "3507e511e293c3004342896272bdd576c74f00b1",
+    "latest_sync_validation_runs": {
+      "main_matrix": 36532883762,
+      "independent_engines": 36532883781,
+      "replay_risk_real": 36532883760,
+      "risk_metrics_real": 36532883835,
+      "bt_real": 36532883848,
+      "calendar_real": 36532883859,
+      "optimizer_real_contracts": 36532883819,
+      "pypfopt_real": 36532883774
+    },
+    "latest_drive_revision_id": "ANLCKQmNxbR8J48dJPuptTkeRx-eRCIE3W0-_JPT0kMlqICLdeAhLrlseUWadcsR3O6NUU1x78FAglRINCNWMhxip7MPZxltmW1HE--5xss",
+    "latest_append_readback_verified": true,
+    "latest_append_prs": [
+      15,
+      16,
+      17,
+      18
+    ]
+  },
+  "research_extension_result": "governance/assistant_cloud_result.json",
+  "product_ecosystem_result": "governance/upstream_ecosystem_result.json",
+  "formal_data_tooling": {
+    "file_name": "Invest-Local-Acquisition-v0.1-20260927.zip",
+    "drive_id": "1lGGDtBLsI-3YwshXF5wL6bG9tGXfrCKT",
+    "result_receipt": "governance/market_acquisition_result.json",
+    "live_acquisition_status": "NOT_PERFORMED"
+  },
+  "preserved_component_receipts": {
+    "desktop": "governance/growth_delivery_result.json",
+    "native_engine_lab": "governance/independent_engine_result.json",
+    "execution_contract": "governance/execution_contract_result.json",
+    "raw_evidence_intake": "governance/market_evidence_result.json",
+    "local_acquisition": "governance/market_acquisition_result.json",
+    "assistant_cloud": "governance/assistant_cloud_result.json",
+    "upstream_ecosystem": "governance/upstream_ecosystem_result.json"
+  },
+  "contains_real_user_data": false,
+  "contains_credentials": false,
+  "contains_public_research_evidence": true,
+  "third_party_source_reuploaded": false,
+  "current_development_sync": {
+    "status": "GITHUB_AND_DRIVE_CHECKPOINT_SYNCED",
+    "feature_head": "3507e511e293c3004342896272bdd576c74f00b1",
+    "feature_prs": [
+      9,
+      10,
+      11,
+      12,
+      13,
+      15,
+      16,
+      17,
+      18
+    ],
+    "status_sync_pr": 14,
+    "development_pr": 18,
+    "development_branch": "feat/independent-engine-contracts-20260929",
+    "drive_checkpoint_id": "1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk",
+    "drive_revision_id": "ANLCKQmNxbR8J48dJPuptTkeRx-eRCIE3W0-_JPT0kMlqICLdeAhLrlseUWadcsR3O6NUU1x78FAglRINCNWMhxip7MPZxltmW1HE--5xss",
+    "validation_runs": [
+      36532883762,
+      36532883781,
+      36532883760,
+      36532883835,
+      36532883848,
+      36532883859,
+      36532883819,
+      36532883774
+    ],
+    "validation_run_map": {
+      "main_matrix": 36532883762,
+      "independent_engines": 36532883781,
+      "replay_risk_real": 36532883760,
+      "risk_metrics_real": 36532883835,
+      "bt_real": 36532883848,
+      "calendar_real": 36532883859,
+      "optimizer_real_contracts": 36532883819,
+      "pypfopt_real": 36532883774
+    },
+    "documentation_sync_parent": "3507e511e293c3004342896272bdd576c74f00b1",
+    "new_release_binary_created": false,
+    "main_modified": false,
+    "third_party_source_reuploaded": false,
+    "drive_readback_verified": true
+  },
+  "previous_development_sync": {
+    "status": "GITHUB_AND_DRIVE_CHECKPOINT_SYNCED",
+    "feature_head": "735b1638c2e00ef5a14ce9b0e37b180f3946ddc7",
+    "feature_prs": [
+      9,
+      10,
+      11,
+      12,
+      13,
+      15,
+      16,
+      17
+    ],
+    "status_sync_pr": 14,
+    "development_pr": 17,
+    "development_branch": "feat/500cny-replay-risk-report-20260929",
+    "drive_checkpoint_id": "1vFoLqrAZmcrbmyHbXJUbLSpFSqImMJhZ81jfon-1Wwk",
+    "drive_revision_id": "ANLCKQm_NtGARTWf2gCAp3WZlHxCO52sRBJ9qA7e3IKyRWTEwMHLfO14T20-2VR68bxr0k8_w_tj9z8DMTIVG0kgE81p3dg1lUhn8_oqpOw",
+    "validation_runs": [
+      36531969490,
+      36531969541,
+      36531969509,
+      36531969518,
+      36531969551,
+      36531969501,
+      36531969530
+    ],
+    "validation_run_map": {
+      "main_matrix": 36531969490,
+      "replay_risk_real": 36531969541,
+      "risk_metrics_real": 36531969509,
+      "bt_real": 36531969518,
+      "calendar_real": 36531969551,
+      "optimizer_real_contracts": 36531969501,
+      "pypfopt_real": 36531969530
+    },
+    "documentation_sync_parent": "735b1638c2e00ef5a14ce9b0e37b180f3946ddc7",
+    "new_release_binary_created": false,
+    "main_modified": false,
+    "third_party_source_reuploaded": false,
+    "drive_readback_verified": true
+  }
+}

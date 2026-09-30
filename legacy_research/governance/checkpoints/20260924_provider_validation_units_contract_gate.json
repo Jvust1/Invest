@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "checkpoint": "provider_validation_units_contract_gate",
+  "date": "2026-09-24",
+  "repository": "Jvust2/Invest",
+  "branch": "feat/a-share-research-v0.1-20260922",
+  "validated_code_head_sha": "1a19ab04bcc5d26f6e825e1d76bd83e9c4621f73",
+  "workflow_run_id": 36010703814,
+  "workflow_result": "success",
+  "matrix": {
+    "jobs": 4,
+    "platforms": [
+      "ubuntu-latest",
+      "windows-latest"
+    ],
+    "python_versions": [
+      "3.11",
+      "3.12"
+    ],
+    "standard_library_tests": "pass",
+    "compile_source": "pass"
+  },
+  "change": {
+    "gap_closed": "Provider evidence could previously use nonempty but adapter-inconsistent price/volume/timezone unit declarations.",
+    "required_units": {
+      "currency": "CNY",
+      "price_unit": "CNY/share",
+      "volume_input_unit": "lot",
+      "volume_output_unit": "share",
+      "timezone": "Asia/Shanghai"
+    },
+    "mismatch_behavior": "structural rejection",
+    "tests_added": 1,
+    "unit_negative_subcases": 5,
+    "provider_evidence_test_methods": 20,
+    "full_suite_tests": 115
+  },
+  "evidence_boundary": {
+    "provider_call_performed": false,
+    "credentials_used": false,
+    "real_data_used": false,
+    "real_provider_evidence_created": false,
+    "real_binding_created": false,
+    "frozen_holdout_opened": false,
+    "forward_paper_started": false,
+    "licensed_real_data_required": "OPEN"
+  },
+  "drive": {
+    "new_objects": 0,
+    "modified_objects": 0,
+    "frozen_source_checkpoint_id": "1Iscm0akdNG5s0WNJfc83-T_eh88xIz1F",
+    "policy": "preserve existing frozen checkpoint; no duplicate ZIP for GitHub-recoverable increment"
+  },
+  "next_safe_action": "When licensed local authorization becomes available, execute the provider runbook and require core interfaces, adapter-required fields and the exact v1 unit contract. Otherwise continue only directly related credential-free adversarial tests, governance or research preparation."
+}
