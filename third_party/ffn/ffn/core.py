@@ -1,0 +1,3227 @@
+import itertools
+import random
+
+import matplotlib
+import numpy as np
+import pandas as pd
+import scipy.stats
+import sklearn.cluster
+import sklearn.covariance
+import sklearn.manifold
+from matplotlib import pyplot as plt
+from packaging.version import Version
+from pandas.core.base import PandasObject
+from scipy.optimize import minimize
+from scipy.stats import t
+from sklearn.utils import resample
+from tabulate import tabulate
+
+from . import utils
+from .utils import fmtn, fmtp, fmtpn, get_freq_name
+
+_PANDAS_TWO = Version(pd.__version__) >= Version("2")
+_PANDAS_TWO_TWO = Version(pd.__version__) >= Version("2.2")
+
+if _PANDAS_TWO_TWO:
+    _MonthEnd = "ME"
+    _YearEnd = "YE"
+else:
+    _MonthEnd = "M"
+    _YearEnd = "Y"
+
+# module level variable, can be different for non traditional markets (eg. crypto - 360)
+TRADING_DAYS_PER_YEAR = 252
+_FLOATING_SCALAR_TYPES = (float, np.floating)
+
+
+def _validate_prices_index(prices):
+    """Require datetime price indexes to be monotonic increasing."""
+    if isinstance(prices, (pd.Series, pd.DataFrame)) and isinstance(prices.index, pd.DatetimeIndex) and not prices.index.is_monotonic_increasing:
+        raise ValueError("prices index must be monotonic increasing")
+
+
+def _riskfree_interval_returns(rf_prices, dates):
+    """Risk-free price returns between consecutive observed daily asset ``dates``.
+
+    Risk-free prices use the asset's daily sampling (last value per calendar day) and are
+    read only at ``dates``; a missing endpoint leaves its interval NaN rather than filled.
+    """
+    if (getattr(rf_prices.index, "tz", None) is None) != (dates.tz is None):
+        raise TypeError("Cannot align tz-naive and tz-aware risk-free and asset prices")
+    if dates.tz is not None:
+        rf_prices = rf_prices.tz_convert(dates.tz)
+    endpoint_prices = rf_prices.resample("D").last().reindex(dates)
+    return endpoint_prices / endpoint_prices.shift(1) - 1
+
+
+class PerformanceStats:
+    """
+    PerformanceStats is a convenience class used for the performance
+    evaluation of a price series. It contains various helper functions
+    to help with plotting and contains a large amount of descriptive
+    statistics.
+
+    Args:
+        * prices (Series): A price series. A DatetimeIndex must be monotonic increasing.
+            Unavailable outer observations are excluded from endpoint statistics when total
+            return is available.
+        * rf (float, np.floating, Series): `Risk-free rate <https://www.investopedia.com/terms/r/risk-freerate.asp>`_ used in various calculation. Should be
+            expressed as a yearly (annualized) return if it is a floating scalar. Otherwise
+            rf should be a *price* series — it is converted internally with
+            to_returns(). Note this differs from calc_sharpe and
+            calc_sortino_ratio, which take rf as a return series. Passing a
+            return series here silently behaves like rf=0.
+            Daily statistics use risk-free prices on the asset's own observed daily
+            endpoints; an interval missing either risk-free price is excluded, not filled.
+
+    Raises:
+        * ValueError: If the price series contains no usable value.
+
+    Attributes:
+        * name (str): Name, derived from price series name
+        * return_table (DataFrame): A table of monthly returns with
+            YTD figures as well.
+        * lookback_returns (Series): Returns for different
+            lookback periods (1m, 3m, 6m, ytd...)
+        * stats (Series): A series that contains all the stats
+        * annualization_factor (float): `Annualization factor` used in various calculations; aka `nperiods`, `252`
+
+    """
+
+    def __init__(self, prices, rf=0.0, annualization_factor=None):
+        _validate_prices_index(prices)
+        super().__init__()
+        self.prices = prices
+        self.name = self.prices.name
+        if self.prices.dropna().empty:
+            raise ValueError("Input prices must contain at least one usable value.")
+        self._start = self.prices.index[0]
+        self._end = self.prices.index[-1]
+
+        self.rf = rf
+        # None means "infer from data"; a numeric value means "user-provided"
+        self._annualization_factor_override = annualization_factor
+        self.annualization_factor = TRADING_DAYS_PER_YEAR if annualization_factor is None else annualization_factor
+
+        self._update(self.prices)
+
+    def set_riskfree_rate(self, rf):
+        """
+        Set annual risk-free rate property and calculate properly annualized
+        monthly and daily rates. Then performance stats are recalculated.
+        Affects only this instance of the PerformanceStats.
+
+        Args:
+            * rf (float, np.floating, Series): Annual `risk-free rate <https://www.investopedia.com/terms/r/risk-freerate.asp>`_,
+                or a risk-free *price* series (not returns)
+        """
+        self.rf = rf
+
+        # Note, that we recalculate everything.
+        self._update(self.prices)
+
+    def _update(self, obj):
+        # calc
+        self._calculate(obj)
+
+        # update derived structure
+        # return table as dataframe for easier manipulation
+        self.return_table = pd.DataFrame(self.return_table).T
+        # name columns
+        if len(self.return_table.columns) == 13:
+            self.return_table.columns = [
+                "Jan",
+                "Feb",
+                "Mar",
+                "Apr",
+                "May",
+                "Jun",
+                "Jul",
+                "Aug",
+                "Sep",
+                "Oct",
+                "Nov",
+                "Dec",
+                "YTD",
+            ]
+
+        self.lookback_returns = pd.Series(
+            [
+                self.mtd,
+                self.three_month,
+                self.six_month,
+                self.ytd,
+                self.one_year,
+                self.three_year,
+                self.five_year,
+                self.ten_year,
+                self.cagr,
+            ],
+            ["mtd", "3m", "6m", "ytd", "1y", "3y", "5y", "10y", "incep"],
+        )
+        self.lookback_returns.name = self.name
+
+        self.stats = self._create_stats_series()
+
+    def _calculate(self, obj):
+        # default values
+        self.daily_mean = np.nan
+        self.daily_vol = np.nan
+        self.daily_sharpe = np.nan
+        self.daily_sortino = np.nan
+        self.best_day = np.nan
+        self.worst_day = np.nan
+        self.total_return = np.nan
+        self.cagr = np.nan
+        self.incep = np.nan
+        self.drawdown = np.nan
+        self.max_drawdown = np.nan
+        self.drawdown_details = np.nan
+        self.daily_skew = np.nan
+        self.daily_kurt = np.nan
+        self.monthly_returns = np.nan
+        self.avg_drawdown = np.nan
+        self.avg_drawdown_days = np.nan
+        self.monthly_mean = np.nan
+        self.monthly_vol = np.nan
+        self.monthly_sharpe = np.nan
+        self.monthly_sortino = np.nan
+        self.best_month = np.nan
+        self.worst_month = np.nan
+        self.mtd = np.nan
+        self.three_month = np.nan
+        self.pos_month_perc = np.nan
+        self.avg_up_month = np.nan
+        self.avg_down_month = np.nan
+        self.monthly_skew = np.nan
+        self.monthly_kurt = np.nan
+        self.six_month = np.nan
+        self.yearly_returns = np.nan
+        self.ytd = np.nan
+        self.one_year = np.nan
+        self.yearly_mean = np.nan
+        self.yearly_vol = np.nan
+        self.yearly_sharpe = np.nan
+        self.yearly_sortino = np.nan
+        self.best_year = np.nan
+        self.worst_year = np.nan
+        self.three_year = np.nan
+        self.win_year_perc = np.nan
+        self.twelve_month_win_perc = np.nan
+        self.yearly_skew = np.nan
+        self.yearly_kurt = np.nan
+        self.five_year = np.nan
+        self.ten_year = np.nan
+        self.calmar = np.nan
+
+        self.return_table = {}
+        # end default values
+
+        if len(obj) == 0:
+            return
+
+        self.start = obj.index[0]
+        self.end = obj.index[-1]
+
+        # Keep full-period fields on observed raw prices; resampling can alter intraday endpoints.
+        observed_prices = obj.dropna()
+        if len(observed_prices) > 1:
+            self.start = observed_prices.index[0]
+            self.end = observed_prices.index[-1]
+            self.total_return = observed_prices.iloc[-1] / observed_prices.iloc[0] - 1
+
+        # save daily prices for future use
+        self.daily_prices = obj.resample("D").last()
+        # resample('D') imputes na values for any day that didn't have a price
+        #  .dropna() removes the na values but also implies that the original
+        #  price series didn't have any na values
+        #  if months or years are missing then we will need .dropna() too
+        self.daily_prices = self.daily_prices.dropna()
+        # M = month end frequency
+        self.monthly_prices = obj.resample(_MonthEnd).last()  # .dropna()
+        # A == year end frequency
+        self.yearly_prices = obj.resample(_YearEnd).last()  # .dropna()
+
+        # let's save some typing
+        dp = self.daily_prices
+        mp = self.monthly_prices
+        yp = self.yearly_prices
+
+        if len(dp) == 1:
+            return
+
+        self.mtd = calc_mtd(dp, mp)
+        self.ytd = calc_ytd(dp, yp)
+
+        # stats using daily data
+        self.returns = dp.to_returns()
+        self.log_returns = np.log1p(self.returns)
+        r = self.returns
+
+        if len(r) < 2:
+            return
+
+        # Gate each block on the typical spacing: one short gap, such as the row bt
+        # prepends a day before a weekly or monthly backtest, must not make it daily.
+        typical_period = r.index.to_series().diff().median()
+        # A short business-day series can have equal weekday and weekend gaps.
+        if typical_period >= pd.Timedelta("2 days") and infer_freq(r) == "B":
+            typical_period = pd.Timedelta("1 day")
+
+        # Auto-infer annualization factor from data frequency when not explicitly provided
+        if self._annualization_factor_override is None:
+            inferred = infer_nperiods(r)
+            if inferred is not None:
+                self.annualization_factor = inferred
+
+        # Will calculate daily figures only if the input data has at least daily frequency or higher (e.g hourly)
+        # Rather < 2 days than <= 1 days in case of data taken at different hours of the days
+        if typical_period < pd.Timedelta("2 days"):
+            self.daily_mean = r.mean() * self.annualization_factor
+            self.daily_vol = r.std(ddof=1) * np.sqrt(self.annualization_factor)
+
+            if isinstance(self.rf, _FLOATING_SCALAR_TYPES):
+                rf = self.rf
+            # rf is a price series; measure it over the same observed asset intervals
+            else:
+                rf = _riskfree_interval_returns(self.rf, dp.index)
+            er = r.to_excess_returns(rf, nperiods=self.annualization_factor)
+            self.daily_sharpe = _calc_sharpe(er, nperiods=self.annualization_factor)
+            self.daily_sortino = _calc_sortino_ratio(er, nperiods=self.annualization_factor)
+
+            self.best_day = r.max()
+            self.worst_day = r.min()
+
+        self.cagr = calc_cagr(dp)
+        self.incep = self.cagr
+
+        self.drawdown = dp.to_drawdown_series()
+        self.max_drawdown = self.drawdown.min()
+        self.drawdown_details = drawdown_details(self.drawdown)
+        if self.drawdown_details is not None:
+            self.avg_drawdown = self.drawdown_details["drawdown"].mean()
+            self.avg_drawdown_days = self.drawdown_details["Length"].mean()
+
+        with np.errstate(invalid="ignore", divide="ignore"):
+            self.calmar = np.divide(self.cagr, np.abs(self.max_drawdown))
+
+        if len(r) < 4:
+            return
+
+        if typical_period <= pd.Timedelta("2 days"):
+            self.daily_skew = r.skew()
+
+            # if all zero/nan kurt fails division by zero
+            if len(r[(~pd.isna(r)) & (r != 0)]) > 0:
+                self.daily_kurt = r.kurt()
+
+        # stats using monthly data
+        self.monthly_returns = self.monthly_prices.to_returns()
+        mr = self.monthly_returns
+
+        if len(mr) < 2:
+            return
+
+        # Will calculate monthly figures only if the input data has at least monthly frequency or higher (e.g daily)
+        # Rather < 32 days than <= 31 days in case of data taken at different hours of the days
+        if typical_period < pd.Timedelta("32 days"):
+            self.monthly_mean = mr.mean() * 12
+            self.monthly_vol = mr.std(ddof=1) * np.sqrt(12)
+
+            if isinstance(self.rf, _FLOATING_SCALAR_TYPES):
+                rf = self.rf
+            # rf is a price series
+            else:
+                rf = self.rf.resample(_MonthEnd).last().to_returns()
+            er = mr.to_excess_returns(rf, nperiods=12)
+            self.monthly_sharpe = _calc_sharpe(er, nperiods=12)
+            self.monthly_sortino = _calc_sortino_ratio(er, nperiods=12)
+            self.best_month = mr.max()
+            self.worst_month = mr.min()
+
+            # -1 here to account for first return that will be nan
+            up_months = mr[mr > 0]
+            self.pos_month_perc = len(up_months) / float(len(mr) - 1)
+            self.avg_up_month = up_months.mean()
+            self.avg_down_month = mr[mr <= 0].mean()
+
+            # Preserve NumPy scalar precision when populating the return table.
+            for idx, value in zip(mr.index, mr.array):
+                if idx.year not in self.return_table:
+                    self.return_table[idx.year] = {
+                        1: 0,
+                        2: 0,
+                        3: 0,
+                        4: 0,
+                        5: 0,
+                        6: 0,
+                        7: 0,
+                        8: 0,
+                        9: 0,
+                        10: 0,
+                        11: 0,
+                        12: 0,
+                    }
+                if not pd.isna(value):
+                    self.return_table[idx.year][idx.month] = value
+            # add first month
+            fidx = mr.index[0]
+            try:
+                self.return_table[fidx.year][fidx.month] = float(mp.iloc[0]) / dp.iloc[0] - 1
+            except ZeroDivisionError:
+                self.return_table[fidx.year][fidx.month] = 0
+            # calculate the YTD values
+            for idx in self.return_table:
+                arr = np.array(list(self.return_table[idx].values()))
+                self.return_table[idx][13] = np.prod(arr + 1) - 1
+
+        if typical_period < pd.Timedelta("93 days"):
+            denom = _lookback_prices(dp, 3)
+            if len(denom) == 0:
+                return
+
+            self.three_month = dp.iloc[-1] / denom.iloc[-1] - 1
+
+        if typical_period < pd.Timedelta("32 days"):
+            if len(mr) < 4:
+                return
+
+            self.monthly_skew = mr.skew()
+
+            # if all zero/nan kurt fails division by zero
+            if len(mr[(~pd.isna(mr)) & (mr != 0)]) > 0:
+                self.monthly_kurt = mr.kurt()
+
+        if typical_period < pd.Timedelta("185 days"):
+            denom = _lookback_prices(dp, 6)
+            if len(denom) == 0:
+                return
+
+            self.six_month = dp.iloc[-1] / denom.iloc[-1] - 1
+
+        # Will calculate yearly figures only if the input data has at least yearly frequency or higher (e.g monthly)
+        # Rather < 367 days than <= 366 days in case of data taken at different hours of the days
+        yr = yp.to_returns()
+        if typical_period < pd.Timedelta("367 days"):
+            self.yearly_returns = yr
+
+            if len(yr) < 2:
+                return
+
+            denom = _lookback_prices(dp, 12)
+
+            if len(denom) > 0:
+                self.one_year = dp.iloc[-1] / denom.iloc[-1] - 1
+
+            self.yearly_mean = yr.mean()
+            self.yearly_vol = yr.std(ddof=1)
+
+            if isinstance(self.rf, _FLOATING_SCALAR_TYPES):
+                rf = self.rf
+            # rf is a price series
+            else:
+                rf = self.rf.resample(_YearEnd).last().to_returns()
+            er = yr.to_excess_returns(rf, nperiods=1)
+            if self.yearly_vol > 0:
+                self.yearly_sharpe = _calc_sharpe(er, nperiods=1)
+            self.yearly_sortino = _calc_sortino_ratio(er, nperiods=1)
+
+            self.best_year = yr.max()
+            self.worst_year = yr.min()
+
+            # -1 here to account for first return that will be nan
+            self.win_year_perc = len(yr[yr > 0]) / float(len(yr) - 1)
+
+            # need enough monthly bins for at least one twelve-month window
+            if mr.size > 12:
+                twelve_month_returns = (mp / mp.shift(12)).dropna()
+                if len(twelve_month_returns) > 0:
+                    self.twelve_month_win_perc = float((twelve_month_returns > 1).sum()) / len(twelve_month_returns)
+
+        if typical_period < pd.Timedelta("1097 days"):
+            if len(yr) < 3:
+                return
+
+            # annualize stat for over 1 year. len(yr) counts calendar-year bins, so
+            # also require a price on or before the start of the window.
+            start = dp.index[-1] - pd.DateOffset(years=3)
+            if dp.index[0] <= start:
+                self.three_year = calc_cagr(dp[start:])
+
+        if typical_period < pd.Timedelta("367 days"):
+            if len(yr) < 4:
+                return
+
+            self.yearly_skew = yr.skew()
+
+            # if all zero/nan kurt fails division by zero
+            if len(yr[(~pd.isna(yr)) & (yr != 0)]) > 0:
+                self.yearly_kurt = yr.kurt()
+
+        if typical_period < pd.Timedelta("1828 days"):
+            if len(yr) < 5:
+                return
+            start = dp.index[-1] - pd.DateOffset(years=5)
+            if dp.index[0] <= start:
+                self.five_year = calc_cagr(dp[start:])
+
+        if typical_period < pd.Timedelta("3654 days"):
+            if len(yr) < 10:
+                return
+            start = dp.index[-1] - pd.DateOffset(years=10)
+            if dp.index[0] <= start:
+                self.ten_year = calc_cagr(dp[start:])
+
+        return
+
+    def _stats(self):
+        stats = [
+            ("start", "Start", "dt"),
+            ("end", "End", "dt"),
+            ("rf", "Risk-free rate", "p"),
+            (None, None, None),
+            ("total_return", "Total Return", "p"),
+            ("cagr", "CAGR", "p"),
+            ("max_drawdown", "Max Drawdown", "p"),
+            ("calmar", "Calmar Ratio", "n"),
+            (None, None, None),
+            ("mtd", "MTD", "p"),
+            ("three_month", "3m", "p"),
+            ("six_month", "6m", "p"),
+            ("ytd", "YTD", "p"),
+            ("one_year", "1Y", "p"),
+            ("three_year", "3Y (ann.)", "p"),
+            ("five_year", "5Y (ann.)", "p"),
+            ("ten_year", "10Y (ann.)", "p"),
+            ("incep", "Since Incep. (ann.)", "p"),
+            (None, None, None),
+            ("daily_sharpe", "Daily Sharpe", "n"),
+            ("daily_sortino", "Daily Sortino", "n"),
+            ("daily_mean", "Daily Mean (ann.)", "p"),
+            ("daily_vol", "Daily Vol (ann.)", "p"),
+            ("daily_skew", "Daily Skew", "n"),
+            ("daily_kurt", "Daily Kurt", "n"),
+            ("best_day", "Best Day", "p"),
+            ("worst_day", "Worst Day", "p"),
+            (None, None, None),
+            ("monthly_sharpe", "Monthly Sharpe", "n"),
+            ("monthly_sortino", "Monthly Sortino", "n"),
+            ("monthly_mean", "Monthly Mean (ann.)", "p"),
+            ("monthly_vol", "Monthly Vol (ann.)", "p"),
+            ("monthly_skew", "Monthly Skew", "n"),
+            ("monthly_kurt", "Monthly Kurt", "n"),
+            ("best_month", "Best Month", "p"),
+            ("worst_month", "Worst Month", "p"),
+            (None, None, None),
+            ("yearly_sharpe", "Yearly Sharpe", "n"),
+            ("yearly_sortino", "Yearly Sortino", "n"),
+            ("yearly_mean", "Yearly Mean", "p"),
+            ("yearly_vol", "Yearly Vol", "p"),
+            ("yearly_skew", "Yearly Skew", "n"),
+            ("yearly_kurt", "Yearly Kurt", "n"),
+            ("best_year", "Best Year", "p"),
+            ("worst_year", "Worst Year", "p"),
+            (None, None, None),
+            ("avg_drawdown", "Avg. Drawdown", "p"),
+            ("avg_drawdown_days", "Avg. Drawdown Days", "n"),
+            ("avg_up_month", "Avg. Up Month", "p"),
+            ("avg_down_month", "Avg. Down Month", "p"),
+            ("win_year_perc", "Win Year %", "p"),
+            ("twelve_month_win_perc", "Win 12m %", "p"),
+        ]
+
+        return stats
+
+    def set_date_range(self, start=None, end=None):
+        """
+        Update date range of stats, charts, etc. If None then
+        the original date is used. So to reset to the original
+        range, just call with no args.
+
+        Args:
+            * start (date): start date
+            * end (end): end date
+
+        Raises:
+            * ValueError: If the selected range has no usable price.
+
+        """
+        start = self._start if start is None else pd.to_datetime(start)
+        end = self._end if end is None else pd.to_datetime(end)
+        prices = self.prices.loc[start:end]
+        if prices.dropna().empty:
+            raise ValueError("The selected date range contains no usable data.")
+        self._update(prices)
+
+    def display(self):
+        """
+        Displays an overview containing descriptive stats for the Series
+        provided.
+        """
+        print(f"Stats for {self.name} from {self.start} - {self.end}")
+        if isinstance(self.rf, _FLOATING_SCALAR_TYPES):
+            print(f"Annual risk-free rate considered: {fmtp(self.rf)}")
+        print("Summary:")
+        data = [
+            [
+                fmtp(self.total_return),
+                fmtn(self.daily_sharpe),
+                fmtp(self.cagr),
+                fmtp(self.max_drawdown),
+            ]
+        ]
+        print(tabulate(data, headers=["Total Return", "Sharpe", "CAGR", "Max Drawdown"]))
+
+        print("\nAnnualized Returns:")
+        data = [
+            [
+                fmtp(self.mtd),
+                fmtp(self.three_month),
+                fmtp(self.six_month),
+                fmtp(self.ytd),
+                fmtp(self.one_year),
+                fmtp(self.three_year),
+                fmtp(self.five_year),
+                fmtp(self.ten_year),
+                fmtp(self.incep),
+            ]
+        ]
+        print(
+            tabulate(
+                data,
+                headers=["mtd", "3m", "6m", "ytd", "1y", "3y", "5y", "10y", "incep."],
+            )
+        )
+
+        print("\nPeriodic:")
+        data = [
+            [
+                "sharpe",
+                fmtn(self.daily_sharpe),
+                fmtn(self.monthly_sharpe),
+                fmtn(self.yearly_sharpe),
+            ],
+            [
+                "mean",
+                fmtp(self.daily_mean),
+                fmtp(self.monthly_mean),
+                fmtp(self.yearly_mean),
+            ],
+            [
+                "vol",
+                fmtp(self.daily_vol),
+                fmtp(self.monthly_vol),
+                fmtp(self.yearly_vol),
+            ],
+            [
+                "skew",
+                fmtn(self.daily_skew),
+                fmtn(self.monthly_skew),
+                fmtn(self.yearly_skew),
+            ],
+            [
+                "kurt",
+                fmtn(self.daily_kurt),
+                fmtn(self.monthly_kurt),
+                fmtn(self.yearly_kurt),
+            ],
+            ["best", fmtp(self.best_day), fmtp(self.best_month), fmtp(self.best_year)],
+            [
+                "worst",
+                fmtp(self.worst_day),
+                fmtp(self.worst_month),
+                fmtp(self.worst_year),
+            ],
+        ]
+        print(tabulate(data, headers=["daily", "monthly", "yearly"]))
+
+        print("\nDrawdowns:")
+        data = [
+            [
+                fmtp(self.max_drawdown),
+                fmtp(self.avg_drawdown),
+                fmtn(self.avg_drawdown_days),
+            ]
+        ]
+        print(tabulate(data, headers=["max", "avg", "# days"]))
+
+        print("\nMisc:")
+        data = [
+            ["avg. up month", fmtp(self.avg_up_month)],
+            ["avg. down month", fmtp(self.avg_down_month)],
+            ["up year %", fmtp(self.win_year_perc)],
+            ["12m up %", fmtp(self.twelve_month_win_perc)],
+        ]
+        print(tabulate(data))
+
+    def display_monthly_returns(self):
+        """
+        Display a table containing monthly returns and ytd returns
+        for every year in range.
+        """
+        data = [
+            [
+                "Year",
+                "Jan",
+                "Feb",
+                "Mar",
+                "Apr",
+                "May",
+                "Jun",
+                "Jul",
+                "Aug",
+                "Sep",
+                "Oct",
+                "Nov",
+                "Dec",
+                "YTD",
+            ]
+        ]
+        for k in self.return_table.index:
+            r = self.return_table.loc[k].values
+            data.append([k] + [fmtpn(x) for x in r])
+        print(tabulate(data, headers="firstrow"))
+
+    def display_lookback_returns(self):
+        """
+        Displays the current lookback returns.
+        """
+        return self.lookback_returns.map("{:,.2%}".format)
+
+    def _get_default_plot_title(self, name, freq, kind):
+        if freq is None:
+            return f"{name} {kind}"
+        else:
+            return f"{name} {get_freq_name(freq)} {kind}"
+
+    def plot(self, freq=None, figsize=(15, 5), title=None, logy=False, **kwargs):
+        """
+        Helper function for plotting the series.
+
+        Args:
+            * freq (str): Data frequency used for display purposes.
+                Refer to pandas docs for valid freq strings.
+            * figsize ((x,y)): figure size
+            * title (str): Title if default not appropriate
+            * logy (bool): log-scale for y axis
+            * kwargs: passed to pandas' plot method
+        """
+        if title is None:
+            title = self._get_default_plot_title(self.name, freq, "Price Series")
+
+        ser = self._get_series(freq)
+        return ser.plot(figsize=figsize, title=title, logy=logy, **kwargs)
+
+    def plot_histogram(self, freq=None, figsize=(15, 5), title=None, bins=20, **kwargs):
+        """
+        Plots a histogram of returns given a return frequency.
+
+        Args:
+            * freq (str): Data frequency used for display purposes.
+                This will dictate the type of returns
+                (daily returns, monthly, ...)
+                Refer to pandas docs for valid period strings.
+            * figsize ((x,y)): figure size
+            * title (str): Title if default not appropriate
+            * bins (int): number of bins for the histogram
+            * kwargs: passed to pandas' hist method
+        """
+        if title is None:
+            title = self._get_default_plot_title(self.name, freq, "Return Histogram")
+
+        ser = self._get_series(freq).to_returns().dropna()
+
+        plt.figure(figsize=figsize)
+
+        if Version(matplotlib.__version__) >= Version("2"):
+            # normed deprecated
+            ax = ser.hist(bins=bins, figsize=figsize, density=True, **kwargs)
+        else:
+            ax = ser.hist(bins=bins, figsize=figsize, normed=True, **kwargs)
+
+        ax.set_title(title)
+        plt.axvline(0, linewidth=4)
+        return ser.plot(kind="kde")
+
+    def _get_series(self, freq):
+        if freq is None:
+            return self.daily_prices
+
+        if freq == "y":
+            freq = "a"
+        return self.daily_prices.asfreq(freq, "ffill")
+
+    def _create_stats_series(self):
+        stats = self._stats()
+
+        short_names = []
+        values = []
+
+        for stat in stats:
+            k, n, _ = stat
+
+            # blank row
+            if k is None or k == "rf" and not isinstance(self.rf, _FLOATING_SCALAR_TYPES):
+                continue
+
+            if n in short_names:
+                continue
+
+            short_names.append(k)
+            raw = getattr(self, k)
+            values.append(raw)
+        return pd.Series(values, short_names)
+
+    def to_csv(self, sep=",", path=None):
+        """
+        Returns a CSV string with appropriate formatting.
+        If path is not None, the string will be saved to file
+        at path.
+
+        Args:
+            * sep (char): Separator
+            * path (str): If None, CSV string returned. Else file written
+                to specified path.
+        """
+        stats = self._stats()
+
+        data = []
+        first_row = ["Stat", self.name]
+        data.append(sep.join(first_row))
+
+        for stat in stats:
+            k, n, f = stat
+
+            # blank row
+            if k is None:
+                row = [""] * len(first_row)
+                data.append(sep.join(row))
+                continue
+            elif k == "rf" and not isinstance(self.rf, _FLOATING_SCALAR_TYPES):
+                continue
+
+            row = [n]
+            raw = getattr(self, k)
+            if f is None:
+                row.append(raw)
+            elif f == "p":
+                row.append(fmtp(raw))
+            elif f == "n":
+                row.append(fmtn(raw))
+            elif f == "dt":
+                row.append(raw.strftime("%Y-%m-%d"))
+            else:
+                raise NotImplementedError(f"unsupported format {f}")
+
+            data.append(sep.join(row))
+
+        res = "\n".join(data)
+
+        if path is not None:
+            with open(path, "w") as fl:
+                fl.write(res)
+        else:
+            return res
+
+
+class GroupStats(dict):
+    """
+    GroupStats enables one to compare multiple series side by side.
+    It is a wrapper around a dict of {price.name: PerformanceStats} and
+    provides many convenience methods.
+
+    The order of the series passed in will be preserved.
+    Individual PerformanceStats objects can be accessed via index
+    position or name via the [] accessor. An integer matching a stored
+    name is treated as a name; other integers use positional lookup.
+
+    Each series' stats are computed from that series' own available
+    observations, matching what PerformanceStats returns for the series
+    on its own. Cross-sectional views (prices, correlations) use the
+    merged calendar, keeping only dates where every series has data.
+
+    Args:
+        * prices (Series): Multiple price series to be compared. Each DatetimeIndex must be
+            monotonic increasing.
+        * annualization_factor (float): Annualization factor used for each series.
+
+    Raises:
+        * ValueError: If any price series contains no usable value.
+
+    Attributes:
+        * stats (DataFrame): Dataframe containing stats for each
+            series provided.  Stats in rows, series in columns.
+        * lookback_returns (DataFrame): Returns for diffrent
+            lookback periods (1m, 3m, 6m, ytd...)
+            Period in rows, series in columns.
+        * prices (DataFrame): The merged and rebased prices.
+
+    """
+
+    def __init__(self, *prices, annualization_factor=None):
+        # Validate before merge can normalize one input's row order.
+        for price in prices:
+            _validate_prices_index(price)
+
+        self._annualization_factor_override = annualization_factor
+        # Preserve configuration when date-range updates rebuild the child statistics.
+        self._riskfree_rate = 0.0
+        names = []
+        for p in prices:
+            if isinstance(p, pd.DataFrame):
+                names.extend(p.columns)
+            elif isinstance(p, pd.Series):
+                names.append(p.name)
+            else:
+                print("else")
+                names.append(getattr(p, "name", "n/a"))
+        self._names = names
+
+        # store original prices with each series' own calendar, and the
+        # merged intersection used for cross-sectional views
+        self._prices_full = merge(*prices)
+        self._prices = self._prices_full.dropna()
+
+        # proper ordering
+        self._prices = self._prices[self._names]
+        self._prices_full = self._prices_full[self._names]
+
+        # check for duplicate columns
+        if len(self._prices.columns) != len(set(self._prices.columns)):
+            raise ValueError(
+                "One or more data series provided",
+                "have same name! Please provide unique names",
+            )
+
+        # Keep the full available range so set_date_range() can restore
+        # observations outside the shared cross-sectional calendar.
+        self._start = self._prices_full.first_valid_index()
+        self._end = self._prices_full.last_valid_index()
+        # calculate stats for entire series
+        self._update(self._prices, self._prices_full)
+
+    def __getitem__(self, key):
+        if isinstance(key, int) and key not in self:
+            key = self._names[key]
+        return self.get(key)
+
+    def _update(self, data, full_data=None):
+        self._calculate(data, full_data)
+        self._update_stats()
+
+    def _calculate(self, data, full_data=None):
+        self.prices = data
+        # build each series' stats from its own observations so that rows
+        # missing in one series are not silently dropped from the others
+        if full_data is None:
+            full_data = data
+        for c in data.columns:
+            prc = full_data[c].dropna()
+            self[c] = PerformanceStats(
+                prc,
+                rf=self._riskfree_rate,
+                annualization_factor=self._annualization_factor_override,
+            )
+
+    def _stats(self):
+        stats = [
+            ("start", "Start", "dt"),
+            ("end", "End", "dt"),
+            ("rf", "Risk-free rate", "p"),
+            (None, None, None),
+            ("total_return", "Total Return", "p"),
+            ("daily_sharpe", "Daily Sharpe", "n"),
+            ("daily_sortino", "Daily Sortino", "n"),
+            ("cagr", "CAGR", "p"),
+            ("max_drawdown", "Max Drawdown", "p"),
+            ("calmar", "Calmar Ratio", "n"),
+            (None, None, None),
+            ("mtd", "MTD", "p"),
+            ("three_month", "3m", "p"),
+            ("six_month", "6m", "p"),
+            ("ytd", "YTD", "p"),
+            ("one_year", "1Y", "p"),
+            ("three_year", "3Y (ann.)", "p"),
+            ("five_year", "5Y (ann.)", "p"),
+            ("ten_year", "10Y (ann.)", "p"),
+            ("incep", "Since Incep. (ann.)", "p"),
+            (None, None, None),
+            ("daily_sharpe", "Daily Sharpe", "n"),
+            ("daily_sortino", "Daily Sortino", "n"),
+            ("daily_mean", "Daily Mean (ann.)", "p"),
+            ("daily_vol", "Daily Vol (ann.)", "p"),
+            ("daily_skew", "Daily Skew", "n"),
+            ("daily_kurt", "Daily Kurt", "n"),
+            ("best_day", "Best Day", "p"),
+            ("worst_day", "Worst Day", "p"),
+            (None, None, None),
+            ("monthly_sharpe", "Monthly Sharpe", "n"),
+            ("monthly_sortino", "Monthly Sortino", "n"),
+            ("monthly_mean", "Monthly Mean (ann.)", "p"),
+            ("monthly_vol", "Monthly Vol (ann.)", "p"),
+            ("monthly_skew", "Monthly Skew", "n"),
+            ("monthly_kurt", "Monthly Kurt", "n"),
+            ("best_month", "Best Month", "p"),
+            ("worst_month", "Worst Month", "p"),
+            (None, None, None),
+            ("yearly_sharpe", "Yearly Sharpe", "n"),
+            ("yearly_sortino", "Yearly Sortino", "n"),
+            ("yearly_mean", "Yearly Mean", "p"),
+            ("yearly_vol", "Yearly Vol", "p"),
+            ("yearly_skew", "Yearly Skew", "n"),
+            ("yearly_kurt", "Yearly Kurt", "n"),
+            ("best_year", "Best Year", "p"),
+            ("worst_year", "Worst Year", "p"),
+            (None, None, None),
+            ("avg_drawdown", "Avg. Drawdown", "p"),
+            ("avg_drawdown_days", "Avg. Drawdown Days", "n"),
+            ("avg_up_month", "Avg. Up Month", "p"),
+            ("avg_down_month", "Avg. Down Month", "p"),
+            ("win_year_perc", "Win Year %", "p"),
+            ("twelve_month_win_perc", "Win 12m %", "p"),
+        ]
+
+        return stats
+
+    def _update_stats(self):
+        # lookback returns dataframe
+        self.lookback_returns = pd.DataFrame({x.lookback_returns.name: x.lookback_returns for x in self.values()})
+
+        self.stats = pd.DataFrame({x.name: x.stats for x in self.values()})
+
+    def _get_default_plot_title(self, freq, kind):
+        if freq is None:
+            return kind
+        else:
+            return f"{get_freq_name(freq)} {kind}"
+
+    def set_riskfree_rate(self, rf):
+        """
+        Set annual `risk-free rate <https://www.investopedia.com/terms/r/risk-freerate.asp>`_ property and calculate properly annualized
+        monthly and daily rates. Then performance stats are recalculated.
+        Affects only those instances of PerformanceStats that are children of
+        this GroupStats object.
+
+        Args:
+            * rf (float, np.floating, Series): Annual risk-free rate or risk-free rate *price*
+                series (not returns)
+        """
+
+        for key in self._names:
+            self[key].set_riskfree_rate(rf)
+
+        # calculate stats for entire series
+        self._update_stats()
+
+        # A failed recalculation must not become the default for later rebuilds.
+        self._riskfree_rate = rf
+
+    def set_date_range(self, start=None, end=None):
+        """
+        Update date range of stats, charts, etc. If None then
+        the original date range is used. So to reset to the original
+        range, just call with no args.
+
+        Args:
+            * start (date): start date
+            * end (end): end date
+
+        Raises:
+            * ValueError: If any series has no usable price in the selected range.
+        """
+        start = self._start if start is None else pd.to_datetime(start)
+        end = self._end if end is None else pd.to_datetime(end)
+        prices = self._prices.loc[start:end]
+        full_prices = self._prices_full.loc[start:end]
+        # The shared calendar may be empty while every series still has usable data.
+        if full_prices.count().eq(0).any():
+            raise ValueError("The selected date range contains no usable data for one or more series.")
+        self._update(prices, full_prices)
+
+    def display(self):
+        """
+        Display summary stats table.
+        """
+        data = []
+        first_row = ["Stat"]
+        first_row.extend(self._names)
+        data.append(first_row)
+
+        stats = self._stats()
+
+        for stat in stats:
+            k, n, f = stat
+            # blank row
+            if k is None:
+                row = [""] * len(data[0])
+                data.append(row)
+                continue
+
+            row = [n]
+            for key in self._names:
+                raw = getattr(self[key], k)
+
+                # if rf is a series print nan
+                if k == "rf" and not isinstance(raw, _FLOATING_SCALAR_TYPES):
+                    row.append(np.nan)
+                elif f is None:
+                    row.append(raw)
+                elif f == "p":
+                    row.append(fmtp(raw))
+                elif f == "n":
+                    row.append(fmtn(raw))
+                elif f == "dt":
+                    row.append(raw.strftime("%Y-%m-%d"))
+                else:
+                    raise NotImplementedError(f"unsupported format {f}")
+            data.append(row)
+
+        print(tabulate(data, headers="firstrow"))
+
+    def display_lookback_returns(self):
+        """
+        Displays the current lookback returns for each series.
+        """
+        return self.lookback_returns.apply(lambda x: x.map("{:,.2%}".format), axis=1)
+
+    def plot(self, freq=None, figsize=(15, 5), title=None, logy=False, **kwargs):
+        """
+        Helper function for plotting the series.
+
+        Args:
+            * freq (str): Data frequency used for display purposes.
+                Refer to pandas docs for valid freq strings.
+            * figsize ((x,y)): figure size
+            * title (str): Title if default not appropriate
+            * logy (bool): log-scale for y axis
+            * kwargs: passed to pandas' plot method
+
+        """
+
+        if title is None:
+            title = self._get_default_plot_title(freq, "Equity Progression")
+
+        ser = self._get_series(freq).rebase()
+        return ser.plot(figsize=figsize, logy=logy, title=title, **kwargs)
+
+    def plot_scatter_matrix(self, freq=None, title=None, figsize=(10, 10), **kwargs):
+        """
+        Wrapper around pandas' scatter_matrix.
+
+        Args:
+            * freq (str): Data frequency used for display purposes.
+                Refer to pandas docs for valid freq strings.
+            * figsize ((x,y)): figure size
+            * title (str): Title if default not appropriate
+            * kwargs: passed to pandas' scatter_matrix method
+
+        """
+        if title is None:
+            title = self._get_default_plot_title(freq, "Return Scatter Matrix")
+
+        plt.figure()
+        ser = self._get_series(freq).to_returns().dropna()
+        if hasattr(pd, "scatter_matrix"):
+            pd.scatter_matrix(ser, figsize=figsize, **kwargs)
+        else:
+            pd.plotting.scatter_matrix(ser, figsize=figsize, **kwargs)
+        return plt.suptitle(title)
+
+    def plot_histograms(self, freq=None, title=None, figsize=(10, 10), **kwargs):
+        """
+        Wrapper around pandas' hist.
+
+        Args:
+            * freq (str): Data frequency used for display purposes.
+                Refer to pandas docs for valid freq strings.
+            * figsize ((x,y)): figure size
+            * title (str): Title if default not appropriate
+            * kwargs: passed to pandas' hist method
+
+        """
+        if title is None:
+            title = self._get_default_plot_title(freq, "Return Histogram Matrix")
+
+        plt.figure()
+        ser = self._get_series(freq).to_returns().dropna()
+        ser.hist(figsize=figsize, **kwargs)
+        return plt.suptitle(title)
+
+    def plot_correlation(self, freq=None, title=None, figsize=(12, 6), **kwargs):
+        """
+        Utility function to plot correlations.
+
+        Args:
+            * freq (str): Pandas data frequency alias string
+            * title (str): Plot title
+            * figsize (tuple (x,y)): figure size
+            * kwargs: passed to Pandas' plot_corr_heatmap function
+
+        """
+        if title is None:
+            title = self._get_default_plot_title(freq, "Return Correlation Matrix")
+
+        rets = self._get_series(freq).to_returns().dropna()
+        return rets.plot_corr_heatmap(title=title, figsize=figsize, **kwargs)
+
+    def _get_series(self, freq):
+        if freq is None:
+            return self.prices
+
+        if freq == "y":
+            freq = "a"
+        return self.prices.asfreq(freq, "ffill")
+
+    def to_csv(self, sep=",", path=None):
+        """
+        Returns a CSV string with appropriate formatting.
+        If path is not None, the string will be saved to file
+        at path.
+
+        Args:
+            * sep (char): Separator
+            * path (str): If None, CSV string returned. Else file
+                written to specified path.
+
+        """
+        data = []
+        first_row = ["Stat"]
+        first_row.extend(self._names)
+        data.append(sep.join(first_row))
+
+        stats = self._stats()
+
+        for stat in stats:
+            k, n, f = stat
+            # blank row
+            if k is None:
+                row = [""] * len(first_row)
+                data.append(sep.join(row))
+                continue
+
+            row = [n]
+            for key in self._names:
+                raw = getattr(self[key], k)
+                if k == "rf" and not isinstance(raw, _FLOATING_SCALAR_TYPES):
+                    raw = np.nan
+                if f is None:
+                    row.append(raw)
+                elif f == "p":
+                    row.append(fmtp(raw))
+                elif f == "n":
+                    row.append(fmtn(raw))
+                elif f == "dt":
+                    row.append(raw.strftime("%Y-%m-%d"))
+                else:
+                    raise NotImplementedError(f"unsupported format {f}")
+            data.append(sep.join(row))
+
+        res = "\n".join(data)
+
+        if path is not None:
+            with open(path, "w") as fl:
+                fl.write(res)
+        else:
+            return res
+
+
+def to_returns(prices):
+    """
+    Calculates the simple arithmetic returns of a price series.
+
+    Formula is: (t1 / t0) - 1
+
+    Args:
+        * prices: Expects a price series
+
+    """
+    return prices / prices.shift(1) - 1
+
+
+def to_log_returns(prices):
+    """
+    Calculates the log returns of a price series.
+
+    Formula is: ln(p1/p0)
+
+    Args:
+        * prices: Expects a price series
+
+    """
+    # A return requires observed prices at both adjacent positions.
+    return np.log1p(prices.pct_change(fill_method=None))
+
+
+def to_price_index(returns, start=100):
+    """
+    Returns a price index given a series of returns.
+
+    Args:
+        * returns: Expects a return series
+        * start (number): Starting level
+
+    Assumes arithmetic returns.
+
+    The first value of the returned price index is always ``start``.
+    When a Series begins with NaN, or every column of a DataFrame begins
+    with NaN (as produced by :func:`to_returns`), the NaN position is
+    replaced by ``start`` and the output length equals the input length.
+    Otherwise ``start`` is prepended so that every non-missing return is
+    reflected in the prices.  Missing returns are treated as zero, and
+    the round-trip ``to_returns(to_price_index(r))`` recovers the
+    non-missing returns.
+
+    Formula is: start, start * cumprod(1+r)
+    """
+    r = returns.replace(to_replace=np.nan, value=0)
+    cp = (1 + r).cumprod() * start
+
+    # If all initial returns are missing (e.g. from to_returns()), the
+    # replacement turns them into 0 so cp starts at ``start``. Just return.
+    if isinstance(returns, pd.DataFrame):
+        has_leading_nan = returns.iloc[0].isna().all()
+    else:
+        has_leading_nan = pd.isna(returns.iloc[0])
+
+    if has_leading_nan:
+        return cp
+
+    # Prepend ``start`` so every output series starts at the same baseline.
+    start_index = cp.index[0]
+    if isinstance(cp.index, pd.DatetimeIndex):
+        frequency = cp.index.freq
+        if frequency is None and len(cp.index) >= 3:
+            frequency = pd.infer_freq(cp.index)
+        if frequency is not None:
+            start_index -= pd.tseries.frequencies.to_offset(frequency)
+        elif len(cp.index) > 1:
+            start_index -= cp.index[1] - cp.index[0]
+        else:
+            start_index -= pd.Timedelta(days=1)
+    elif isinstance(cp.index, pd.RangeIndex):
+        start_index -= cp.index.step
+
+    if isinstance(cp, pd.DataFrame):
+        start_row = pd.DataFrame(start, columns=cp.columns, index=[start_index])
+    else:
+        start_row = pd.Series([start], index=[start_index], name=cp.name)
+
+    return pd.concat([start_row, cp])
+
+
+def rebase(prices, value=100):
+    """
+    Rebase each price series to a given initial value.
+
+    Each series uses its first non-missing price as the baseline. Missing
+    prices remain missing in the returned object.
+
+    Args:
+        * prices: Expects a price Series or DataFrame
+        * value (number): starting value for all series.
+
+    """
+    # Backfill only the baseline lookup so returned missing prices stay missing.
+    return prices / prices.bfill().iloc[0] * value
+
+
+def calc_perf_stats(prices, risk_free_rate=0.0, annualization_factor=252):
+    """
+    Calculates the performance statistics given an object.
+    The object should be a Series of prices.
+
+    A PerformanceStats object will be returned containing all the stats.
+
+    Args:
+        * prices (Series): Series of prices. A DatetimeIndex must be monotonic increasing.
+        * risk_free_rate (float, np.floating, Series): Annual risk-free rate or risk-free rate price series
+        * annualization_factor (int): Annualizing factor. Default is 252 (trading days)
+
+    Raises:
+        * ValueError: If the price series contains no usable value.
+
+    """
+    return PerformanceStats(prices, rf=risk_free_rate, annualization_factor=annualization_factor)
+
+
+def calc_stats(prices, annualization_factor=None):
+    """
+    Calculates performance stats of a given object.
+
+    If object is Series, a PerformanceStats object is
+    returned. If object is DataFrame, a GroupStats object
+    is returned.
+
+    Args:
+        * prices (Series, DataFrame): Set of prices. A DatetimeIndex must be monotonic increasing.
+        * annualization_factor (float): Annualization factor used in calculations
+
+    Raises:
+        * ValueError: If any input price series contains no usable value.
+    """
+    if isinstance(prices, pd.Series):
+        return PerformanceStats(prices, annualization_factor=annualization_factor)
+    elif isinstance(prices, pd.DataFrame):
+        return GroupStats(
+            *[prices[x] for x in prices.columns],
+            annualization_factor=annualization_factor,
+        )
+    else:
+        raise NotImplementedError("Unsupported type")
+
+
+def to_drawdown_series(prices):
+    """
+    Calculates the `drawdown <https://www.investopedia.com/terms/d/drawdown.asp>`_ series.
+
+    This returns a series representing a drawdown.
+    When the price is at all time highs, the drawdown
+    is 0. However, when prices are below high water marks,
+    the drawdown series = current / hwm - 1
+
+    The max drawdown can be obtained by simply calling .min()
+    on the result (since the drawdown series is negative)
+
+    Method ignores all gaps of NaN's in the price series.
+
+    Args:
+        * prices (Series or DataFrame): Series of prices.
+
+    """
+    # Fill NaN's with previous values
+    drawdown = prices.ffill()
+
+    # Rolling maximum
+    roll_max = drawdown.cummax()
+
+    drawdown = drawdown / roll_max - 1.0
+    return drawdown
+
+
+def _calc_current_period_return(daily_prices, period_prices):
+    """Calculate a period return with an observed-current-period fallback."""
+    if len(period_prices) == 1:
+        return daily_prices.iloc[-1] / daily_prices.iloc[0] - 1
+
+    previous_price = period_prices.iloc[-2]
+    if isinstance(previous_price, pd.Series):
+        if previous_price.isna().any():
+            current_prices = daily_prices[daily_prices.index > period_prices.index[-2]]
+            if not current_prices.empty:
+                # Each missing column needs two observations to define its current-period return.
+                fallback = current_prices.bfill().iloc[0].where(current_prices.count() > 1)
+                previous_price = previous_price.fillna(fallback)
+    elif pd.isna(previous_price):
+        current_prices = daily_prices[daily_prices.index > period_prices.index[-2]].dropna()
+        if len(current_prices) > 1:
+            previous_price = current_prices.iloc[0]
+
+    return daily_prices.iloc[-1] / previous_price - 1
+
+
+def _lookback_prices(prices, months):
+    """
+    Prices up to the start of a lookback of ``months`` ending at the last price.
+
+    A series that ends on the last business day of its month is anchored on the
+    month ``months`` earlier, not on the same day number: Jun 30 less three months
+    is Mar 30, and the last month-end price on or before that is Feb 28.
+    """
+    end = prices.index[-1]
+    last_business_day = pd.offsets.BMonthEnd().rollback(end + pd.offsets.MonthEnd(0))
+    if end.normalize() >= last_business_day.normalize():
+        months_elapsed = prices.index.year * 12 + prices.index.month
+        return prices[months_elapsed <= end.year * 12 + end.month - months]
+    return prices[: end - pd.DateOffset(months=months)]
+
+
+def calc_mtd(daily_prices, monthly_prices):
+    """
+    Calculates mtd return of a price series.
+    Use daily_prices if prices are only available from the same month. With
+    older periods present, use current-month prices when the prior month is
+    unavailable and the current month has at least two usable observations; else use
+    monthly_prices.
+    """
+    return _calc_current_period_return(daily_prices, monthly_prices)
+
+
+def calc_ytd(daily_prices, yearly_prices):
+    """
+    Calculates ytd return of a price series.
+    Use daily_prices if prices are only available from the same year. With
+    older periods present, use current-year prices when the prior year is
+    unavailable and the current year has at least two usable observations; else use
+    yearly_prices.
+    """
+    return _calc_current_period_return(daily_prices, yearly_prices)
+
+
+def calc_max_drawdown(prices):
+    """
+    Calculates the max drawdown of a price series. If you want the
+    actual drawdown series, please use to_drawdown_series.
+    """
+    # Expanding maxima promote other dtypes to float64 and treat infinities as missing.
+    if np.all(prices.dtypes == np.dtype("float64")) and not np.isinf(prices.to_numpy()).any():
+        maximum = prices.cummax()
+    else:
+        maximum = prices.expanding(min_periods=1).max()
+    return (prices / maximum).min() - 1
+
+
+def drawdown_details(drawdown, index_type=pd.DatetimeIndex):
+    """
+    Returns a data frame with start, end, days (duration) and
+    drawdown for each drawdown in a drawdown series.
+
+    .. note::
+
+        days are actual calendar days, not trading days
+
+    Args:
+        * drawdown (pandas.Series): A drawdown Series
+            (can be obtained w/ drawdown(prices).
+    Returns:
+        * pandas.DataFrame -- A data frame with the following
+            columns: start, end, days, drawdown.
+
+    """
+
+    is_zero = drawdown == 0
+    # find start dates (first day where dd is non-zero after a zero)
+    start = ~is_zero & is_zero.shift(1)
+    start = list(np.flatnonzero(np.asarray(start.fillna(False), dtype=bool)))
+
+    # find end dates (first day where dd is 0 after non-zero)
+    end = is_zero & (~is_zero).shift(1)
+    end = list(np.flatnonzero(np.asarray(end.fillna(False), dtype=bool)))
+
+    # A sliced series may already be underwater at its first observation.
+    if len(drawdown) > 0 and pd.notna(drawdown.iloc[0]) and drawdown.iloc[0] < 0:
+        start.insert(0, 0)
+
+    if len(start) == 0:  # start.empty
+        return None
+
+    # drawdown has no end (end period in dd)
+    if len(end) == 0:  # end.empty
+        end.append(len(drawdown) - 1)
+
+    # if the first drawdown start is larger than the first drawdown end it
+    # means the drawdown series begins in a drawdown and therefore we must add
+    # the first index to the start series
+    if start[0] > end[0]:
+        start.insert(0, 0)
+
+    # if the last start is greater than the end then we must add the last index
+    # to the end series since the drawdown series must finish with a drawdown
+    if start[-1] > end[-1]:
+        end.append(len(drawdown) - 1)
+
+    start = np.asarray(start)
+    end = np.asarray(end)[np.arange(len(start))]
+    valid = start <= end
+    minimum = np.empty(len(start), dtype=object)
+    if (~valid).any():
+        minimum[~valid] = drawdown.iloc[:0].min()
+    if valid.any():
+        episode_bounds = np.empty(valid.sum() * 2, dtype=int)
+        episode_bounds[::2] = start[valid]
+        episode_bounds[1::2] = end[valid] + 1
+        values = np.append(drawdown.astype(float).values, np.nan)
+        minimum[valid] = np.fmin.reduceat(values, episode_bounds)[::2]
+    start = drawdown.index.take(start)
+    end = drawdown.index.take(end)
+
+    result = []
+
+    for first, last, value in zip(start.array, end.array, minimum):
+        if index_type is pd.DatetimeIndex:
+            result.append((first, last, (last - first).days, value))
+        else:
+            result.append((first, last, (last - first), value))
+
+    return pd.DataFrame(result, columns=("Start", "End", "Length", "drawdown"), dtype=object)
+
+
+def _observed_frame_endpoints(prices):
+    first_row = prices.iloc[0]
+    last_row = prices.iloc[-1]
+    first, last = [], []
+    starts, ends = [], []
+    for i in range(prices.shape[1]):
+        column = prices.iloc[:, i]
+        observed = column.dropna()
+        if len(observed) >= 2:
+            column = observed
+        first.append(column.iloc[0])
+        last.append(column.iloc[-1])
+        starts.append(column.index[0])
+        ends.append(column.index[-1])
+    first = pd.Series(first, index=prices.columns, dtype=first_row.dtype, name=first_row.name)
+    last = pd.Series(last, index=prices.columns, dtype=last_row.dtype, name=last_row.name)
+    return first, last, starts, ends
+
+
+def calc_cagr(prices):
+    """
+    Calculates the `CAGR (compound annual growth rate) <https://www.investopedia.com/terms/c/cagr.asp>`_ for given prices.
+
+    Each Series or DataFrame column uses its first and last observed prices and
+    their dates when at least two observations are available.
+
+    Args:
+        * prices (pandas.Series, pandas.DataFrame): Prices.
+    Returns:
+        * float or pandas.Series -- cagr.
+
+    """
+    # Keep vectorized endpoint arithmetic unless an endpoint is missing.
+    if not prices.empty and prices.iloc[[0, -1]].isna().to_numpy().any():
+        if isinstance(prices, pd.DataFrame):
+            first, last, starts, ends = _observed_frame_endpoints(prices)
+            exponents = np.array([1 / year_frac(start, end) for start, end in zip(starts, ends)])
+            return (last / first) ** exponents - 1
+        observed = prices.dropna()
+        # Preserve the established insufficient-data behavior outside this fix.
+        if len(observed) >= 2:
+            prices = observed
+
+    start = prices.index[0]
+    end = prices.index[-1]
+    return (prices.iloc[-1] / prices.iloc[0]) ** (1 / year_frac(start, end)) - 1
+
+
+def calc_risk_return_ratio(returns, nperiods=None, annualize=True):
+    """
+    Calculates the return / risk ratio. Basically the
+    `Sharpe ratio <https://www.investopedia.com/terms/s/sharperatio.asp>`_ without factoring in the `risk-free rate <https://www.investopedia.com/terms/r/risk-freerate.asp>`_.
+
+    Supply nperiods when the return frequency cannot be inferred, or set
+    annualize=False for a per-period ratio. See :func:`calc_sharpe`.
+    """
+    return calc_sharpe(returns, nperiods=nperiods, annualize=annualize)
+
+
+def calc_sharpe(returns, rf=0.0, nperiods=None, annualize=True):
+    """
+    Calculates the `Sharpe ratio <https://www.investopedia.com/terms/s/sharperatio.asp>`_
+    (see `Sharpe vs. Sortino <https://www.investopedia.com/ask/answers/010815/what-difference-between-sharpe-ratio-and-sortino-ratio.asp>`_).
+
+    If rf is a non-zero floating scalar, nperiods must be supplied or inferable.
+    In this case, rf is assumed to be expressed in yearly (annualized) terms,
+    even when annualize=False.
+
+    Returns NaN when the aligned excess returns have no dispersion, independently for each
+    DataFrame column.
+
+    Args:
+        * returns (Series, DataFrame): Input return series
+        * rf (float, np.floating, Series): `Risk-free rate <https://www.investopedia.com/terms/r/risk-freerate.asp>`_ expressed as a yearly (annualized) return or *return*
+            series (unlike PerformanceStats, which takes rf as a price series)
+        * nperiods (int): Frequency of returns (252 for daily, 12 for monthly,
+            etc.). Inferred from the index when omitted.
+        * annualize (bool): Annualize the result. Defaults to True.
+
+    Raises:
+        * ValueError: If nperiods cannot be inferred and is needed for annualization
+            or a non-zero scalar risk-free rate. Supply nperiods explicitly, or
+            use annualize=False for a per-period ratio with no scalar rate conversion.
+
+    """
+    if nperiods is None:
+        nperiods = infer_nperiods(returns)
+
+    if isinstance(rf, _FLOATING_SCALAR_TYPES) and rf != 0 and nperiods is None:
+        raise ValueError("Must provide nperiods if rf != 0")
+
+    return _calc_sharpe(returns.to_excess_returns(rf, nperiods=nperiods), nperiods, annualize)
+
+
+def _calc_sharpe(er, nperiods, annualize=True):
+    """Calculate Sharpe from already aligned excess returns.
+
+    A sample without meaningful dispersion has an undefined Sharpe ratio. Apply that
+    rule independently to each DataFrame column so a constant column does not affect
+    valid neighboring columns.
+    """
+    if annualize and nperiods is None:
+        raise ValueError("Cannot infer return frequency. Pass nperiods or set annualize=False.")
+
+    std = er.std(ddof=1)
+
+    # Match the bounded range test established by calc_deflated_sharpe_ratio.
+    # Range identifies identical observations even when std retains rounding residue;
+    # the scale-aware, sample-count-independent floor preserves real quiet variation.
+    # Promote integer extrema before subtraction or abs can overflow.
+    maximum = er.max() * 1.0
+    minimum = er.min() * 1.0
+    spread = maximum - minimum
+    tolerance = 4 * np.finfo(float).eps
+    no_dispersion = (spread <= tolerance * abs(maximum)) | (spread <= tolerance * abs(minimum))
+
+    if isinstance(std, pd.Series):
+        std[no_dispersion] = np.nan
+    # Short-circuit all-missing nullable Series before comparing pd.NA.
+    elif isinstance(er, pd.Series) and (er.count() == 0 or no_dispersion):
+        std = np.nan
+    with np.errstate(invalid="ignore", divide="ignore"):
+        res = np.divide(er.mean(), std)
+
+    if annualize:
+        return res * np.sqrt(nperiods)
+    return res
+
+
+def _diff_returns(returns, benchmark_returns):
+    """
+    Subtracts benchmark_returns from returns along the date index.
+
+    A bare ``-`` between a DataFrame and a Series aligns the Series against
+    the frame's *columns*, so a date-indexed benchmark silently produces an
+    all-NaN frame the size of the calendar plus the column labels. Subtract
+    along the index whenever the two arguments have different shapes.
+    """
+    if isinstance(returns, pd.DataFrame) and isinstance(benchmark_returns, pd.Series):
+        return returns.sub(benchmark_returns, axis="index")
+
+    if isinstance(returns, pd.Series) and isinstance(benchmark_returns, pd.DataFrame):
+        return benchmark_returns.rsub(returns, axis="index")
+
+    return returns - benchmark_returns
+
+
+def calc_information_ratio(returns, benchmark_returns):
+    """
+    Calculates the `Information ratio <https://www.investopedia.com/terms/i/informationratio.asp>`_ (or `from Wikipedia <http://en.wikipedia.org/wiki/Information_ratio>`_).
+    """
+    return _calc_information_ratio(_diff_returns(returns, benchmark_returns), returns, benchmark_returns)
+
+
+def _return_roundoff(data):
+    """Per-observation rounding bound at each input column's precision."""
+    dtypes = data.dtypes if isinstance(data, pd.DataFrame) else [getattr(data, "dtype", np.dtype(float))]
+    eps = np.array([np.finfo(f"f{dtype.itemsize}").eps if dtype.kind == "f" else np.finfo(float).eps for dtype in dtypes])
+    if not isinstance(data, pd.DataFrame):
+        eps = eps[0]
+    # Scale before abs to avoid overflowing signed integer inputs.
+    return abs(np.multiply(data, 4 * eps))
+
+
+def _calc_information_ratio(diff_rets, returns, benchmark_returns):
+    diff_std = diff_rets.std(ddof=1)
+
+    # Sum the input rounding bounds with the same alignment as the subtraction.
+    # Only paired observations in each column can affect its tracking error.
+    bounds = _diff_returns(_return_roundoff(returns), -_return_roundoff(benchmark_returns))
+    bounds = bounds.where(diff_rets.notna()).to_numpy(dtype=float, na_value=np.nan)
+    values = diff_rets.to_numpy(dtype=float, na_value=np.nan)
+    if values.ndim == 1:
+        values = values[:, None]
+        bounds = bounds[:, None]
+    spread = np.fmax.reduce(values, axis=0, initial=-np.inf) - np.fmin.reduce(values, axis=0, initial=np.inf)
+    no_spread = spread <= np.fmax.reduce(bounds, axis=0, initial=0.0)
+
+    if isinstance(diff_std, pd.Series):
+        diff_mean = diff_rets.mean()
+        valid = diff_std.notna() & diff_std.ne(0) & ~no_spread
+        if diff_mean.dtype.kind == "f" and diff_mean.dtype.itemsize <= 8:
+            return np.divide(diff_mean, diff_std).where(valid, 0.0).astype(float)
+
+        # Allocate object results explicitly: pandas 3 no longer upcasts on assignment.
+        result = pd.Series(0.0, index=diff_std.index, dtype=object if diff_mean.dtype == object else float)
+        result.loc[valid] = np.divide(diff_mean.loc[valid], diff_std.loc[valid])
+        return result
+
+    if pd.isna(diff_std) or diff_std == 0 or no_spread[0]:
+        return 0.0
+
+    return np.divide(diff_rets.mean(), diff_std)
+
+
+def calc_prob_mom(returns, other_returns):
+    """
+    `Probabilistic momentum <http://cssanalytics.wordpress.com/2014/01/28/are-simple-momentum-strategies-too-dumb-introducing-probabilistic-momentum/>`_ (see `momentum investing <https://www.investopedia.com/terms/m/momentum_investing.asp>`_)
+
+    Basically the "probability or confidence that one asset
+    is going to outperform the other".
+
+    Source:
+        http://cssanalytics.wordpress.com/2014/01/28/are-simple-momentum-strategies-too-dumb-introducing-probabilistic-momentum/ # NOQA
+    """
+    # t.cdf expects a t-statistic, and the information ratio is mean / std.
+    # Scaling by sqrt(n) turns it into one, so the probability reflects how
+    # much evidence there is rather than just the per-period edge. n counts
+    # the aligned, non-NaN differentials actually used in the information
+    # ratio, not the raw series length.
+    diff_rets = _diff_returns(returns, other_returns)
+    n = diff_rets.count()
+    ir = _calc_information_ratio(diff_rets, returns, other_returns)
+    t_stat = ir * np.sqrt(n)
+    prob = t.cdf(t_stat, n - 1)
+
+    # t.cdf drops the labels, so put them back for column-wise input
+    if isinstance(t_stat, pd.Series):
+        return pd.Series(prob, index=t_stat.index)
+
+    return prob
+
+
+def calc_total_return(prices):
+    """
+    Calculates the total return of given prices.
+
+    Each Series or DataFrame column uses its first and last observed prices when
+    at least two observations are available.
+
+    last / first - 1
+    """
+    # Keep vectorized endpoint arithmetic unless an endpoint is missing.
+    if not prices.empty and prices.iloc[[0, -1]].isna().to_numpy().any():
+        if isinstance(prices, pd.DataFrame):
+            first, last, _, _ = _observed_frame_endpoints(prices)
+            return last / first - 1
+        observed = prices.dropna()
+        # Preserve the established insufficient-data behavior outside this fix.
+        if len(observed) >= 2:
+            prices = observed
+
+    return (prices.iloc[-1] / prices.iloc[0]) - 1
+
+
+def year_frac(start, end):
+    """
+    Similar to excel's yearfrac function. Returns
+    a year fraction between two dates (i.e. 1.53 years).
+
+    Approximation using the average number of seconds
+    in a year.
+
+    Args:
+        * start (datetime): start date
+        * end (datetime): end date
+
+    """
+    if start > end:
+        raise ValueError("start cannot be larger than end")
+
+    # obviously not perfect but good enough
+    return (end - start).total_seconds() / (31557600)
+
+
+def merge(*series):
+    """
+    Merge Series and/or DataFrames together.
+
+    Returns a DataFrame.
+    """
+    dfs = []
+    for s in series:
+        if isinstance(s, pd.DataFrame):
+            dfs.append(s)
+        elif isinstance(s, pd.Series):
+            tmpdf = pd.DataFrame({s.name: s})
+            dfs.append(tmpdf)
+        else:
+            raise NotImplementedError("Unsupported merge type")
+
+    return pd.concat(dfs, axis=1)
+
+
+def drop_duplicate_cols(df):
+    """Remove duplicate columns without modifying the input DataFrame.
+
+    For each label, keep the first column with the most non-missing values.
+    Retained labels remain in first-occurrence order.
+    """
+    keep = []
+    for label in df.columns.drop_duplicates():
+        positions = df.columns.get_indexer_for([label])
+        if len(positions) > 1:
+            counts = df.iloc[:, positions].count()
+            keep.append(positions[counts.argmax()])
+        else:
+            keep.append(positions[0])
+
+    return df.iloc[:, keep].copy()
+
+
+def to_monthly(series, method="ffill", how="end"):
+    """
+    Convenience method that wraps asfreq_actual
+    with 'M' param (method='ffill', how='end').
+    """
+    return series.asfreq_actual(_MonthEnd, method=method, how=how)
+
+
+def asfreq_actual(series, freq, method="ffill", how="end", normalize=False):
+    """
+    Similar to pandas' asfreq but keeps the actual dates.
+    For example, if last data point in Jan is on the 29th,
+    that date will be used instead of the 31st.
+    """
+    # Resample the index itself so timezones and user labels remain untouched.
+    dates = series.index.to_series().asfreq(freq=freq, method=method, how=how, normalize=normalize)
+    return series.loc[dates.array]
+
+
+def calc_inv_vol_weights(returns):
+    """
+    Calculates weights proportional to inverse volatility of each column.
+
+    Returns weights that are inversely proportional to the column's
+    volatility resulting in a set of portfolio weights where each position
+    has the same level of volatility.
+
+    Assets with no non-missing returns or only one distinct non-missing return
+    are excluded from the portfolio (their weight is set to NaN).
+
+    Returns:
+        Series {col_name: weight}
+    """
+    # calc vols
+    vol = (1.0 / pd.to_numeric(returns.std(ddof=1))).astype(float)
+    # Detect exact constants independently of std's dtype-dependent rounding residue.
+    vol[returns.max() == returns.min()] = np.nan
+    vol[np.isinf(vol)] = np.nan
+    volsum = vol.sum()
+    return vol / volsum
+
+
+def calc_mean_var_weights(returns, weight_bounds=(0.0, 1.0), rf=0.0, covar_method="ledoit-wolf", options=None):
+    """
+    Calculates the mean-variance weights given a DataFrame of returns.
+
+    Args:
+        * returns (DataFrame): Returns for multiple securities with unique column labels.
+        * weight_bounds ((low, high)): Weigh limits for optimization.
+        * rf (float): `Risk-free rate <https://www.investopedia.com/terms/r/risk-freerate.asp>`_ used in utility calculation
+        * covar_method (str): Covariance matrix estimation method:
+          `ledoit-wolf <http://www.ledoit.net/honey.pdf>`_ or ``standard``.
+        * options (dict): options for minimizing, e.g. {'maxiter': 10000 }
+
+    Returns:
+        Series {col_name: weight}
+
+    Raises:
+        * ValueError: If the returns have duplicate column labels.
+
+    """
+
+    if not returns.columns.is_unique:
+        raise ValueError("returns columns must be unique")
+
+    def fitness(weights, exp_rets, covar, rf):
+        # portfolio mean
+        mean = sum(exp_rets * weights)
+        # portfolio var
+        var = np.dot(np.dot(weights, covar), weights)
+        # utility - i.e. sharpe ratio
+        util = (mean - rf) / np.sqrt(var)
+        # negative because we want to maximize and optimizer
+        # minimizes metric
+        return -util
+
+    n = len(returns.columns)
+
+    # expected return defaults to mean return by default
+    exp_rets = returns.mean()
+    # Preserve pandas' nullable-missing failure path before the optimizer.
+    if not exp_rets.hasnans:
+        # Match Series iteration: Python floats use compensated sum on Python
+        # 3.12+, while nullable/sparse arrays can yield NumPy scalars instead.
+        dtype = object if type(next(iter(exp_rets), None)) is float else getattr(exp_rets.dtype, "numpy_dtype", None)
+        exp_rets = exp_rets.to_numpy(dtype=dtype)
+
+    # calc covariance matrix
+    if covar_method == "ledoit-wolf":
+        covar = sklearn.covariance.ledoit_wolf(returns)[0]
+    elif covar_method == "standard":
+        covar = returns.cov().to_numpy()
+    else:
+        raise NotImplementedError("covar_method not implemented")
+
+    weights = np.ones([n]) / n
+    bounds = [weight_bounds for i in range(n)]
+    # sum of weights must be equal to 1
+    constraints = {"type": "eq", "fun": lambda W: sum(W) - 1.0}
+    optimized = minimize(
+        fitness,
+        weights,
+        (exp_rets, covar, rf),
+        method="SLSQP",
+        constraints=constraints,
+        bounds=bounds,
+        options=options,
+    )
+    # check if success
+    if not optimized.success:
+        raise RuntimeError(optimized.message)
+
+    # return weight vector
+    return pd.Series({returns.columns[i]: optimized.x[i] for i in range(n)})
+
+
+def _erc_weights_slsqp(x0, cov, b, maximum_iterations, tolerance):
+    """
+    Calculates long-only risk-budget weights with SLSQP.
+
+    The objective matches each asset's raw component contribution to its
+    requested share of portfolio variance. Both the target and covariance are
+    normalized so equivalent target proportions and return units produce the
+    same optimization problem.
+
+    Args:
+        * x0 (np.array): Starting asset weights.
+        * cov (np.array): Covariance matrix.
+        * b (np.array): Relative risk target weights.
+        * maximum_iterations (int): Maximum iterations in iterative solutions.
+        * tolerance (float): Tolerance level in iterative solutions.
+
+    Returns:
+        np.array {weight}
+
+    You can read more about ERC at
+    http://thierry-roncalli.com/download/erc.pdf
+
+    """
+    b = np.asarray(b)
+    # Keep SLSQP's finite-difference steps visible with low-precision targets.
+    b = b.astype(np.result_type(b.dtype, np.float64), copy=False)
+    # Scale before summing so finite positive targets cannot overflow their total.
+    b = b / np.max(b)
+    b = b / np.sum(b)
+    covariance_scale = np.mean(np.diagonal(cov))
+    # Keep SLSQP's absolute tolerance independent of the units used for returns.
+    if np.isfinite(covariance_scale) and covariance_scale > 0:
+        cov = cov / covariance_scale
+
+    def fitness(weights, covar):
+        # Raw component contributions sum to portfolio variance.
+        trc = weights * np.matmul(covar, weights)
+        target_trc = b * trc.sum()
+        # Preserve the accepted absolute-deviation objective's numerical stability.
+        return np.sum(np.abs(trc - target_trc))
+
+    # nonnegative
+    bounds = [(0, None) for i in range(len(x0))]
+    # sum of weights must be equal to 1
+    constraints = {"type": "eq", "fun": lambda W: sum(W) - 1.0}
+    options = {"maxiter": maximum_iterations}
+
+    optimized = minimize(
+        fitness,
+        x0,
+        (cov),
+        method="SLSQP",
+        constraints=constraints,
+        bounds=bounds,
+        options=options,
+        tol=tolerance,
+    )
+    # check if success
+    if not optimized.success:
+        raise RuntimeError(optimized.message)
+
+    # return weight vector
+    return optimized.x
+
+
+def _erc_weights_ccd(x0, cov, b, maximum_iterations, tolerance):
+    """
+    Calculates the equal risk contribution / risk parity weights given
+    a DataFrame of returns.
+
+    Args:
+        * x0 (np.array): Starting asset weights.
+        * cov (np.array): covariance matrix.
+        * b (np.array): Risk target weights.
+        * maximum_iterations (int): Maximum iterations in iterative solutions.
+        * tolerance (float): Tolerance level in iterative solutions.
+
+    Returns:
+        np.array {weight}
+
+    Reference:
+        Griveau-Billion, Theophile and Richard, Jean-Charles and Roncalli,
+        Thierry, A Fast Algorithm for Computing High-Dimensional Risk Parity
+        Portfolios (2013).
+        Available at SSRN: https://ssrn.com/abstract=2325255
+
+    """
+    n = len(x0)
+    x = x0.copy()
+    var = np.diagonal(cov)
+    ctr = cov.dot(x)
+    sigma_x = np.sqrt(x.T.dot(ctr))
+
+    for iteration in range(maximum_iterations):
+        for i in range(n):
+            alpha = var[i]
+            beta = ctr[i] - x[i] * alpha
+            gamma = -b[i] * sigma_x
+
+            x_tilde = (-beta + np.sqrt(beta * beta - 4 * alpha * gamma)) / (2 * alpha)
+            x_i = x[i]
+
+            ctr = ctr - cov[i] * x_i + cov[i] * x_tilde
+            sigma_x = sigma_x * sigma_x - 2 * x_i * cov[i].dot(x) + x_i * x_i * var[i]
+            x[i] = x_tilde
+            sigma_x = np.sqrt(sigma_x + 2 * x_tilde * cov[i].dot(x) - x_tilde * x_tilde * var[i])
+
+        # check convergence
+        if np.power((x - x0) / x.sum(), 2).sum() < tolerance:
+            return x / x.sum()
+
+        x0 = x.copy()
+
+    # no solution found
+    raise ValueError(f"No solution found after {maximum_iterations} iterations.")
+
+
+def calc_erc_weights(
+    returns,
+    initial_weights=None,
+    risk_weights=None,
+    covar_method="ledoit-wolf",
+    risk_parity_method="ccd",
+    maximum_iterations=100,
+    tolerance=1e-8,
+):
+    """
+    Calculates the equal risk contribution / risk parity weights given a
+    DataFrame of returns.
+
+    Args:
+        * returns (DataFrame): Returns for multiple securities.
+        * initial_weights (list): Starting asset weights [default inverse vol].
+        * risk_weights (list): Risk target weights [default equal weight].
+        * covar_method (str): Covariance matrix estimation method:
+          `ledoit-wolf <http://www.ledoit.net/honey.pdf>`_ (default) or ``standard``.
+        * risk_parity_method (str): Risk parity estimation method:
+          ``ccd`` (cyclical coordinate descent, default) or ``slsqp``
+          (scipy's implementation of sequential least squares programming).
+        * maximum_iterations (int): Maximum iterations in iterative solutions.
+        * tolerance (float): Tolerance level in iterative solutions.
+
+    Returns:
+        Series {col_name: weight}
+
+    """
+    n = len(returns.columns)
+
+    # calc covariance matrix
+    if covar_method == "ledoit-wolf":
+        covar = sklearn.covariance.ledoit_wolf(returns)[0]
+    elif covar_method == "standard":
+        covar = returns.cov().values
+    else:
+        raise NotImplementedError("covar_method not implemented")
+
+    # initial weights (default to inverse vol)
+    if initial_weights is None:
+        inv_vol = 1.0 / np.sqrt(np.diagonal(covar))
+        initial_weights = inv_vol / inv_vol.sum()
+
+    # default to equal risk weight
+    if risk_weights is None:
+        risk_weights = np.ones(n) / n
+
+    # calc risk parity weights matrix
+    if risk_parity_method == "ccd":
+        # cyclical coordinate descent implementation
+        erc_weights = _erc_weights_ccd(initial_weights, covar, risk_weights, maximum_iterations, tolerance)
+    elif risk_parity_method == "slsqp":
+        # scipys slsqp optimizer
+        erc_weights = _erc_weights_slsqp(initial_weights, covar, risk_weights, maximum_iterations, tolerance)
+
+    else:
+        raise NotImplementedError("risk_parity_method not implemented")
+
+    # return erc weights vector
+    return pd.Series(erc_weights, index=returns.columns, name="erc")
+
+
+def get_num_days_required(offset, period="d", perc_required=0.90, annualization_factor=252):
+    """
+    Estimates the number of days required to assume that data is OK.
+
+    Helper function used to determine if there are enough "good" data
+    days over a given period.
+
+    Args:
+        * offset (DateOffset): Offset (lookback) period.
+        * period (str): Period string.
+        * perc_required (float): percentage of number of days
+            expected required.
+
+    """
+    x = pd.to_datetime("2010-01-01")
+    delta = x - (x - offset)
+    # convert to 'trading days' - rough guestimate
+    days = delta.days * 0.69
+
+    if period == "d":
+        req = days * perc_required
+    elif period == "m":
+        req = (days / 20) * perc_required
+    elif period == "y":
+        req = (days / annualization_factor) * perc_required
+    else:
+        raise NotImplementedError("period not supported. Supported periods are d, m, y")
+
+    return req
+
+
+def calc_clusters(returns, n=None, plot=False):
+    """
+    Calculates the clusters based on k-means
+    clustering.
+
+    Args:
+        * returns (pd.DataFrame): DataFrame of returns
+        * n (int): Specify # of clusters. If None, this
+            will be automatically determined
+        * plot (bool): Show plot?
+
+    Returns:
+        * dict with structure: {cluster# : [col names]}
+    """
+    # calculate correlation
+    corr = returns.corr()
+
+    # calculate dissimilarity matrix
+    diss = 1 - corr
+
+    # scale down to 2 dimensions using MDS
+    # (multi-dimensional scaling) using the
+    # dissimilarity matrix
+    mds = sklearn.manifold.MDS(dissimilarity="precomputed")
+    xy = mds.fit_transform(diss)
+
+    def routine(k):
+        # fit KMeans
+        km = sklearn.cluster.KMeans(n_clusters=k)
+        km_fit = km.fit(xy)
+        labels = km_fit.labels_
+        centers = km_fit.cluster_centers_
+
+        # get {ticker: label} mappings
+        mappings = dict(zip(returns.columns, labels))
+
+        # print % of var explained
+        totss = 0
+        withinss = 0
+        # column average fot totss
+        avg = np.array([np.mean(xy[:, 0]), np.mean(xy[:, 1])])
+        for idx, lbl in enumerate(labels):
+            withinss += sum((xy[idx] - centers[lbl]) ** 2)
+            totss += sum((xy[idx] - avg) ** 2)
+        pvar_expl = 1.0 - withinss / totss
+
+        return mappings, pvar_expl, labels
+
+    if n:
+        result = routine(n)
+    else:
+        n = len(returns.columns)
+        n1 = int(np.ceil(n * 0.6666666666))
+        for i in range(2, n1 + 1):
+            result = routine(i)
+            if result[1] > 0.9:
+                break
+
+    if plot:
+        _, ax = plt.subplots()
+        ax.scatter(xy[:, 0], xy[:, 1], c=result[2], s=90)
+        for i, txt in enumerate(returns.columns):
+            ax.annotate(txt, (xy[i, 0], xy[i, 1]), size=14)
+
+    # sanitize return value
+    tmp = result[0]
+    # map as such {cluster: [list of tickers], cluster2: [...]}
+    inv_map = {}
+    for k, v in tmp.items():
+        inv_map[v] = inv_map.get(v, [])
+        inv_map[v].append(k)
+
+    return inv_map
+
+
+def calc_ftca(returns, threshold=0.5):
+    """
+    Implementation of David Varadi's `Fast Threshold Clustering Algorithm (FTCA) <http://cssanalytics.wordpress.com/2013/11/26/fast-threshold-clustering-algorithm-ftca/>`_.
+
+    http://cssanalytics.wordpress.com/2013/11/26/fast-threshold-clustering-algorithm-ftca/  # NOQA
+
+    More stable than k-means for clustering purposes.
+    If you want more clusters, use a higher threshold.
+
+    Args:
+        * returns - expects a pandas dataframe of returns where
+            each column is the name of a given security.
+        * threshold (float): Threshold parameter - use higher value
+            for more clusters. Basically controls how similar
+            (correlated) series have to be.
+    Returns:
+        dict of cluster name (a number) and list of securities in cluster
+
+    """
+    # cluster index (name)
+    i = 0
+    # correlation matrix
+    corr = returns.corr()
+    # remaining securities to cluster
+    remain = list(corr.index.copy())
+    n = len(remain)
+    res = {}
+
+    while n > 0:
+        # if only one left then create cluster and finish
+        if n == 1:
+            i += 1
+            res[i] = remain
+            n = 0
+        # if not then we have some work to do
+        else:
+            # filter down correlation matrix to current remain
+            cur_corr = corr[remain].loc[remain]
+            # get mean correlations, ordered
+            mc = cur_corr.mean().sort_values()
+            # get lowest and highest mean correlation
+            low = mc.index[0]
+            high = mc.index[-1]
+
+            # case if corr(high,low) > threshold
+            if corr[high][low] > threshold:
+                i += 1
+
+                # new cluster for high and low
+                res[i] = [low, high]
+                remain.remove(low)
+                remain.remove(high)
+
+                rmv = []
+                for x in remain:
+                    avg_corr = (corr[x][high] + corr[x][low]) / 2.0
+                    if avg_corr > threshold:
+                        res[i].append(x)
+                        rmv.append(x)
+                [remain.remove(x) for x in rmv]
+
+                n = len(remain)
+
+            # otherwise we are creating two clusters - one for high
+            # and one for low
+            else:
+                # add cluster with HC
+                i += 1
+                res[i] = [high]
+                remain.remove(high)
+                remain.remove(low)
+
+                rmv = []
+                for x in remain:
+                    if corr[x][high] > threshold:
+                        res[i].append(x)
+                        rmv.append(x)
+                [remain.remove(x) for x in rmv]
+
+                i += 1
+                res[i] = [low]
+
+                rmv = []
+                for x in remain:
+                    if corr[x][low] > threshold:
+                        res[i].append(x)
+                        rmv.append(x)
+                [remain.remove(x) for x in rmv]
+
+                n = len(remain)
+
+    return res
+
+
+def limit_weights(weights, limit=0.1):
+    """
+    Limits weights and redistributes excedent amount
+    proportionally.
+
+    ex:
+        - weights are {a: 0.7, b: 0.2, c: 0.1}
+        - call with limit=0.5
+        - excess 0.2 in a is ditributed to b and c
+            proportionally.
+            - result is {a: 0.5, b: 0.33, c: 0.167}
+
+    Args:
+        * weights (Series): A series describing finite weights
+        * limit (float): Maximum weight allowed
+    """
+    if 1.0 / limit > len(weights):
+        raise ValueError("invalid limit -> 1 / limit must be <= len(weights)")
+
+    if isinstance(weights, dict):
+        weights = pd.Series(weights)
+
+    if weights.isna().any() or not np.isfinite(weights.to_numpy(dtype=float, na_value=np.nan)).all():
+        raise ValueError("weights must contain only finite values")
+
+    if np.round(weights.sum(), 1) != 1.0:
+        raise ValueError(f"Expecting weights (that sum to 1) - sum is {weights.sum()}")
+
+    res = weights.copy()
+    to_rebalance = (res[res > limit] - limit).sum()
+
+    ok = res[res < limit]
+    ok += (ok / ok.sum()) * to_rebalance
+
+    res[res > limit] = limit
+    res[res < limit] = ok
+
+    if any(x > limit for x in res):
+        return limit_weights(res, limit=limit)
+
+    return res
+
+
+def random_weights(n, bounds=(0.0, 1.0), total=1.0):
+    """
+    Generate pseudo-random weights.
+
+    Returns a list of random weights that is of length
+    n, where each weight is in the range bounds, and
+    where the weights sum up to total.
+
+    Useful for creating random portfolios when benchmarking.
+
+    Args:
+        * n (int): number of random weights
+        * bounds ((low, high)): bounds for each weight
+        * total (float): total sum of the weights
+
+    """
+    low = bounds[0]
+    high = bounds[1]
+
+    if high < low:
+        raise ValueError("Higher bound must be greater or equal to lower bound")
+
+    if n * high < total or n * low > total:
+        raise ValueError("solution not possible with given n and bounds")
+
+    w = [0] * n
+    tgt = -float(total)
+
+    for i in range(n):
+        rn = n - i - 1
+        rhigh = rn * high
+        rlow = rn * low
+
+        lowb = max(-rhigh - tgt, low)
+        highb = min(-rlow - tgt, high)
+
+        rw = random.uniform(lowb, highb)
+        w[i] = rw
+
+        tgt += rw
+
+    random.shuffle(w)
+    return w
+
+
+def plot_heatmap(data, title="Heatmap", show_legend=True, show_labels=True, label_fmt=".2f", vmin=None, vmax=None, figsize=None, label_color="w", cmap="RdBu", **kwargs):
+    """
+    Plot a heatmap using matplotlib's pcolor.
+
+    Args:
+        * data (DataFrame): DataFrame to plot. Usually small matrix (ex.
+            correlation matrix).
+        * title (string): Plot title
+        * show_legend (bool): Show color legend
+        * show_labels (bool): Show value labels
+        * label_fmt (str): Label format string
+        * vmin (float): Min value for scale
+        * vmax (float): Max value for scale
+        * cmap (string): Color map
+        * kwargs: Passed to matplotlib's pcolor
+
+    """
+    fig, ax = plt.subplots(figsize=figsize)
+
+    heatmap = ax.pcolor(data, vmin=vmin, vmax=vmax, cmap=cmap)
+    # for some reason heatmap has the y values backwards....
+    ax.invert_yaxis()
+
+    if title is not None:
+        plt.title(title)
+
+    if show_legend:
+        fig.colorbar(heatmap)
+
+    if show_labels:
+        vals = data.values
+        for x in range(data.shape[1]):
+            for y in range(data.shape[0]):
+                plt.text(
+                    x + 0.5,
+                    y + 0.5,
+                    format(vals[y, x], label_fmt),
+                    horizontalalignment="center",
+                    verticalalignment="center",
+                    color=label_color,
+                )
+
+    plt.yticks(np.arange(0.5, len(data.index), 1), data.index)
+    plt.xticks(np.arange(0.5, len(data.columns), 1), data.columns)
+
+    return plt
+
+
+def plot_corr_heatmap(data, **kwargs):
+    """
+    Plots the correlation heatmap for a given DataFrame.
+    """
+    return plot_heatmap(data.corr(), vmin=-1, vmax=1, **kwargs)
+
+
+def rollapply(data, window, fn):
+    """
+    Apply a function fn over a rolling window of size window.
+
+    Args:
+        * data (Series or DataFrame): Series or DataFrame
+        * window (int): Window size
+        * fn (function): Function to apply over the rolling window.
+            For a series, the return value is expected to be a single
+            number. For a DataFrame, it shuold return a new row.
+
+    Returns:
+        * Object of same dimensions as data
+    """
+    res = data.copy().astype(float)
+    res[:] = np.nan
+    n = len(data)
+
+    if window > n:
+        return res
+
+    for i in range(window - 1, n):
+        res.iloc[i] = fn(data.iloc[i - window + 1 : i + 1])
+
+    return res
+
+
+def _winsorize_wrapper(x, limits):
+    """
+    Wraps scipy winsorize function to drop na's
+    """
+    if isinstance(x, pd.Series):
+        if x.count() == 0:
+            return x
+
+        notnanx = ~pd.isna(x)
+        observed = x[notnanx]
+        if isinstance(x.dtype, pd.api.extensions.ExtensionDtype) and pd.api.types.is_float_dtype(x.dtype):
+            # SciPy requires a NumPy dtype rather than a pandas nullable floating dtype.
+            observed = observed.to_numpy(dtype=float)
+        x[notnanx] = scipy.stats.mstats.winsorize(observed, limits=limits)
+        return x
+    else:
+        return scipy.stats.mstats.winsorize(x, limits=limits)
+
+
+def winsorize(x, axis=0, limits=0.01):
+    """
+    `Winsorize <https://en.wikipedia.org/wiki/Winsorizing>`_ values based on limits
+    """
+    # operate on copy
+    x = x.copy()
+
+    if isinstance(x, pd.DataFrame):
+        return x.apply(_winsorize_wrapper, axis=axis, args=(limits,))
+    else:
+        return pd.Series(_winsorize_wrapper(x, limits).values, index=x.index, name=x.name)
+
+
+def rescale(x, min=0.0, max=1.0, axis=0):
+    """
+    Rescale values to fit a certain range [min, max]
+    """
+
+    def innerfn(x, min, max):
+        return np.interp(x, [np.min(x), np.max(x)], [min, max])
+
+    if isinstance(x, pd.DataFrame):
+        return x.apply(
+            innerfn,
+            axis=axis,
+            args=(
+                min,
+                max,
+            ),
+        )
+    else:
+        return pd.Series(innerfn(x, min, max), index=x.index, name=x.name)
+
+
+def annualize(returns, durations, one_year=365.0):
+    """
+    Annualize returns using their respective durations.
+
+    Formula used is:
+        (1 + returns) ** (1 / (durations / one_year)) - 1
+
+    """
+    return np.power(1.0 + returns, 1.0 / (durations / one_year)) - 1.0
+
+
+def deannualize(returns, nperiods):
+    """
+    Convert return expressed in annual terms on a different basis.
+
+    Args:
+        * returns (float, Series, DataFrame): Return(s)
+        * nperiods (int): Target basis, typically 252 for daily, 12 for
+            monthly, etc.
+
+    """
+    if nperiods is None:
+        nperiods = infer_nperiods(returns)
+    return np.power(1 + returns, 1.0 / nperiods) - 1.0
+
+
+def infer_freq(data):
+    """
+    Infer the most likely frequency given the input index. If the frequency is
+    uncertain or index is not DateTime like, just return None
+
+    Args:
+        * data (DataFrame, Series): Any timeseries dataframe or series
+    """
+    try:
+        # Older pandas interprets numeric row labels as nanosecond timestamps.
+        if data.index.inferred_type in ("integer", "floating", "mixed-integer-float"):
+            return None
+        if _PANDAS_TWO:
+            return pd.infer_freq(data.index)
+        else:
+            return pd.infer_freq(data.index, warn=False)
+    except (AttributeError, TypeError, ValueError):
+        return None
+
+
+# Number of periods in a year for offset aliases whose length is fixed.
+# Sub-daily and daily aliases depend on `annualization_factor` and are handled
+# in `_whole_periods_str_to_nperiods`.
+_FIXED_PERIODS_PER_YEAR = {
+    "Y": 1,
+    "A": 1,
+    "Q": 4,
+    "M": 12,
+    "W": 52,
+}
+
+# Daily-or-shorter aliases, as a multiple of `annualization_factor`.
+_ANNUALIZATION_MULTIPLES = {
+    "D": 1,
+    "B": 1,
+    "C": 1,
+    "H": 24,
+    "T": 24 * 60,
+    "S": 24 * 60 * 60,
+    "L": 24 * 60 * 60 * 1_000,
+    "U": 24 * 60 * 60 * 1_000_000,
+    "N": 24 * 60 * 60 * 1_000_000_000,
+}
+
+
+def _normalize_freq_code(freq):
+    """Reduce a pandas offset alias to a bare period code.
+
+    Strips the anchor suffix ("W-SUN" -> "W", "QE-DEC" -> "Q"), the start/end
+    suffix introduced in pandas 2.2 ("ME" -> "M", "YE" -> "Y") and a leading
+    business-day marker ("BME" -> "M"). Returns None if nothing recognisable
+    is left.
+    """
+    if not freq:
+        return None
+
+    # "W-SUN", "QE-DEC", "YE-DEC" -> "W", "QE", "YE"
+    code = freq.split("-", 1)[0]
+
+    # Modern sub-daily aliases are case sensitive: "ms" is milliseconds,
+    # while "MS" is month start. Normalize them before upper casing.
+    case_sensitive = {"min": "T", "ms": "L", "us": "U", "ns": "N"}
+    code = case_sensitive.get(code, code)
+
+    code = code.upper()
+
+    # A business-day marker on a longer period is still that period:
+    # "BME" (business month end) annualizes the same way as "M".
+    if len(code) > 1 and code.startswith("B") and code[1] in ("M", "Q", "Y", "A"):
+        code = code[1:]
+
+    # pandas 2.2 start/end suffixes: "ME", "MS", "QE", "QS", "YE", "YS", "AS".
+    if len(code) == 2 and code[1] in ("E", "S") and code[0] in ("M", "Q", "Y", "A"):
+        code = code[0]
+
+    return code or None
+
+
+def _whole_periods_str_to_nperiods(freq, annualization_factor=None):
+    annualization_factor = TRADING_DAYS_PER_YEAR if annualization_factor is None else annualization_factor
+
+    code = _normalize_freq_code(freq)
+    if code is None:
+        return None
+
+    if code in _FIXED_PERIODS_PER_YEAR:
+        return _FIXED_PERIODS_PER_YEAR[code]
+    if code in _ANNUALIZATION_MULTIPLES:
+        return annualization_factor * _ANNUALIZATION_MULTIPLES[code]
+    return None
+
+
+def infer_nperiods(data, annualization_factor=None):
+    annualization_factor = annualization_factor or TRADING_DAYS_PER_YEAR
+    freq = infer_freq(data)
+
+    if freq is None:
+        return None
+
+    # Split a leading multiplier off the alias, e.g. "30min" -> (30, "min").
+    # A descending index yields a negative multiplier, e.g. "-30min".
+    rest = freq
+    if rest[:1] in ("-", "+"):
+        rest = rest[1:]
+
+    num_str = ""
+    while rest and rest[0].isdigit():
+        num_str += rest[0]
+        rest = rest[1:]
+
+    nperiods = _whole_periods_str_to_nperiods(rest, annualization_factor)
+    if nperiods is None:
+        return None
+
+    if not num_str:
+        return nperiods
+
+    try:
+        num = int(num_str)
+    except (TypeError, ValueError):
+        return None
+
+    if num == 0:
+        return None
+
+    return nperiods / abs(num)
+
+
+def calc_sortino_ratio(returns, rf=0.0, nperiods=None, annualize=True):
+    """
+    Calculates the `Sortino ratio <https://www.investopedia.com/terms/s/sortinoratio.asp>`_ given a series of returns
+    (see `Sharpe vs. Sortino <https://www.investopedia.com/ask/answers/010815/what-difference-between-sharpe-ratio-and-sortino-ratio.asp>`_).
+
+    Args:
+        * returns (Series or DataFrame): Returns
+        * rf (float, np.floating, Series): `Risk-free rate <https://www.investopedia.com/terms/r/risk-freerate.asp>`_ expressed in yearly (annualized) terms or return series.
+        * nperiods (int): Number of periods used for annualization. Must be
+            provided or inferable if annualize=True or rf is a non-zero scalar.
+        * annualize (bool): Annualize the result. Defaults to True. A non-zero
+            scalar risk-free rate still needs nperiods when annualize=False.
+
+    Raises:
+        * ValueError: If nperiods cannot be inferred and is needed for annualization
+            or a non-zero scalar risk-free rate. Supply nperiods explicitly, or
+            use annualize=False for a per-period ratio with no scalar rate conversion.
+
+    """
+    # An inferable return frequency is sufficient to deannualize a scalar rate.
+    if nperiods is None:
+        nperiods = infer_nperiods(returns)
+
+    if isinstance(rf, _FLOATING_SCALAR_TYPES) and rf != 0 and nperiods is None:
+        raise ValueError("nperiods must be set or inferable if rf is a non-zero scalar")
+
+    dtypes = (returns.dtype,) if isinstance(returns, pd.Series) else returns.dtypes
+    if all(dtype.kind in "iuf" for dtype in dtypes) and any(dtype.kind in "iu" for dtype in dtypes):
+        # Promote before excess-return arithmetic and reductions can overflow.
+        returns = returns.astype(float)
+        if isinstance(rf, pd.Series) and rf.dtype.kind in "iu":
+            rf = rf.astype(float)
+    return _calc_sortino_ratio(returns.to_excess_returns(rf, nperiods=nperiods), nperiods, annualize)
+
+
+def _calc_sortino_ratio(er, nperiods, annualize=True):
+    """Calculate Sortino from already aligned excess returns."""
+    if annualize and nperiods is None:
+        raise ValueError("Cannot infer return frequency. Pass nperiods or set annualize=False.")
+
+    if isinstance(er, pd.Series) and er.dtype.kind == "f":
+        negative_returns = np.minimum(er, 0.0)
+    else:
+        negative_returns = er.clip(upper=0.0)
+    downside_deviation = np.sqrt((negative_returns**2).mean())
+    with np.errstate(invalid="ignore", divide="ignore"):
+        res = np.divide(er.mean(), downside_deviation)
+
+    if annualize:
+        return res * np.sqrt(nperiods)
+
+    return res
+
+
+def to_excess_returns(returns, rf, nperiods=None):
+    """
+    Given a series of returns, it will return the excess returns over rf.
+
+    A Series risk-free return is aligned to the return index. For DataFrame
+    returns, it is subtracted from every column by date.
+
+    Args:
+        * returns (Series, DataFrame): Returns
+        * rf (float, np.floating, Series): `Risk-Free rate(s) <https://www.investopedia.com/terms/r/risk-freerate.asp>`_ expressed in annualized term or return series
+        * nperiods (int): Optional. If provided, will convert rf to different
+            frequency using deannualize only if rf is a floating scalar
+    Returns:
+        * excess_returns (Series, DataFrame): Returns - rf
+
+    """
+    if nperiods is None:
+        nperiods = infer_nperiods(returns)
+
+    if isinstance(rf, _FLOATING_SCALAR_TYPES) and nperiods is not None:
+        # Promote low-precision NumPy scalars before calculating a much smaller
+        # per-period rate, which could otherwise round to zero.
+        scalar_rf = float(rf.item()) if isinstance(rf, np.floating) else rf
+        _rf = deannualize(scalar_rf, nperiods)
+    else:
+        _rf = rf
+
+    # A time-indexed risk-free Series applies to every asset column by date.
+    if isinstance(returns, pd.DataFrame) and isinstance(_rf, pd.Series):
+        return returns.sub(_rf, axis="index")
+
+    return returns - _rf
+
+
+def calc_calmar_ratio(prices):
+    """
+    Calculates the `Calmar ratio <https://www.investopedia.com/terms/c/calmarratio.asp>`_ given a series of prices
+
+    Args:
+        * prices (Series, DataFrame): Price series
+
+    """
+    return np.divide(prices.calc_cagr(), abs(prices.calc_max_drawdown()))
+
+
+def to_ulcer_index(prices):
+    """
+    Calculates the Ulcer Index for a series of investment returns.
+
+    Converts from prices -> `Ulcer index <https://www.investopedia.com/terms/u/ulcerindex.asp>`_
+
+    See https://en.wikipedia.org/wiki/Ulcer_index
+
+    Method ignores all gaps of NaN's in the price series.
+
+    Args:
+        * prices (Series, DataFrame, ndarray): Prices
+
+    Returns:
+        * float (Series if prices has more than one column) -- The Ulcer Index.
+    """
+    if not isinstance(prices, PandasObject):
+        prices = pd.DataFrame(prices) if np.ndim(prices) > 1 else pd.Series(prices)
+
+    # to_drawdown_series carries the last known price across a gap and leaves
+    # the observations before the first price as NaN. Without it,
+    # np.maximum.accumulate propagates the first NaN over the whole tail and
+    # the mean below then skips those rows, returning the Ulcer Index of the
+    # prefix before the gap as a confident number rather than an error.
+    #
+    # Drawdowns are expressed in percentage points here.
+    squared_drawdowns = np.square(to_drawdown_series(prices) * 100)
+
+    # axis=0 so a DataFrame reduces per column, as every other ffn measure
+    # does, rather than pooling every column into one scalar
+    return np.sqrt(np.mean(squared_drawdowns, axis=0))
+
+
+def to_ulcer_performance_index(prices, rf=0.0, nperiods=None):
+    """
+    Converts from prices -> `ulcer performance index <https://www.investopedia.com/terms/u/ulcerindex.asp>`_.
+
+    See https://www.tangotools.com/ui/ui.htm
+
+    The numerator is the investment's compound annual return minus the annual
+    risk-free return. The Ulcer Index can still vary with sampling frequency.
+    Price gaps are forward-filled. Fewer than two prices, zero elapsed time,
+    or missing risk-free returns within the holding period produce NaN.
+
+    Args:
+        * prices (Series, DataFrame): Prices
+        * rf (float, np.floating, Series): Annual `risk-free rate <https://www.investopedia.com/terms/r/risk-freerate.asp>`_ when scalar,
+            or per-period return Series aligned to the price index.
+        * nperiods (int): Positive periods per year, required for prices without
+            a datetime or timedelta index. Dated prices use elapsed calendar time.
+
+    """
+    # to_ulcer_index carries the last known price across a gap, so fill here
+    # too. Otherwise the numerator is a return over the raw series while the
+    # denominator is an Ulcer Index over the filled one.
+    prices = prices.ffill()
+
+    def annual_excess_return(column):
+        column = column.dropna()
+        if len(column) < 2:
+            return np.nan
+        if isinstance(column.index, (pd.DatetimeIndex, pd.TimedeltaIndex)):
+            years = year_frac(column.index[0], column.index[-1])
+        else:
+            if nperiods is None or nperiods <= 0:
+                raise ValueError("nperiods must be positive for prices without a datetime or timedelta index")
+            years = (len(column) - 1) / nperiods
+        if years == 0:
+            return np.nan
+
+        annual_return = np.power(np.divide(column.iloc[-1], column.iloc[0]), 1 / years) - 1
+        if isinstance(rf, _FLOATING_SCALAR_TYPES):
+            annual_rf = float(rf)
+        else:
+            # The first price anchors the period; its preceding return is excluded.
+            rates = rf.reindex(prices.index).iloc[len(prices) - len(column) + 1 :]
+            if rates.isna().any():
+                return np.nan
+            growth = np.prod(1.0 + rates.to_numpy(dtype=float))
+            annual_rf = np.power(growth, 1 / years) - 1
+        return annual_return - annual_rf
+
+    if isinstance(prices, pd.DataFrame):
+        annual_excess = pd.Series([annual_excess_return(prices.iloc[:, i]) for i in range(prices.shape[1])], index=prices.columns, dtype=float)
+    else:
+        annual_excess = annual_excess_return(prices)
+
+    # to_ulcer_index is expressed in percentage points, so put the excess
+    # return on the same scale before dividing
+    return np.divide(annual_excess * 100.0, prices.to_ulcer_index())
+
+
+def calc_expected_max_sharpe(n_trials, sr_std):
+    """
+    Calculates the expected maximum `Sharpe ratio <https://www.investopedia.com/terms/s/sharperatio.asp>`_
+    of ``n_trials`` skill-less strategies, i.e. the hurdle the best of that
+    many trials is expected to clear by chance alone.
+
+    Searching over many strategies (or many parameter sets of one strategy)
+    and keeping the best is a multiple testing problem: even with no skill,
+    the maximum Sharpe ratio of the search grows with the number and the
+    dispersion of the trials.
+
+    ``sr_std`` and the returned value are expressed in the same terms, so
+    passing an annualized dispersion returns an annualized hurdle.
+
+    Args:
+        * n_trials (int): Number of trials (strategies or parameter sets) evaluated.
+        * sr_std (float): Standard deviation of the Sharpe ratios across those trials.
+
+    Returns:
+        * float -- expected maximum Sharpe ratio under the null of no skill.
+
+    """
+    if n_trials < 1:
+        raise ValueError("n_trials must be at least 1")
+    if n_trials == 1 or not sr_std > 0:
+        return 0.0
+    return sr_std * ((1 - np.euler_gamma) * scipy.stats.norm.ppf(1 - 1 / n_trials) + np.euler_gamma * scipy.stats.norm.ppf(1 - 1 / (n_trials * np.e)))
+
+
+def calc_deflated_sharpe_ratio(returns, trial_sharpe_ratios, rf=0.0, nperiods=None, annualized_trials=True):
+    """
+    Calculates the `deflated Sharpe ratio <https://doi.org/10.3905/jpm.2014.40.5.094>`_
+    of a strategy selected as the best of several trials: the probability
+    that its true Sharpe ratio exceeds zero, after correcting for the
+    multiple testing of the selection and for the non-normality of the
+    returns.
+
+    Use it on the winner of a strategy search or a parameter optimization.
+    ``trial_sharpe_ratios`` must cover **all** trials that were evaluated,
+    not only the ones that were kept: their count and dispersion set the
+    hurdle (see :func:`calc_expected_max_sharpe`) that the winner is
+    measured against. Values close to 1 mean the winner clears the bar its
+    own search sets by chance; values below ~0.95 suggest the result may be
+    an artifact of having tried many candidates.
+
+    Where the trials are strongly correlated (e.g. a dense grid of similar
+    parameters), the effective number of independent trials is lower than
+    their count and the result is accordingly conservative.
+
+    The sample size, Sharpe ratio, skew and kurtosis are all taken over the
+    excess returns, skipping missing observations.
+
+    Source: Bailey, D. and Lopez de Prado, M. (2014), "The Deflated Sharpe
+    Ratio: Correcting for Selection Bias, Backtest Overfitting, and
+    Non-Normality", Journal of Portfolio Management, 40(5), 94-107.
+
+    Args:
+        * returns (Series): Return series of the selected (best) trial.
+        * trial_sharpe_ratios (Series, array-like): Sharpe ratios of all
+            evaluated trials, e.g. as returned by :func:`calc_sharpe`. All
+            values must be finite; otherwise the result is ``NaN``.
+        * rf (float, np.floating, Series): `Risk-free rate <https://www.investopedia.com/terms/r/risk-freerate.asp>`_
+            expressed in yearly (annualized) terms or return series.
+        * nperiods (int): Frequency of returns (252 for daily, 12 for
+            monthly, etc.). Inferred from `returns` if not provided.
+        * annualized_trials (bool): Whether `trial_sharpe_ratios` are
+            annualized, as :func:`calc_sharpe` returns them by default.
+
+    Returns:
+        * float -- probability [0, 1] that the selected trial's Sharpe ratio
+          is greater than zero, or ``NaN`` when the statistic is undefined.
+
+    """
+    if nperiods is None:
+        nperiods = infer_nperiods(returns)
+
+    # Work in per-period terms; annualization cancels in the ratio below
+    sr = calc_sharpe(returns, rf=rf, nperiods=nperiods, annualize=False)
+    # Check missing pandas values before conversion to a NumPy float array.
+    if np.any(pd.isna(trial_sharpe_ratios)):
+        return np.nan
+    trial_values = np.asarray(trial_sharpe_ratios, dtype=float)
+    if not np.isfinite(trial_values).all():
+        return np.nan
+    trials = pd.Series(trial_values)
+    if annualized_trials:
+        trials = trials / np.sqrt(nperiods or 1)
+
+    excess_returns = returns.to_excess_returns(rf, nperiods=nperiods)
+
+    # Every moment below is taken over the excess returns, so the sample size
+    # must be too. A Series risk-free rate can align away observations that the
+    # raw return series still counts, and len() counts missing ones as well.
+    n = excess_returns.count()
+    if n < 3 or pd.isnull(sr):
+        return np.nan
+
+    # Use excess-return range instead of standard deviation so constant inputs are
+    # not obscured by accumulated rounding error. The bounded tolerance also handles
+    # cancellation residue from a varying risk-free return without growing with n.
+    spread = float(excess_returns.max() - excess_returns.min())
+    scale = max(float(np.abs(returns).max()), float(np.abs(excess_returns).max()))
+    if not spread > 4 * np.finfo(float).eps * scale:
+        return np.nan
+
+    sr0 = calc_expected_max_sharpe(len(trials), trials.std(ddof=1))
+
+    # Probabilistic Sharpe ratio of the winner against that hurdle,
+    # adjusted for the skew and kurtosis of the same excess returns
+    skew = excess_returns.skew()
+    kurtosis = excess_returns.kurt() + 3.0  # pandas reports excess kurtosis
+    variance_adj = 1 - skew * sr + (kurtosis - 1) / 4 * sr**2
+    if not variance_adj > 0:
+        return np.nan
+    return scipy.stats.norm.cdf((sr - sr0) * np.sqrt(n - 1) / np.sqrt(variance_adj))
+
+
+def calc_prob_backtest_overfitting(trial_returns, n_blocks=16, metric=None, full_output=False):
+    """
+    Calculates the probability of `backtest overfitting <https://doi.org/10.21314/JCF.2016.322>`_
+    (PBO) of a strategy search via combinatorially symmetric cross validation
+    (CSCV).
+
+    Use it on the full matrix of trials a strategy search evaluated, with one
+    column per trial. The sample is split into ``n_blocks`` contiguous blocks
+    and, for every balanced combination of half the blocks used in-sample, the
+    in-sample winner's performance rank is observed out-of-sample. If selecting
+    the in-sample best carried no information, that rank is uniform; PBO is the
+    fraction of combinations in which the in-sample winner performs at or below
+    the out-of-sample median (rank logit <= 0). Out-of-sample ties receive their
+    average rank; in-sample ties select the first column.
+
+    This is the companion diagnostic to :func:`calc_deflated_sharpe_ratio`, and
+    they answer different questions: the deflated Sharpe ratio asks whether the
+    winner's performance clears the hurdle its own search sets by chance, whilst
+    PBO asks whether the act of selection transferred out of sample at all. A
+    strategy family with genuine common alpha can pass the first and still show
+    a PBO near one half because the parameter choice within the family was
+    arbitrary.
+
+    Source: Bailey, D., Borwein, J., Lopez de Prado, M. and Zhu, Q. (2017),
+    "The Probability of Backtest Overfitting", Journal of Computational
+    Finance, 20(4), 39-69.
+
+    Args:
+        * trial_returns (DataFrame): Return series of ALL evaluated trials,
+            one column per trial (configuration), in chronological row order.
+        * n_blocks (int): Number of contiguous blocks for CSCV. Must be even
+            and at least 2; observations beyond a multiple of ``n_blocks`` are
+            truncated from the end. 16 gives 12,870 combinations; 12 or 8 run
+            faster on long samples.
+        * metric (callable): Performance measure mapping a return Series to a
+            scalar, with larger values indicating better performance, used
+            both to pick the in-sample winner and to rank out of sample. The
+            Series retains its original index and column name. Defaults to the
+            per-period Sharpe ratio (mean over sample standard deviation),
+            skipping missing observations. Constant or insufficient data has
+            an undefined Sharpe ratio.
+        * full_output (bool): If True, also return the per-combination rank
+            logits and the mean out-of-sample rank of the in-sample winner.
+
+    Raises:
+        * ValueError: If a DatetimeIndex is not monotonic increasing.
+
+    Returns:
+        * float -- probability [0, 1] of backtest overfitting, or a dict with
+          keys ``pbo``, ``logits`` and ``mean_oos_rank`` when ``full_output``
+          is True. If any trial has a non-finite metric in either half of a
+          combination, that combination's logit is NaN and both ``pbo`` and
+          ``mean_oos_rank`` are NaN. Undefined combinations are not dropped.
+
+    """
+    if not isinstance(trial_returns, pd.DataFrame):
+        raise TypeError("trial_returns must be a DataFrame with one column per trial")
+    if not isinstance(n_blocks, (int, np.integer)) or n_blocks < 2 or n_blocks % 2:
+        raise ValueError("n_blocks must be an even integer and at least 2")
+    n_blocks = int(n_blocks)
+    if metric is not None and not callable(metric):
+        raise TypeError("metric must be callable")
+
+    n_obs, n_trials = trial_returns.shape
+    rows = (n_obs // n_blocks) * n_blocks
+    if rows < n_blocks or n_trials < 2:
+        raise ValueError("not enough observations or trials for the requested blocks")
+    if isinstance(trial_returns.index, pd.DatetimeIndex) and not trial_returns.index.is_monotonic_increasing:
+        raise ValueError("trial_returns index must be monotonic increasing")
+    trial_returns = trial_returns.iloc[:rows].astype(float)
+    blocks = np.array_split(np.arange(rows), n_blocks)
+
+    def performance(sample):
+        if metric is None:
+            std = sample.std(ddof=1)
+            std = std.where((std > 0) & (sample.max() > sample.min()))
+            return (sample.mean() / std).to_numpy()
+        return np.array([metric(series) for _, series in sample.items()], dtype=float)
+
+    logits = []
+    ranks = []
+    indices = range(n_blocks)
+    for in_sample in itertools.combinations(indices, n_blocks // 2):
+        chosen = set(in_sample)
+        ins = trial_returns.iloc[np.concatenate([blocks[i] for i in indices if i in chosen])]
+        oos = trial_returns.iloc[np.concatenate([blocks[i] for i in indices if i not in chosen])]
+        is_perf = performance(ins)
+        oos_perf = performance(oos)
+        if is_perf.shape != (n_trials,) or oos_perf.shape != (n_trials,):
+            raise ValueError("metric must return one scalar per trial")
+        if not np.isfinite(is_perf).all() or not np.isfinite(oos_perf).all():
+            logits.append(np.nan)
+            ranks.append(np.nan)
+            continue
+        winner = np.argmax(is_perf)
+        # Relative rank of the winner's out-of-sample performance in (0, 1)
+        omega = scipy.stats.rankdata(oos_perf, method="average")[winner] / (n_trials + 1.0)
+        logits.append(np.log(omega / (1.0 - omega)))
+        ranks.append(omega)
+
+    logits = pd.Series(logits, dtype=float)
+    pbo = float((logits <= 0.0).mean()) if logits.notna().all() else np.nan
+    if full_output:
+        return {"pbo": pbo, "logits": logits, "mean_oos_rank": float(np.mean(ranks))}
+    return pbo
+
+
+def resample_returns(returns, func, seed=0, num_trials=100):
+    """
+    Resample the returns and calculate any statistic on every new sample.
+
+    https://en.wikipedia.org/wiki/Resampling_(statistics)
+
+    Sampled dates are shuffled and may repeat, so annualized ratio functions need
+    an explicit frequency, for example
+    ``lambda sample: calc_sharpe(sample, nperiods=252)``. Use ``annualize=False``
+    instead for per-period ratios.
+
+    :param returns (Series, DataFrame): Returns
+    :param func: Given the resampled returns calculate a statistic
+    :param seed: Seed for random number generator
+    :param num_trials: Number of times to resample and run the experiment
+    :return: Series of resampled statistics
+    """
+
+    # stats = []
+    if type(returns) is pd.Series:
+        stats = pd.Series(index=range(num_trials))
+    elif type(returns) is pd.DataFrame:
+        stats = pd.DataFrame(index=range(num_trials), columns=returns.columns)
+    else:
+        raise (TypeError("returns needs to be a Series or DataFrame!"))
+
+    n = returns.shape[0]
+    for i in range(num_trials):
+        # Sample rows directly so duplicate index labels cannot expand a draw.
+        sample, sample_index = resample(returns, returns.index, n_samples=n, random_state=seed + i)
+        # Preserve label-sampling metadata; row sampling can infer a frequency.
+        sample.index = sample_index
+        stats.loc[i] = func(sample)
+
+    return stats
+
+
+def extend_pandas():
+    """
+    Extends pandas' PandasObject (Series, Series,
+    DataFrame) with some functions defined in this file.
+
+    This facilitates common functional composition used in quant
+    finance.
+
+    Ex:
+        prices.to_returns().dropna().calc_clusters()
+        (where prices would be a DataFrame)
+    """
+    PandasObject.to_returns = to_returns
+    PandasObject.to_log_returns = to_log_returns
+    PandasObject.to_price_index = to_price_index
+    PandasObject.rebase = rebase
+    PandasObject.calc_perf_stats = calc_perf_stats
+    PandasObject.to_drawdown_series = to_drawdown_series
+    PandasObject.calc_max_drawdown = calc_max_drawdown
+    PandasObject.calc_cagr = calc_cagr
+    PandasObject.calc_total_return = calc_total_return
+    PandasObject.as_percent = utils.as_percent
+    PandasObject.as_format = utils.as_format
+    PandasObject.to_monthly = to_monthly
+    PandasObject.asfreq_actual = asfreq_actual
+    PandasObject.drop_duplicate_cols = drop_duplicate_cols
+    PandasObject.calc_information = calc_information_ratio
+    PandasObject.calc_information_ratio = calc_information_ratio
+    PandasObject.calc_prob_mom = calc_prob_mom
+    PandasObject.calc_risk_return = calc_risk_return_ratio
+    PandasObject.calc_risk_return_ratio = calc_risk_return_ratio
+    PandasObject.calc_erc_weights = calc_erc_weights
+    PandasObject.calc_inv_vol_weights = calc_inv_vol_weights
+    PandasObject.calc_mean_var_weights = calc_mean_var_weights
+    PandasObject.calc_clusters = calc_clusters
+    PandasObject.calc_ftca = calc_ftca
+    PandasObject.calc_stats = calc_stats
+    PandasObject.plot_heatmap = plot_heatmap
+    PandasObject.plot_corr_heatmap = plot_corr_heatmap
+    PandasObject.rollapply = rollapply
+    PandasObject.winsorize = winsorize
+    PandasObject.rescale = rescale
+    PandasObject.calc_sortino = calc_sortino_ratio
+    PandasObject.calc_sortino_ratio = calc_sortino_ratio
+    PandasObject.calc_calmar = calc_calmar_ratio
+    PandasObject.calc_calmar_ratio = calc_calmar_ratio
+    PandasObject.calc_sharpe = calc_sharpe
+    PandasObject.calc_sharpe_ratio = calc_sharpe
+    PandasObject.calc_deflated_sharpe_ratio = calc_deflated_sharpe_ratio
+    PandasObject.calc_prob_backtest_overfitting = calc_prob_backtest_overfitting
+    PandasObject.to_excess_returns = to_excess_returns
+    PandasObject.to_ulcer_index = to_ulcer_index
+    PandasObject.to_ulcer_performance_index = to_ulcer_performance_index
