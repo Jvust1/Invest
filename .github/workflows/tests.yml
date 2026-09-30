@@ -22,3 +22,4 @@ jobs:
         run: python -m unittest discover -s tests -v
       - name: Compile source
         run: python -m compileall -q invest
+# ci rerun 2026-09-30
