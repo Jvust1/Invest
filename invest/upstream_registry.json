@@ -2,19 +2,107 @@
   "purpose": "Track external projects used or evaluated by Invest.",
   "source_snapshot": "03_Invest_full_source_20260925.zip",
   "projects": [
-    {"repository": "akfamily/akshare", "revision": "0191689d57c667b7c7a198fd0cf97316837ef311", "license": "MIT", "stars": 22794, "status": "active_adapter", "path": "invest/providers/akshare_eastmoney.py"},
-    {"repository": "microsoft/qlib", "revision": "be725493eb1a6bbb42bf11b37aa7669f59610ff1", "license": "MIT", "stars": 49061, "status": "research_reference"},
-    {"repository": "PyPortfolio/PyPortfolioOpt", "revision": "a6638d2e06dae6f444fd022cfd4b3c528902a85b", "license": "MIT", "stars": 6065, "status": "active_adapter", "path": "invest/portfolio.py"},
-    {"repository": "pmorissette/ffn", "revision": "b1396bf4d426e4863549b0f76a7edd39f32ad460", "license": "MIT", "stars": 2679, "status": "vendored_reference", "path": "third_party/ffn"},
-    {"repository": "jealous/stockstats", "revision": "67318d90e2e051aeb7838b56feacf90747fd6635", "license": "BSD-3-Clause", "stars": 1523, "status": "active_adapter", "path": "invest/features.py"},
-    {"repository": "stefan-jansen/empyrical-reloaded", "revision": "efe60664f0abd957074b0751ef82228594a659a5", "license": "Apache-2.0", "stars": 124, "status": "active_adapter", "path": "invest/risk.py"},
-    {"repository": "rsheftel/pandas_market_calendars", "revision": "275890784073a3a3a347e4f05f4dc986456e6a75", "license": "MIT", "stars": 1001, "status": "research_reference"},
-    {"repository": "dcajasn/Riskfolio-Lib", "revision": "master", "license": "BSD-3-Clause", "stars": 4523, "status": "research_reference"},
-    {"repository": "AI4Finance-Foundation/FinRL", "revision": "3a0ab5cf3ddf0b59d25f7fd7e435811a18838c6c", "license": "MIT", "stars": 16486, "status": "research_reference"},
-    {"repository": "kernc/backtesting.py", "revision": "ca2e2611621e472542ba90f7243a1fa06a7d7108", "license": "AGPL-3.0", "status": "reference_only"},
-    {"repository": "polakowo/vectorbt", "revision": "a3c0f40979648585b4581fc4694fd6e92b3fffca", "license": "Apache-2.0 + Commons Clause", "status": "reference_only"},
-    {"repository": "ricequant/rqalpha", "revision": "0d98adefa87956e26f3e7ca5b26b5f3fc7ca834f", "license": "custom commercial restriction", "status": "reference_only"},
-    {"repository": "mementum/backtrader", "revision": "b853d7c90b6721476eb5a5ea3135224e33db1f14", "license": "GPL-3.0", "status": "reference_only"},
-    {"repository": "vnpy/vnpy", "revision": "fa5206fe63836f3f8cd1ebd7168fbd19a5e2ff09", "license": "MIT", "stars": 45660, "status": "research_reference"}
+    {
+      "repository": "akfamily/akshare",
+      "revision": "0191689d57c667b7c7a198fd0cf97316837ef311",
+      "license": "MIT",
+      "stars": 22794,
+      "status": "active_adapter",
+      "path": "invest/providers/akshare_eastmoney.py"
+    },
+    {
+      "repository": "microsoft/qlib",
+      "revision": "be725493eb1a6bbb42bf11b37aa7669f59610ff1",
+      "license": "MIT",
+      "stars": 49065,
+      "status": "active_adapter",
+      "path": "invest/qlib_bridge.py"
+    },
+    {
+      "repository": "PyPortfolio/PyPortfolioOpt",
+      "revision": "a6638d2e06dae6f444fd022cfd4b3c528902a85b",
+      "license": "MIT",
+      "stars": 6065,
+      "status": "active_adapter",
+      "path": "invest/portfolio.py"
+    },
+    {
+      "repository": "pmorissette/ffn",
+      "revision": "b1396bf4d426e4863549b0f76a7edd39f32ad460",
+      "license": "MIT",
+      "stars": 2679,
+      "status": "vendored_reference",
+      "path": "third_party/ffn"
+    },
+    {
+      "repository": "jealous/stockstats",
+      "revision": "67318d90e2e051aeb7838b56feacf90747fd6635",
+      "license": "BSD-3-Clause",
+      "stars": 1523,
+      "status": "active_adapter",
+      "path": "invest/features.py"
+    },
+    {
+      "repository": "stefan-jansen/empyrical-reloaded",
+      "revision": "efe60664f0abd957074b0751ef82228594a659a5",
+      "license": "Apache-2.0",
+      "stars": 124,
+      "status": "active_adapter",
+      "path": "invest/risk.py"
+    },
+    {
+      "repository": "rsheftel/pandas_market_calendars",
+      "revision": "275890784073a3a3a347e4f05f4dc986456e6a75",
+      "license": "MIT",
+      "stars": 1001,
+      "status": "active_adapter",
+      "path": "invest/calendar.py"
+    },
+    {
+      "repository": "dcajasn/Riskfolio-Lib",
+      "revision": "8724297f5a252755229b7284495389223af70b95",
+      "license": "BSD-3-Clause",
+      "stars": 4523,
+      "status": "active_adapter",
+      "path": "invest/riskfolio_adapter.py"
+    },
+    {
+      "repository": "AI4Finance-Foundation/FinRL",
+      "revision": "3a0ab5cf3ddf0b59d25f7fd7e435811a18838c6c",
+      "license": "MIT",
+      "stars": 16486,
+      "status": "research_reference"
+    },
+    {
+      "repository": "kernc/backtesting.py",
+      "revision": "ca2e2611621e472542ba90f7243a1fa06a7d7108",
+      "license": "AGPL-3.0",
+      "status": "reference_only"
+    },
+    {
+      "repository": "polakowo/vectorbt",
+      "revision": "a3c0f40979648585b4581fc4694fd6e92b3fffca",
+      "license": "Apache-2.0 + Commons Clause",
+      "status": "reference_only"
+    },
+    {
+      "repository": "ricequant/rqalpha",
+      "revision": "0d98adefa87956e26f3e7ca5b26b5f3fc7ca834f",
+      "license": "custom commercial restriction",
+      "status": "reference_only"
+    },
+    {
+      "repository": "mementum/backtrader",
+      "revision": "b853d7c90b6721476eb5a5ea3135224e33db1f14",
+      "license": "GPL-3.0",
+      "status": "reference_only"
+    },
+    {
+      "repository": "vnpy/vnpy",
+      "revision": "fa5206fe63836f3f8cd1ebd7168fbd19a5e2ff09",
+      "license": "MIT",
+      "stars": 45660,
+      "status": "research_reference"
+    }
   ]
 }
