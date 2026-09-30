@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "repository": "Jvust1/Invest",
+  "as_of": "2026-09-30",
+  "capability": "default_off_local_mlflow_archive_after_authoritative_workbench_save",
+  "base_commit": "34ce4e4ca27369a0c4c874935ba0308ec468c760",
+  "upstream": {
+    "repository": "mlflow/mlflow",
+    "stars": 28199,
+    "verified_at_utc": "2026-09-30T19:29:00Z",
+    "revision": "7faf28476bddcebb68ee8b08cdcba1bee7ad6109",
+    "license": "Apache-2.0",
+    "license_blob": "db7cb10b5e330d56b40370bc178974ccabe71458",
+    "root_notice_present": false,
+    "runtime_package": "mlflow==3.16.1",
+    "integration": "actual installed MlflowClient; no implementation source vendored"
+  },
+  "contract": {
+    "default_enabled": false,
+    "authoritative_record_saved_first": true,
+    "worker_timeout_seconds": 45,
+    "tracking_backend": "explicit_local_sqlite",
+    "registry_backend": "explicit_local_sqlite_no_registry_operations",
+    "artifacts": "bounded_canonical_study_json_under_exact_run_local_directory",
+    "telemetry": "disabled_before_sdk_import; verified_no_telemetry_client",
+    "network": "no_remote_calls; worker_socket_audit_guard",
+    "supported_studies": [
+      "invest-exploratory-study-v1",
+      "invest-walk-forward-study-v1"
+    ],
+    "retry": "same_study_id_same_run; no_duplicate_metrics; completed_bytes_and_indexes_verified",
+    "failure": "saved_study_retained; bounded_response_status",
+    "standard_backup": "authoritative_state_and_paper_databases_only; derivative_archive_excluded_and_rebuildable"
+  },
+  "local_verification": {
+    "full_pytest": {
+      "passed": 590,
+      "skipped": 13,
+      "passing_subtests": 348,
+      "failed": 0
+    },
+    "targeted_sdk_http": "real_MLflow_3.16.1_with_synthetic_only_studies",
+    "source_compile": "pass",
+    "diff_check": "pass",
+    "review": "parent_reviewed; schema_compatibility_and_sdk_version_findings_addressed",
+    "remote_ci": "must_be_verified_on_exact_published_head",
+    "new_test_cases": 25,
+    "combined_pr49": "parent independently verified genuine rolling study: 9 comparisons -> real local MLflow archive -> repeat reused same run"
+  },
+  "limitations": [
+    "frozen_executable_worker_not_supported; source_Python_required",
+    "no_browser_UI_changes_or_visual_acceptance",
+    "synthetic_research_is_not_real_market_or_holdout_validation"
+  ],
+  "real_provider_calls": 0,
+  "private_holdings_used": false,
+  "secrets_used": false,
+  "real_trades": 0,
+  "main_modified": false,
+  "merged": false,
+  "deployed": false
+}
