@@ -51,7 +51,9 @@
       "capabilities": [
         "factor_research",
         "model_pipeline",
-        "backtesting"
+        "backtesting",
+        "china_market_data",
+        "market_data"
       ],
       "python_import": "qlib",
       "last_push": "2026-09-22T05:57:23Z"
