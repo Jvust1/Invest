@@ -10,6 +10,7 @@ from .pipeline import (
     run_backtest,
 )
 from .portfolio import inverse_variance_weights, minimum_variance_weights, optimize_weights
+from .providers import fetch_ccxt_ohlcv
 from .risk import risk_report
 from .riskfolio_adapter import riskfolio_weights
 from .skfolio_adapter import skfolio_weights
@@ -18,6 +19,7 @@ from .vnpy_bridge import to_vnpy_bars, to_vnpy_records
 __all__ = [
     "add_stockstats_features",
     "exchange_sessions",
+    "fetch_ccxt_ohlcv",
     "finrl_observation",
     "inverse_variance_weights",
     "load_qlib_features",

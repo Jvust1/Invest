@@ -99,6 +99,14 @@
       "path": "invest/vnpy_bridge.py"
     },
     {
+      "repository": "ccxt/ccxt",
+      "revision": "47d7b31cf935007dc79fa2243ac36643c82b15fd",
+      "license": "MIT",
+      "stars": 44217,
+      "status": "active_adapter",
+      "path": "invest/providers/ccxt_ohlcv.py"
+    },
+    {
       "repository": "kernc/backtesting.py",
       "revision": "ca2e2611621e472542ba90f7243a1fa06a7d7108",
       "license": "AGPL-3.0",
