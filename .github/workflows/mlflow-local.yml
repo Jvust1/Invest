@@ -38,6 +38,6 @@ jobs:
       - name: Install real optional SDK and project
         run: python -m pip install -e '.[mlflow,test]' 'mlflow==3.16.1'
       - name: Run local SDK and HTTP regression proofs
-        run: python -m pytest tests/test_mlflow_local.py tests/test_mlflow_tracking.py tests/test_growth_http.py -q
+        run: python -m pytest tests/test_mlflow_local.py tests/test_mlflow_tracking.py tests/test_growth_http.py -q --durations=10
       - name: Compile tracking and server modules
         run: python -m py_compile invest/mlflow_tracking.py invest/server.py invest/workbench_api.py

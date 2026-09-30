@@ -57,11 +57,14 @@ def dispatch(handler, path, parameter, payload=None):
             study = run_study(dataset,payload.get('specification'))
             record = ws.put('study',study)
             # Save the authoritative record before the optional derivative archive.
+            response = record
             if server.experiment_archive is not None:
-                return handler._reply(200,dict(record,tracking=server.experiment_archive.archive(record)))
-            return handler._reply(200,record)
+                response = dict(record,tracking=server.experiment_archive.archive(record))
         finally:
             server.study_lock.release()
+        # A fully received success must already be ready for the next action.
+        # Do not retain the study lock while a slow client receives the body.
+        return handler._reply(200,response)
     if path == '/api/workbench/track-study':
         if not server.study_lock.acquire(blocking=False):
             return handler._reply(409,{'error':'已有实验正在运行，请保留当前结果后重试'})
@@ -69,9 +72,9 @@ def dispatch(handler, path, parameter, payload=None):
             record = ws.get(payload.get('study_id'),'study')
             status = ({'status':'disabled','study_saved':True} if server.experiment_archive is None
                       else server.experiment_archive.archive(record))
-            return handler._reply(200,{'study_id':record['id'],'tracking':status})
         finally:
             server.study_lock.release()
+        return handler._reply(200,{'study_id':record['id'],'tracking':status})
     if path == '/api/workbench/reviews':
         return handler._reply(200,create_review(ws,payload))
     if path == '/api/workbench/event':

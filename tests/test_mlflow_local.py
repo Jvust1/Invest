@@ -68,6 +68,13 @@ def saved_record(root):
         "symbol": "600000.SH", "cost_model_acknowledged": True}))
 
 
+def require_archived(archive, record):
+    """Keep the complete sanitized worker status when an SDK assertion fails."""
+    result = archive.archive(record)
+    assert result["status"] == "archived", result
+    return result
+
+
 def sdk_probe(root, script, *args):
     """Release SDK engine handles before Windows tmpdir removal; deny all HTTP."""
     prefix = '''
@@ -112,6 +119,43 @@ def test_default_mode_preserves_response_and_does_not_import_sdk(tmp_path, monke
         assert request("/api/workbench/status")[1]["experiment_tracking"]["enabled"] is False
         assert request("/api/workbench/track-study", {"study_id": record["id"]})[1]["tracking"]["status"] == "disabled"
     assert not (tmp_path / "mlflow").exists()
+
+
+@pytest.mark.parametrize('route', ['/api/workbench/study', '/api/workbench/track-study'])
+@pytest.mark.parametrize('enabled', [False, True])
+def test_success_response_starts_only_after_study_lock_is_released(route, enabled, monkeypatch):
+    from types import SimpleNamespace
+    from invest.workbench_api import dispatch
+    lock = threading.Lock()
+    record = {'id': 'a'*64, 'kind': 'study', 'payload': {'saved': True}}
+    calls = []
+
+    def while_locked(name, value):
+        def operation(*args):
+            assert lock.locked(), name + ' must remain serialized'
+            calls.append(name)
+            return value
+        return operation
+
+    archive = SimpleNamespace(archive=while_locked('archive', {'status': 'archived'})) if enabled else None
+    server = SimpleNamespace(study_lock=lock, experiment_archive=archive,
+        state=SimpleNamespace(dataset=lambda key: {'id': key}),
+        workspace=SimpleNamespace(put=while_locked('save', record), get=while_locked('load', record)))
+    monkeypatch.setattr('invest.workbench_api.run_study', while_locked('run', {'synthetic': True}))
+
+    def reply(code, response):
+        assert code == 200
+        # This runs before sending even the first response byte, so it detects
+        # the old return-inside-try race deterministically without a timing sleep.
+        assert lock.acquire(blocking=False), 'success must not arrive while the study lock is still held'
+        lock.release()
+        return response
+
+    response = dispatch(SimpleNamespace(server=server, _reply=reply), route, lambda *args: None,
+                        {'dataset_id': 'demo', 'specification': {}, 'study_id': record['id']})
+    assert not lock.locked()
+    assert calls == (['run', 'save'] if route.endswith('/study') else ['load']) + (['archive'] if enabled else [])
+    assert response.get('id', response.get('study_id')) == record['id']
 
 
 @sdk
@@ -170,7 +214,7 @@ assert client.list_artifacts(run.info.run_id)[0].path == 'study.json'
     restored = restore_backup(backup, tmp_path / "restored")
     assert Workspace(restored / "state.sqlite").get(response["id"]) == response
     assert not (restored / "mlflow").exists()
-    assert LocalMLflowArchive(restored).archive(response)["status"] == "archived"
+    require_archived(LocalMLflowArchive(restored), response)
     # Subprocess completion must leave no SQLite handles that prevent moves on Windows.
     archive = tmp_path / "mlflow"
     archive.rename(tmp_path / "archive-moved")
@@ -233,7 +277,7 @@ def test_existing_backend_cannot_redirect_artifacts(tmp_path, column, destinatio
     record = saved_record(tmp_path)
     archive = LocalMLflowArchive(tmp_path)
     first = archive.archive(record)
-    assert first["status"] == "archived"
+    assert first["status"] == "archived", first
     table = "runs" if column == "artifact_uri" else "experiments"
     with sqlite3.connect(tmp_path / "mlflow" / "tracking.sqlite") as db:
         db.execute(f"UPDATE {table} SET {column}=?", (destination,))
@@ -246,7 +290,7 @@ def test_existing_backend_cannot_redirect_artifacts(tmp_path, column, destinatio
 def test_existing_symlink_cannot_escape_archive_root(tmp_path):
     record = saved_record(tmp_path)
     archive = LocalMLflowArchive(tmp_path)
-    assert archive.archive(record)["status"] == "archived"
+    require_archived(archive, record)
     artifact = next((tmp_path / "mlflow" / "artifacts").rglob("study.json"))
     outside = tmp_path / "outside.json"
     outside.write_text("private sentinel", encoding="utf-8")
@@ -375,7 +419,7 @@ print(json.dumps(results))
 def test_completed_artifact_tampering_and_duplicate_run_fail_closed(tmp_path):
     record = saved_record(tmp_path)
     archive = LocalMLflowArchive(tmp_path)
-    assert archive.archive(record)["status"] == "archived"
+    require_archived(archive, record)
     artifact = next((tmp_path / "mlflow" / "artifacts").rglob("study.json"))
     original = artifact.read_bytes()
     artifact.write_text('{"id":"forged"}', encoding="utf-8")
@@ -425,7 +469,7 @@ def test_same_root_wrong_run_directory_is_rejected(tmp_path):
     record = saved_record(tmp_path)
     archive = LocalMLflowArchive(tmp_path)
     first = archive.archive(record)
-    assert first["status"] == "archived"
+    assert first["status"] == "archived", first
     sibling = tmp_path / "mlflow" / "artifacts" / "other-run" / "artifacts"
     sibling.mkdir(parents=True)
     sentinel = sibling / "study.json"
@@ -449,7 +493,7 @@ def test_unsupported_sdk_version_is_rejected_before_import(tmp_path, monkeypatch
 def test_internal_symlink_cannot_redirect_study_artifact(tmp_path):
     record = saved_record(tmp_path)
     archive = LocalMLflowArchive(tmp_path)
-    assert archive.archive(record)["status"] == "archived"
+    require_archived(archive, record)
     artifact = next((tmp_path / "mlflow" / "artifacts").rglob("study.json"))
     sentinel = artifact.with_name("other.json")
     sentinel.write_bytes(artifact.read_bytes())
@@ -468,7 +512,7 @@ def test_failed_research_cases_are_preserved_without_return_metrics(tmp_path, mo
     record = saved_record(tmp_path)
     assert record["payload"]["summary"]["failed"] == 18
     result = LocalMLflowArchive(tmp_path).archive(record)
-    assert result["status"] == "archived"
+    assert result["status"] == "archived", result
     sdk_probe(tmp_path, '''
 from invest.mlflow_tracking import _artifact_path
 run = client.get_run(sys.argv[3])
