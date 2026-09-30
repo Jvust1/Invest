@@ -1,0 +1,2 @@
+# Retain the exact upstream license blob on Windows as well as Unix.
+third_party/matplotlib/LICENSE -text

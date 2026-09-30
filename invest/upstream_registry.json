@@ -789,20 +789,22 @@
     },
     {
       "repo": "matplotlib/matplotlib",
-      "revision": "default-branch metadata snapshot 2026-09-30",
-      "license": "NOASSERTION",
-      "stars": 23307,
-      "status": "catalog_contract",
-      "path": null,
-      "target": "invest.upstream_catalog",
-      "stage": "catalog",
+      "revision": "1392cbe3c79cdb93f9282747841d648770f60249",
+      "license": "LicenseRef-Matplotlib",
+      "stars": 23310,
+      "status": "runtime_integration",
+      "path": "invest/study_charts.py",
+      "target": "invest.study_charts.render_study_png",
+      "stage": "active_adapter",
       "capabilities": [
         "visualization",
         "research_reporting"
       ],
       "python_import": "matplotlib",
       "last_push": "2026-09-30T03:22:33Z",
-      "batch": "20260930-high-star-50"
+      "batch": "20260930-high-star-50",
+      "license_review": "Matplotlib PSF-based license reviewed; exact license retained in third_party/matplotlib/LICENSE; generic safe-only allowlist unchanged",
+      "tested_package": "matplotlib==3.10.8"
     },
     {
       "repo": "mwaskom/seaborn",

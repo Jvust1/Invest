@@ -55,6 +55,9 @@ class UnsupportedMLflowVersion(RuntimeError):
     """The opt-in archive requires its validated SDK version."""
 MAX_STUDY_BYTES = 8 * 1024 * 1024 + 4096
 WORKER_TIMEOUT = 45
+# Leave time for another process's cold schema setup or artifact commit, while
+# retaining the outer 45-second hard deadline for every worker.
+ARCHIVE_LOCK_TIMEOUT = 30
 STUDY_MODES = {
     "invest-exploratory-study-v1": "EXPLORATORY_CHRONOLOGICAL_SLICES",
     "invest-walk-forward-study-v1": "EXPLORATORY_WALK_FORWARD",
@@ -227,7 +230,7 @@ def _archive_local(record, data_dir):
     uri = "sqlite:///" + database.as_posix()
     # An independent SQLite transaction serializes separate server processes.
     # The SDK writes to its own DB, not to this lock database or Workspace.
-    with closing(sqlite3.connect(lock_path, timeout=10)) as lock:
+    with closing(sqlite3.connect(lock_path, timeout=ARCHIVE_LOCK_TIMEOUT)) as lock:
         lock.execute("BEGIN IMMEDIATE")
         client = MlflowClient(tracking_uri=uri, registry_uri=uri)
         experiment = client.get_experiment_by_name(LOCAL_EXPERIMENT)
@@ -313,6 +316,7 @@ def _worker_main(data_dir):
     import contextlib
     import json
     import os
+    import sqlite3
     import sys
 
     # Defense in depth: this worker has no legitimate socket operations. This
@@ -332,6 +336,13 @@ def _worker_main(data_dir):
         result = {"status": "failed", "reason": "unsupported_mlflow_version", "study_saved": True}
     except ImportError:
         result = {"status": "failed", "reason": "mlflow_extra_required", "study_saved": True}
+    except sqlite3.OperationalError as exc:
+        # Do not echo filesystem/SDK details. Distinguish retryable writer
+        # contention from unrelated local failures, including extended codes.
+        code = getattr(exc, "sqlite_errorcode", 0)
+        busy = isinstance(code, int) and (code & 255) in (sqlite3.SQLITE_BUSY, sqlite3.SQLITE_LOCKED)
+        result = {"status": "failed", "reason": "archive_busy" if busy else "local_archive_unavailable",
+                  "study_saved": True}
     except Exception:
         result = {"status": "failed", "reason": "local_archive_unavailable", "study_saved": True}
     sys.stdout.write(json.dumps(result, separators=(",", ":")))
