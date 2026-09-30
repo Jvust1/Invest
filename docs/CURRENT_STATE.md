@@ -1,3 +1,25 @@
+## 2026-09-30 六个上游的完整融合候选
+
+当前候选把 PR #48–#56 的已审查切片组合为可安装的研究链路，并补上原生 Qlib 数据与
+DuckDB 回放的口径/身份桥、两条研究管线的来源保留、已保存研究的本地归档重试入口。
+确切来源 SHA 和本轮验证见 [融合说明](upstream/research-stack-2026-09-30.md)
+及 `governance/checkpoints/20260930_research_stack_candidate.json`；远端状态以候选 PR 的 exact-head CI 为准。
+它尚未合入 main，旧段落中的当时待办和失败是历史记录，不是当前候选结果。
+本轮只使用合成数据，不连接券商，不打开冻结留出集；Qlib 原生价格不用于现金撮合。
+
+## 2026-09-30 滚动验证功能分支候选
+
+新增 scikit-learn TimeSeriesSplit → 假设实验室 → 训练段选候选 → 后续评价
+→ 独立账本回放 → 不可变研究档案的完整离线链路。默认连续样本段模式保持不变。
+该候选依赖 PR #48 的应用恢复；不重复修改其修复文件，也不表示已经合入 main。
+当前仓库为 Jvust1/Invest（stable ID 1381007406）；下方早期仓库名和交付状态为历史快照。
+
+本地临时组合 PR #48 1b2d415b 后：569 unittest cases，13 skips，0 failures/errors，
+包括 HTTP 保存、下载、幂等重试与错误恢复。pytest 为575 passed / 13 skipped / 1个已在原PR #48复现的目录能力计数失败；断言未放宽。云浏览器禁止 loopback，UI 视觉验收未完成；
+远端 exact-head CI 待发布后单独核验。全部为合成测试，没有真实数据或交易。
+来源、合同和验证细节见 [滚动验证集成说明](upstream/sklearn-walkforward-2026-09-30.md)
+及 governance/checkpoints/20260930_sklearn_walkforward_pilot.json。
+
 ## 2026-09-25 Windows 桌面交付更新
 
 - 新增独立交付分支 `feat/desktop-delivery-20260925`；不修改 main、不自动合并。

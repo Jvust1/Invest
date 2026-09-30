@@ -51,6 +51,24 @@ class GrowthHTTPTests(unittest.TestCase):
         finally:self.s.study_lock.release()
         self.assertEqual(self.request('/api/workbench/study',{'dataset_id':dataset['id'],'specification':{}})[0],400)
         self.assertFalse(self.s.study_lock.locked())
+    def test_walk_forward_study_persist_download_and_invalid_config_recovery(self):
+        _,dataset=self.request('/api/datasets/demo',{})
+        specification={'symbol':'600000.SH','cost_model_acknowledged':True,
+                       'walk_forward':{'n_splits':3,'gap':5}}
+        payload={'dataset_id':dataset['id'],'specification':specification}
+        code,record=self.request('/api/workbench/study',payload)
+        self.assertEqual(code,200,record)
+        report=record['payload']
+        self.assertEqual(report['protocol']['mode'],'EXPLORATORY_WALK_FORWARD')
+        self.assertEqual(report['summary']['succeeded'],9)
+        self.assertEqual(report['summary']['training_runs'],18)
+        self.assertFalse(report['protocol']['frozen_holdout_opened'])
+        self.assertEqual(self.request('/api/workbench/document?id='+record['id'])[1],record)
+        self.assertEqual(self.request('/api/workbench/study',payload)[1]['id'],record['id'])
+        specification['walk_forward']['gap']=-1
+        self.assertEqual(self.request('/api/workbench/study',payload)[0],400)
+        self.assertFalse(self.s.study_lock.locked())
+        self.assertEqual(len(self.request('/api/workbench/documents?kind=study')[1]['documents']),1)
     def test_review_event_repeat_and_backup_tables(self):
         code,d=self.request('/api/workbench/reviews',{'name':'HTTP测试','initial_cash':'1000','client_key':'http','manual_record_acknowledged':True})
         self.assertEqual(code,200,d)

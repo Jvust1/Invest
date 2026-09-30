@@ -8,6 +8,8 @@ __pycache__/
 *.sqlite-*
 *.db
 *.db-*
+*.duckdb
+*.duckdb.wal
 .pytest_cache/
 dist/
 build/

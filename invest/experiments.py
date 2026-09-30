@@ -125,7 +125,7 @@ def run_study(dataset, specification):
     verify_dataset_identity(dataset)
     if not isinstance(specification, dict) or specification.get('cost_model_acknowledged') is not True:
         raise ValueError('必须确认成本为演示情景，不代表券商实际收费')
-    if set(specification) - {'symbol','candidates','initial_cash','cost_model_acknowledged'}:
+    if set(specification) - {'symbol','candidates','initial_cash','cost_model_acknowledged','walk_forward'}:
         raise ValueError('研究规格含有不支持的字段；不能通过此接口打开留出集')
     symbol = specification.get('symbol')
     candidates = specification.get('candidates', [{'name':'MA 5/20','fast':5,'slow':20}, {'name':'MA 10/30','fast':10,'slow':30}])
@@ -152,6 +152,11 @@ def run_study(dataset, specification):
         {'name':'中成本演示', 'commission_rate':0.0003, 'min_commission':5, 'stamp_tax_rate':0.0005,'transfer_fee_rate':0.00001,'slippage_bps':5},
         {'name':'高成本演示', 'commission_rate':0.001, 'min_commission':10, 'stamp_tax_rate':0.0005,'transfer_fee_rate':0.00002,'slippage_bps':20},
     ]
+    if 'walk_forward' in specification:
+        from .walkforward import run_walkforward
+        return run_walkforward(dataset, symbol=symbol, candidates=checked, cash=cash,
+                               costs=cost_scenarios, warmup=warmup,
+                               configuration=specification['walk_forward'])
     count = len(bars) - warmup
     periods = [{'name':f'连续样本段 {i+1}', 'start':bars[warmup+count*i//3]['date'],
                 'end':bars[warmup+count*(i+1)//3-1]['date']} for i in range(3)]

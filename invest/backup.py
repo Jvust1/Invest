@@ -15,7 +15,7 @@ LIMIT = 100 * 1024 * 1024
 
 def export_backup(root):
     root=Path(root)
-    out=io.BytesIO(); manifest={'schema':'invest-private-backup-v1','files':{}}
+    out=io.BytesIO(); manifest={'schema':'invest-private-backup-v1','files':{}}; payload_total=0
     with tempfile.TemporaryDirectory() as tmp, zipfile.ZipFile(out,'w',zipfile.ZIP_DEFLATED) as z:
         for name in DATABASES:
             path=root/name
@@ -26,9 +26,13 @@ def export_backup(root):
                 if dst.execute('PRAGMA integrity_check').fetchone()[0]!='ok': raise ValueError('数据库完整性检查失败')
             if target.stat().st_size>LIMIT: raise ValueError('备份数据库超过100MB限制')
             raw=target.read_bytes()
+            payload_total += len(raw)
+            if payload_total > LIMIT: raise ValueError('备份总量超过100MB限制')
             z.writestr(name,raw)
             manifest['files'][name]=hashlib.sha256(raw).hexdigest()
-        z.writestr('manifest.json',json.dumps(manifest))
+        manifest_raw=json.dumps(manifest,ensure_ascii=False,separators=(',',':')).encode('utf-8')
+        if payload_total + len(manifest_raw) > LIMIT: raise ValueError('备份清单超过100MB限制')
+        z.writestr('manifest.json',manifest_raw)
     if not manifest['files']: raise ValueError('没有可备份的数据')
     return out.getvalue()
 

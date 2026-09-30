@@ -14,3 +14,19 @@ license files.
 The vendored code is included for reproducible research. New project code in
 invest/ provides a narrow, stable integration layer and does not modify the
 upstream implementations.
+
+## Runtime reuse: scikit-learn
+
+The workbench study path executes the installed scikit-learn TimeSeriesSplit
+implementation. Inspected release 1.8.0 is pinned to commit
+`646da0f072a8afef6a980aa427a710311e67eb9d`; actual runtime versions are recorded
+in saved study protocols. Its BSD-3-Clause copyright and redistribution notice
+is retained unchanged at `third_party/scikit_learn/COPYING`. No scikit-learn
+source fork is vendored. See `docs/upstream/sklearn-walkforward-2026-09-30.md`.
+
+## Optional native Qlib data reader
+
+The Invest-authored local data reader executes the official `pyqlib==0.9.7` SDK
+(release commit `da920b7f954f48ab1bb64117c976710de198373e`). No Qlib implementation
+source is copied or modified. The exact Microsoft MIT license and source/runtime
+provenance are retained in `third_party/qlib/`; market-data rights remain separate.
