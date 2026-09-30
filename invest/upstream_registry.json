@@ -1144,20 +1144,22 @@
     },
     {
       "repo": "OpenBB-finance/OpenBB",
-      "revision": "default-branch metadata snapshot 2026-09-30",
-      "license": "NOASSERTION",
+      "revision": "bbf1ab2020c2ce025333db56ece2036190fcad9c",
+      "license": "Apache-2.0",
       "stars": 73668,
-      "status": "catalog_contract",
-      "path": null,
-      "target": "invest.upstream_catalog",
-      "stage": "catalog",
+      "status": "active_adapter",
+      "path": "invest/providers/openbb_provider.py",
+      "target": "invest.providers.openbb_provider.OpenBBProvider",
+      "stage": "active_adapter",
       "capabilities": [
         "research_workbench",
-        "market_data"
+        "market_data",
+        "global_equity_data"
       ],
       "python_import": "openbb",
-      "last_push": "2026-09-30T01:47:43Z",
-      "batch": "20260930-high-star-50"
+      "last_push": "2026-09-30T14:28:00Z",
+      "batch": "20260930-high-star-50",
+      "notes": "Current V5 repository LICENSE is Apache-2.0. Optional adapter uses obb.equity.price.historical(...).to_dataframe(); data-provider rights remain separate."
     }
   ]
 }
