@@ -1,0 +1,851 @@
+"""
+Contains backtesting logic and objects.
+"""
+
+from copy import deepcopy
+
+import ffn
+import numpy as np
+import pandas as pd
+import pyprind
+from matplotlib import pyplot as plt
+from tqdm import tqdm
+
+import bt
+
+
+def run(*backtests, progress_bar=None):
+    """
+    Runs a series of backtests and returns a Result
+    object containing the results of the backtests.
+
+    Args:
+        * backtests (list): Backtests to run.
+        * progress_bar (bool): Show progress bar. Defaults to True unless
+          all backtests have progress_bar=False.
+
+    Returns:
+        Result
+
+    """
+    # If progress_bar not explicitly set, derive from backtests' settings
+    if progress_bar is None:
+        progress_bar = any(getattr(bkt, "progress_bar", True) for bkt in backtests)
+
+    # run each backtest
+    for bkt in tqdm(backtests, disable=not progress_bar):
+        bkt.run()
+
+    return Result(*backtests)
+
+
+def benchmark_random(backtest, random_strategy, nsim=100):
+    """
+    Given a backtest and a random strategy, compare backtest to
+    a number of random portfolios.
+
+    The idea here is to benchmark your strategy vs a bunch of
+    random strategies that have a similar structure but execute
+    some part of the logic randomly - basically you are trying to
+    determine if your strategy has any merit - does it beat
+    randomly picking weight? Or randomly picking the selected
+    securities?
+
+    Random backtests preserve every date from the original supplied
+    market data, including dates with partial missing values. They also
+    preserve initial capital, transaction costs, integer-position policy,
+    additional data, and CostModel impact inputs. Each control receives an
+    independent copy of additional data.
+
+    Args:
+        * backtest (Backtest): A backtest you want to benchmark
+        * random_strategy (Strategy): A strategy you want to benchmark
+          against. The strategy should have a random component to
+          emulate skilless behavior.
+        * nsim (int): number of random strategies to create.
+
+    Returns:
+        RandomBenchmarkResult
+
+    """
+    # save name for future use
+    if backtest.name is None:
+        backtest.name = "original"
+
+    # run if necessary
+    if not backtest.has_run:
+        backtest.run()
+
+    bts = []
+    bts.append(backtest)
+    # Remove only Backtest's synthetic first row without dropping real partial rows.
+    data = backtest.data.iloc[1:]
+
+    # Reuse constructor configuration without copying the completed Strategy state.
+    commissions = backtest.cost_model
+    if commissions is None:
+        commission_fn = backtest.strategy.commission_fn
+        if getattr(commission_fn, "__func__", None) is not bt.core.StrategyBase._dflt_comm_fn:
+            commissions = commission_fn
+    initial_capital = backtest.initial_capital
+    integer_positions = backtest.strategy.integer_positions
+    additional_data: dict[str, object] = backtest.additional_data
+    # Impact frames must be validated against real data before Backtest adds its bootstrap row.
+    volume = None if backtest.volume is None else backtest.volume.iloc[1:]
+    volatility = None if backtest.volatility is None else backtest.volatility.iloc[1:]
+
+    # create and run random backtests
+    for i in tqdm(range(nsim)):
+        random_strategy.name = f"random_{i}"
+        rbt = bt.Backtest(
+            random_strategy,
+            data,
+            initial_capital=initial_capital,
+            commissions=commissions,
+            integer_positions=integer_positions,
+            additional_data=deepcopy(additional_data),
+            volume=volume,
+            volatility=volatility,
+        )
+        if commissions is None:
+            # Override the template's fees without retaining the original strategy.
+            rbt.strategy.set_commissions(bt.core.StrategyBase._dflt_comm_fn.__get__(rbt.strategy))
+        rbt.run()
+
+        bts.append(rbt)
+
+    # now create new RandomBenchmarkResult
+    res = RandomBenchmarkResult(*bts)
+
+    return res
+
+
+class Backtest:
+    """
+    A Backtest combines a Strategy with data to
+    produce a Result.
+
+    A backtest is basically testing a strategy over a data set.
+
+    Note:
+        The Strategy will be deepcopied so it is re-usable in other
+        backtests. To access the backtested strategy, simply access
+        the strategy attribute.
+
+    Args:
+        * strategy (Strategy, Node, StrategyBase): The Strategy to be tested.
+        * data (DataFrame): DataFrame containing data used in backtest. The
+          index must be monotonic increasing. This will be the Strategy's
+          "universe".
+        * name (str): Backtest name - defaults to strategy name
+        * initial_capital (float): Initial amount of capital passed to
+          Strategy.
+        * commissions: The transaction cost model. Either:
+
+          - a callable ``fn(quantity, price) -> float`` (the original flat hook,
+            e.g. ``commissions=lambda q, p: max(1, abs(q) * 0.01)``), or
+          - an instance of :class:`bt.core.CostModel` (e.g.
+            :class:`bt.core.SqrtCostModel`,
+            :class:`bt.core.AlmgrenChrissCostModel`) for nonlinear,
+            size-aware costs that depend on bar volume and volatility.
+            When a ``CostModel`` is passed, ``volume`` and ``volatility``
+            must also be supplied.
+        * integer_positions (bool): Whether to use integer positions for securities
+          in the backtest. This can have unintended consequences when prices are
+          high relative to the amount of capital (i.e. though split-adjusted prices,
+          or too-low of a capital amount), causing allocated positions to round to zero.
+          While the default is True, try setting to False for more robust behavior.
+        * progress_bar (Bool): Display progress bar while running backtest
+        * additional_data (dict): Additional kwargs passed to StrategyBase.setup, after preprocessing
+          This data can be retrieved by Algos using StrategyBase.get_data.
+          The data may also be used by the Strategy itself, i.e.
+
+            - ``bidoffer``: A DataFrame with the same format as 'data', will be used
+              by the strategy for transaction cost modeling
+            - ``coupons``: A DataFrame with the same format as 'data', will by used
+              by :class:`CouponPayingSecurity <bt.core.CouponPayingSecurity>`
+              to determine cashflows.
+            - ``cost_long``/``cost_short``: A DataFrame with the same format as 'data',
+              will by used
+              by :class:`CouponPayingSecurity <bt.core.CouponPayingSecurity>`
+              to calculate asymmetric holding cost of long (or short) positions.
+        * volume (DataFrame): finite, non-negative per-security bar volume,
+          with the same index and columns as ``data``. Required when
+          ``commissions`` is a ``CostModel``, ignored otherwise.
+        * volatility (DataFrame): finite, non-negative per-security bar
+          volatility, with the same index and columns as ``data``. Required
+          when ``commissions`` is a ``CostModel``, ignored otherwise.
+
+
+    Attributes:
+        * strategy (Strategy): The Backtest's Strategy. This will be a deepcopy
+          of the Strategy that was passed in.
+        * data (DataFrame): Data passed in
+        * dates (DateTimeIndex): Data's index
+        * initial_capital (float): Initial capital
+        * name (str): Backtest name
+        * stats (ffn.PerformanceStats): Performance statistics
+        * has_run (bool): Run flag
+        * weights (DataFrame): Weights of each component over time
+        * security_weights (DataFrame): Weights of each security as a
+          percentage of the whole portfolio over time
+        * additional_data (dict): Additional data passed at construction
+
+    """
+
+    def __init__(
+        self,
+        strategy,
+        data,
+        name=None,
+        initial_capital=1000000.0,
+        commissions=None,
+        integer_positions=True,
+        progress_bar=False,
+        additional_data=None,
+        volume=None,
+        volatility=None,
+    ):
+        if data.columns.duplicated().any():
+            cols = data.columns[data.columns.duplicated().tolist()].tolist()
+            raise ValueError(f"data provided has some duplicate column names: \n{cols} \nPlease remove duplicates!")
+
+        # Label-based universe slicing can otherwise expose future rows.
+        if not data.index.is_monotonic_increasing:
+            raise ValueError("data index must be monotonic increasing")
+
+        # we want to reuse strategy logic - copy it!
+        # basically strategy is a template
+        self.strategy = deepcopy(strategy)
+        self.strategy.use_integer_positions(integer_positions)
+
+        self._process_data(data, additional_data)
+
+        self.initial_capital = initial_capital
+        self.name = name if name is not None else strategy.name
+        self.progress_bar = progress_bar
+
+        self.cost_model = None
+        self.volume = None
+        self.volatility = None
+
+        if isinstance(commissions, bt.core.CostModel):
+            self._validate_cost_model(volume, volatility, data)
+            self.cost_model = commissions
+            self.volume = self._align_impact_frame(volume)
+            self.volatility = self._align_impact_frame(volatility)
+            self._install_cost_model_hook()
+        elif commissions is not None:
+            self.strategy.set_commissions(commissions)
+
+        self.stats = {}
+        self._original_prices = None
+        self._stat_prices = None
+        self._weights = None
+        self._sweights = None
+        self.has_run = False
+
+    def _validate_cost_model(self, volume, volatility, data):
+        if volume is None or volatility is None:
+            raise ValueError("`volume` and `volatility` are required when `commissions` is a CostModel.")
+        if not volume.index.equals(data.index):
+            raise ValueError("`volume` index must match `data` index.")
+        if not volatility.index.equals(data.index):
+            raise ValueError("`volatility` index must match `data` index.")
+        if not volume.columns.equals(data.columns):
+            raise ValueError("`volume` columns must match `data` columns.")
+        if not volatility.columns.equals(data.columns):
+            raise ValueError("`volatility` columns must match `data` columns.")
+
+        # Validate the complete market-data domain before any trading can begin.
+        for name, frame in (("volume", volume), ("volatility", volatility)):
+            values = frame.to_numpy(dtype=float, na_value=np.nan)
+            if not np.isfinite(values).all() or (values < 0.0).any():
+                raise ValueError(f"`{name}` must contain only finite, non-negative values.")
+
+    @staticmethod
+    def _prepend_missing_row(data):
+        """Prepend an all-missing row, promoting non-nullable column dtypes."""
+        # Expand positionally so duplicate date labels retain their existing behavior.
+        positional = data.set_axis(pd.RangeIndex(len(data)))
+        positional = positional.reindex(pd.RangeIndex(-1, len(data)))
+        index = data.index.insert(0, data.index[0] - pd.DateOffset(days=1))
+        return positional.set_axis(index)
+
+    def _align_impact_frame(self, df):
+        """Prepend the t0-1 NaN row that ``_process_data`` adds to ``data``,
+        so per-bar lookups by ``security.now`` always resolve.
+        """
+        return self._prepend_missing_row(df)
+
+    def _install_cost_model_hook(self):
+        """Wire commissions throughout real and paper trees after setup."""
+        original_setup = self.strategy.setup
+
+        def hooked_setup(*args, **kwargs):
+            result = original_setup(*args, **kwargs)
+            strategy = self.strategy
+            assert isinstance(strategy, bt.core.StrategyBase)
+            self._wire_strategy_tree(strategy)
+            return result
+
+        self.strategy.setup = hooked_setup
+
+    def _wire_strategy_tree(self, strategy: bt.core.StrategyBase):
+        """Wire direct securities and lazy creation in a strategy tree."""
+        if getattr(strategy, "_cost_model_tree_wired", False):
+            return
+
+        original_create = strategy._create_child_if_needed
+        original_add = strategy._add_children
+
+        def hooked_add(children, dc):
+            first_new_child = len(strategy._childrenv)
+            result = original_add(children, dc)
+            for child in strategy._childrenv[first_new_child:]:
+                if isinstance(child, bt.core.SecurityBase):
+                    self._wire_security(child)
+                elif isinstance(child, bt.core.StrategyBase):
+                    self._install_dynamic_strategy_hook(child)
+            return result
+
+        def hooked_create(child: str):
+            result = original_create(child)
+            node = strategy.children.get(child)
+            if isinstance(node, bt.core.SecurityBase):
+                self._wire_security(node)
+            elif isinstance(node, bt.core.StrategyBase):
+                self._wire_nested_strategy(node)
+            return result
+
+        strategy._add_children = hooked_add
+        strategy._create_child_if_needed = hooked_create
+        strategy._cost_model_tree_wired = True
+        for child in strategy._childrenv:
+            if isinstance(child, bt.core.SecurityBase):
+                self._wire_security(child)
+            elif isinstance(child, bt.core.StrategyBase):
+                self._wire_nested_strategy(child)
+
+    def _wire_nested_strategy(self, strategy: bt.core.StrategyBase):
+        self._wire_strategy_tree(strategy)
+        # Nested strategies price themselves through a separate paper tree.
+        if strategy._paper_trade:
+            self._wire_strategy_tree(strategy._paper)
+
+    def _install_dynamic_strategy_hook(self, strategy: bt.core.StrategyBase):
+        original_setup_from_parent = strategy.setup_from_parent
+
+        def hooked_setup_from_parent(*args, **kwargs):
+            result = original_setup_from_parent(*args, **kwargs)
+            self._wire_nested_strategy(strategy)
+            return result
+
+        strategy.setup_from_parent = hooked_setup_from_parent
+
+    def _wire_security(self, security):
+        if getattr(security, "_cost_model_wired", False):
+            return
+        cost_model = self.cost_model
+        V_df = self.volume
+        S_df = self.volatility
+
+        def commission(q, p):
+            dt = security.now
+            name = security.name
+            return cost_model.cost(q, p, V_df.at[dt, name], S_df.at[dt, name])
+
+        security.commission = commission
+        security._cost_model_wired = True
+
+    def _process_data(self, data, additional_data):
+        # add virtual row at t0-1day with NaNs
+        # this is so that any trading action at t0 can be evaluated relative to
+        # a clean starting point. This is related to #83. Basically, if you
+        # have a big trade / commision on day 0, then the Strategy.prices will
+        # be adjusted at 0, and hide the 'total' return. The series should
+        # start at 100, but may start at 90, for example. Here, we add a
+        # starting point at t0-1day, and this is the reference starting point
+        data_new = pd.concat(
+            [
+                pd.DataFrame(
+                    np.nan,
+                    columns=data.columns,
+                    index=[data.index[0] - pd.DateOffset(days=1)],
+                ),
+                data,
+            ]
+        )
+
+        self.data = data_new
+        self.dates = data_new.index
+
+        self.additional_data = (additional_data or {}).copy()
+
+        # Look for data frames with the same index as (original) data,
+        # and add in the first row as well (i.e. "bidoffer")
+        for k in self.additional_data:
+            old = self.additional_data[k]
+            if isinstance(old, (pd.DataFrame, pd.Series)) and old.index.equals(data.index):
+                self.additional_data[k] = self._prepend_missing_row(old)
+
+    def run(self):
+        """
+        Runs the Backtest.
+        """
+        if self.has_run:
+            return
+
+        # set run flag to avoid running same test more than once
+        self.has_run = True
+
+        # setup strategy
+        self.strategy.setup(self.data, **self.additional_data)
+
+        # adjust strategy with initial capital
+        self.strategy.adjust(self.initial_capital)
+
+        # loop through dates
+        # init progress bar
+        if self.progress_bar:
+            bar = pyprind.ProgBar(len(self.dates), title=self.name, stream=1)
+
+        # since there is a dummy row at time 0, start backtest at date 1.
+        # we must still update for t0
+        self.strategy.update(self.dates[0])
+
+        # and for the backtest loop, start at date 1
+        for dt in self.dates[1:]:
+            # update progress bar
+            if self.progress_bar:
+                bar.update()
+
+            # update strategy
+            self.strategy.update(dt)
+
+            if not self.strategy.bankrupt:
+                self.strategy.run()
+                # need update after to save weights, values and such
+                self.strategy.update(dt)
+            else:
+                if self.progress_bar:
+                    bar.stop()
+
+        self._original_prices = self.strategy.prices
+        self._stat_prices = self._compute_stat_prices()
+        self.stats = self._stat_prices.calc_perf_stats()
+
+    def _compute_stat_prices(self):
+        prices = self.strategy.prices
+        first_transaction_date = None
+        for security in self.strategy.securities:
+            positions = security.positions
+            position_changed = positions.ne(positions.shift(fill_value=0))
+            if position_changed.any():
+                transaction_date = positions.index[position_changed][0]
+                if first_transaction_date is None or transaction_date < first_transaction_date:
+                    first_transaction_date = transaction_date
+
+        if first_transaction_date is not None:
+            first_transaction_position = prices.index.get_indexer_for([first_transaction_date])[0]
+            return prices.iloc[max(first_transaction_position - 1, 0) :]
+
+        return prices
+
+    @property
+    def weights(self):
+        """
+        DataFrame of each component's weight over time
+        """
+        if self._weights is not None:
+            return self._weights
+        else:
+            if self.strategy.fixed_income:
+                vals = pd.DataFrame({x.full_name: x.notional_values for x in self.strategy.members})
+                vals = vals.div(self.strategy.notional_values, axis=0)
+            else:
+                vals = pd.DataFrame({x.full_name: x.values for x in self.strategy.members})
+                vals = vals.div(self.strategy.values, axis=0)
+            self._weights = vals
+            return vals
+
+    @property
+    def positions(self):
+        """
+        DataFrame of each component's position over time
+        """
+        return self.strategy.positions
+
+    @property
+    def security_weights(self):
+        """
+        DataFrame containing weights of each security as a
+        percentage of the whole portfolio over time
+        """
+        if self._sweights is not None:
+            return self._sweights
+        else:
+            # get values for all securities in tree and divide by root values
+            # for security weights
+            vals = {}
+            for m in self.strategy.members:
+                if isinstance(m, bt.core.SecurityBase):
+                    if self.strategy.fixed_income:
+                        m_values = m.notional_values.copy()
+                    else:
+                        m_values = m.values.copy()
+                    if m.name in vals:
+                        vals[m.name] += m_values
+                    else:
+                        vals[m.name] = m_values
+            vals = pd.DataFrame(vals)
+
+            # divide by root strategy values
+            if self.strategy.fixed_income:
+                vals = vals.div(self.strategy.notional_values, axis=0)
+            else:
+                vals = vals.div(self.strategy.values, axis=0)
+
+            # save for future use
+            self._sweights = vals
+
+            return vals
+
+    @property
+    def herfindahl_index(self):
+        """
+        Calculate Herfindahl-Hirschman Index (HHI) for invested securities.
+        For each day, signed security values (notionals for fixed income) are
+        normalized by total absolute security exposure before they are squared
+        and summed. Cash is excluded, so HHI varies from 1/N for N equally
+        exposed securities to 1 for a single security, regardless of leverage.
+        HHI is NaN when there is no security exposure.
+
+        1 / HHI is often considered as "an effective number of assets" in
+        a given portfolio
+        """
+        values = {}
+        for security in self.strategy.securities:
+            exposure = security.notional_values if self.strategy.fixed_income else security.values
+            if security.name in values:
+                values[security.name] = values[security.name].add(exposure, fill_value=0)
+            else:
+                values[security.name] = exposure
+        exposures = pd.DataFrame(values, index=self.strategy.values.index)
+        # Gross normalization keeps concentration independent of cash and leverage scale.
+        gross_exposure = exposures.abs().sum(axis=1)
+        normalized_weights = exposures.div(gross_exposure.where(gross_exposure != 0), axis=0)
+        return (normalized_weights**2).sum(axis=1, min_count=1)
+
+    @property
+    def turnover(self):
+        """
+        Calculate the turnover for the backtest.
+
+        This function will calculate the turnover for the strategy. Turnover is
+        defined as the lesser of positive or negative outlays divided by NAV
+        """
+        s = self.strategy
+        outlays = s.outlays
+
+        # seperate positive and negative outlays, sum them up, and keep min
+        outlaysp = outlays[outlays >= 0].fillna(value=0).sum(axis=1)
+        outlaysn = np.abs(outlays[outlays < 0].fillna(value=0).sum(axis=1))
+
+        # merge and keep minimum
+        min_outlay = pd.DataFrame({"pos": outlaysp, "neg": outlaysn}).min(axis=1)
+
+        # turnover is defined as min outlay / nav
+        mrg = pd.DataFrame({"outlay": min_outlay, "nav": s.values})
+
+        return mrg["outlay"] / mrg["nav"]
+
+
+class Result(ffn.GroupStats):
+    """
+    Based on ffn's GroupStats with a few extra helper methods.
+
+    Args:
+        * backtests (list): List of backtests
+
+    Attributes:
+        * backtest_list (list): List of bactests in the same order as provided
+        * backtests (dict): Dict of backtests by name
+
+    """
+
+    def __init__(self, *backtests):
+        tmp = [pd.DataFrame({x.name: x._stat_prices if x._stat_prices is not None else x.strategy.prices}) for x in backtests]
+        super().__init__(*tmp)
+        self.backtest_list = backtests
+        self.backtests = {x.name: x for x in backtests}
+
+    def display_monthly_returns(self, backtest=0):
+        """
+        Display monthly returns for a specific backtest.
+
+        Args:
+            * backtest (str, int): Backtest. Can be either a index (int) or the
+                name (str)
+
+        """
+        key = self._get_backtest(backtest)
+        self[key].display_monthly_returns()
+
+    def get_monthly_max_drawdown(self):
+        """Return maximum drawdown from monthly-resampled prices.
+
+        The final, potentially incomplete month is included.
+        """
+        return pd.Series(
+            {key: self[key].monthly_prices.calc_max_drawdown() for key in self._names},
+            name="monthly_max_drawdown",
+        )
+
+    def get_weights(self, backtest=0, filter=None):
+        """
+
+        :param backtest: (str, int) Backtest can be either a index (int) or the
+                name (str)
+        :param filter: (list, str) filter columns for specific columns. Filter
+                is simply passed as is to DataFrame[filter], so use something
+                that makes sense with a DataFrame.
+        :return: (pd.DataFrame) DataFrame of weights
+        """
+
+        key = self._get_backtest(backtest)
+
+        if filter is not None:
+            data = self.backtests[key].weights[filter]
+        else:
+            data = self.backtests[key].weights
+
+        return data
+
+    def plot_weights(self, backtest=0, filter=None, figsize=(15, 5), **kwds):
+        """
+        Plots the weights of a given backtest over time.
+
+        Args:
+            * backtest (str, int): Backtest can be either a index (int) or the
+              name (str)
+            * filter (list, str): filter columns for specific columns. Filter
+              is simply passed as is to DataFrame[filter], so use something
+              that makes sense with a DataFrame.
+            * figsize ((width, height)): figure size
+            * kwds (dict): Keywords passed to plot
+
+        """
+        data = self.get_weights(backtest, filter)
+
+        data.plot(figsize=figsize, **kwds)
+
+    def get_security_weights(self, backtest=0, filter=None):
+        """
+
+        :param backtest: (str, int) Backtest can be either a index (int) or the
+                name (str)
+        :param filter: (list, str) filter columns for specific columns. Filter
+                is simply passed as is to DataFrame[filter], so use something
+                that makes sense with a DataFrame.
+        :return: (pd.DataFrame) DataFrame of security weights
+        """
+
+        key = self._get_backtest(backtest)
+
+        if filter is not None:
+            data = self.backtests[key].security_weights[filter]
+        else:
+            data = self.backtests[key].security_weights
+
+        return data
+
+    def plot_security_weights(self, backtest=0, filter=None, figsize=(15, 5), **kwds):
+        """
+        Plots the security weights of a given backtest over time.
+
+        Args:
+            * backtest (str, int): Backtest. Can be either a index (int) or the
+                name (str)
+            * filter (list, str): filter columns for specific columns. Filter
+                is simply passed as is to DataFrame[filter], so use something
+                that makes sense with a DataFrame.
+            * figsize ((width, height)): figure size
+            * kwds (dict): Keywords passed to plot
+
+        """
+        data = self.get_security_weights(backtest, filter)
+
+        data.plot(figsize=figsize, **kwds)
+
+    def plot_histogram(self, backtest=0, **kwds):
+        """
+        Plots the return histogram of a given backtest over time.
+
+        Args:
+            * backtest (str, int): Backtest. Can be either a index (int) or the
+                name (str)
+            * kwds (dict): Keywords passed to plot_histogram
+
+        """
+        key = self._get_backtest(backtest)
+        self[key].plot_histogram(**kwds)
+
+    def _get_backtest(self, backtest):
+        # based on input order
+        if isinstance(backtest, int):
+            return self.backtest_list[backtest].name
+
+        # default case assume ok
+        return backtest
+
+    def get_transactions(self, strategy_name=None):
+        """
+        Helper function that returns the transactions in the following format:
+
+            Date, Security | quantity, price
+
+        The result is a MultiIndex DataFrame.
+
+        Args:
+            * strategy_name (str): If none, it will take the first backtest's
+              strategy (self.backtest_list[0].name)
+
+        """
+        if strategy_name is None:
+            strategy_name = self.backtest_list[0].name
+
+        # extract strategy given strategy_name
+        return self.backtests[strategy_name].strategy.get_transactions()
+
+
+class RandomBenchmarkResult(Result):
+    """
+    RandomBenchmarkResult expands on Result to add methods specific
+    to random strategy benchmarking.
+
+    Args:
+        * backtests (list): List of backtests
+
+    Attributes:
+        * base_name (str): Name of backtest being benchmarked
+        * r_stats (Result): Stats for random strategies
+        * b_stats (Result): Stats for benchmarked strategy
+
+    """
+
+    def __init__(self, *backtests):
+        super().__init__(*backtests)
+        self.base_name = backtests[0].name
+        # seperate stats to make
+        self.r_stats = self.stats.drop(self.base_name, axis=1)
+        self.b_stats = self.stats[self.base_name]
+
+    def plot_histogram(self, statistic="monthly_sharpe", figsize=(15, 5), title=None, bins=20, **kwargs):
+        """
+        Plots the distribution of a given statistic. The histogram
+        represents the distribution of the random strategies' statistic
+        and the vertical line is the value of the benchmarked strategy's
+        statistic.
+
+        This helps you determine if your strategy is statistically 'better'
+        than the random versions.
+
+        Args:
+            * statistic (str): Statistic - any numeric statistic in
+              Result is valid.
+            * figsize ((x, y)): Figure size
+            * title (str): Chart title
+            * bins (int): Number of bins
+            * kwargs (dict): Passed to pandas hist function.
+
+        """
+        if statistic not in self.r_stats.index:
+            raise ValueError("Invalid statistic. Valid statisticsare the statistics in self.stats")
+
+        if title is None:
+            title = f"{statistic} histogram"
+
+        plt.figure(figsize=figsize)
+
+        ser = self.r_stats.loc[statistic]
+
+        ax = ser.hist(bins=bins, figsize=figsize, density=True, **kwargs)
+        ax.set_title(title)
+        plt.axvline(self.b_stats[statistic], linewidth=4, color="r")
+        ser.plot(kind="kde")
+
+
+class RenormalizedFixedIncomeResult(Result):
+    """
+    A new result type to help compare results generated from
+    :class:`FixedIncomeStrategy <bt.core.FixedIncomeStrategy>`.
+    Recall that in a fixed income strategy, the normalized prices are computed
+    using additive returns expressed as a percentage of current outstanding
+    notional (i.e. fixed-notional equivalent).
+    In strategies where the notional is varying, this may lead to counter-
+    intuitive results because the different terms in the sum are being scaled by
+    different notionals in the denominator (i.e. price could be below par, but
+    overall change in value is positive).
+
+    This class provides a way to "renormalize" the results with a different
+    denominator value or series, i.e. using max or average notional exposure,
+    or the risk exposure of the strategy.
+
+    Args:
+        * normalizing_value: finite, non-zero float, pd.Series, or dict thereof
+            (by strategy name). Series values are aligned to the strategy
+            history and must cover every date after the initial price.
+        * backtests (list): List of backtests (i.e. from Result.backtest_list)
+
+    Raises:
+        * ValueError: If an applicable normalizing value is missing, zero, or
+            non-finite.
+    """
+
+    def __init__(self, normalizing_value, *backtests):
+        for backtest in backtests:
+            if not backtest.strategy.fixed_income:
+                raise ValueError(f"Cannot apply RenormalizedFixedIncomeResult because backtest {backtest.name} is not on a fixed income strategy")
+        if not isinstance(normalizing_value, dict):
+            normalizing_value = {x.name: normalizing_value for x in backtests}
+        tmp = []
+        for backtest in backtests:
+            prices = self._price(backtest.strategy, normalizing_value[backtest.name])
+            if backtest._stat_prices is not None:
+                prices = prices.reindex(backtest._stat_prices.index)
+            tmp.append(pd.DataFrame({backtest.name: prices}))
+        super(Result, self).__init__(*tmp)
+        self.backtest_list = backtests
+        self.backtests = {x.name: x for x in backtests}
+
+    def _price(self, s, v):
+        """
+        Compute the new price series from the strategy (s) and the
+        normalizing value (v)
+        """
+        # Compute additive returns net of flows
+        returns = s.values.diff() - s.flows
+
+        # Align labels before validation so extra dates cannot become price observations.
+        if isinstance(v, pd.Series) and not v.index.equals(returns.index):
+            v = v.reindex(returns.index)
+
+        # The first diff is the PAR bootstrap; every later denominator is required.
+        values = np.asarray(v)
+        if len(returns) <= 1:
+            applicable_values = np.asarray([], dtype=float)
+        elif values.ndim == 0:
+            applicable_values = values.reshape(1)
+        else:
+            applicable_values = values[1:]
+        try:
+            applicable_values = np.asarray(applicable_values, dtype=float)
+        except (TypeError, ValueError) as exc:
+            raise ValueError(f"normalizing_value for strategy {s.name!r} must contain finite, non-zero values for every date after the initial price") from exc
+        if not np.isfinite(applicable_values).all() or (applicable_values == 0).any():
+            raise ValueError(f"normalizing_value for strategy {s.name!r} must contain finite, non-zero values for every date after the initial price")
+
+        prices = bt.core.PAR * (1.0 + (returns / v).cumsum())
+        prices.iloc[0] = bt.core.PAR
+        return prices
