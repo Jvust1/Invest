@@ -28,6 +28,21 @@ def dispatch(handler, path, parameter, payload=None):
                 'summary':d['payload'].get('summary')} for d in docs], 'listing_limit':100})
         if path == '/api/workbench/document':
             return handler._reply(200, ws.get(parameter('id',True)), attachment='invest-workbench-record.json')
+        if path == '/api/workbench/study-chart':
+            import re
+            from .study_charts import ChartBusyError, ChartDependencyError, render_study_png
+            index = parameter('case', True)
+            if re.fullmatch(r'0|[1-9][0-9]?', index) is None:
+                raise ValueError('图表 case 必须为从0开始的整数')
+            record = ws.get(parameter('id', True), 'study')
+            try:
+                png = render_study_png(record, int(index))
+            except ChartDependencyError as exc:
+                return handler._reply(503, {'error': str(exc), 'study_saved': True})
+            except ChartBusyError as exc:
+                return handler._reply(409, {'error': str(exc), 'study_saved': True})
+            return handler._reply(200, body=png, content_type='image/png',
+                attachment=f'invest-study-{record["id"][:12]}-case-{index}.png')
         if path == '/api/workbench/review':
             return handler._reply(200, snapshot(ws,parameter('id',True)))
         raise LookupError('工作台接口不存在')

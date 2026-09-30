@@ -10,6 +10,7 @@ requires-python = ">=3.10"
 dependencies = ["numpy>=1.23", "pandas>=1.5", "requests>=2.28", "scipy>=1.9", "scikit-learn>=1.1"]
 
 [project.optional-dependencies]
+charts = ["matplotlib==3.10.8"]
 mlflow = ["mlflow==3.16.1"]
 openbb = ["openbb"]
 optuna = ["optuna>=5.0"]
