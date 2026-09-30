@@ -1,4 +1,4 @@
-"""Minimal research pipeline for OHLCV data."""
+"""Research pipeline that connects market data, signals, and backtests."""
 from __future__ import annotations
 import numpy as np
 import pandas as pd
@@ -13,7 +13,9 @@ def moving_average_signal(close: pd.Series, fast: int = 20, slow: int = 50) -> p
     return (fast_ma > slow_ma).astype("int8").rename("signal")
 
 def run_backtest(close: pd.Series, signal: pd.Series, fee_bps: float = 0.0) -> pd.DataFrame:
-    """Run a long/flat daily close-to-close backtest."""
+    """Run a long/flat close-to-close backtest without look-ahead."""
+    if fee_bps < 0:
+        raise ValueError("fee_bps cannot be negative")
     prices = pd.Series(close, dtype="float64").rename("close")
     positions = pd.Series(signal, index=prices.index, dtype="float64").fillna(0.0)
     if not prices.index.equals(positions.index):
@@ -23,15 +25,25 @@ def run_backtest(close: pd.Series, signal: pd.Series, fee_bps: float = 0.0) -> p
     costs = turnover * (fee_bps / 10_000.0)
     strategy_returns = positions.shift(1).fillna(0.0) * asset_returns - costs
     equity = (1.0 + strategy_returns).cumprod()
-    return pd.DataFrame({"close": prices, "signal": positions, "asset_return": asset_returns,
-                         "turnover": turnover, "strategy_return": strategy_returns, "equity": equity})
+    return pd.DataFrame({
+        "close": prices,
+        "signal": positions,
+        "asset_return": asset_returns,
+        "turnover": turnover,
+        "strategy_return": strategy_returns,
+        "equity": equity,
+    })
 
 def performance_summary(result: pd.DataFrame, periods_per_year: int = 252) -> dict[str, float]:
     """Calculate common, reproducible performance statistics."""
+    if periods_per_year <= 0:
+        raise ValueError("periods_per_year must be positive")
     returns = pd.Series(result["strategy_return"], dtype="float64").dropna()
     equity = pd.Series(result["equity"], dtype="float64").dropna()
     if returns.empty:
-        return {"total_return": 0.0, "annualized_return": 0.0, "annualized_volatility": 0.0, "sharpe": 0.0, "max_drawdown": 0.0}
+        return {"total_return": 0.0, "annualized_return": 0.0,
+                "annualized_volatility": 0.0, "sharpe": 0.0,
+                "max_drawdown": 0.0}
     total = float(equity.iloc[-1] - 1.0)
     years = max(len(returns) / periods_per_year, 1 / periods_per_year)
     annual = float((1.0 + total) ** (1.0 / years) - 1.0)
@@ -41,3 +53,33 @@ def performance_summary(result: pd.DataFrame, periods_per_year: int = 252) -> di
     return {"total_return": total, "annualized_return": annual,
             "annualized_volatility": volatility, "sharpe": sharpe,
             "max_drawdown": float(drawdown.min())}
+
+def run_a_share_sma_backtest(
+    symbol: str,
+    start_date: str = "20200101",
+    end_date: str = "20500101",
+    fast: int = 20,
+    slow: int = 50,
+    fee_bps: float = 5.0,
+    adjust: str = "qfq",
+    timeout: float = 15,
+) -> tuple[pd.DataFrame, dict[str, float]]:
+    """Fetch A-share history and run the Invest SMA pipeline end to end.
+
+    The provider is imported lazily so users can run local/synthetic research
+    without installing or contacting an external data service.
+    """
+    from .providers.akshare_eastmoney import fetch_a_share_daily
+
+    history = fetch_a_share_daily(
+        symbol=symbol,
+        start_date=start_date,
+        end_date=end_date,
+        adjust=adjust,
+        timeout=timeout,
+    )
+    if history.empty:
+        raise ValueError(f"no market data returned for symbol {symbol}")
+    signal = moving_average_signal(history["close"], fast=fast, slow=slow)
+    result = run_backtest(history["close"], signal, fee_bps=fee_bps)
+    return result, performance_summary(result)
