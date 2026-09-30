@@ -703,10 +703,10 @@
       "repo": "optuna/optuna",
       "revision": "5c8e50d85b77dd5a1fd7e26e21f63debc81d6016",
       "license": "MIT",
-      "stars": 14864,
+      "stars": 14865,
       "status": "active_adapter",
       "path": "invest/optuna_walkforward.py",
-      "target": "invest.optuna_walkforward.optimize_sma_walkforward",
+      "target": "invest.research_pipeline.run_a_share_research_bundle",
       "stage": "active_adapter",
       "capabilities": [
         "hyperparameter_optimization",
@@ -715,7 +715,7 @@
       "python_import": "optuna",
       "last_push": "2026-09-30T07:26:24Z",
       "batch": "20260930-high-star-50",
-      "notes": "Walk-forward-only SMA optimization adapter; no single-window in-sample score is used as the objective."
+      "notes": "Real seeded in-memory TPE search on an earlier provider-history prefix; later evaluation is separate, slice-local metrics and all completed trials retained; no persistent storage or real trades."
     },
     {
       "repo": "duckdb/duckdb",
