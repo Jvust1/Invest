@@ -24,3 +24,7 @@ applying each signal on the following bar.
 ## 书籍与开源参考
 
 [学习资源清单](docs/LEARNING_RESOURCES.md)：5 本书、12 项 GitHub 参考，按成长环节说明用途、许可与最小应用产物。
+
+## 融合状态
+
+[融合状态与目录边界](docs/INTEGRATION_STATUS.md)记录当前 main 已合入的高星适配器、桌面/研究归档和独立引擎合同。
