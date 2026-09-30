@@ -1,0 +1,31 @@
+name: DuckDB offline replay
+on:
+  pull_request:
+  push:
+    branches: [main, 'feat/**']
+permissions:
+  contents: read
+jobs:
+  replay:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ['3.11', '3.12']
+        duckdb: ['1.4.0', '1.5.6']
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install actual upstream package
+        run: python -m pip install -e '.[test,duckdb]' 'duckdb==${{ matrix.duckdb }}'
+      - name: Verify actual DuckDB version
+        run: python -c "import duckdb; print(duckdb.__version__)"
+      - name: Cache and offline replay contracts
+        run: python -m pytest -q tests/test_duckdb_cache.py tests/test_duckdb_replay.py tests/test_pipeline_provider_fusion.py tests/test_research_pipeline.py
+      - name: Executable synthetic close and reopen example
+        run: python -m examples.duckdb_offline_replay
+      - name: Compile provider and example
+        run: python -m compileall -q invest/providers examples/duckdb_offline_replay.py
