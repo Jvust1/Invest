@@ -411,20 +411,21 @@
     },
     {
       "repo": "fasiondog/hikyuu",
-      "revision": "default-branch metadata snapshot 2026-09-30",
+      "revision": "daeb2c792a2095178fd5af051eda76d1b23e96c6",
       "license": "Apache-2.0",
       "stars": 3535,
-      "status": "catalog_contract",
-      "path": null,
-      "target": "invest.upstream_catalog",
-      "stage": "catalog",
+      "status": "active_adapter",
+      "path": "invest/hikyuu_performance.py",
+      "target": "invest.hikyuu_performance.HikyuuPerformanceAdapter",
+      "stage": "active_adapter",
       "capabilities": [
         "backtesting",
         "execution_architecture"
       ],
       "python_import": "hikyuu",
-      "last_push": "2026-09-29T14:30:49Z",
-      "batch": "20260930-high-star-50"
+      "last_push": "2026-09-30T14:39:05Z",
+      "batch": "20260930-high-star-50",
+      "notes": "Research-only TradeManager.get_performance() snapshot adapter; no execution/order path."
     },
     {
       "repo": "cvxgrp/cvxportfolio",
