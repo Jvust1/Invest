@@ -22,11 +22,14 @@ from pathlib import Path
 from urllib.request import build_opener,ProxyHandler
 installed,root,fixture=map(lambda value:Path(value).resolve(),sys.argv[1:4])
 with_charts=sys.argv[4]=='charts'
+with_diagnostics=sys.argv[4]=='diagnostics'
 chart_evidence={}
 sys.path.insert(0,str(installed))
-optional={'mlflow','duckdb','optuna','qlib','pyqlib','matplotlib'}
+optional={'mlflow','duckdb','optuna','qlib','pyqlib','matplotlib','statsmodels'}
 if with_charts:
     optional.remove('matplotlib')
+if with_diagnostics:
+    optional.remove('statsmodels')
 attempts=[]
 original_import=builtins.__import__
 def guarded_import(name,*args,**kwargs):
@@ -119,6 +122,30 @@ fs.writeFileSync(path,Buffer.from(await result.blob.arrayBuffer()));
     assert result.returncode==0,result.stderr
     assert output.read_bytes()==downloaded
     assert validate_native_record(parse_native_json(output.read_text(encoding='utf-8')))==original
+    if with_diagnostics:
+        from invest.workspace import digest
+        with opener.open(base+'/api/workbench/native-diagnostics?id='+original['id'],timeout=30) as response:
+            assert response.headers.get_content_type()=='application/json'
+            diagnostics_bytes=response.read()
+        diagnostics=json.loads(diagnostics_bytes)
+        assert diagnostics['schema']=='invest-native-diagnostics-v1'
+        assert diagnostics['record_id']==original['id'] and diagnostics['record_sha256']==digest(original)
+        assert diagnostics['curve_sha256']==digest(original['payload']['curve'])
+        assert diagnostics['observations']==36 and diagnostics['status']=='computed'
+        assert diagnostics['protocol']['lag']==7
+        assert diagnostics['upstream']['version']=='0.15.0'
+        assert diagnostics['diagnostics_id']==digest({k:v for k,v in diagnostics.items() if k!='diagnostics_id'})
+        assert diagnostics['producer_declaration']==original['payload']['producer']
+        assert diagnostics['recorded_at_declaration']==original['recorded_at']
+        with opener.open(base+'/api/workbench/native-diagnostics?id='+original['id'],timeout=30) as response:
+            assert response.read()==diagnostics_bytes
+        diagnostic_js=js.replace("savedRecordDownload(id,'native-'+id+'.json')", "nativeDiagnosticsDownload(id,'native-'+id+'.json')")
+        diagnostic_output=root/'native-browser-diagnostics.json'
+        diagnostic_run=subprocess.run(['node','-e',diagnostic_js,base,original['id'],str(diagnostic_output)],capture_output=True,timeout=30)
+        assert diagnostic_run.returncode==0,diagnostic_run.stderr
+        assert diagnostic_output.read_bytes()==diagnostics_bytes
+        chart_evidence.update(native_diagnostics_actual_sdk=True,native_diagnostics_record_identity=True,
+            native_diagnostics_served_js_exact_bytes=True,native_diagnostics_repeat_identical=True)
     if with_charts:
         import io
         from PIL import Image
@@ -187,6 +214,19 @@ if with_charts:
         other.shutdown();worker.join(10);other.server_close()
     assert not (second.parent/'mlflow').exists()
     chart_evidence['native_chart_after_json_restore_identical']=True
+if with_diagnostics:
+    second=root/'diagnostics-restored'/'state.sqlite'
+    assert restore_native_json(downloaded.decode('utf-8'),second)==original
+    other=InvestServer(('127.0.0.1',0),second.parent,track_experiments=False)
+    worker=threading.Thread(target=other.serve_forever,daemon=True);worker.start()
+    try:
+        with opener.open(f'http://127.0.0.1:{other.server_port}/api/workbench/native-diagnostics?id='+original['id'],timeout=30) as response:
+            assert response.read()==diagnostics_bytes
+        assert Workspace(second).get(original['id'])==original
+    finally:
+        other.shutdown();worker.join(10);other.server_close()
+    assert not (second.parent/'mlflow').exists()
+    chart_evidence['native_diagnostics_after_json_restore_identical']=True
 assert not attempts,attempts
 assert not network_attempts,network_attempts
 assert not (workspace.parent/'mlflow').exists()
@@ -206,7 +246,9 @@ print(json.dumps({'schema':'invest-installed-native-recovery-v1','synthetic_only
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('wheel', type=Path)
-    parser.add_argument('--charts', action='store_true', help='also verify pinned native PNG; default forbids every optional SDK')
+    mode=parser.add_mutually_exclusive_group()
+    mode.add_argument('--charts', action='store_true', help='also verify pinned native PNG; default forbids every optional SDK')
+    mode.add_argument('--diagnostics', action='store_true', help='verify actual statsmodels diagnostics; other optional SDKs remain forbidden')
     args = parser.parse_args(argv)
     wheel = args.wheel.resolve(strict=True)
     if wheel.is_dir():
@@ -220,6 +262,8 @@ def main(argv=None):
         required = {'invest/native_research.py', 'invest/workspace.py', 'invest/web/workbench.js'}
         if args.charts:
             required.add('invest/native_charts.py')
+        if args.diagnostics:
+            required.add('invest/native_diagnostics.py')
         if not required.issubset(package.namelist()):
             raise ValueError('wheel lacks native recovery/chart modules or web assets')
     fixture = Path(__file__).resolve().parents[1]/'tests'/'fixtures'/'native_research_v1_synthetic.json'
@@ -230,7 +274,7 @@ def main(argv=None):
             '--target', str(target), str(wheel)], cwd=root, check=True, timeout=90, stdout=subprocess.DEVNULL)
         env = dict(os.environ, OPENBLAS_NUM_THREADS='1', OMP_NUM_THREADS='1', MKL_NUM_THREADS='1',
                    MPLCONFIGDIR=str(root/'matplotlib-cache'))
-        result = subprocess.run([sys.executable, '-I', '-c', CHILD, str(target), str(root), str(fixture), 'charts' if args.charts else 'core'],
+        result = subprocess.run([sys.executable, '-I', '-c', CHILD, str(target), str(root), str(fixture), 'charts' if args.charts else 'diagnostics' if args.diagnostics else 'core'],
             cwd=root, env=env, capture_output=True, timeout=90)
         if result.returncode:
             detail=(result.stdout+result.stderr).decode('utf-8',errors='replace')[-12000:]

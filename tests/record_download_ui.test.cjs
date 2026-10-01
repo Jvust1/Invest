@@ -137,5 +137,6 @@ test('archive exports use raw saved-record helper and suppress repeated pending 
   assert.equal(button.disabled,false);
   assert.equal(calls.downloads[0][1],'Invest-native_research-'+id.slice(0,12)+'.json');
   assert.equal(await calls.downloads[0][0].text(),'{"n":1.0}');
-  assert.equal(rows[0][2].children.length,1); // No cash chart/archive controls for native records.
+  assert.equal(rows[0][2].children.length,2); // JSON plus native-only diagnostics; no cash controls.
+  assert.equal(rows[0][2].children[1].text,'下载收益统计诊断');
 });

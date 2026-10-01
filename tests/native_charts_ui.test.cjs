@@ -100,7 +100,8 @@ test('native archive column is distinct while JSON and cash-study controls are r
   context.$('document-kind').value = 'native_research'; await context.loadDocuments();
   const native = calls.tables[0];
   assert.equal(native.headers.length, 4); assert.equal(native.headers[3], '原生研究图表');
-  assert.equal(native.rows[0][2].children.length, 1);
+  assert.equal(native.rows[0][2].children.length, 2);
+  assert.equal(native.rows[0][2].children[1].text, '下载收益统计诊断');
   assert.equal(native.rows[0][2].children[0].text, '导出 JSON');
   assert.equal(native.rows[0][3].text, '下载原生研究 PNG');
   context.$('document-kind').value = 'study'; await context.loadDocuments();

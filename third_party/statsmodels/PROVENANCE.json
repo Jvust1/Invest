@@ -1,0 +1,17 @@
+{
+  "repository": "statsmodels/statsmodels",
+  "release": "v0.15.0",
+  "source_revision": "278ff9950636cdd4939b4055e339a8e681d79cab",
+  "runtime_version": "0.15.0",
+  "stars": 11666,
+  "stars_checked_at_utc": "2026-10-01T03:20:00Z",
+  "license": "BSD-3-Clause",
+  "license_sha256": "1ca78e1dec9dcebc55f3b96a862317f23e76422c5fc943568d955aad1f6b5fad",
+  "license_url": "https://github.com/statsmodels/statsmodels/blob/278ff9950636cdd4939b4055e339a8e681d79cab/LICENSE.txt",
+  "reuse": "Official installed SDK functions; Invest-authored adapter; no upstream implementation fork",
+  "apis": [
+    "statsmodels.stats.diagnostic.acorr_ljungbox",
+    "statsmodels.stats.stattools.jarque_bera",
+    "statsmodels.stats.stattools.durbin_watson"
+  ]
+}

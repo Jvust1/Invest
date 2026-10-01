@@ -900,20 +900,21 @@
     },
     {
       "repo": "statsmodels/statsmodels",
-      "revision": "default-branch metadata snapshot 2026-09-30",
+      "revision": "278ff9950636cdd4939b4055e339a8e681d79cab",
       "license": "BSD-3-Clause",
       "stars": 11666,
-      "status": "catalog_contract",
-      "path": null,
-      "target": "invest.upstream_catalog",
-      "stage": "catalog",
+      "status": "active_adapter",
+      "path": "invest/native_diagnostics.py",
+      "target": "saved native evaluation-return diagnostics",
+      "stage": "active_adapter",
       "capabilities": [
         "statistics",
         "time_series_validation"
       ],
       "python_import": "statsmodels",
       "last_push": "2026-09-29T14:19:52Z",
-      "batch": "20260930-high-star-50"
+      "batch": "20260930-high-star-50",
+      "notes": "Actual pinned0.15.0 SDK; existing record revalidation, deterministic lag, explicit insufficient/constant states, identity-bound JSON download. Exploratory/asymptotic only; no profitability or significance gate."
     },
     {
       "repo": "pytorch/pytorch",
