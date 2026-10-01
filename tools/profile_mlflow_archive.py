@@ -61,6 +61,7 @@ try:
     def measured_archive(*args,**kwargs):
         phase('archive_begin')
         try:
+            kwargs['progress']=lambda name: phase(name)
             return original_archive(*args,**kwargs)
         except Exception as error:
             phase('archive_error',error_type=type(error).__name__)
@@ -152,7 +153,7 @@ def main():
                               'unsupported_mlflow_version', 'mlflow_extra_required', 'source_python_required'}:
                 reason = 'unrecognized_reason'
             summary = {'profile':label, 'synthetic_only':True, 'deadline_seconds':WORKER_TIMEOUT,
-                'elapsed_seconds':round(time.monotonic()-started,3), 'process_timeout':timeout,
+                'elapsed_seconds':round(time.monotonic()-started,3), 'sqlite_version':sqlite3.sqlite_version, 'process_timeout':timeout,
                 'returncode':returncode, 'worker_status':status.get('status') if status.get('status') in {'archived','failed'} else 'not_emitted',
                 'worker_reason':reason, 'phases':phases,
                 'committed_evidence':verify_committed(destination,status,raw)}

@@ -38,6 +38,24 @@ def _validated_close(close: pd.Series) -> pd.Series:
     return series
 
 
+def _training_fingerprint(close: pd.Series) -> str:
+    """Stable across pandas timestamp resolutions; no optional SDK dependency."""
+    close = _validated_close(close).copy()
+    if isinstance(close.index, pd.DatetimeIndex):
+        index = close.index
+        # pandas 3 can hold microsecond dates outside the nanosecond range.
+        # Unbounded conversions may overflow or wrap; reject before casting.
+        lower, upper = pd.Timestamp.min, pd.Timestamp.max
+        if index.tz is not None:
+            index = index.tz_convert('UTC')
+            lower, upper = lower.tz_localize('UTC'), upper.tz_localize('UTC')
+        if index.hasnans or index.min() < lower or index.max() > upper:
+            raise ValueError('training timestamps must fit the nanosecond range')
+        normalized = pd.DatetimeIndex(index.to_numpy(dtype='datetime64[ns]'), name=index.name)
+        close.index = normalized.tz_localize('UTC') if index.tz is not None else normalized
+    return hashlib.sha256(pd.util.hash_pandas_object(close, index=True).to_numpy(dtype='<u8').tobytes()).hexdigest()
+
+
 def _walkforward_score(
     close: pd.Series,
     *,
@@ -134,9 +152,7 @@ def optimize_sma_walkforward(
         trials=tuple(trials),
         seed=seed if owned_study else None,
         optimizer_version=optuna.__version__ if owned_study else None,
-        training_fingerprint=hashlib.sha256(
-            pd.util.hash_pandas_object(close, index=True).to_numpy(dtype='<u8').tobytes()
-        ).hexdigest(),
+        training_fingerprint=_training_fingerprint(close),
         splits=splits,
         fee_bps=float(fee_bps),
     )

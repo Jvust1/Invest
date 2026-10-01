@@ -46,7 +46,7 @@ jobs:
           MPLCONFIGDIR: ${{ runner.temp }}/invest-stack-mpl
         run: python -m pytest tests -q --durations=15
       - name: Verify interrupted and repeated workbench controls
-        run: node --test tests/archive_controls_ui.test.cjs tests/study_charts_ui.test.cjs
+        run: node --test tests/archive_controls_ui.test.cjs tests/study_charts_ui.test.cjs tests/record_download_ui.test.cjs
       - name: Build distribution without installing from the checkout
         run: python -m pip wheel --no-deps --wheel-dir dist .
       - name: Verify isolated installed-wheel native replay and saved-study flows
