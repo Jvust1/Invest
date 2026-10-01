@@ -4,6 +4,8 @@ The only producer runs the cache-only pipeline and saves immediately. Validation
 replays bounded arithmetic from embedded rows; it never imports/calls an optional
 SDK, reads provider files, or opens the original DuckDB database. Hashes identify
 recorded claims and bytes, not market-data rights, authenticity or profitability.
+Explicit JSON recovery preserves the original envelope without producing new
+research or authenticating its producer/timestamp declarations.
 """
 from __future__ import annotations
 
@@ -375,6 +377,63 @@ def validate_native_record(record):
         raise ValueError('native research record identity differs')
     instant(record['recorded_at'])
     validate_native_research(record['payload'])
+    return record
+
+
+def restore_native_json(raw: str, workspace_path):
+    """Restore one bounded native JSON export into an explicit SQLite path.
+
+    Parse and fully replay the record before creating/opening the destination.
+    Preserve its ID, numeric types, producer and recorded_at verbatim as declared
+    evidence, never as authenticated provenance. Whitespace/key order in the
+    input JSON are not identity. An identical repeat is idempotent; any existing
+    envelope conflict, including a different timestamp for the same content ID,
+    fails rather than overwriting the immutable original. No optional SDK runs.
+    """
+    record = validate_native_record(parse_native_json(raw))
+    payload = canonical(record['payload'])
+
+    def existing_record(db):
+        # A foreign/restored database can bypass the normal write guards. Fetch
+        # only scalar header facts before bringing any existing text into Python.
+        # BLOB length counts UTF-8 bytes including content after embedded NULs.
+        header = db.execute('''SELECT kind=? COLLATE BINARY AS is_native, typeof(payload) AS payload_type,
+            length(CAST(payload AS BLOB)) AS payload_bytes,
+            typeof(recorded_at) AS timestamp_type,
+            length(CAST(recorded_at AS BLOB)) AS timestamp_bytes
+            FROM growth_documents WHERE id=? COLLATE BINARY''', (KIND, record['id'])).fetchone()
+        if header is not None:
+            if (header['is_native'] != 1 or header['payload_type'] != 'text'
+                    or not 0 < header['payload_bytes'] <= MAX_BYTES
+                    or header['timestamp_type'] != 'text'
+                    or not 0 < header['timestamp_bytes'] <= 40 * 4):
+                raise ValueError('existing native research record conflicts with the imported envelope')
+            existing = db.execute('''SELECT id,kind,payload,recorded_at FROM growth_documents
+                WHERE id=? COLLATE BINARY''', (record['id'],)).fetchone()
+            return workspace._decode(existing)
+        return None
+
+    workspace = Workspace(workspace_path)
+    with workspace.connection() as db:
+        # Serialize the check and insert across independent processes/connections.
+        # Do not use INSERT OR IGNORE: it could hide a conflicting envelope.
+        db.execute('BEGIN IMMEDIATE')
+        existing = existing_record(db)
+        if existing is not None:
+            if canonical(existing) != canonical(record):
+                raise ValueError('existing native research record conflicts with the imported envelope')
+        else:
+            inserted = db.execute('INSERT INTO growth_documents(id,kind,payload,recorded_at) VALUES(?,?,?,?)',
+                                  (record['id'], KIND, payload, record['recorded_at']))
+            if inserted.rowcount != 1:
+                raise ValueError('native research restore did not insert exactly one record')
+            # A foreign database can contain unexpected triggers. Do not report
+            # success if one removes/substitutes the inserted envelope. Reuse the
+            # bounded lookup and verify before commit so any side writes roll back.
+            saved = existing_record(db)
+            if saved is None or canonical(saved) != canonical(record):
+                raise ValueError('native research restore did not preserve the imported envelope')
+        db.commit()
     return record
 
 

@@ -1,0 +1,52 @@
+name: Invest native JSON recovery without optional SDKs
+
+on:
+  pull_request:
+    paths:
+      - 'invest/**'
+      - 'examples/native_research_record.py'
+      - 'tests/test_native_json_restore.py'
+      - 'tests/test_record_download_http.py'
+      - 'tests/test_mlflow_local.py'
+      - 'tests/fixtures/native_research_v1_synthetic.json'
+      - 'tools/native_restore_smoke.py'
+      - 'pyproject.toml'
+      - '.github/workflows/native-json-recovery.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  restore:
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ['3.10', '3.12']
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install core project and test tools only
+        run: python -m pip install -e '.[test]'
+      - name: Verify optional producer SDKs are absent
+        run: python -c "import importlib.util; names=('mlflow','duckdb','optuna','qlib','matplotlib'); assert all(importlib.util.find_spec(name) is None for name in names), 'optional SDK leaked into core recovery environment'"
+      - name: Verify atomic native restore and unchanged raw export
+        run: python -m pytest tests/test_native_json_restore.py tests/test_record_download_http.py -q
+      - name: Build distribution
+        run: python -m pip wheel --no-deps --wheel-dir dist .
+      - name: Verify isolated installed-wheel restore and served-JS export
+        run: python tools/native_restore_smoke.py dist
+      - name: Compile recovery modules
+        run: python -m py_compile invest/native_research.py examples/native_research_record.py tools/native_restore_smoke.py
