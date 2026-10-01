@@ -266,7 +266,7 @@ def progress(phase):
         assert not (root/'mlflow'/'tracking.sqlite').exists()
         assert not (root/'mlflow'/'archive-lock.sqlite').exists()
         before[:]=logger.handlers
-result=_archive_local(json.loads(sys.stdin.read()),root,progress=progress)
+result=_archive_local(json.loads(sys.stdin.buffer.read()),root,progress=progress)
 assert result['status']=='archived'
 assert logger.handlers==before
 expected=['sdk_import','sdk_store_import','lock_wait','client_initialization',
@@ -279,7 +279,7 @@ print(json.dumps({'status':result['status'],'phases':seen}))
     env.update(MLFLOW_DISABLE_TELEMETRY='true', DO_NOT_TRACK='true')
     result = subprocess.run([sys.executable, '-I', '-c', script,
         str(Path(__file__).resolve().parents[1]), str(tmp_path/'phase-probe')],
-        input=canonical(record), capture_output=True, text=True, env=env, timeout=WORKER_TIMEOUT)
+        input=canonical(record).encode('utf-8'), capture_output=True, env=env, timeout=WORKER_TIMEOUT)
     assert result.returncode == 0, result.stderr
     assert json.loads(result.stdout)['status'] == 'archived'
 
