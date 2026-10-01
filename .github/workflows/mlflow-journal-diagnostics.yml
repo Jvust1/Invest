@@ -1,0 +1,44 @@
+name: Invest synthetic SQLite journal diagnostics
+
+on:
+  pull_request:
+    paths:
+      - 'tools/profile_mlflow_journals.py'
+      - 'tools/profile_mlflow_archive.py'
+      - 'tests/test_archive_journal_profile.py'
+      - '.github/workflows/mlflow-journal-diagnostics.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  compare:
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        python: ['3.11', '3.12']
+    runs-on: windows-latest
+    timeout-minutes: 15
+    env:
+      MLFLOW_DISABLE_TELEMETRY: 'true'
+      DO_NOT_TRACK: 'true'
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install pinned local SDK and test tools
+        run: python -m pip install -e '.[mlflow,test]' 'mlflow==3.16.1'
+      - name: Check diagnostic isolation and observation contracts
+        run: python -m pytest tests/test_archive_journal_profile.py -q
+      - name: Collect eight synthetic fresh-store observations
+        # This exits zero to collect observations, including deadline failures.
+        # It is not an archive pass/fail gate. The existing complete MLflow and
+        # integrated-stack workflows remain unchanged and independently gate.
+        run: python -m tools.profile_mlflow_journals --repeats 4
+      - name: Compile isolated diagnostic tool
+        run: python -m py_compile tools/profile_mlflow_journals.py

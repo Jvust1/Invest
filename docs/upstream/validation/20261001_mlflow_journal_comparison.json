@@ -1,0 +1,234 @@
+{
+  "scope": "Synthetic-only diagnostic measurement; no production journal policy change",
+  "base_pr": 59,
+  "base_remote_head": "5a2ab7de29253af750326bf3d11b20da23001b17",
+  "local_samples": [
+    {
+      "case": 1,
+      "mode": "DELETE",
+      "synchronous": "FULL",
+      "synthetic_only": true,
+      "deadline_seconds": 45,
+      "elapsed_seconds": 4.051,
+      "sqlite_version": "3.53.1",
+      "process_timeout": false,
+      "returncode": 0,
+      "case_completed": true,
+      "case_outcome": "archived",
+      "reported_worker_status": "archived",
+      "worker_reason": null,
+      "phases": [
+        {
+          "name": "record_validation",
+          "seconds": 0.1168
+        },
+        {
+          "name": "path_validation",
+          "seconds": 0.12
+        },
+        {
+          "name": "sdk_import",
+          "seconds": 0.1204
+        },
+        {
+          "name": "sdk_store_import",
+          "seconds": 1.0829
+        },
+        {
+          "name": "lock_wait",
+          "seconds": 1.6687
+        },
+        {
+          "name": "client_initialization",
+          "seconds": 1.6693
+        },
+        {
+          "name": "initial_tables",
+          "seconds": 1.6799
+        },
+        {
+          "name": "schema_upgrade",
+          "seconds": 1.684
+        },
+        {
+          "name": "experiment_lookup",
+          "seconds": 2.1162
+        },
+        {
+          "name": "run_lookup",
+          "seconds": 2.304
+        },
+        {
+          "name": "artifact_validation",
+          "seconds": 2.3259
+        },
+        {
+          "name": "index_write",
+          "seconds": 2.3263
+        },
+        {
+          "name": "artifact_write",
+          "seconds": 2.3554
+        },
+        {
+          "name": "commit",
+          "seconds": 2.3645
+        }
+      ],
+      "connection_policy": {
+        "configured": 2,
+        "matched": 2,
+        "rejected": 0,
+        "sqlite_connections": 2,
+        "unrelated_untouched": 0,
+        "verified": 2
+      },
+      "checks": {
+        "foreign_keys_ok": true,
+        "integrity_ok": true,
+        "schema_head_matches": true
+      },
+      "listener_removed": true,
+      "committed_evidence": {
+        "success_emitted": true,
+        "artifact_matches": true,
+        "database_finished": true
+      },
+      "diagnostic_output_truncated": false
+    },
+    {
+      "case": 2,
+      "mode": "PERSIST",
+      "synchronous": "FULL",
+      "synthetic_only": true,
+      "deadline_seconds": 45,
+      "elapsed_seconds": 3.843,
+      "sqlite_version": "3.53.1",
+      "process_timeout": false,
+      "returncode": 0,
+      "case_completed": true,
+      "case_outcome": "archived",
+      "reported_worker_status": "archived",
+      "worker_reason": null,
+      "phases": [
+        {
+          "name": "record_validation",
+          "seconds": 0.1058
+        },
+        {
+          "name": "path_validation",
+          "seconds": 0.1088
+        },
+        {
+          "name": "sdk_import",
+          "seconds": 0.1091
+        },
+        {
+          "name": "sdk_store_import",
+          "seconds": 0.9247
+        },
+        {
+          "name": "lock_wait",
+          "seconds": 1.3993
+        },
+        {
+          "name": "client_initialization",
+          "seconds": 1.3997
+        },
+        {
+          "name": "initial_tables",
+          "seconds": 1.4069
+        },
+        {
+          "name": "schema_upgrade",
+          "seconds": 1.4098
+        },
+        {
+          "name": "experiment_lookup",
+          "seconds": 2.0017
+        },
+        {
+          "name": "run_lookup",
+          "seconds": 2.241
+        },
+        {
+          "name": "artifact_validation",
+          "seconds": 2.265
+        },
+        {
+          "name": "index_write",
+          "seconds": 2.2656
+        },
+        {
+          "name": "artifact_write",
+          "seconds": 2.3016
+        },
+        {
+          "name": "commit",
+          "seconds": 2.3158
+        }
+      ],
+      "connection_policy": {
+        "configured": 2,
+        "matched": 2,
+        "rejected": 0,
+        "sqlite_connections": 2,
+        "unrelated_untouched": 0,
+        "verified": 2
+      },
+      "checks": {
+        "foreign_keys_ok": true,
+        "integrity_ok": true,
+        "schema_head_matches": true
+      },
+      "listener_removed": true,
+      "committed_evidence": {
+        "success_emitted": true,
+        "artifact_matches": true,
+        "database_finished": true
+      },
+      "diagnostic_output_truncated": false
+    }
+  ],
+  "sample_limit": "Exactly one actual local archive per mode. These observations preceded final parser/capture hardening; final contract tests cover that change and hosted exact-head measurements remain required.",
+  "final_focused_tests": "13 passed; actual SQLAlchemy replacement connections, exact-path isolation, cleanup, sidecar guard, UTF-8 transport, privacy/bounds, failure/timeout/nonzero outcomes and final counter/truncation rules",
+  "hosted_protocol": {
+    "operating_system": "windows-latest",
+    "python": [
+      "3.11",
+      "3.12"
+    ],
+    "cases_per_job": 8,
+    "order": [
+      "DELETE",
+      "PERSIST",
+      "PERSIST",
+      "DELETE",
+      "PERSIST",
+      "DELETE",
+      "DELETE",
+      "PERSIST"
+    ],
+    "worker_seconds": 45,
+    "writer_lock_seconds": 30,
+    "job_minutes": 15,
+    "diagnostic_exit_zero_is_not_archive_acceptance": true
+  },
+  "unchanged": [
+    "Production invest/* files",
+    "Official MLflow3.16.1 schema creation, migrations and schema checks",
+    "Existing MLflow and full six-SDK acceptance gates",
+    "No WAL, network, telemetry, real market data or private holdings"
+  ],
+  "limitations": [
+    "No causal or reliability inference from small hosted samples",
+    "No claim of PERSIST improvement from local samples",
+    "No power-loss durability or production policy acceptance",
+    "PERSIST retained page bytes, interrupted-migration recovery, disk usage and concurrency require separate review before adoption"
+  ],
+  "independent_review": {
+    "result": "No code blocker; documentation overclaim about inherited environment narrowed",
+    "tests": "13 focused contracts and independent unrelated-WAL / archive-lock isolation probe passed",
+    "limits": "No heavy suite or extra real-SDK archive run; hosted exact-head comparison pending"
+  }
+}
