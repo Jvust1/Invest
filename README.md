@@ -41,6 +41,8 @@ applying each signal on the following bar.
 恢复保留原始 ID、内容、声明的生产者及时间；完整校验后才写入，相同记录可重复恢复，冲突不会覆盖原件。
 此恢复功能独立于 MLflow；PR #59 的既有 Windows Python 3.10 初始化超时仍未解决，不能据此声称总体验证通过。
 
+原生研究归档也可[下载单独标注的单位资金 / 评价回撤 PNG](docs/upstream/native-research-charts-2026-10-01.md)：安装既有 charts 扩展后，在同一归档行点击“下载原生研究 PNG”。图表只读取完整校验的保存记录，不再运行研究；来源、生产者和原生单位仍保留未核验声明。
+
 工作台本地归档需在源码启动时明确启用 `--track-experiments`；失败仍保留原研究，可在结果或归档列表中重试。
 
 ## 长期成长计划

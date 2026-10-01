@@ -2,6 +2,8 @@
 
 Only the authored historical synthetic fixture is used. The installed package
 must restore, list, and export its original envelope without a provider/search.
+The explicit --charts mode additionally permits only the pinned Matplotlib SDK
+and verifies the native derivative; the default remains fully SDK-free.
 """
 from __future__ import annotations
 
@@ -19,8 +21,12 @@ import builtins,json,sys,threading,subprocess
 from pathlib import Path
 from urllib.request import build_opener,ProxyHandler
 installed,root,fixture=map(lambda value:Path(value).resolve(),sys.argv[1:4])
+with_charts=sys.argv[4]=='charts'
+chart_evidence={}
 sys.path.insert(0,str(installed))
 optional={'mlflow','duckdb','optuna','qlib','pyqlib','matplotlib'}
+if with_charts:
+    optional.remove('matplotlib')
 attempts=[]
 original_import=builtins.__import__
 def guarded_import(name,*args,**kwargs):
@@ -113,8 +119,74 @@ fs.writeFileSync(path,Buffer.from(await result.blob.arrayBuffer()));
     assert result.returncode==0,result.stderr
     assert output.read_bytes()==downloaded
     assert validate_native_record(parse_native_json(output.read_text(encoding='utf-8')))==original
+    if with_charts:
+        import io
+        from PIL import Image
+        from invest.workspace import digest
+        from invest.study_charts import prepare_chart
+        with opener.open(base+'/api/workbench/native-chart?id='+original['id'],timeout=30) as response:
+            assert response.headers.get_content_type()=='image/png'
+            native_png=response.read()
+        with Image.open(io.BytesIO(native_png)) as image:
+            assert image.format=='PNG' and image.size==(1200,900)
+            image.load()
+            assert len(image.convert('RGB').getcolors(1200*900))>100
+            identity=json.loads(image.info['Description'])
+            assert identity['schema']=='invest-native-research-chart-v1'
+            assert identity['record_id']==original['id']
+            assert identity['record_sha256']==digest(original)
+            assert identity['curve_sha256']==digest(original['payload']['curve'])
+            assert identity['producer_declaration']==original['payload']['producer']
+            assert identity['recorded_at_declaration']==original['recorded_at']
+            assert identity['initial_unit_capital']==1.0
+            assert identity['renderer']['version']=='3.10.8'
+        with opener.open(base+'/api/workbench/native-chart?id='+original['id'],timeout=30) as response:
+            assert response.read()==native_png
+        # Cash validation must still reject the separate native schema.
+        try:
+            prepare_chart(original,0)
+        except ValueError:
+            pass
+        else:
+            raise AssertionError('native record entered cash chart validation')
+        chart_js=r"""
+const fs=require('node:fs'),vm=require('node:vm');
+(async()=>{const [base,id,path]=process.argv.slice(1);
+const response=await fetch(base+'/workbench.js');if(!response.ok)throw new Error('script missing');
+const source=await response.text();let result;
+const context={Blob,AbortSignal,encodeURIComponent,csrf:'',
+fetch:(route,options)=>fetch(base+route,options),download:(blob,name)=>{result={blob,name};}};
+vm.createContext(context);vm.runInContext(source.slice(source.indexOf('const MAX_DOCUMENT_BYTES='),source.indexOf('function action(')),context);
+await context.nativeChartDownload(id,'native-chart-'+id+'.png');
+if(!result||result.name!=='native-chart-'+id+'.png')throw new Error('wrong native chart identity');
+fs.writeFileSync(path,Buffer.from(await result.blob.arrayBuffer()));
+})().catch(error=>{console.error(error);process.exitCode=1;});
+"""
+        chart_output=root/'native-browser-chart.png'
+        chart_run=subprocess.run(['node','-e',chart_js,base,original['id'],str(chart_output)],capture_output=True,timeout=30)
+        assert chart_run.returncode==0,chart_run.stderr
+        assert chart_output.read_bytes()==native_png
+        chart_evidence={'native_png_identity_verified':True,'native_png_pixels_decoded':True,
+            'native_png_repeat_identical':True,
+            'native_served_javascript_png_byte_identical':True,'cash_validator_still_rejects_native':True}
 finally:
     server.shutdown();thread.join(10);server.server_close()
+if with_charts:
+    # Recover the actual exported JSON into a second empty installed workspace;
+    # no source provider/cache or research execution can participate.
+    second=root/'chart-restored'/'state.sqlite'
+    assert restore_native_json(downloaded.decode('utf-8'),second)==original
+    other=InvestServer(('127.0.0.1',0),second.parent,track_experiments=False)
+    worker=threading.Thread(target=other.serve_forever,daemon=True);worker.start()
+    try:
+        other_base=f'http://127.0.0.1:{other.server_port}'
+        with opener.open(other_base+'/api/workbench/native-chart?id='+original['id'],timeout=30) as response:
+            assert response.read()==native_png
+        assert Workspace(second).get(original['id'])==original
+    finally:
+        other.shutdown();worker.join(10);other.server_close()
+    assert not (second.parent/'mlflow').exists()
+    chart_evidence['native_chart_after_json_restore_identical']=True
 assert not attempts,attempts
 assert not network_attempts,network_attempts
 assert not (workspace.parent/'mlflow').exists()
@@ -127,13 +199,14 @@ print(json.dumps({'schema':'invest-installed-native-recovery-v1','synthetic_only
     'record_identity_preserved':True,'producer_and_timestamp_preserved_as_declarations':True,
     'http_list_and_raw_export':True,'served_javascript_export_byte_identical':True,
     'offline_arithmetic_revalidated':True,'mlflow_archive_used':False,
-    'native_cash_units_conflated':False,'browser_layout_verified':False}))
+    'native_cash_units_conflated':False,'browser_layout_verified':False,**chart_evidence}))
 '''
 
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('wheel', type=Path)
+    parser.add_argument('--charts', action='store_true', help='also verify pinned native PNG; default forbids every optional SDK')
     args = parser.parse_args(argv)
     wheel = args.wheel.resolve(strict=True)
     if wheel.is_dir():
@@ -144,16 +217,20 @@ def main(argv=None):
     if wheel.suffix != '.whl':
         parser.error('expected a built invest wheel')
     with ZipFile(wheel) as package:
-        if not {'invest/native_research.py', 'invest/workspace.py', 'invest/web/workbench.js'}.issubset(package.namelist()):
-            raise ValueError('wheel lacks native recovery modules or web assets')
+        required = {'invest/native_research.py', 'invest/workspace.py', 'invest/web/workbench.js'}
+        if args.charts:
+            required.add('invest/native_charts.py')
+        if not required.issubset(package.namelist()):
+            raise ValueError('wheel lacks native recovery/chart modules or web assets')
     fixture = Path(__file__).resolve().parents[1]/'tests'/'fixtures'/'native_research_v1_synthetic.json'
     with tempfile.TemporaryDirectory(prefix='invest-native-restore-wheel-') as directory:
         root = Path(directory)
         target = root/'installed'
         subprocess.run([sys.executable, '-m', 'pip', 'install', '--no-deps', '--no-index',
             '--target', str(target), str(wheel)], cwd=root, check=True, timeout=90, stdout=subprocess.DEVNULL)
-        env = dict(os.environ, OPENBLAS_NUM_THREADS='1', OMP_NUM_THREADS='1', MKL_NUM_THREADS='1')
-        result = subprocess.run([sys.executable, '-I', '-c', CHILD, str(target), str(root), str(fixture)],
+        env = dict(os.environ, OPENBLAS_NUM_THREADS='1', OMP_NUM_THREADS='1', MKL_NUM_THREADS='1',
+                   MPLCONFIGDIR=str(root/'matplotlib-cache'))
+        result = subprocess.run([sys.executable, '-I', '-c', CHILD, str(target), str(root), str(fixture), 'charts' if args.charts else 'core'],
             cwd=root, env=env, capture_output=True, timeout=90)
         if result.returncode:
             detail=(result.stdout+result.stderr).decode('utf-8',errors='replace')[-12000:]

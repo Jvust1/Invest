@@ -40,6 +40,28 @@ def dispatch(handler, path, parameter, payload=None):
                 finally:
                     server.study_lock.release()
             return handler._reply(200, record, attachment='invest-workbench-record.json')
+        if path == '/api/workbench/native-chart':
+            from .native_charts import render_native_png
+            from .study_charts import ChartBusyError, ChartDependencyError
+            if not server.study_lock.acquire(blocking=False):
+                return handler._reply(409, {'error':'已有研究计算或校验正在运行，请稍后重试'})
+            try:
+                record = ws.get(parameter('id', True), 'native_research')
+                try:
+                    png = render_native_png(record)
+                    error, status = None, 200
+                except ChartDependencyError as exc:
+                    error, status = str(exc), 503
+                except ChartBusyError as exc:
+                    error, status = str(exc), 409
+            finally:
+                server.study_lock.release()
+            # Release validation/render locks before every reply. A complete
+            # error or success response must already permit a subsequent retry.
+            if error is not None:
+                return handler._reply(status, {'error':error, 'record_saved':True})
+            return handler._reply(200, body=png, content_type='image/png',
+                attachment=f'invest-native-research-{record["id"][:12]}.png')
         if path == '/api/workbench/study-chart':
             import re
             from .study_charts import ChartBusyError, ChartDependencyError, render_study_png

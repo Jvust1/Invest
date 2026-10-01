@@ -34,3 +34,16 @@ This uses only deterministic synthetic data and the real upstream optimizer;
 parameter search sees an earlier prefix, while the reported backtest covers a
 separate later suffix. Full trial evidence and split/metric scope are included.
 See `docs/upstream/optuna-walkforward-2026-09-30.md` for the research boundaries.
+
+## Saved native report PNG
+
+After installing the existing `.[charts]` extra, run:
+
+```sh
+python -m examples.saved_native_chart tests/fixtures/native_research_v1_synthetic.json /tmp/invest-native-synthetic.png
+```
+
+This source-checkout example reads an existing bounded native JSON record; it
+does not rerun providers or optimization. The PNG keeps synthetic/unverified
+labels and the original source/producer declarations as metadata. Review those
+declarations before sharing. See [native research charts](../docs/upstream/native-research-charts-2026-10-01.md).
