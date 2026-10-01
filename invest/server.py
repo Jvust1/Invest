@@ -11,15 +11,18 @@ from pathlib import Path
 import re
 import secrets
 import sqlite3
+import threading
 from typing import Any
 from urllib.parse import parse_qs, urlsplit
 import uuid
 
 from . import __version__
 from .backup import export_backup
-from .data import demo_dataset, fetch_tushare, parse_csv, verify_dataset_identity
+from .data import akshare_available, demo_dataset, fetch_akshare, fetch_tushare, parse_csv, verify_dataset_identity
 from .engine import backtest, research
 from .portfolio import PaperLedger
+from .workspace import Workspace
+from .workbench_api import dispatch as dispatch_workbench
 
 MAX_BODY = 2 * 1024 * 1024
 DEFAULT_PARAMETERS = {
@@ -145,6 +148,8 @@ class InvestServer(ThreadingHTTPServer):
             raise ValueError("v0.1 仅允许本机访问；不提供公开托管或未认证局域网账户访问")
         self.state = StateStore(Path(data_dir) / "state.sqlite")
         self.ledger = PaperLedger(Path(data_dir) / "paper.sqlite")
+        self.workspace = Workspace(Path(data_dir) / "state.sqlite")
+        self.study_lock = threading.Lock()
         self.csrf_token = secrets.token_urlsafe(32)
         self.web_root = Path(__file__).parent / "web"
         super().__init__(address, InvestHandler)
@@ -225,13 +230,15 @@ class InvestHandler(BaseHTTPRequestHandler):
             return items[0] if items else None
 
         if self.command == "GET":
-            if path in {"/", "/index.html", "/app.css", "/app.js"}:
-                name = "index.html" if path == "/" else path[1:]
-                mime = {"index.html": "text/html; charset=utf-8", "app.css": "text/css; charset=utf-8", "app.js": "text/javascript; charset=utf-8"}[name]
+            if path.startswith("/api/workbench/"):
+                return dispatch_workbench(self,path,parameter)
+            if path in {"/", "/legacy", "/index.html", "/app.css", "/app.js", "/workbench.html", "/workbench.css", "/workbench.js"}:
+                name = "workbench.html" if path == "/" else "index.html" if path == "/legacy" else path[1:]
+                mime = {".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8", ".js": "text/javascript; charset=utf-8"}[Path(name).suffix]
                 return self._reply(200, body=(self.server.web_root / name).read_bytes(), content_type=mime)
             if path == "/api/config":
                 return self._reply(200, {"version": __version__, "csrf_token": self.server.csrf_token,
-                    "tushare_configured": bool(os.environ.get("TUSHARE_TOKEN")), "default_parameters": DEFAULT_PARAMETERS})
+                    "tushare_configured": bool(os.environ.get("TUSHARE_TOKEN")), "akshare_available": akshare_available(), "default_parameters": DEFAULT_PARAMETERS})
             if path == "/api/datasets":
                 return self._reply(200, {"datasets": self.server.state.datasets()})
             if path.startswith("/api/datasets/"):
@@ -256,6 +263,8 @@ class InvestHandler(BaseHTTPRequestHandler):
             raise LookupError("页面或记录不存在")
 
         payload = self._json_body()
+        if path.startswith("/api/workbench/"):
+            return dispatch_workbench(self,path,parameter,payload)
         if path == "/api/private-backup":
             if payload.get("confirm_private_export") is not True:
                 raise ValueError("请确认导出含模拟账本与私人研究笔记的完整备份")
@@ -270,6 +279,12 @@ class InvestHandler(BaseHTTPRequestHandler):
             if not all(isinstance(x, str) for x in (csv_text, source, calendar_csv)):
                 raise ValueError("CSV、来源和日历必须是文本")
             data = parse_csv(csv_text, source=source, calendar_csv=calendar_csv)
+            return self._reply(200, self.server.state.save_dataset(data))
+        if path == "/api/datasets/akshare":
+            args = [payload.get(key) for key in ("symbol", "start", "end")]
+            if not all(isinstance(x, str) for x in args):
+                raise ValueError("请输入证券代码和日期范围")
+            data = fetch_akshare(*args)
             return self._reply(200, self.server.state.save_dataset(data))
         if path == "/api/datasets/tushare":
             if not os.environ.get("TUSHARE_TOKEN"):
