@@ -16,12 +16,63 @@ async function documentBlob(response){
   catch(error){try{await reader.cancel();}catch{}throw error;}finally{reader.releaseLock();}
   return new Blob(chunks,{type:'application/json'});
 }
+// Native charts have their own strict response path; cash-study downloads keep their contract.
+const MAX_NATIVE_PNG_BYTES=8*1024*1024;
+// Check the fixed native-chart dimensions, PNG structure and CRCs; this does not decode pixels.
+function validateNativePng(bytes){
+  const invalid=()=>{throw new Error('原生图表响应不是有效 PNG');};
+  if(bytes.length<57||![137,80,78,71,13,10,26,10].every((n,i)=>bytes[i]===n))invalid();
+  const view=new DataView(bytes.buffer,bytes.byteOffset,bytes.byteLength),crcTable=new Uint32Array(256);
+  for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=(c&1)?0xedb88320^(c>>>1):c>>>1;crcTable[n]=c>>>0;}
+  let offset=8,sawHeader=false,sawData=false,endedData=false,sawPalette=false,colorType;
+  while(offset+12<=bytes.length){
+    const length=view.getUint32(offset),end=offset+12+length;
+    if(end>bytes.length)invalid();
+    const type=String.fromCharCode(...bytes.subarray(offset+4,offset+8));
+    if(!/^[A-Za-z]{2}[A-Z][A-Za-z]$/.test(type))invalid();
+    let crc=0xffffffff;for(let i=offset+4;i<end-4;i++)crc=crcTable[(crc^bytes[i])&255]^(crc>>>8);
+    if(((crc^0xffffffff)>>>0)!==view.getUint32(end-4))invalid();
+    if(type==='IHDR'){
+      if(sawHeader||offset!==8||length!==13)invalid();
+      const width=view.getUint32(offset+8),height=view.getUint32(offset+12),depth=bytes[offset+16];colorType=bytes[offset+17];
+      const depths={0:[1,2,4,8,16],2:[8,16],3:[1,2,4,8],4:[8,16],6:[8,16]};
+      if(width!==1200||height!==900||!depths[colorType]?.includes(depth)||bytes[offset+18]!==0||bytes[offset+19]!==0||bytes[offset+20]>1)invalid();
+      sawHeader=true;
+    }else if(!sawHeader)invalid();
+    else if(type==='PLTE'){if(sawPalette||sawData||length===0||length%3||length>768||colorType===0||colorType===4)invalid();sawPalette=true;}
+    else if(type==='IDAT'){if(endedData||(colorType===3&&!sawPalette))invalid();if(length)sawData=true;}
+    else if(type==='IEND'){if(length!==0||!sawData||end!==bytes.length)invalid();return;}
+    else if(type[0]===type[0].toUpperCase())invalid(); // Unknown critical chunks are outside the saved-chart format.
+    if(sawData&&type!=='IDAT')endedData=true;
+    offset=end;
+  }
+  invalid(); // A signature or truncated image is not a successful chart download.
+}
+async function nativePngBlob(response){
+  const declared=response.headers.get('Content-Length');
+  if(declared!==null&&(!/^[0-9]+$/.test(declared)||Number(declared)>MAX_NATIVE_PNG_BYTES)){try{await response.body?.cancel?.();}catch{}throw new Error('原生图表超过下载大小限制');}
+  if(!response.body||typeof response.body.getReader!=='function')throw new Error('浏览器不支持有界图表下载');
+  const reader=response.body.getReader(),chunks=[];let size=0;
+  try{while(true){const {done,value}=await reader.read();if(done)break;size+=value.byteLength;if(!Number.isSafeInteger(size)||size>MAX_NATIVE_PNG_BYTES)throw new Error('原生图表超过下载大小限制');chunks.push(value);}}
+  catch(error){try{await reader.cancel();}catch{}throw error;}finally{reader.releaseLock();}
+  const blob=new Blob(chunks,{type:'image/png'});validateNativePng(new Uint8Array(await blob.arrayBuffer()));return blob;
+}
 async function api(path,payload,options={}){const opts={headers:{},signal:AbortSignal.timeout(60000)};if(payload!==undefined){opts.method='POST';opts.headers={'Content-Type':'application/json','X-Invest-CSRF':csrf};opts.body=JSON.stringify(payload);}const response=await fetch(path,opts);const type=response.headers.get('Content-Type')||'';
   if(!response.ok){const data=type.includes('json')?await response.json():null;throw new Error(data?.error||`请求失败 (${response.status})`);}
+  if(options.nativePng===true){if(type.split(';')[0].trim().toLowerCase()!=='image/png'){try{await response.body?.cancel?.();}catch{}throw new Error('原生图表响应不是 PNG');}return nativePngBlob(response);}
   if(options.raw===true){if(!type.includes('json'))throw new Error('保存记录响应不是 JSON');return documentBlob(response);}
   return type.includes('json')?response.json():response.blob();
 }
 async function savedRecordDownload(id,name){const savedId=id,filename=name;download(await api('/api/workbench/document?id='+encodeURIComponent(savedId),undefined,{raw:true}),filename);}
+async function nativeChartDownload(id,name){const savedId=id,filename=name;download(await api('/api/workbench/native-chart?id='+encodeURIComponent(savedId),undefined,{nativePng:true}),filename);}
+function nativeChartButton(record){
+  const id=record.id,filename='Invest-native_research-'+id.slice(0,12)+'.png',button=node('button','下载原生研究 PNG','secondary');let pending=false;
+  button.type='button';button.title='从已保存的原生单位曲线生成；需要可选 charts 扩展，不重新运行研究';
+  button.addEventListener('click',async()=>{if(pending)return;pending=true;button.disabled=true;
+    try{await nativeChartDownload(id,filename);tell('原生研究图表已从保存记录生成。保留原生单位、探索性和来源声明；不代表现金回测或独立核验。');}
+    catch(e){tell(e.message||String(e),true);}finally{pending=false;button.disabled=false;}
+  });return button;
+}
 function action(id,fn,event='click'){$(id).addEventListener(event,async ev=>{ev.preventDefault();const el=ev.currentTarget;const button=el.tagName==='FORM'?el.querySelector('[type=submit]'):el;button.disabled=true;try{await fn(ev);}catch(e){tell(e.message||String(e),true);}finally{button.disabled=false;}});}
 function table(target,headers,rows){const wrapper=node('div',undefined,'table-wrap'),t=node('table'),head=node('thead'),hr=node('tr');headers.forEach(h=>hr.append(node('th',h)));head.append(hr);t.append(head);const body=node('tbody');rows.forEach(row=>{const r=node('tr');row.forEach(cell=>{const td=node('td');cell instanceof Node?td.append(cell):td.textContent=String(cell??'—');r.append(td);});body.append(r);});t.append(body);wrapper.append(t);target.replaceChildren(wrapper);}
 function pretty(target,value){target.replaceChildren(node('pre',JSON.stringify(value,null,2)));}
@@ -93,7 +144,7 @@ action('review-form',async()=>{const d=await api('/api/workbench/reviews',{name:
 const eventDefaults={DEPOSIT:{amount:'1000.00'},WITHDRAWAL:{amount:'1000.00'},FEE:{amount:'5.00'},DIVIDEND:{symbol:'600000.SH',amount:'10.00'},BUY:{symbol:'600000.SH',quantity:100,price:'10.00',fee:'5.00'},SELL:{symbol:'600000.SH',quantity:100,price:'11.00',fee:'5.00'},MARK:{prices:{'600000.SH':'10.50'}},DECISION:{reason:'记录支持证据、反证与判断失效条件',evidence_at:'2024-01-01T16:00:00+08:00'},FAILURE:{reason:'数据更新失败，未生成替代结果'},RETRY:{reason:'记录重试对象、原因和结果'}};
 $('event-type').addEventListener('change',()=>{$('event-fields').value=JSON.stringify(eventDefaults[$('event-type').value],null,2);});
 action('event-form',async()=>{const review_id=$('review-select').value;if(!review_id)throw new Error('先创建或选择复盘账户');const event={...JSON.parse($('event-fields').value),type:$('event-type').value,occurred_at:$('event-time').value,source:$('event-source').value};const signature=JSON.stringify({review_id,event});if(!eventRetry||eventRetry.signature!==signature)eventRetry={signature,key:crypto.randomUUID()};const result=await api('/api/workbench/event',{review_id,event_key:eventRetry.key,event});showReview(result);eventRetry=null;tell('事件已校验并追加。哈希链与现金余额已重新核对。');},'submit');
-async function loadDocuments(){const kind=$('document-kind').value;const r=await api('/api/workbench/documents?kind='+kind);table($('documents-output'),['身份 / 名称','保存时间','操作'],r.documents.map(d=>{const b=node('button','导出 JSON','secondary');b.addEventListener('click',async()=>{if(b.disabled)return;const id=d.id;b.disabled=true;try{await savedRecordDownload(id,'Invest-'+kind+'-'+id.slice(0,12)+'.json');}catch(e){tell(e.message,true);}finally{b.disabled=false;}});const operations=node('div');operations.append(b);if(kind==='study'){const charts=node('button','图表 / 本地归档','secondary');charts.type='button';charts.addEventListener('click',async()=>{charts.disabled=true;try{const record=await api('/api/workbench/document?id='+encodeURIComponent(d.id));operations.append(chartPicker(record),archiveControls(record));charts.remove();}catch(e){charts.disabled=false;tell(e.message,true);}});operations.append(charts);}return[d.name,d.recorded_at,operations];}));}
+async function loadDocuments(){const kind=$('document-kind').value;const r=await api('/api/workbench/documents?kind='+kind);const headers=['身份 / 名称','保存时间','操作'];if(kind==='native_research')headers.push('原生研究图表');table($('documents-output'),headers,r.documents.map(d=>{const b=node('button','导出 JSON','secondary');b.addEventListener('click',async()=>{if(b.disabled)return;const id=d.id;b.disabled=true;try{await savedRecordDownload(id,'Invest-'+kind+'-'+id.slice(0,12)+'.json');}catch(e){tell(e.message,true);}finally{b.disabled=false;}});const operations=node('div');operations.append(b);if(kind==='study'){const charts=node('button','图表 / 本地归档','secondary');charts.type='button';charts.addEventListener('click',async()=>{charts.disabled=true;try{const record=await api('/api/workbench/document?id='+encodeURIComponent(d.id));operations.append(chartPicker(record),archiveControls(record));charts.remove();}catch(e){charts.disabled=false;tell(e.message,true);}});operations.append(charts);}const row=[d.name,d.recorded_at,operations];if(kind==='native_research')row.push(nativeChartButton(d));return row;}));}
 action('refresh-documents',loadDocuments);action('document-kind',loadDocuments,'change');
 action('backup',async()=>{if(!$('backup-ack').checked)throw new Error('请先确认备份包含私人账本和笔记');download(await api('/api/private-backup',{confirm_private_export:true}),'Invest-complete-private-backup.zip');tell('完整备份已生成。请妥善保存私人数据。');});
 const sampleFacts={source_name:'合成财务事实样例，不对应真实公司披露',source_text:'虚构指标：2023年末利润；2024-03-01首次披露10，2024-05-01修订为8。仅测试时点过滤。',license_note:'人工合成测试，不含真实公告数据',facts:[{symbol:'600000.SH',metric:'net_profit',period_end:'2023-12-31',available_at:'2024-03-01T16:00:00+08:00',revision:1,value:'10',unit:'CNY million'},{symbol:'600000.SH',metric:'net_profit',period_end:'2023-12-31',available_at:'2024-05-01T16:00:00+08:00',revision:2,value:'8',unit:'CNY million'}]};
