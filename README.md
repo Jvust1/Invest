@@ -46,6 +46,8 @@ applying each signal on the following bar.
 
 原生研究归档也可[下载单独标注的单位资金 / 评价回撤 PNG](docs/upstream/native-research-charts-2026-10-01.md)：安装既有 charts 扩展后，在同一归档行点击“下载原生研究 PNG”。图表只读取完整校验的保存记录，不再运行研究；来源、生产者和原生单位仍保留未核验声明。
 
+已保存原生研究还可[导出收益统计诊断](docs/upstream/statsmodels-native-diagnostics-2026-10-01.md)：可选 `diagnostics` 扩展使用真实 statsmodels 检查后续评价收益的自相关和分布形状。不足样本与常量明确标记；渐近 p 值不代表策略有效或盈利，原始研究保持不变。
+
 工作台本地归档需在源码启动时明确启用 `--track-experiments`；失败仍保留原研究，可在结果或归档列表中重试。
 
 ## 长期成长计划

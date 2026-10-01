@@ -40,6 +40,25 @@ def dispatch(handler, path, parameter, payload=None):
                 finally:
                     server.study_lock.release()
             return handler._reply(200, record, attachment='invest-workbench-record.json')
+        if path == '/api/workbench/native-diagnostics':
+            from .native_diagnostics import native_diagnostics, DiagnosticsUnavailable, DiagnosticsBusy
+            if not server.study_lock.acquire(blocking=False):
+                return handler._reply(409, {'error':'已有研究计算或校验正在运行，请稍后重试'})
+            try:
+                record = ws.get(parameter('id', True), 'native_research')
+                try:
+                    result = native_diagnostics(record)
+                    error, status = None, 200
+                except DiagnosticsUnavailable as exc:
+                    error, status = str(exc), 503
+                except DiagnosticsBusy as exc:
+                    error, status = str(exc), 409
+            finally:
+                server.study_lock.release()
+            if error is not None:
+                return handler._reply(status, {'error':error, 'record_saved':True})
+            return handler._reply(200, result,
+                attachment=f'invest-native-diagnostics-{record["id"][:12]}.json')
         if path == '/api/workbench/native-chart':
             from .native_charts import render_native_png
             from .study_charts import ChartBusyError, ChartDependencyError

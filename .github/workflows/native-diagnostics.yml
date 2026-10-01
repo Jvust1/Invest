@@ -1,0 +1,55 @@
+name: Invest saved native statsmodels diagnostics
+
+on:
+  pull_request:
+    paths:
+      - 'invest/**'
+      - 'tests/**'
+      - 'examples/saved_native_diagnostics.py'
+      - 'tools/native_restore_smoke.py'
+      - 'third_party/statsmodels/**'
+      - 'pyproject.toml'
+      - '.gitattributes'
+      - '.github/workflows/native-diagnostics.yml'
+permissions:
+  contents: read
+jobs:
+  diagnostics:
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ['3.10', '3.12']
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install actual pinned diagnostic SDK and core test dependencies
+        run: python -m pip install '.[diagnostics,test]'
+      - name: Dependency consistency
+        run: python -m pip check
+      - name: Saved report diagnostics and restore regressions
+        run: python -m pytest tests/test_native_diagnostics.py tests/test_native_json_restore.py tests/test_native_research.py -q
+      - name: Verify existing and new archive downloads
+        run: node --test tests/native_diagnostics_ui.test.cjs tests/native_charts_ui.test.cjs tests/study_charts_ui.test.cjs tests/record_download_ui.test.cjs tests/archive_controls_ui.test.cjs
+      - name: CLI from bounded saved JSON
+        run: python -m examples.saved_native_diagnostics tests/fixtures/native_research_v1_synthetic.json diagnostic-proof.json
+      - name: Build package
+        run: python -m pip wheel --no-deps --wheel-dir dist .
+      - name: Installed wheel actual SDK report and restored byte identity
+        run: python tools/native_restore_smoke.py dist --diagnostics
+      - name: Existing core-only installed recovery still forbids optional imports
+        run: python tools/native_restore_smoke.py dist
+      - name: Compile
+        run: python -m compileall -q invest tools/native_restore_smoke.py examples/saved_native_diagnostics.py

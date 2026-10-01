@@ -1,0 +1,529 @@
+{
+  "schema": "invest-broader-upstream-discovery-v1",
+  "checked_at_utc": "2026-10-01T03:20:00Z",
+  "scope": "Read-only screening beyond the six previously active SDKs, followed by one bounded new active statsmodels integration",
+  "base_pr": 63,
+  "base_head": "3035f98774a2a10b9ae69af70686471e4a8481a4",
+  "main_unchanged": "8d9e6aaa5ed8e2a71ef22430a45e0a77c4c24f8d",
+  "open_pr_overlap": "#48-#63 unchanged; only #60 diagnostic fork excluded from candidate; no competing Invest writer found at03:00UTC",
+  "screened_unique_repositories": 20,
+  "qualified_star_threshold": 13,
+  "below_threshold": 7,
+  "count_caveat": "Screened is not adopted. Most names already appear in the broad registry; statsmodels was registry-only, not an active runtime dependency. Only statsmodels is implemented in this slice; no catalogue-only adoption count. Source inspection is explicitly incomplete for Nautilus and threshold rejects.",
+  "known_data_gaps": [
+    "calendar",
+    "suspension",
+    "corporate_actions",
+    "price_limits",
+    "risk_warning_history",
+    "survivorship_bias",
+    "pit_features"
+  ],
+  "data_boundary_authority": "invest/provider_validation.py and invest/evaluation.py preserve unknown/not_covered; no library upgrades those declarations to verified without actual evidence",
+  "redirect_resolution": "great-expectations/great_expectations moved to fivetran/great_expectations; resolved through official GitHub page then verified by plugin. Wrong greatexpectations alias404 is not another project.",
+  "entries": [
+    {
+      "repo": "statsmodels/statsmodels",
+      "stars": 11666,
+      "license": "BSD-3-Clause",
+      "branch": "main",
+      "head": "d413a9313750d60ce5ee0628ab6d1dcd7858afcf",
+      "archived": false,
+      "last_push": "2026-09-30T07:58:45Z",
+      "checked_at": "2026-10-01T03:20:00Z",
+      "existing_repo_overlap": {
+        "stage": "catalog",
+        "status": "catalog_contract",
+        "path": null,
+        "target": "invest.upstream_catalog"
+      },
+      "source_inspection": [
+        {
+          "url": "https://github.com/statsmodels/statsmodels/blob/278ff9950636cdd4939b4055e339a8e681d79cab/statsmodels/stats/diagnostic.py",
+          "api": "acorr_ljungbox, deterministic supplied lag, model_df=0, no automatic lag search"
+        },
+        {
+          "url": "https://github.com/statsmodels/statsmodels/blob/278ff9950636cdd4939b4055e339a8e681d79cab/statsmodels/stats/stattools.py",
+          "api": "jarque_bera and durbin_watson on centered/scaled saved evaluation returns"
+        }
+      ],
+      "decision": "selected_implementation",
+      "gap_category": "analytics_reports",
+      "reason": "New active SDK path from saved native evaluation returns to identity-bound diagnostics JSON; existing registry-only entry. Real Ljung-Box/Jarque-Bera/Durbin-Watson APIs; no producer execution.",
+      "license_review": "Full official BSD-3-Clause text read and retained unchanged",
+      "selected_release": "v0.15.0",
+      "selected_source_pin": "278ff9950636cdd4939b4055e339a8e681d79cab"
+    },
+    {
+      "repo": "scipy/scipy",
+      "stars": 15060,
+      "license": "BSD-3-Clause",
+      "branch": "main",
+      "head": "38be1fd9514fa2e6c4ec82a7848874de8f40f9fe",
+      "archived": false,
+      "last_push": "2026-09-30T23:18:48Z",
+      "checked_at": "2026-10-01T03:20:00Z",
+      "existing_repo_overlap": null,
+      "source_inspection": [
+        {
+          "repo": "scipy/scipy",
+          "path": "scipy/stats/_resampling.py",
+          "pin": "38be1fd9514fa2e6c4ec82a7848874de8f40f9fe",
+          "url": "https://raw.githubusercontent.com/scipy/scipy/38be1fd9514fa2e6c4ec82a7848874de8f40f9fe/scipy/stats/_resampling.py",
+          "characters": 106490,
+          "matched": "def bootstrap",
+          "match_found": true
+        }
+      ],
+      "decision": "deferred",
+      "gap_category": "portfolio_risk",
+      "reason": "Already a core dependency. bootstrap API supports bounded batches and seeded rng, but naive independent resampling is inappropriate for serially dependent return data; block/paired design needs an explicit research protocol.",
+      "license_review": "GitHub SPDX metadata; full terms/adoption clearance not completed except selected statsmodels"
+    },
+    {
+      "repo": "pydantic/pydantic",
+      "stars": 28909,
+      "license": "MIT",
+      "branch": "main",
+      "head": "e2ac21dcd66fc682f8a50f6e179dbd95fa4b44ac",
+      "archived": false,
+      "last_push": "2026-10-01T00:07:19Z",
+      "checked_at": "2026-10-01T03:20:00Z",
+      "existing_repo_overlap": {
+        "stage": "catalog",
+        "status": "catalog_contract",
+        "path": null,
+        "target": "invest.upstream_catalog"
+      },
+      "source_inspection": [
+        {
+          "repo": "pydantic/pydantic",
+          "path": "pydantic/main.py",
+          "pin": "e2ac21dcd66fc682f8a50f6e179dbd95fa4b44ac",
+          "url": "https://raw.githubusercontent.com/pydantic/pydantic/e2ac21dcd66fc682f8a50f6e179dbd95fa4b44ac/pydantic/main.py",
+          "characters": 91373,
+          "matched": "def model_validate",
+          "match_found": true
+        }
+      ],
+      "decision": "deferred",
+      "gap_category": "data_quality",
+      "reason": "model_validate(strict=True, extra=forbid) is concrete but replacing current handwritten full-arithmetic validators would be unnecessary broad rearchitecture. Schema validation cannot attest source declarations; no Logfire telemetry integration is proposed.",
+      "license_review": "GitHub SPDX metadata; full terms/adoption clearance not completed except selected statsmodels"
+    },
+    {
+      "repo": "quantopian/zipline",
+      "stars": 20139,
+      "license": "Apache-2.0",
+      "branch": "master",
+      "head": "014f1fc339dc8b7671d29be2d85ce57d3daec343",
+      "archived": false,
+      "last_push": "2024-02-13T08:02:51Z",
+      "checked_at": "2026-10-01T03:20:00Z",
+      "existing_repo_overlap": null,
+      "source_inspection": [
+        {
+          "repo": "quantopian/zipline",
+          "path": "zipline/data/adjustments.py",
+          "pin": "014f1fc339dc8b7671d29be2d85ce57d3daec343",
+          "url": "https://raw.githubusercontent.com/quantopian/zipline/014f1fc339dc8b7671d29be2d85ce57d3daec343/zipline/data/adjustments.py",
+          "characters": 24855,
+          "matched": "class SQLiteAdjustmentWriter",
+          "match_found": true
+        }
+      ],
+      "decision": "rejected_current_adoption",
+      "gap_category": "corporate_actions_backtest",
+      "reason": "SQLiteAdjustmentWriter is a concrete split/dividend ledger reference, but original repository last push2024 and Invest already has zipline-reloaded synthetic contract. Do not duplicate the old engine or equate corporate-action storage with licensed complete event data.",
+      "license_review": "GitHub SPDX metadata; full terms/adoption clearance not completed except selected statsmodels"
+    },
+    {
+      "repo": "QuantConnect/Lean",
+      "stars": 21833,
+      "license": "Apache-2.0",
+      "branch": "master",
+      "head": "41c6e603e5671ca7b5d3de0cbe13b3c4b109bba4",
+      "archived": false,
+      "last_push": "2026-09-30T23:00:58Z",
+      "checked_at": "2026-10-01T03:20:00Z",
+      "existing_repo_overlap": {
+        "stage": "catalog",
+        "status": "catalog_contract",
+        "path": null,
+        "target": "invest.upstream_catalog"
+      },
+      "source_inspection": [
+        {
+          "repo": "QuantConnect/Lean",
+          "path": "Common/Data/Auxiliary/FactorFile.cs",
+          "pin": "41c6e603e5671ca7b5d3de0cbe13b3c4b109bba4",
+          "url": "https://raw.githubusercontent.com/QuantConnect/Lean/41c6e603e5671ca7b5d3de0cbe13b3c4b109bba4/Common/Data/Auxiliary/FactorFile.cs",
+          "characters": 5488,
+          "matched": "class FactorFile",
+          "match_found": true
+        }
+      ],
+      "decision": "deferred",
+      "gap_category": "corporate_actions_backtest",
+      "reason": "FactorFile sorted-date and minimum-tradeable-date handling is useful as an independent adjustment reference. C#/.NET engine and market semantics are a large new integration; a synthetic split/dividend crosscheck would need a separate bounded protocol.",
+      "license_review": "GitHub SPDX metadata; full terms/adoption clearance not completed except selected statsmodels"
+    },
+    {
+      "repo": "mementum/backtrader",
+      "stars": 23377,
+      "license": "GPL-3.0",
+      "branch": "master",
+      "head": "b853d7c90b6721476eb5a5ea3135224e33db1f14",
+      "archived": false,
+      "last_push": "2024-08-19T17:47:36Z",
+      "checked_at": "2026-10-01T03:20:00Z",
+      "existing_repo_overlap": {
+        "stage": "reference_only",
+        "status": "reference_only",
+        "path": null,
+        "target": "reference_only"
+      },
+      "source_inspection": [
+        {
+          "repo": "mementum/backtrader",
+          "path": "backtrader/brokers/bbroker.py",
+          "pin": "b853d7c90b6721476eb5a5ea3135224e33db1f14",
+          "url": "https://raw.githubusercontent.com/mementum/backtrader/b853d7c90b6721476eb5a5ea3135224e33db1f14/backtrader/brokers/bbroker.py",
+          "characters": 46016,
+          "matched": "class BackBroker",
+          "match_found": true
+        }
+      ],
+      "decision": "rejected_current_adoption",
+      "gap_category": "portfolio_backtest",
+      "reason": "BackBroker supports next-bar market simulation and cash accounting. GPL-3.0 source-copy licensing obligations are not cleared for this project; stale2024 push and missing exact A-share lot/T+1/fee mapping make it a poor immediate addition.",
+      "license_review": "GitHub SPDX metadata; full terms/adoption clearance not completed except selected statsmodels"
+    },
+    {
+      "repo": "kernc/backtesting.py",
+      "stars": 9010,
+      "license": "AGPL-3.0",
+      "branch": "master",
+      "head": "ca2e2611621e472542ba90f7243a1fa06a7d7108",
+      "archived": false,
+      "last_push": "2026-08-05T12:39:16Z",
+      "checked_at": "2026-10-01T03:20:00Z",
+      "existing_repo_overlap": {
+        "stage": "reference_only",
+        "status": "reference_only",
+        "path": null,
+        "target": "reference_only"
+      },
+      "source_inspection": [],
+      "decision": "rejected_star_threshold",
+      "gap_category": "calendar_data_quality_or_backtest",
+      "reason": "9010 current stars is below the explicit10000 threshold; not counted as a qualified adoption candidate",
+      "license_review": "GitHub metadata only; no adoption clearance"
+    },
+    {
+      "repo": "polakowo/vectorbt",
+      "stars": 9247,
+      "license": "NOASSERTION",
+      "branch": "master",
+      "head": "ceffc501f2d37033a79dd86a9f883e69ec6977bd",
+      "archived": false,
+      "last_push": "2026-09-26T11:27:49Z",
+      "checked_at": "2026-10-01T03:20:00Z",
+      "existing_repo_overlap": {
+        "stage": "reference_only",
+        "status": "reference_only",
+        "path": null,
+        "target": "reference_only"
+      },
+      "source_inspection": [],
+      "decision": "rejected_star_threshold",
+      "gap_category": "calendar_data_quality_or_backtest",
+      "reason": "9247 current stars is below the explicit10000 threshold; not counted as a qualified adoption candidate",
+      "license_review": "GitHub metadata only; no adoption clearance"
+    },
+    {
+      "repo": "nautechsystems/nautilus_trader",
+      "stars": 29544,
+      "license": "LGPL-3.0",
+      "branch": "develop",
+      "head": "b54a311469d9b0b88c2cfeea1c78ca3263a9afa3",
+      "archived": false,
+      "last_push": "2026-10-01T02:46:11Z",
+      "checked_at": "2026-10-01T03:20:00Z",
+      "existing_repo_overlap": null,
+      "source_inspection": [
+        {
+          "repo": "nautechsystems/nautilus_trader",
+          "path": "nautilus_trader/backtest/engine.pyx",
+          "pin": "b54a311469d9b0b88c2cfeea1c78ca3263a9afa3",
+          "url": "https://raw.githubusercontent.com/nautechsystems/nautilus_trader/b54a311469d9b0b88c2cfeea1c78ca3263a9afa3/nautilus_trader/backtest/engine.pyx",
+          "error": [
+            {
+              "type": "text",
+              "text": "GitHub API error 404: {\"message\":\"Not Found\",\"documentation_url\":\"https://docs.github.com/rest/repos/contents#get-repository-content\",\"status\":\"404\"}"
+            }
+          ]
+        }
+      ],
+      "decision": "deferred_not_source_cleared",
+      "gap_category": "portfolio_backtest",
+      "reason": "High-star LGPL-3.0 engine, but the attempted pinned engine.pyx path was absent; concrete engine API was not verified in this pass. No adoption recommended without locating current Rust/Python boundaries and clearing redistribution obligations.",
+      "license_review": "GitHub SPDX metadata; full terms/adoption clearance not completed except selected statsmodels"
+    },
+    {
+      "repo": "plotly/plotly.py",
+      "stars": 18817,
+      "license": "MIT",
+      "branch": "main",
+      "head": "d586d225b8577fa3a4ff8954bdd47ef3b9cc0c07",
+      "archived": false,
+      "last_push": "2026-09-25T07:35:35Z",
+      "checked_at": "2026-10-01T03:20:00Z",
+      "existing_repo_overlap": {
+        "stage": "catalog",
+        "status": "catalog_contract",
+        "path": null,
+        "target": "invest.upstream_catalog"
+      },
+      "source_inspection": [
+        {
+          "repo": "plotly/plotly.py",
+          "path": "plotly/io/_html.py",
+          "pin": "d586d225b8577fa3a4ff8954bdd47ef3b9cc0c07",
+          "url": "https://raw.githubusercontent.com/plotly/plotly.py/d586d225b8577fa3a4ff8954bdd47ef3b9cc0c07/plotly/io/_html.py",
+          "characters": 19372,
+          "matched": "def to_html",
+          "match_found": true
+        }
+      ],
+      "decision": "shortlisted_future_pilot",
+      "gap_category": "analytics_reports_ui",
+      "reason": "to_html(include_plotlyjs=True) supports offline self-contained interactive saved-report drilldown. Existing PNG path stays authoritative; content/script handling and download bounds need a separate pilot. Already registry-only.",
+      "license_review": "GitHub SPDX metadata; full terms/adoption clearance not completed except selected statsmodels"
+    },
+    {
+      "repo": "apache/echarts",
+      "stars": 67423,
+      "license": "Apache-2.0",
+      "branch": "master",
+      "head": "62e3373dc1afcce0643d13059c43583ca275fd56",
+      "archived": false,
+      "last_push": "2026-09-30T04:13:49Z",
+      "checked_at": "2026-10-01T03:20:00Z",
+      "existing_repo_overlap": null,
+      "source_inspection": [
+        {
+          "repo": "apache/echarts",
+          "path": "src/component/dataZoom/InsideZoomView.ts",
+          "pin": "62e3373dc1afcce0643d13059c43583ca275fd56",
+          "url": "https://raw.githubusercontent.com/apache/echarts/62e3373dc1afcce0643d13059c43583ca275fd56/src/component/dataZoom/InsideZoomView.ts",
+          "characters": 10023,
+          "matched": "class InsideZoomView",
+          "match_found": true
+        }
+      ],
+      "decision": "deferred",
+      "gap_category": "analytics_reports_ui",
+      "reason": "InsideZoomView has concrete bounded-range pan/zoom lifecycle and disposal. Potential future client-side saved-curve comparison, but it overlaps current plots and needs local asset/CSP/data-boundary/browser acceptance.",
+      "license_review": "GitHub SPDX metadata; full terms/adoption clearance not completed except selected statsmodels"
+    },
+    {
+      "repo": "chartjs/Chart.js",
+      "stars": 67727,
+      "license": "MIT",
+      "branch": "master",
+      "head": "6a86e238fac3d1ad35eb84b93e7804dfb5813f79",
+      "archived": false,
+      "last_push": "2026-09-29T17:59:38Z",
+      "checked_at": "2026-10-01T03:20:00Z",
+      "existing_repo_overlap": null,
+      "source_inspection": [
+        {
+          "repo": "chartjs/Chart.js",
+          "path": "src/controllers/controller.line.js",
+          "pin": "6a86e238fac3d1ad35eb84b93e7804dfb5813f79",
+          "url": "https://raw.githubusercontent.com/chartjs/Chart.js/6a86e238fac3d1ad35eb84b93e7804dfb5813f79/src/controllers/controller.line.js",
+          "characters": 4207,
+          "matched": "class LineController",
+          "match_found": true
+        }
+      ],
+      "decision": "deferred",
+      "gap_category": "analytics_reports_ui",
+      "reason": "LineController has gap-preserving defaults and visible-range rendering. Smaller client option for saved curves, but choosing another renderer now duplicates current Matplotlib output; comparison/hover use case should precede adoption.",
+      "license_review": "GitHub SPDX metadata; full terms/adoption clearance not completed except selected statsmodels"
+    },
+    {
+      "repo": "vega/vega-lite",
+      "stars": 5499,
+      "license": "BSD-3-Clause",
+      "branch": "main",
+      "head": "37e3b5c76b9cb97dcb1358a46bd645cad8b11ea8",
+      "archived": false,
+      "last_push": "2026-09-30T16:40:44Z",
+      "checked_at": "2026-10-01T03:20:00Z",
+      "existing_repo_overlap": null,
+      "source_inspection": [],
+      "decision": "rejected_star_threshold",
+      "gap_category": "calendar_data_quality_or_backtest",
+      "reason": "5499 current stars is below the explicit10000 threshold; not counted as a qualified adoption candidate",
+      "license_review": "GitHub metadata only; no adoption clearance"
+    },
+    {
+      "repo": "vega/altair",
+      "stars": 10488,
+      "license": "BSD-3-Clause",
+      "branch": "main",
+      "head": "7dab0f6404d5adffad5c5ed9b354aa5bfc116dbc",
+      "archived": false,
+      "last_push": "2026-09-28T14:33:43Z",
+      "checked_at": "2026-10-01T03:20:00Z",
+      "existing_repo_overlap": null,
+      "source_inspection": [
+        {
+          "repo": "vega/altair",
+          "path": "altair/vegalite/v6/api.py",
+          "pin": "7dab0f6404d5adffad5c5ed9b354aa5bfc116dbc",
+          "url": "https://raw.githubusercontent.com/vega/altair/7dab0f6404d5adffad5c5ed9b354aa5bfc116dbc/altair/vegalite/v6/api.py",
+          "characters": 204712,
+          "matched": "def save",
+          "match_found": true
+        }
+      ],
+      "decision": "deferred",
+      "gap_category": "analytics_reports_ui",
+      "reason": "Chart.save supports JSON/HTML and inline modes, but default override_data_transformer disables the row cap and image export needs another package. Requires explicit caps/offline assets; redundant with current charts until an interaction need is established.",
+      "license_review": "GitHub SPDX metadata; full terms/adoption clearance not completed except selected statsmodels"
+    },
+    {
+      "repo": "streamlit/streamlit",
+      "stars": 45868,
+      "license": "Apache-2.0",
+      "branch": "develop",
+      "head": "9a8bbf0b9096fa27d74c1025935c0ee99128c34b",
+      "archived": false,
+      "last_push": "2026-10-01T01:31:36Z",
+      "checked_at": "2026-10-01T03:20:00Z",
+      "existing_repo_overlap": {
+        "stage": "catalog",
+        "status": "catalog_contract",
+        "path": null,
+        "target": "invest.upstream_catalog"
+      },
+      "source_inspection": [
+        {
+          "repo": "streamlit/streamlit",
+          "path": "lib/streamlit/elements/vega_charts.py",
+          "pin": "9a8bbf0b9096fa27d74c1025935c0ee99128c34b",
+          "url": "https://raw.githubusercontent.com/streamlit/streamlit/9a8bbf0b9096fa27d74c1025935c0ee99128c34b/lib/streamlit/elements/vega_charts.py",
+          "characters": 116212,
+          "matched": "def altair_chart",
+          "match_found": true
+        }
+      ],
+      "decision": "rejected_current_adoption",
+      "gap_category": "local_research_ui",
+      "reason": "altair_chart selection callbacks are concrete, but a second server/rerun UI would duplicate the existing local workbench and persistence/CSRF/download boundaries. Replacing the UI is outside this bounded feature.",
+      "license_review": "GitHub SPDX metadata; full terms/adoption clearance not completed except selected statsmodels"
+    },
+    {
+      "repo": "pydata/pandas-datareader",
+      "stars": 3273,
+      "license": "NOASSERTION",
+      "branch": "main",
+      "head": "9a3e2fe8c4e202bf9be6b4543fd1a06c3cdce7de",
+      "archived": false,
+      "last_push": "2026-07-21T08:28:05Z",
+      "checked_at": "2026-10-01T03:20:00Z",
+      "existing_repo_overlap": null,
+      "source_inspection": [],
+      "decision": "rejected_star_threshold",
+      "gap_category": "calendar_data_quality_or_backtest",
+      "reason": "3273 current stars is below the explicit10000 threshold; not counted as a qualified adoption candidate",
+      "license_review": "GitHub metadata only; no adoption clearance"
+    },
+    {
+      "repo": "gerrymanoim/exchange_calendars",
+      "stars": 670,
+      "license": "Apache-2.0",
+      "branch": "master",
+      "head": "bbda29fed902374bdb75acab008f421fbd567823",
+      "archived": false,
+      "last_push": "2026-09-24T06:22:30Z",
+      "checked_at": "2026-10-01T03:20:00Z",
+      "existing_repo_overlap": {
+        "stage": "active_adapter",
+        "status": "active_adapter",
+        "path": "invest/calendar.py",
+        "target": "invest.calendar"
+      },
+      "source_inspection": [],
+      "decision": "rejected_star_threshold",
+      "gap_category": "calendar_data_quality_or_backtest",
+      "reason": "670 current stars is below the explicit10000 threshold; not counted as a qualified adoption candidate",
+      "license_review": "GitHub metadata only; no adoption clearance"
+    },
+    {
+      "repo": "rsheftel/pandas_market_calendars",
+      "stars": 1001,
+      "license": "MIT",
+      "branch": "master",
+      "head": "275890784073a3a3a347e4f05f4dc986456e6a75",
+      "archived": false,
+      "last_push": "2026-07-12T22:35:10Z",
+      "checked_at": "2026-10-01T03:20:00Z",
+      "existing_repo_overlap": {
+        "stage": "active_adapter",
+        "status": "active_adapter",
+        "path": "invest/calendar.py",
+        "target": "invest.calendar"
+      },
+      "source_inspection": [],
+      "decision": "rejected_star_threshold",
+      "gap_category": "calendar_data_quality_or_backtest",
+      "reason": "1001 current stars is below the explicit10000 threshold; not counted as a qualified adoption candidate",
+      "license_review": "GitHub metadata only; no adoption clearance"
+    },
+    {
+      "repo": "unionai-oss/pandera",
+      "stars": 4471,
+      "license": "MIT",
+      "branch": "main",
+      "head": "6e23433b4f010fdadc2e11b6229a43afd792abed",
+      "archived": false,
+      "last_push": "2026-09-26T16:31:24Z",
+      "checked_at": "2026-10-01T03:20:00Z",
+      "existing_repo_overlap": null,
+      "source_inspection": [],
+      "decision": "rejected_star_threshold",
+      "gap_category": "calendar_data_quality_or_backtest",
+      "reason": "4471 current stars is below the explicit10000 threshold; not counted as a qualified adoption candidate",
+      "license_review": "GitHub metadata only; no adoption clearance"
+    },
+    {
+      "repo": "fivetran/great_expectations",
+      "stars": 11851,
+      "license": "Apache-2.0",
+      "branch": "develop",
+      "head": "88a054dfc0cb1d7bae86d3f81cb5c23da8c4d1bd",
+      "checked_at": "2026-10-01T03:20:00Z",
+      "redirect_from": "great-expectations/great_expectations",
+      "existing_repo_overlap": null,
+      "source_inspection": [
+        {
+          "repo": "fivetran/great_expectations",
+          "path": "great_expectations/expectations/core/expect_column_values_to_be_between.py",
+          "pin": "88a054dfc0cb1d7bae86d3f81cb5c23da8c4d1bd",
+          "url": "https://raw.githubusercontent.com/fivetran/great_expectations/88a054dfc0cb1d7bae86d3f81cb5c23da8c4d1bd/great_expectations/expectations/core/expect_column_values_to_be_between.py",
+          "characters": 17970,
+          "matched": "class ExpectColumnValuesToBeBetween",
+          "match_found": true
+        }
+      ],
+      "decision": "shortlisted_future_pilot",
+      "gap_category": "data_quality",
+      "reason": "Row-level expectations and complete failure reports could supplement audit_receipt. Must disable permissive mostly thresholds/caught-exception success and any cloud context; it cannot establish data rights, PIT, calendar or corporate-action completeness.",
+      "license_review": "GitHub SPDX metadata; full terms/adoption clearance not completed except selected statsmodels"
+    }
+  ]
+}

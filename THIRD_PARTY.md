@@ -59,3 +59,12 @@ the reproduction commands pin the tested SDKs, and reports record actual runtime
 versions. The native chart reuses the same Matplotlib integration and notices.
 See [the coherent source handoff](docs/upstream/coherent-source-candidate-2026-10-01.md)
 for actual input-to-output paths, constraints and exact acceptance evidence.
+
+## Saved-return statistical diagnostics
+
+`invest/native_diagnostics.py` invokes the official installed `statsmodels==0.15.0`
+Ljung-Box, Jarque-Bera and Durbin-Watson APIs. The Invest adapter is original code;
+no statsmodels implementation fork is vendored. Exact release source
+`278ff9950636cdd4939b4055e339a8e681d79cab`, full BSD-3-Clause license bytes and
+license hash are retained in `third_party/statsmodels/`. See
+[diagnostic meaning and limits](docs/upstream/statsmodels-native-diagnostics-2026-10-01.md).
