@@ -501,7 +501,8 @@ def test_cli_restore_requires_explicit_paths_and_preserves_record(tmp_path, reco
 
 
 @pytest.mark.parametrize('command', ['restore', 'validate'])
-@pytest.mark.parametrize('raw', [b'\xff', b' ' * (native.MAX_BYTES + 1), b'{'])
+@pytest.mark.parametrize('raw', [b'\xff', b' ' * (native.MAX_BYTES + 1), b'{'],
+                         ids=['invalid-utf8', 'oversized', 'malformed'])
 def test_cli_invalid_bytes_never_create_destination(tmp_path, command, raw):
     source = tmp_path / 'invalid.json'
     source.write_bytes(raw)
@@ -512,6 +513,15 @@ def test_cli_invalid_bytes_never_create_destination(tmp_path, command, raw):
     with pytest.raises(ValueError):
         cli.main(args)
     assert not destination.exists()
+
+
+def test_collected_recovery_metadata_is_bounded(request):
+    # Pytest copies node IDs into PYTEST_CURRENT_TEST for each test phase. Large
+    # adversarial fixtures must stay test data, never collection/environment IDs.
+    # Report only lengths/names on failure, not the potentially huge IDs.
+    offenders = [(item.originalname, len(item.nodeid)) for item in request.session.items
+                 if item.path == request.node.path and len(item.nodeid) > 256]
+    assert offenders == []
 
 
 def test_cli_reads_max_plus_one_without_stat_or_unbounded_read(monkeypatch):
