@@ -1,4 +1,4 @@
-"""Save exact offline native research, or run an authored synthetic SDK pilot.
+"""Save, validate or explicitly restore exact offline native research JSON.
 
 Run from the source checkout with ``python -m examples.native_research_record``.
 Exports contain embedded source rows and the caller's source_id declaration.
@@ -10,7 +10,8 @@ import argparse
 import json
 from pathlib import Path
 
-from invest.native_research import parse_native_json, run_and_save_native_research, validate_native_record
+from invest.native_research import (MAX_BYTES, parse_native_json, restore_native_json,
+                                    run_and_save_native_research, validate_native_record)
 from invest.providers.duckdb_cache import DuckDBMarketCache, DuckDBReplayProvider
 from invest.workspace import Workspace
 
@@ -48,6 +49,18 @@ def synthetic_pilot(destination):
     return record
 
 
+def read_native_json(path):
+    """One bounded read, even if a file grows while it is being opened/read."""
+    with Path(path).open('rb') as source:
+        raw = source.read(MAX_BYTES + 1)
+    if len(raw) > MAX_BYTES:
+        raise ValueError('native record JSON exceeds 8 MiB')
+    try:
+        return raw.decode('utf-8')
+    except UnicodeDecodeError as exc:
+        raise ValueError('native record JSON must be UTF-8') from exc
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest='command', required=True)
@@ -64,21 +77,28 @@ def main(argv=None):
     run.add_argument('--trials', type=int, default=12)
     check = commands.add_parser('validate', help='fully replay a saved JSON record without optional SDKs')
     check.add_argument('record', type=Path)
+    restore = commands.add_parser('restore', help='restore one native JSON export without replacing existing records')
+    restore.add_argument('record', type=Path)
+    restore.add_argument('--workspace', required=True, type=Path)
     args = parser.parse_args(argv)
     if args.command == 'synthetic-pilot':
         record = synthetic_pilot(args.destination)
     elif args.command == 'run':
         record = save_from_cache(args.cache, args.workspace, args.source_id, args.symbol,
                                  args.start, args.end, args.input_role, args.trials)
+    elif args.command == 'restore':
+        record = restore_native_json(read_native_json(args.record), args.workspace / 'state.sqlite')
     else:
-        if args.record.stat().st_size > 8 * 1024 * 1024:
-            raise ValueError('native record JSON exceeds 8 MiB')
-        record = parse_native_json(args.record.read_text(encoding='utf-8'))
+        record = parse_native_json(read_native_json(args.record))
         validate_native_record(record)
-    print(json.dumps({'record_id': record['id'], 'kind': record['kind'],
+    result = {'record_id': record['id'], 'kind': record['kind'],
         'input_rows': len(record['payload']['input']['rows']),
         'evaluation_rows': len(record['payload']['curve']['rows']),
-        'summary': record['payload']['summary'], 'validated': True}, indent=2, allow_nan=False))
+        'summary': record['payload']['summary'], 'validated': True}
+    if args.command == 'restore':
+        result.update(recorded_at=record['recorded_at'],
+                      provenance='preserved_producer_and_timestamp_declarations_not_authenticated')
+    print(json.dumps(result, indent=2, allow_nan=False))
     return 0
 
 

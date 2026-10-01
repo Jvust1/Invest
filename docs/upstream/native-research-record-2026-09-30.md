@@ -59,6 +59,10 @@ source declarations can themselves contain private information. Do not put secre
 in them. No arbitrary DataFrame attrs, feature values, study objects, cache paths
 or provider paths are automatically collected.
 
+Standalone exports can also be [explicitly restored to a workbench](native-json-recovery-2026-10-01.md)
+without optional SDKs. Recovery retains the complete declared envelope, including
+the original timestamp; it never reruns a producer or assigns current provenance.
+
 ## Saved evidence and validation
 
 Schema `invest-native-research-v1` stores:

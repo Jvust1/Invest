@@ -34,6 +34,13 @@ applying each signal on the following bar.
 
     python -m examples.native_research_record synthetic-pilot /tmp/invest-native-demo
 
+已有原生研究 JSON 可[显式恢复到工作台](docs/upstream/native-json-recovery-2026-10-01.md)，无需可选 SDK：
+
+    python -m examples.native_research_record restore /path/to/native-research.json --workspace /path/to/workbench
+
+恢复保留原始 ID、内容、声明的生产者及时间；完整校验后才写入，相同记录可重复恢复，冲突不会覆盖原件。
+此恢复功能独立于 MLflow；PR #59 的既有 Windows Python 3.10 初始化超时仍未解决，不能据此声称总体验证通过。
+
 工作台本地归档需在源码启动时明确启用 `--track-experiments`；失败仍保留原研究，可在结果或归档列表中重试。
 
 ## 长期成长计划
