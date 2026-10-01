@@ -43,7 +43,7 @@
       "repo": "microsoft/qlib",
       "revision": "be725493eb1a6bbb42bf11b37aa7669f59610ff1",
       "license": "MIT",
-      "stars": 49065,
+      "stars": 49078,
       "status": "active_adapter",
       "path": "invest/qlib_bridge.py",
       "target": "invest.qlib_bridge",
@@ -51,10 +51,16 @@
       "capabilities": [
         "factor_research",
         "model_pipeline",
-        "backtesting"
+        "backtesting",
+        "china_market_data",
+        "market_data"
       ],
       "python_import": "qlib",
-      "last_push": "2026-09-22T05:57:23Z"
+      "last_push": "2026-09-22T05:57:23Z",
+      "runtime_package": "pyqlib==0.9.7",
+      "runtime_revision": "da920b7f954f48ab1bb64117c976710de198373e",
+      "license_path": "third_party/qlib/LICENSE",
+      "notes": "Actual isolated local D.features reader into both existing research pipelines; explicit native adjust='qlib'; no Qlib experiments or market downloads; MLflow3.16.1 coinstalled."
     },
     {
       "repo": "PyPortfolio/PyPortfolioOpt",
@@ -703,10 +709,10 @@
       "repo": "optuna/optuna",
       "revision": "5c8e50d85b77dd5a1fd7e26e21f63debc81d6016",
       "license": "MIT",
-      "stars": 14864,
+      "stars": 14865,
       "status": "active_adapter",
       "path": "invest/optuna_walkforward.py",
-      "target": "invest.optuna_walkforward.optimize_sma_walkforward",
+      "target": "invest.research_pipeline.run_a_share_research_bundle",
       "stage": "active_adapter",
       "capabilities": [
         "hyperparameter_optimization",
@@ -715,24 +721,26 @@
       "python_import": "optuna",
       "last_push": "2026-09-30T07:26:24Z",
       "batch": "20260930-high-star-50",
-      "notes": "Walk-forward-only SMA optimization adapter; no single-window in-sample score is used as the objective."
+      "notes": "Real seeded in-memory TPE search on an earlier provider-history prefix; later evaluation is separate, slice-local metrics and all completed trials retained; no persistent storage or real trades."
     },
     {
       "repo": "duckdb/duckdb",
-      "revision": "default-branch metadata snapshot 2026-09-30",
+      "revision": "7fb68627fd223b7cd06d37b83059e571fa5f994a",
       "license": "MIT",
-      "stars": 41818,
-      "status": "catalog_contract",
-      "path": null,
-      "target": "invest.upstream_catalog",
-      "stage": "catalog",
+      "stars": 41832,
+      "status": "active_adapter",
+      "path": "invest/providers/duckdb_cache.py",
+      "target": "invest.providers.DuckDBReplayProvider",
+      "stage": "active_adapter",
       "capabilities": [
         "analytical_storage",
-        "market_data"
+        "market_data",
+        "exact_request_offline_replay"
       ],
       "python_import": "duckdb",
-      "last_push": "2026-09-29T19:17:02Z",
-      "batch": "20260930-high-star-50"
+      "last_push": "2026-09-30T18:04:43Z",
+      "batch": "20260930-high-star-50",
+      "integration_note": "Actual optional DuckDB runtime stores exact-request snapshots, verifies integrity and replays through existing research/SMA pipelines. MIT notice in third_party/duckdb/LICENSE; docs/upstream/duckdb-replay-2026-09-30.md."
     },
     {
       "repo": "pola-rs/polars",
@@ -787,20 +795,22 @@
     },
     {
       "repo": "matplotlib/matplotlib",
-      "revision": "default-branch metadata snapshot 2026-09-30",
-      "license": "NOASSERTION",
-      "stars": 23307,
-      "status": "catalog_contract",
-      "path": null,
-      "target": "invest.upstream_catalog",
-      "stage": "catalog",
+      "revision": "1392cbe3c79cdb93f9282747841d648770f60249",
+      "license": "LicenseRef-Matplotlib",
+      "stars": 23310,
+      "status": "runtime_integration",
+      "path": "invest/study_charts.py",
+      "target": "invest.study_charts.render_study_png",
+      "stage": "active_adapter",
       "capabilities": [
         "visualization",
         "research_reporting"
       ],
       "python_import": "matplotlib",
       "last_push": "2026-09-30T03:22:33Z",
-      "batch": "20260930-high-star-50"
+      "batch": "20260930-high-star-50",
+      "license_review": "Matplotlib PSF-based license reviewed; exact license retained in third_party/matplotlib/LICENSE; generic safe-only allowlist unchanged",
+      "tested_package": "matplotlib==3.10.8"
     },
     {
       "repo": "mwaskom/seaborn",
@@ -872,20 +882,21 @@
     },
     {
       "repo": "scikit-learn/scikit-learn",
-      "revision": "default-branch metadata snapshot 2026-09-30",
+      "revision": "646da0f072a8afef6a980aa427a710311e67eb9d",
       "license": "BSD-3-Clause",
       "stars": 67434,
-      "status": "catalog_contract",
-      "path": null,
-      "target": "invest.upstream_catalog",
-      "stage": "catalog",
+      "status": "active_adapter",
+      "path": "invest/walkforward.py",
+      "target": "invest.experiments.run_study",
+      "stage": "active_adapter",
       "capabilities": [
         "machine_learning",
         "time_series_validation"
       ],
       "python_import": "sklearn",
       "last_push": "2026-09-29T16:42:42Z",
-      "batch": "20260930-high-star-50"
+      "batch": "20260930-high-star-50",
+      "notes": "TimeSeriesSplit is executed in the existing workbench study path; chronological train-only candidate selection, gap and bounded rolling windows, all candidate evidence, deterministic ledger replay. Installed runtime version is recorded; inspected source is 1.8.0, not a copied fork."
     },
     {
       "repo": "statsmodels/statsmodels",
@@ -974,20 +985,23 @@
     },
     {
       "repo": "mlflow/mlflow",
-      "revision": "default-branch metadata snapshot 2026-09-30",
+      "revision": "7faf28476bddcebb68ee8b08cdcba1bee7ad6109",
       "license": "Apache-2.0",
-      "stars": 28192,
-      "status": "catalog_contract",
-      "path": null,
-      "target": "invest.upstream_catalog",
-      "stage": "catalog",
+      "stars": 28199,
+      "status": "implemented_optional_local_archive",
+      "path": "invest/mlflow_tracking.py",
+      "target": "invest.mlflow_tracking.LocalMLflowArchive",
+      "stage": "active_adapter",
       "capabilities": [
         "experiment_tracking",
-        "model_registry"
+        "local_study_archive"
       ],
       "python_import": "mlflow",
-      "last_push": "2026-09-30T07:21:04Z",
-      "batch": "20260930-high-star-50"
+      "last_push": "2026-09-30T15:57:22Z",
+      "batch": "20260930-high-star-50",
+      "license_path": "third_party/mlflow/LICENSE.txt",
+      "runtime_version": "3.16.1",
+      "notes": "Default-off workbench save calls the real local SDK after committing the immutable study. Explicit SQLite/file storage, disabled telemetry, idempotent archive and recovery; no remote tracking, model registry or trading."
     },
     {
       "repo": "PrefectHQ/prefect",

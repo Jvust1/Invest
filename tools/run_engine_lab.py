@@ -38,7 +38,7 @@ QUANTITIES={
  'mark_to_close':([100,100],[100,100]),'cash_exact':([100],[100]),'no_inventory':([0],[0])}
 
 
-def save_json(path,obj): path.write_text(json.dumps(obj,ensure_ascii=False,indent=2,allow_nan=False)+'\n',encoding='utf-8')
+def save_json(path,obj): path.write_text(json.dumps(obj,ensure_ascii=True,indent=2,allow_nan=False)+'\n',encoding='utf-8')
 
 
 def outcome(name,report,definition):

@@ -26,3 +26,24 @@ CSV 导入保留来源声明和 SHA-256 内容指纹，但不会独立证明提�
 - [交易日历](https://tushare.pro/document/2?doc_id=26)
 - [复权因子](https://tushare.pro/document/2?doc_id=28)
 - [涨跌停价格](https://tushare.pro/document/2?doc_id=183)
+
+## Optional seeded Optuna research bundle
+
+Run `python examples/optimized_research_bundle.py` after installing `.[optuna]`.
+This uses only deterministic synthetic data and the real upstream optimizer;
+parameter search sees an earlier prefix, while the reported backtest covers a
+separate later suffix. Full trial evidence and split/metric scope are included.
+See `docs/upstream/optuna-walkforward-2026-09-30.md` for the research boundaries.
+
+## Saved native report PNG
+
+After installing the existing `.[charts]` extra, run:
+
+```sh
+python -m examples.saved_native_chart tests/fixtures/native_research_v1_synthetic.json /tmp/invest-native-synthetic.png
+```
+
+This source-checkout example reads an existing bounded native JSON record; it
+does not rerun providers or optimization. The PNG keeps synthetic/unverified
+labels and the original source/producer declarations as metadata. Review those
+declarations before sharing. See [native research charts](../docs/upstream/native-research-charts-2026-10-01.md).

@@ -1,0 +1,113 @@
+name: Invest reproducible source delivery
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    env:
+      # A PR archive represents the actual head, never GitHub's synthetic merge.
+      SOURCE_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install test and wheel build tools
+        run: python -m pip install 'setuptools>=68' wheel pytest
+      - name: Test source boundary adversaries
+        run: python -m pytest tests/test_source_delivery.py -q
+      - name: Build twice, verify against trusted Git, and extract
+        shell: python
+        run: |
+          import importlib.util, json, os, pathlib, subprocess, sys
+          repo = pathlib.Path.cwd()
+          spec = importlib.util.spec_from_file_location('source_delivery', repo/'tools/build_source_delivery.py')
+          module = importlib.util.module_from_spec(spec)
+          sys.modules[spec.name] = module
+          spec.loader.exec_module(module)
+          commit = os.environ['SOURCE_COMMIT']
+          actual = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
+          assert actual == commit, 'checkout is not the selected immutable head'
+          output = repo/'source-delivery-artifacts'
+          output.mkdir()
+          archive = output/'Invest-Source.zip'
+          second = pathlib.Path(os.environ['RUNNER_TEMP'])/'Invest-Source-repeat.zip'
+          report = module.build(repo, commit, archive)
+          module.build(repo, commit, second)
+          assert archive.read_bytes() == second.read_bytes(), 'duplicate builds differ'
+          destination = pathlib.Path(os.environ['RUNNER_TEMP'])/'verified-invest-source'
+          assert module.verify(repo, commit, archive, extract=destination) == report
+          source = destination/'invest-source'
+          (output/'SOURCE_MANIFEST.json').write_bytes((source/module.MANIFEST).read_bytes())
+          report.update(duplicate_build_equal=True, trusted_git_verified=True,
+                        extracted_source_wheel_built=False, installed_wheel_core_only_restore_passed=False)
+          (output/'verification.json').write_text(json.dumps(report, indent=2)+'\n', encoding='utf-8')
+          with open(os.environ['GITHUB_ENV'], 'a', encoding='utf-8') as env:
+              env.write(f'EXTRACTED_SOURCE={source}\n')
+              env.write(f'DELIVERY_ARTIFACTS={output}\n')
+      - name: Build extracted source wheel and install core dependencies
+        shell: python
+        run: |
+          import os, pathlib, subprocess, sys
+          source = pathlib.Path(os.environ['EXTRACTED_SOURCE'])
+          runtime = pathlib.Path(os.environ['RUNNER_TEMP'])/'source-wheel-runtime'
+          runtime.mkdir()
+          wheels = runtime/'wheels'
+          subprocess.run([sys.executable, '-m', 'pip', 'wheel', '--no-deps', '--no-build-isolation',
+                          '--wheel-dir', str(wheels), str(source)], cwd=runtime, check=True)
+          wheel, = wheels.glob('invest-*.whl')
+          subprocess.run([sys.executable, '-m', 'pip', 'install', str(wheel)], cwd=runtime, check=True)
+          with open(os.environ['GITHUB_ENV'], 'a', encoding='utf-8') as env:
+              env.write(f'SOURCE_WHEELS={wheels}\n')
+              env.write(f'SOURCE_RUNTIME={runtime}\n')
+      - name: Verify installed core-only recovery outside either source tree
+        shell: python
+        run: |
+          import importlib.util, json, os, pathlib, subprocess, sys
+          optional = ('mlflow', 'duckdb', 'optuna', 'qlib', 'matplotlib')
+          assert all(importlib.util.find_spec(name) is None for name in optional), 'optional SDK installed'
+          source = pathlib.Path(os.environ['EXTRACTED_SOURCE'])
+          result = subprocess.run([sys.executable, str(source/'tools/native_restore_smoke.py'),
+                                   os.environ['SOURCE_WHEELS']], cwd=os.environ['SOURCE_RUNTIME'],
+                                  capture_output=True, text=True, check=True, timeout=180)
+          recovery = json.loads(result.stdout)
+          assert recovery['installed_wheel_import'] and recovery['restore_empty_workspace']
+          assert recovery['optional_sdk_import_attempts'] == 0
+          report_path = pathlib.Path(os.environ['DELIVERY_ARTIFACTS'])/'verification.json'
+          report = json.loads(report_path.read_text(encoding='utf-8'))
+          report.update(extracted_source_wheel_built=True, installed_wheel_core_only_restore_passed=True,
+                        recovery=recovery, mlflow_initialization_limitation='unresolved; not exercised by SDK-free restore')
+          report_path.write_text(json.dumps(report, indent=2)+'\n', encoding='utf-8')
+          print(json.dumps(report, indent=2))
+      - name: Upload verified source and evidence only
+        uses: actions/upload-artifact@v4
+        with:
+          name: Invest-Source-${{ runner.os }}-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            source-delivery-artifacts/Invest-Source.zip
+            source-delivery-artifacts/SOURCE_MANIFEST.json
+            source-delivery-artifacts/verification.json
+          if-no-files-found: error
+          retention-days: 14

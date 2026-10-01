@@ -1,0 +1,58 @@
+name: Invest integrated research stack
+
+on:
+  pull_request:
+    paths:
+      - 'invest/**'
+      - 'tests/**'
+      - 'tools/research_stack_smoke.py'
+      - 'tools/native_restore_smoke.py'
+      - 'examples/qlib_local_research.py'
+      - 'pyproject.toml'
+      - '.github/workflows/research-stack.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  installed-stack:
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ['3.10', '3.12']
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 25
+    env:
+      MLFLOW_DISABLE_TELEMETRY: 'true'
+      DO_NOT_TRACK: 'true'
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install all real SDKs together
+        run: python -m pip install '.[qlib,mlflow,charts,duckdb,optuna,test]' 'duckdb==1.5.6' 'optuna==5.0.0'
+      - name: Verify dependency consistency
+        run: python -m pip check
+      - name: Run full source suite with all six actual SDKs
+        env:
+          MPLCONFIGDIR: ${{ runner.temp }}/invest-stack-mpl
+        run: python -m pytest tests -q --durations=15
+      - name: Verify interrupted and repeated workbench controls
+        run: node --test tests/archive_controls_ui.test.cjs tests/study_charts_ui.test.cjs tests/native_charts_ui.test.cjs tests/record_download_ui.test.cjs
+      - name: Build distribution without installing from the checkout
+        run: python -m pip wheel --no-deps --wheel-dir dist .
+      - name: Verify isolated installed-wheel native replay and saved-study flows
+        run: python tools/research_stack_smoke.py dist
+      - name: Verify installed-wheel native JSON and PNG restoration
+        run: python tools/native_restore_smoke.py dist --charts
+      - name: Compile source and pilot
+        run: python -m compileall -q invest tools/research_stack_smoke.py

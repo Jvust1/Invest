@@ -1,4 +1,6 @@
 """Invest: a composable research and backtesting toolkit."""
+
+__version__ = "0.1.0"
 from .calendar import exchange_sessions, trading_sessions
 from .upstream_catalog import available_catalog, catalog_summary, list_catalog
 from .features import add_stockstats_features
@@ -10,7 +12,7 @@ from .pipeline import (
     run_a_share_sma_backtest,
     run_backtest,
 )
-from .portfolio import inverse_variance_weights, minimum_variance_weights, optimize_weights
+from .portfolio import PaperLedger, inverse_variance_weights, minimum_variance_weights, optimize_weights
 from .providers import fetch_ccxt_ohlcv, fetch_yfinance_ohlcv
 from .risk import risk_report
 from .riskfolio_adapter import riskfolio_weights
@@ -31,6 +33,7 @@ __all__ = [
     "minimum_variance_weights",
     "moving_average_signal",
     "optimize_weights",
+    "PaperLedger",
     "performance_summary",
     "risk_report",
     "riskfolio_weights",

@@ -1,0 +1,251 @@
+{
+  "schema": "invest-coherent-source-candidate-v1",
+  "created_at": "2026-10-01T01:58:49Z",
+  "repository": "Jvust1/Invest",
+  "stable_repository_id": 1381007406,
+  "base_main": "8d9e6aaa5ed8e2a71ef22430a45e0a77c4c24f8d",
+  "source_head": "db94eeae24e647ed1a874b7f1225d93a41c4958e",
+  "source_tree": "725c6cde8c82c32fb98e031a662b43dad9acebbc",
+  "preserved_invest_subtree": "7a2562f84abce2da99d008756acf4a8ec1ff0d54",
+  "included_stack": [
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    61,
+    62
+  ],
+  "excluded_diagnostic_pr": 60,
+  "publication": "new main-targeted Draft; no main update, merge, deployment, existing PR closure or base rewrite",
+  "upstream_verification": [
+    {
+      "repo": "scikit-learn/scikit-learn",
+      "stars": 67435,
+      "license": {
+        "key": "bsd-3-clause",
+        "name": "BSD 3-Clause \"New\" or \"Revised\" License",
+        "spdx_id": "BSD-3-Clause",
+        "url": "https://api.github.com/licenses/bsd-3-clause",
+        "node_id": "MDc6TGljZW5zZTU="
+      },
+      "checked_at": "2026-10-01T01:54:55Z",
+      "url": "https://github.com/scikit-learn/scikit-learn"
+    },
+    {
+      "repo": "optuna/optuna",
+      "stars": 14865,
+      "license": {
+        "key": "mit",
+        "name": "MIT License",
+        "spdx_id": "MIT",
+        "url": "https://api.github.com/licenses/mit",
+        "node_id": "MDc6TGljZW5zZTEz"
+      },
+      "checked_at": "2026-10-01T01:54:55Z",
+      "url": "https://github.com/optuna/optuna"
+    },
+    {
+      "repo": "duckdb/duckdb",
+      "stars": 41837,
+      "license": {
+        "key": "mit",
+        "name": "MIT License",
+        "spdx_id": "MIT",
+        "url": "https://api.github.com/licenses/mit",
+        "node_id": "MDc6TGljZW5zZTEz"
+      },
+      "checked_at": "2026-10-01T01:54:55Z",
+      "url": "https://github.com/duckdb/duckdb"
+    },
+    {
+      "repo": "mlflow/mlflow",
+      "stars": 28205,
+      "license": {
+        "key": "apache-2.0",
+        "name": "Apache License 2.0",
+        "spdx_id": "Apache-2.0",
+        "url": "https://api.github.com/licenses/apache-2.0",
+        "node_id": "MDc6TGljZW5zZTI="
+      },
+      "checked_at": "2026-10-01T01:54:55Z",
+      "url": "https://github.com/mlflow/mlflow"
+    },
+    {
+      "repo": "matplotlib/matplotlib",
+      "stars": 23310,
+      "license": null,
+      "checked_at": "2026-10-01T01:54:55Z",
+      "url": "https://github.com/matplotlib/matplotlib"
+    },
+    {
+      "repo": "microsoft/qlib",
+      "stars": 49081,
+      "license": {
+        "key": "mit",
+        "name": "MIT License",
+        "spdx_id": "MIT",
+        "url": "https://api.github.com/licenses/mit",
+        "node_id": "MDc6TGljZW5zZTEz"
+      },
+      "checked_at": "2026-10-01T01:54:55Z",
+      "url": "https://github.com/microsoft/qlib"
+    }
+  ],
+  "source_head_acceptance": {
+    "workflows_passed": 17,
+    "full_six_sdk": {
+      "run_id": 36801988580,
+      "os": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "python": [
+        "3.10",
+        "3.12"
+      ],
+      "each_job": {
+        "passed": 1255,
+        "skipped": 13,
+        "subtests_passed": 454
+      },
+      "installed_wheel": true
+    },
+    "charts": {
+      "run_id": 36801988498,
+      "jobs_passed": 6
+    },
+    "sdk_free_restore": {
+      "run_id": 36801988541,
+      "jobs_passed": 4,
+      "each_tests_passed": 63
+    }
+  },
+  "new_local_acceptance": {
+    "python": "3.12.14",
+    "platform": "Linux",
+    "actual_sdk_versions": {
+      "pyqlib": "0.9.7",
+      "mlflow": "3.16.1",
+      "matplotlib": "3.10.8",
+      "duckdb": "1.5.6",
+      "optuna": "5.0.0",
+      "scikit-learn": "1.9.1"
+    },
+    "current_record": {
+      "native_input_rows": 120,
+      "trials": 12,
+      "training_rows": 84,
+      "evaluation_rows": 36,
+      "served_javascript_json_exact": true,
+      "original_png_pixels_decoded": true,
+      "private_backup_native_png_identical": true,
+      "empty_json_restore_in_fresh_isolated_wheel_process": true,
+      "producer_sdk_import_attempts": 0,
+      "python_external_network_attempts": 0,
+      "restored_png_identical_to_current_original": true
+    },
+    "existing_cash_pilot": {
+      "rolling_cases": 9,
+      "local_archive_reused": true,
+      "private_backup_restored": true,
+      "archive_rebuilt": true,
+      "cash_png_identical": true
+    }
+  },
+  "independent_review": {
+    "scope": "tools/research_stack_smoke.py assembly diff",
+    "blocking_findings": 0,
+    "old_assertions_preserved": true,
+    "tests_run_by_reviewer": false
+  },
+  "new_exact_head_hosted_acceptance": "pending publication; parent acceptance does not substitute",
+  "retained_failures": [
+    {
+      "pr": 59,
+      "run_id": 36789951703,
+      "scope": "standalone MLflow Windows Python 3.11",
+      "stage": "client_initialization"
+    },
+    {
+      "pr": 59,
+      "run_id": 36794299116,
+      "scope": "six SDK Windows Python 3.10",
+      "stage": "schema_upgrade"
+    },
+    {
+      "scope": "earlier local full suite",
+      "exit_code": 137,
+      "cause": "not established",
+      "serial_retry": "passed; both outcomes retained in #59"
+    }
+  ],
+  "limits": [
+    "synthetic-only software proof",
+    "no authorized real-market data or profitability proof",
+    "no broker, holdings, paid provider, credential or trading action",
+    "native unconverted/unverified units are distinct from cash engine",
+    "producer and timestamp are unauthenticated preserved declarations",
+    "same-renderer/configuration/font/rasterizer PNG byte identity only",
+    "no actual browser layout/desktop/frozen executable acceptance",
+    "historical intermittent MLflow initialization not proven cured",
+    "recovery import/network checks are not a general subprocess sandbox",
+    "inherited SQLite row materialization is not a hostile-database sandbox",
+    "diagnostic-only journal comparison is excluded; production storage and budgets unchanged"
+  ],
+  "source_delivery": {
+    "tool": "tools/build_source_delivery.py",
+    "author_commit": "91f3713756cb62f1110ec5fbc20022876bbe5087",
+    "new_files": 4,
+    "author_focused_tests_passed": 61,
+    "author_duplicate_zip_equal": true,
+    "author_trusted_git_verification_and_extraction": true,
+    "author_extracted_source_wheel_and_sdk_guarded_recovery": "passed; optional packages present but imports forbidden",
+    "hosted_optional_sdk_absence": "pending exact-head workflow",
+    "source_only": true,
+    "legacy_compiled_roots_excluded": [
+      "legacy_app",
+      "legacy_research"
+    ],
+    "final_aggregate_artifact_identity": "recorded in exact-head workflow artifact/PR, not self-referential commit metadata",
+    "author_followup_commit": "5bed90a52029378fd13b6ca77915b64958399cb7",
+    "parent_focused_tests_passed": 61,
+    "parent_seconds": 2.29,
+    "transport_guard": "GIT_NO_LAZY_FETCH=1 plus GIT_ALLOW_PROTOCOL empty; inherited credential/Git overrides omitted",
+    "author_rollback_fix": "442450032905dda0c7cc146716bfd262dcece544",
+    "parent_final_tests_passed": 63,
+    "review_fixes": [
+      "Windows reserved device stems with spaces before extensions rejected",
+      "per-transport Git configuration cannot override explicit empty protocol allowlist",
+      "write plus close failures and close-only failures remove newly created partial archive"
+    ],
+    "parent_pre_fix_assembly_proof": {
+      "commit": "d9570d9598ee691ef37e7f7ed22d874960a97928",
+      "tree": "264776d571111ddfa95238b8ff1902cd7fa15162",
+      "files": 455,
+      "archive_entries": 456,
+      "archive_bytes": 3779567,
+      "archive_sha256": "fe781170a72c8d64d6534782188b4b042a9c1f0ace471ddaf95598a80384701b",
+      "duplicate_equal": true,
+      "trusted_verification": true,
+      "third_party_license_provenance_files_byte_equal": 17,
+      "extracted_source_wheel_core_recovery": "passed; optional import/external Python network attempts zero",
+      "packaged_runtime_files_byte_equal": 62
+    },
+    "independent_review": {
+      "through_author_commit": "442450032905dda0c7cc146716bfd262dcece544",
+      "blocking_findings": 0,
+      "independent_tests_before_final_fix": 61,
+      "affected_regressions_after_final_fix": 6,
+      "windows_runtime": "pending hosted CI"
+    },
+    "parent_final_seconds": 1.72
+  }
+}

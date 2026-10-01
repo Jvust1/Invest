@@ -1,0 +1,71 @@
+name: Invest saved study charts
+
+on:
+  pull_request:
+    paths:
+      - 'invest/study_charts.py'
+      - 'invest/native_charts.py'
+      - 'invest/native_research.py'
+      - 'invest/pipeline.py'
+      - 'invest/optuna_walkforward.py'
+      - 'invest/workbench_api.py'
+      - 'invest/web/workbench.js'
+      - 'invest/experiments.py'
+      - 'invest/workspace.py'
+      - 'pyproject.toml'
+      - 'tests/test_study_charts.py'
+      - 'tests/test_native_charts.py'
+      - 'tests/native_charts_ui.test.cjs'
+      - 'tests/fixtures/native_research_v1_synthetic.json'
+      - 'tools/native_restore_smoke.py'
+      - 'tests/study_charts_ui.test.cjs'
+      - 'examples/saved_study_chart.py'
+      - 'examples/saved_native_chart.py'
+      - '.github/workflows/study-charts.yml'
+  push:
+    branches: ['feat/matplotlib-study-charts-20260930']
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ['3.10', '3.11', '3.12']
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    env:
+      MLFLOW_DISABLE_TELEMETRY: 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install actual renderer and project
+        run: python -m pip install -e '.[charts,test]'
+      - name: Run actual PNG, HTTP and provenance tests
+        env:
+          MPLCONFIGDIR: ${{ runner.temp }}/invest-matplotlib
+        run: python -m pytest tests/test_study_charts.py tests/test_native_charts.py tests/test_native_research.py tests/test_native_research_budget.py tests/test_growth_http.py tests/test_upstreams.py -q
+      - name: Render complete synthetic example
+        env:
+          MPLCONFIGDIR: ${{ runner.temp }}/invest-matplotlib
+        run: python examples/saved_study_chart.py '${{ runner.temp }}/invest-study-example.png'
+      - name: Render existing synthetic native JSON without research rerun
+        env:
+          MPLCONFIGDIR: ${{ runner.temp }}/invest-matplotlib
+        run: python -m examples.saved_native_chart tests/fixtures/native_research_v1_synthetic.json '${{ runner.temp }}/invest-native-example.png'
+      - name: Build distribution for isolated native chart acceptance
+        run: python -m pip wheel --no-deps --wheel-dir dist .
+      - name: Verify installed-wheel JSON restore and native PNG download
+        run: python tools/native_restore_smoke.py dist --charts
+      - name: Check browser script syntax
+        run: node --check invest/web/workbench.js
+      - name: Test browser helper state and error recovery
+        run: node --test tests/study_charts_ui.test.cjs tests/native_charts_ui.test.cjs tests/record_download_ui.test.cjs
