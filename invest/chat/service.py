@@ -18,7 +18,7 @@ from .connectors import DriveClient, GitHubClient, REPOSITORY, REPOSITORY_ID
 TOOL_NAMES = ('status','search','fetch','list_sources','github_read_file','drive_list_files',
               'drive_read_file','allocation_scenario','portfolio_snapshot','risk_summary',
               'backtest_sma','pit_facts','upstream_catalog','market_history',
-              'connection_check','analyze_price_series')
+              'connection_check','analyze_price_series','research_catalog','research_run')
 SHANGHAI = timezone(timedelta(hours=8))
 SCOPE = 'PUBLIC_RESEARCH_ONLY'
 
@@ -95,7 +95,7 @@ class InvestService:
         for dependency in ('mcp','numpy','pandas'):
             try: deps[dependency]=version(dependency)
             except PackageNotFoundError: deps[dependency]=None
-        return {'schema':'invest-chat-status-v1','plugin_version':'0.2.0','repository':REPOSITORY,'repository_id':REPOSITORY_ID,
+        return {'schema':'invest-chat-status-v1','plugin_version':'0.3.0','repository':REPOSITORY,'repository_id':REPOSITORY_ID,
                 'scope':SCOPE,'tools':list(TOOL_NAMES),'capability':'LOCAL_IMPLEMENTATION_NOT_CHATGPT_ACCEPTANCE',
                 'source_configuration':{'github_public_reader':True,'drive_oauth_configured':self.drive.configured,
                                         'private_catalog_present':bool(self.catalog and self.catalog.path.is_file())},
@@ -277,3 +277,11 @@ class InvestService:
         rows=list_upstreams(capability=capability,adapter_safe_only=adapter_safe_only)
         return {'projects':[dict(r,installed=is_import_available(r)) for r in rows],
                 'count':len(rows),'license_note':'Recorded software license is not a market-data license; installed is not end-to-end validated.'}
+
+    def research_catalog(self) -> dict[str, Any]:
+        from ..opensource import integration_catalog
+        return integration_catalog()
+
+    def research_run(self, backend: str, values: list[Any], source: str, as_of: str) -> dict[str, Any]:
+        from ..opensource import run_integration
+        return run_integration(backend, {'values': values}, source=source, as_of=as_of)

@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import importlib
 import os
 from urllib.parse import urlparse
 
@@ -42,6 +43,8 @@ DESCRIPTIONS = {
     'market_history':'显式读取 A 股日频未复权历史（有界 Eastmoney 入口）；带时间、来源、哈希、未核实许可/成交量单位，失败不补造行情。',
     'connection_check':'当需要排查接入时使用：默认离线检查私有索引健康；仅 include_network=true 检查固定 GitHub/获准 Drive 根目录。配置、检查通过和实际连接分开报告，不暴露路径或凭据。',
     'analyze_price_series':'当用户明确提供带来源的 OHLC 历史数据时使用：检查日期/价格关系/陈旧性/复权口径并计算描述性风险。不联网，不替代失败行情请求，不证明数据真实性或可成交性。',
+    'research_catalog':'查看11个已实现的开源研究后端、固定测试版本、当前安装状态与许可证据；发现模块不等于运行通过，不会自动安装依赖。',
+    'research_run':'用明确来源/as_of和8-5000个调用者数值，运行research_catalog列出的固定后端：数据统计、序列诊断、技术指标、时间顺序模型评估、状态图或图表规格。不同后端有最少行数和正价格要求；不接受SQL/代码/路径，不联网、不下单。',
 }
 
 
@@ -81,6 +84,10 @@ def https_url(value, label):
 
 
 def build_server(service=None, *, host='127.0.0.1', port=8787, public_url=None):
+    # SciPy is a base dependency. Initialize its native BLAS before stdio readers
+    # start: late _fblas loading was observed to hang the Windows MCP event loop.
+    # This does not import or install the optional research backends.
+    importlib.import_module('scipy.linalg')
     service = service or InvestService()
     auth, verifier = None, None
     allowed_hosts=['127.0.0.1:*','localhost:*','[::1]:*','testserver']

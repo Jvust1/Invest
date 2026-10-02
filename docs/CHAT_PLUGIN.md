@@ -2,10 +2,11 @@
 
 ## 能力
 
-同一个 MCP 服务提供 16 个只读工具（插件版本 0.2.0）：status、search、fetch、list_sources、
+同一个 MCP 服务提供 18 个只读工具（插件版本 0.3.0）：status、search、fetch、list_sources、
 github_read_file、drive_list_files、drive_read_file、allocation_scenario、
 portfolio_snapshot、risk_summary、backtest_sma、pit_facts、upstream_catalog、market_history、
-connection_check、analyze_price_series。
+connection_check、analyze_price_series、research_catalog、research_run。
+新增11个可选原生研究后端见 [0.3 开源融合说明](OPEN_SOURCE_INTEGRATION_0_3.md)，完整研究组合要求 Python 3.12。
 复用原有 Invest 计算代码，不把第三方源码包直接执行或整包塞入核心。
 
 绑定仓库 `Jvust1/Invest`，stable repository ID `1381007406`。
@@ -21,7 +22,7 @@ Drive 默认范围为既有 Invest 与 03_Invest 两目录，可由部署者显�
 python -m venv .venv
 # Activate .venv, then:
 python -m pip install -e '.[chat]'
-python -m unittest discover -s tests -p test_chat_plugin.py -v
+python -m unittest discover -s tests -p 'test_chat*.py' -v
 python -m invest.chat.mcp_server --transport stdio
 ```
 

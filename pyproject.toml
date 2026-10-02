@@ -12,6 +12,11 @@ dependencies = ["numpy>=1.23", "pandas>=1.5", "requests>=2.28", "scipy>=1.9", "s
 [project.optional-dependencies]
 chat = ["mcp==1.30.0"]
 test = ["pytest>=8,<10"]
+# Optional, version-pinned research bundle: Python 3.12. Base install is unchanged.
+research-data = ["polars==1.44.2", "duckdb==1.5.6", "pyarrow==25.0.1"]
+research-stats = ["statsmodels==0.15.0", "arch==8.0.0", "scipy==1.18.1"]
+research-features = ["ta==0.11.0", "ffn==1.2.2", "networkx==3.7", "plotly==7.1.0", "scikit-learn==1.9.1"]
+research = ["polars==1.44.2", "duckdb==1.5.6", "pyarrow==25.0.1", "statsmodels==0.15.0", "arch==8.0.0", "scipy==1.18.1", "ta==0.11.0", "ffn==1.2.2", "networkx==3.7", "plotly==7.1.0", "scikit-learn==1.9.1"]
 backtest-bt = ["bt==1.2.3"]
 risk-metrics = ["quantstats==0.0.86", "empyrical-reloaded==0.5.12"]
 optimization = ["PyPortfolioOpt==1.6.0"]
