@@ -56,7 +56,9 @@ def fetch_a_share_daily(
                "turnover_rate", "symbol"]
     if not rows:
         return pd.DataFrame(columns=columns[1:]).rename_axis("date")
-    frame = pd.DataFrame([row.split(",") for row in rows], columns=columns)
+    # AKShare's pinned source adds symbol after parsing eleven kline values;
+    # f116 in the request does not make symbol an extra returned CSV column.
+    frame = pd.DataFrame([row.split(",") for row in rows], columns=columns[:-1])
     frame["date"] = pd.to_datetime(frame["date"], errors="coerce")
     numeric = [c for c in columns if c not in {"date", "symbol"}]
     frame[numeric] = frame[numeric].apply(pd.to_numeric, errors="coerce")

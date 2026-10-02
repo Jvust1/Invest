@@ -1,4 +1,5 @@
 """Invest: a composable research and backtesting toolkit."""
+__version__ = "0.1.0"
 from .calendar import exchange_sessions, trading_sessions
 from .upstream_catalog import available_catalog, catalog_summary, list_catalog
 from .features import add_stockstats_features

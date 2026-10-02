@@ -10,6 +10,7 @@ requires-python = ">=3.10"
 dependencies = ["numpy>=1.23", "pandas>=1.5", "requests>=2.28", "scipy>=1.9", "scikit-learn>=1.1"]
 
 [project.optional-dependencies]
+chat = ["mcp==1.30.0"]
 mlflow = ["mlflow>=3"]
 openbb = ["openbb"]
 optuna = ["optuna>=5.0"]
@@ -30,3 +31,9 @@ independent-zipline = ["zipline-reloaded==3.1.1"]
 
 [tool.setuptools.packages.find]
 include = ["invest*"]
+
+[project.scripts]
+invest-chat = "invest.chat.mcp_server:main"
+
+[tool.setuptools.package-data]
+invest = ["upstream_registry.json", "web/*"]
