@@ -5,6 +5,9 @@ on:
   pull_request:
 permissions:
   contents: read
+env:
+  PYTHONUTF8: '1'
+  PYTHONIOENCODING: utf-8
 jobs:
   chat:
     strategy:
@@ -18,7 +21,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
-      - run: python -m pip install -e '.[chat]'
+      - run: python -m pip install -e '.[chat,test]'
       - run: python -m unittest discover -s tests -p test_chat_plugin.py -v
       - run: python -m unittest discover -s tests -q
+      - run: python -m pytest tests -q
       - run: python -m compileall -q invest tools

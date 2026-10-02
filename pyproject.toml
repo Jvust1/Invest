@@ -11,6 +11,13 @@ dependencies = ["numpy>=1.23", "pandas>=1.5", "requests>=2.28", "scipy>=1.9", "s
 
 [project.optional-dependencies]
 chat = ["mcp==1.30.0"]
+test = ["pytest>=8,<10"]
+backtest-bt = ["bt==1.2.3"]
+risk-metrics = ["quantstats==0.0.86", "empyrical-reloaded==0.5.12"]
+optimization = ["PyPortfolioOpt==1.6.0"]
+optimization-riskfolio = ["Riskfolio-Lib==7.3.0"]
+optimization-skfolio = ["skfolio==1.4.10"]
+optimization-all = ["PyPortfolioOpt==1.6.0", "Riskfolio-Lib==7.3.0", "skfolio==1.4.10"]
 mlflow = ["mlflow>=3"]
 openbb = ["openbb"]
 optuna = ["optuna>=5.0"]

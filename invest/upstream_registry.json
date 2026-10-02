@@ -420,12 +420,13 @@
       "stage": "active_adapter",
       "capabilities": [
         "backtesting",
-        "execution_architecture"
+        "execution_architecture",
+        "china_market_data"
       ],
       "python_import": "hikyuu",
       "last_push": "2026-09-30T14:39:05Z",
       "batch": "20260930-high-star-50",
-      "notes": "Research-only TradeManager.get_performance() snapshot adapter; no execution/order path."
+      "notes": "Research-only TradeManager.get_performance() snapshot adapter; no execution/order path. china_market_data describes upstream TDX historical A-share import, not an implemented Invest quote adapter; see https://github.com/fasiondog/hikyuu."
     },
     {
       "repo": "cvxgrp/cvxportfolio",

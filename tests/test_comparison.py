@@ -247,7 +247,7 @@ class LabDeliveryTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp,patch.object(mod,'run_rqalpha',side_effect=ValueError('unit-test-only failure')),patch.object(mod,'probe_network',return_value={'blocked':True}):
             output=Path(tmp)/'new';result=mod.run_suite(sys.executable,output,'round_trip')
             self.assertEqual(result['status'],'FAIL');self.assertEqual(result['counts']['errors'],1)
-            self.assertIn('unit-test-only failure',(output/'cases/round_trip.error.json').read_text())
+            self.assertIn('unit-test-only failure',(output/'cases/round_trip.error.json').read_text(encoding='utf-8'))
             manifest=json.loads((output/'SHA256SUMS.json').read_text());self.assertIn('summary.json',manifest)
     def test_wrong_archive_rejected_before_install(self):
         mod=self.module('setup_engine_lab')
