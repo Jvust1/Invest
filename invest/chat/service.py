@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from datetime import date, datetime, timedelta, timezone
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 from importlib.metadata import PackageNotFoundError, version
 import hashlib
 import json
@@ -17,7 +17,8 @@ from .connectors import DriveClient, GitHubClient, REPOSITORY, REPOSITORY_ID
 
 TOOL_NAMES = ('status','search','fetch','list_sources','github_read_file','drive_list_files',
               'drive_read_file','allocation_scenario','portfolio_snapshot','risk_summary',
-              'backtest_sma','pit_facts','upstream_catalog','market_history')
+              'backtest_sma','pit_facts','upstream_catalog','market_history',
+              'connection_check','analyze_price_series')
 SHANGHAI = timezone(timedelta(hours=8))
 SCOPE = 'PUBLIC_RESEARCH_ONLY'
 
@@ -45,6 +46,23 @@ def number(value, label, *, lower=-1e9, upper=1e9):
     except (ValueError,OverflowError): raise ValueError(label+' must be a finite number') from None
     if not math.isfinite(n) or not lower<=n<=upper: raise ValueError(label+' is outside bounds')
     return n
+
+
+def exact_decimal(value, label, *, lower=0, upper=1_000_000_000, integral=False):
+    """Validate original decimal input without lossy float round trips."""
+    if isinstance(value, bool) or not isinstance(value, (str, int, float)) or len(str(value)) > 100:
+        raise ValueError(label+' must be a bounded finite decimal')
+    try:
+        result = Decimal(str(value))
+        if not result.is_finite() or not Decimal(lower) <= result <= Decimal(upper):
+            raise ValueError(label+' is outside bounds')
+        if integral:
+            if result != result.to_integral_value(): raise ValueError(label+' must be an integer')
+        elif result != result.quantize(Decimal('0.01')):
+            raise ValueError(label+' must be precise to CNY cents')
+    except InvalidOperation:
+        raise ValueError(label+' must be a bounded finite decimal') from None
+    return result
 
 
 def _metrics(values, annualization=252):
@@ -77,7 +95,7 @@ class InvestService:
         for dependency in ('mcp','numpy','pandas'):
             try: deps[dependency]=version(dependency)
             except PackageNotFoundError: deps[dependency]=None
-        return {'schema':'invest-chat-status-v1','repository':REPOSITORY,'repository_id':REPOSITORY_ID,
+        return {'schema':'invest-chat-status-v1','plugin_version':'0.2.0','repository':REPOSITORY,'repository_id':REPOSITORY_ID,
                 'scope':SCOPE,'tools':list(TOOL_NAMES),'capability':'LOCAL_IMPLEMENTATION_NOT_CHATGPT_ACCEPTANCE',
                 'source_configuration':{'github_public_reader':True,'drive_oauth_configured':self.drive.configured,
                                         'private_catalog_present':bool(self.catalog and self.catalog.path.is_file())},
@@ -98,10 +116,13 @@ class InvestService:
             raise ValueError('invalid search source/limit')
         if not isinstance(query,str) or not query.strip() or len(query)>200: raise ValueError('invalid search query')
         if type(include_live) is not bool: raise ValueError('include_live must be boolean')
-        results=self.catalog.search(query,source=source,limit=limit) if self.catalog else []
+        page=self.catalog.search_page(query,source=source,limit=limit) if self.catalog else {'results':[],'limited':False}
+        results=page['results']; limited=page['limited']
         errors=[]
         if include_live and source in {'all','github'}:
-            try: results.extend(self.github.list_files(query=query,limit=limit)['results'])
+            try:
+                listing=self.github.list_files(query=query,limit=limit)
+                results.extend(listing['results']); limited=limited or bool(listing.get('limited'))
             except RuntimeError as exc: errors.append({'source':'github','error':str(exc)})
         if include_live and source in {'all','drive'}:
             # List only selected roots. Recursive/paginated browsing is an explicit separate tool.
@@ -109,10 +130,12 @@ class InvestService:
                 try:
                     listing=self.drive.list_files(folder,limit=100)
                     results.extend(r for r in listing['files'] if query.casefold() in r['title'].casefold())
-                    if listing.get('next_page_token'): errors.append({'source':'drive','error':'root listing has further pages; use drive_list_files'})
+                    if listing.get('next_page_token'):
+                        limited=True
+                        errors.append({'source':'drive','error':'root listing has further pages; use drive_list_files'})
                 except RuntimeError as exc: errors.append({'source':'drive','error':str(exc)})
         unique={r['id']:r for r in results}
-        return {'results':list(unique.values())[:limit],'limited':len(unique)>limit,'errors':errors,
+        return {'results':list(unique.values())[:limit],'limited':limited or len(unique)>limit,'errors':errors,
                 'search_scope':'private index; optional live filenames in bound repo and allowlisted folders',
                 'complete_drive_scan':False,'untrusted_source_material':True}
 
@@ -149,10 +172,23 @@ class InvestService:
         from .market import history
         return history(symbol, start_date, end_date, day)
 
-    def portfolio_snapshot(self, cash_cny: str, positions: list[dict], as_of: str) -> dict[str, Any]:
-        day(as_of)
-        cash=Decimal(str(number(cash_cny,'cash',lower=0)))
-        if cash!=cash.quantize(Decimal('0.01')): raise ValueError('cash must be precise to CNY cents')
+    def connection_check(self, include_network: bool = False) -> dict[str, Any]:
+        from .diagnostics import connection_check
+        return connection_check(catalog=self.catalog, github=self.github, drive=self.drive,
+                                include_network=include_network)
+
+    def analyze_price_series(self, symbol: str, bars: list[dict], currency: str,
+                             source: str, as_of: str, adjustment: str = 'unknown',
+                             max_staleness_days: int = 7) -> dict[str, Any]:
+        from .price_quality import analyze_price_series
+        return analyze_price_series(symbol, bars, currency, source, as_of, adjustment, max_staleness_days)
+
+    def portfolio_snapshot(self, cash_cny: str, positions: list[dict], as_of: str,
+                           max_quote_age_days: int = 7) -> dict[str, Any]:
+        cutoff=day(as_of)
+        if type(max_quote_age_days) is not int or not 0<=max_quote_age_days<=366:
+            raise ValueError('max_quote_age_days must be an integer from 0 to 366')
+        cash=exact_decimal(cash_cny,'cash')
         if not isinstance(positions,list) or len(positions)>100: raise ValueError('positions limit is 100')
         rows,seen=[],set()
         for p in positions:
@@ -161,18 +197,22 @@ class InvestService:
             symbol=p['symbol']
             if not isinstance(symbol,str) or not symbol.strip() or len(symbol)>40 or symbol in seen: raise ValueError('invalid/duplicate symbol')
             seen.add(symbol)
-            quantity=number(p['quantity'],'quantity',lower=0,upper=1e8)
-            if quantity!=int(quantity): raise ValueError('quantity must be integer shares/units')
-            price=Decimal(str(number(p['price_cny'],'price',lower=0.01)))
-            if price!=price.quantize(Decimal('0.01')): raise ValueError('price must be precise to cents')
-            if day(p['quote_date'])>day(as_of): raise ValueError('quote later than snapshot')
+            quantity=exact_decimal(p['quantity'],'quantity',upper=100_000_000,integral=True)
+            price=exact_decimal(p['price_cny'],'price',lower=Decimal('0.01'))
+            quote_day=day(p['quote_date'])
+            if quote_day>cutoff: raise ValueError('quote later than snapshot')
             if not isinstance(p['quote_source'],str) or not p['quote_source'].strip() or len(p['quote_source'])>300: raise ValueError('quote source required')
-            rows.append(dict(p,market_value_cny=str(price*int(quantity))))
+            age=(cutoff-quote_day).days
+            rows.append(dict(p,market_value_cny=format(price*int(quantity),'.2f'),
+                             quote_age_calendar_days=age,quote_stale=age>max_quote_age_days))
         invested=sum((Decimal(r['market_value_cny']) for r in rows),Decimal(0))
         total=cash+invested
         for r in rows: r['portfolio_weight']=float(Decimal(r['market_value_cny'])/total) if total else 0
-        return {'status':'SCENARIO_ONLY','currency':'CNY','as_of':as_of,'cash_cny':str(cash),
-                'invested_cny':str(invested),'total_cny':str(total),'positions':rows,
+        return {'status':'SCENARIO_ONLY','currency':'CNY','as_of':as_of,'cash_cny':format(cash,'.2f'),
+                'invested_cny':format(invested,'.2f'),'total_cny':format(total,'.2f'),'positions':rows,
+                'quote_quality':{'max_age_calendar_days':max_quote_age_days,
+                                 'stale_symbols':[r['symbol'] for r in rows if r['quote_stale']],
+                                 'source_independently_verified':False,'freshness_relative_to':'caller as_of, not wall clock'},
                 'concentration_max_weight':max((r['portfolio_weight'] for r in rows),default=0),
                 'stress_scenarios':[{'invested_price_shock':x,'pnl_cny':str((invested*Decimal(str(x))).quantize(Decimal('0.01')))} for x in (-0.1,-0.2,-0.3)],
                 'limitations':['Caller quotes; no actual account access, FX verification, correlations, fees or forecasts.'],

@@ -40,6 +40,8 @@ DESCRIPTIONS = {
     'pit_facts':'按已有 Invest PIT 事实包 available_at 筛选；默认关闭，不验证来源真伪或许可。',
     'upstream_catalog':'查询现有上游源码能力、软件许可和依赖安装情况；安装或高星不代表可用行情与集成验收。',
     'market_history':'显式读取 A 股日频未复权历史（有界 Eastmoney 入口）；带时间、来源、哈希、未核实许可/成交量单位，失败不补造行情。',
+    'connection_check':'当需要排查接入时使用：默认离线检查私有索引健康；仅 include_network=true 检查固定 GitHub/获准 Drive 根目录。配置、检查通过和实际连接分开报告，不暴露路径或凭据。',
+    'analyze_price_series':'当用户明确提供带来源的 OHLC 历史数据时使用：检查日期/价格关系/陈旧性/复权口径并计算描述性风险。不联网，不替代失败行情请求，不证明数据真实性或可成交性。',
 }
 
 
@@ -104,7 +106,7 @@ def build_server(service=None, *, host='127.0.0.1', port=8787, public_url=None):
     for name in TOOL_NAMES:
         server.add_tool(getattr(service,name),name=name,description=DESCRIPTIONS[name],structured_output=True,
                         annotations=ToolAnnotations(readOnlyHint=True,destructiveHint=False,idempotentHint=True,
-                            openWorldHint=name in {'search','fetch','github_read_file','drive_list_files','drive_read_file','market_history'}))
+                            openWorldHint=name in {'search','fetch','github_read_file','drive_list_files','drive_read_file','market_history','connection_check'}))
 
     @server.resource('invest://status',mime_type='application/json')
     def status_resource():
@@ -124,8 +126,15 @@ def main(argv=None):
     parser.add_argument('--host',default='127.0.0.1')
     parser.add_argument('--port',type=int,default=8787)
     parser.add_argument('--public-url',default=os.environ.get('INVEST_MCP_RESOURCE_URL'))
+    parser.add_argument('--check',action='store_true',help='print bounded diagnostics without starting a server')
+    parser.add_argument('--check-network',action='store_true',help='with --check, explicitly probe configured GitHub/Drive sources')
     args=parser.parse_args(argv)
     if not 1<=args.port<=65535: parser.error('port outside range')
+    if args.check_network and not args.check: parser.error('--check-network requires --check')
+    if args.check:
+        result=InvestService().connection_check(include_network=args.check_network)
+        print(canonical(result))
+        raise SystemExit(0 if result['checks_passed'] else 1)
     server=build_server(host=args.host,port=args.port,public_url=args.public_url)
     server.run(transport=args.transport)
 

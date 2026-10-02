@@ -2,9 +2,10 @@
 
 ## 能力
 
-同一个 MCP 服务提供 14 个只读工具：status、search、fetch、list_sources、
+同一个 MCP 服务提供 16 个只读工具（插件版本 0.2.0）：status、search、fetch、list_sources、
 github_read_file、drive_list_files、drive_read_file、allocation_scenario、
-portfolio_snapshot、risk_summary、backtest_sma、pit_facts、upstream_catalog、market_history。
+portfolio_snapshot、risk_summary、backtest_sma、pit_facts、upstream_catalog、market_history、
+connection_check、analyze_price_series。
 复用原有 Invest 计算代码，不把第三方源码包直接执行或整包塞入核心。
 
 绑定仓库 `Jvust1/Invest`，stable repository ID `1381007406`。
@@ -23,6 +24,11 @@ python -m pip install -e '.[chat]'
 python -m unittest discover -s tests -p test_chat_plugin.py -v
 python -m invest.chat.mcp_server --transport stdio
 ```
+
+启动前可用 `python -m invest.chat.mcp_server --check` 离线检查私有索引；
+只有追加 `--check-network` 才实际检查 GitHub 和已配置 Drive。退出 0 只表示已执行检查健康，
+不是所有可选来源、普通 Chat 或行情均已接通。详细新增能力、参数与合成示例见
+[0.2 升级说明](CHAT_UPGRADE_0_2.md)。
 
 本包根目录的 plugin.json + mcp.json + skills/ 是便携插件结构；先安装 Python 依赖。
 本地 stdio 配置并不会自动安装进 ChatGPT 网页，也不会自动上线一个公网服务。

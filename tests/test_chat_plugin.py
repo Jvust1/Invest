@@ -96,7 +96,7 @@ class ChatServiceTests(unittest.TestCase):
     def test_portfolio_cash_concentration_and_stress(self):
         r=self.service.portfolio_snapshot('100.00',[{'symbol':'DEMO','quantity':100,'price_cny':'4.00',
             'quote_date':'2026-09-25','quote_source':'SYNTHETIC'}],'2026-09-28')
-        self.assertEqual(r['total_cny'],'500.0');self.assertAlmostEqual(r['concentration_max_weight'],.8)
+        self.assertEqual(r['total_cny'],'500.00');self.assertAlmostEqual(r['concentration_max_weight'],.8)
         self.assertEqual(r['stress_scenarios'][1]['pnl_cny'],'-80.00')
 
     def test_portfolio_invalid_quantity_and_missing_source(self):

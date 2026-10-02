@@ -47,12 +47,15 @@ class Catalog:
         return key
 
     def search(self, query: str, *, source='all', limit=10) -> list[dict]:
+        return self.search_page(query,source=source,limit=limit)['results']
+
+    def search_page(self, query: str, *, source='all', limit=10) -> dict:
         if source not in {'all', 'github', 'drive'} or type(limit) is not int or not 1 <= limit <= 20:
             raise ValueError('invalid search bounds')
         if not isinstance(query, str) or not query.strip() or len(query) > 200:
             raise ValueError('query must contain 1-200 characters')
         if not self.path.is_file():
-            return []
+            return {'results':[], 'limited':False}
         tokens = query.strip().split()[:8]
         where, args = [], []
         for token in tokens:
@@ -62,16 +65,22 @@ class Catalog:
         if source != 'all':
             where.append('source=?')
             args.append(source)
-        args.append(limit)
+        args.append(limit+1)
         with self.connection() as db:
             rows = db.execute('SELECT * FROM resources WHERE ' + ' AND '.join(where) + ' ORDER BY title,id LIMIT ?', args).fetchall()
         output = []
-        for row in rows:
+        for row in rows[:limit]:
+            self.verify_content(row)
             position = max(0, row['content'].casefold().find(tokens[0].casefold()) - 70)
             item = {k:row[k] for k in ('id','title','source','url','sha256','license_note')}
             item.update(excerpt=row['content'][position:position+400], untrusted_source_material=True)
             output.append(item)
-        return output
+        return {'results':output, 'limited':len(rows)>limit}
+
+    @staticmethod
+    def verify_content(row):
+        if not isinstance(row['content'],str) or hashlib.sha256(row['content'].encode()).hexdigest() != row['sha256']:
+            raise ValueError('catalog content hash mismatch')
 
     def fetch(self, key: str, *, offset=0, max_chars=1000) -> dict:
         if not isinstance(key, str) or not key.startswith('local:') or type(offset) is not int or offset < 0:
@@ -82,8 +91,7 @@ class Catalog:
             row = db.execute('SELECT * FROM resources WHERE id=?', (key,)).fetchone()
         if row is None:
             raise LookupError('resource not indexed')
-        if hashlib.sha256(row['content'].encode()).hexdigest() != row['sha256']:
-            raise ValueError('catalog content hash mismatch')
+        self.verify_content(row)
         if offset > len(row['content']):
             raise ValueError('offset is beyond the document')
         item = {k:row[k] for k in ('id','title','source','url','sha256','license_note')}

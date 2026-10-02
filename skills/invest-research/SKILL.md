@@ -8,6 +8,8 @@ description: 使用 Invest 的 GitHub、获准 Google Drive 与私有结构化�
 先调用 Invest status/list_sources 确认实际可用能力。Configured 不是 Connected，
 软件测试通过不是投资能力、收益能力或 ChatGPT 普通 Chat 的安装验收。
 若当前宿主没有该插件工具，明确缺少接入，不编造调用结果。
+排查问题用 connection_check：默认不联网；明确需要验证在线来源时才设 include_network=true。
+区分各组件的 configured / not_checked / connected / failed，不把 checks_passed 当作普通 Chat 验收。
 
 ## 请求 → 证据 → 计算 → 风险 → 下一步
 
@@ -19,11 +21,15 @@ description: 使用 Invest 的 GitHub、获准 Google Drive 与私有结构化�
    私有结构化书籍用于解释方法，不当作当前行情或预测训练标签。
    日频历史可显式调用 market_history，保留最新观察日、未复权口径和原始成交量单位未知的标记；
    网络失败不切换成合成数据，日频历史不能称为实时可成交报价。
+   用户显式提供有来源的 OHLC 时可独立调用 analyze_price_series 检查时间、价格、复权和陈旧性；
+   保留 CALLER_SUPPLIED 标记，它不是 market_history 的替代返回，也不代表来源真实或已获许可。
+   search 的 limited=true 表示还有结果或上游页未完整检查，应缩小查询或显式分页，不称全量。
 3. 需要金额方案时，必须有显式的报价日期/来源、最小交易单位、佣金、税费、
    流动性及保留现金输入，才能调用 allocation_scenario。
    不可买、暂不交易或保留全部现金都是有效结果，不为了给建议而制造价格。
-4. 用 portfolio_snapshot 查看集中度与下跌压力情景；risk_summary 要求日期严格递增的
-   简单日收益；backtest_sma 仅作延迟信号算术情景，不能替代成交模型和真实验证。
+4. 用 portfolio_snapshot 查看集中度与下跌压力情景；报价年龄相对于显式 as_of，出现
+   stale_symbols 时先核实报价；金额和份额不能默默四舍五入输入。
+   risk_summary 要求日期严格递增的简单日收益；backtest_sma 仅作延迟信号算术情景，不能替代成交模型和真实验证。
    可用时调用 pit_facts 保留 available_at/修订版本，不使用未来公告。
 5. 对机构策略或模型比较可查询 upstream_catalog。软件许可、数据许可、安装、
    adapter 实现、独立测试和真实市场验收是不同状态，不能混为“全部接入”。
