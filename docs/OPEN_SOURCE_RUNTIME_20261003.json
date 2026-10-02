@@ -14,7 +14,7 @@
   },
   "method": "importlib.metadata reads METADATA/WHEEL/INSTALLER and distribution RECORD; every available license/notice file listed by that RECORD is read and SHA-256 hashed. Hashes specified by RECORD are independently verified. Distribution metadata and upstream repository evidence are explicitly separate.",
   "upstream_evidence_file": "docs/OPEN_SOURCE_EVIDENCE_20261003.json",
-  "upstream_evidence_sha256": "67515f88272f291cf3bcb13524ecabe4420721d4f327ef3f5107d558dbb82bb4",
+  "upstream_evidence_sha256": "542dcc528d6ee37295e2df1f79e2eeff6ab7f4f6b00a9f7cdbe354abce1ed168",
   "distributions": [
     {
       "requested_distribution": "polars",
@@ -1732,5 +1732,8 @@
     "Only files listed by the requested distribution RECORD are included; transitive distributions must be inventoried separately before redistribution.",
     "Installed versions and Requires-Python are environment-specific, not a guarantee that the same versions work across other supported Python versions.",
     "Software license metadata does not grant rights to market data, exchange/broker services, API credentials, pretrained models or training datasets."
-  ]
+  ],
+  "upstream_evidence_observed_input_sha256": "67515f88272f291cf3bcb13524ecabe4420721d4f327ef3f5107d558dbb82bb4",
+  "upstream_evidence_hash_mode": "UTF-8 source with LF line endings (Git canonical published bytes)",
+  "upstream_evidence_hash_note": "The collection-time CRLF input hash is retained separately. This reference binds to the canonical LF source distributed by Git; JSON content is unchanged."
 }
