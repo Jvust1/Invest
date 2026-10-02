@@ -104,7 +104,7 @@ def build_server(service=None, *, host='127.0.0.1', port=8787, public_url=None):
     for name in TOOL_NAMES:
         server.add_tool(getattr(service,name),name=name,description=DESCRIPTIONS[name],structured_output=True,
                         annotations=ToolAnnotations(readOnlyHint=True,destructiveHint=False,idempotentHint=True,
-                            openWorldHint=name in {'search','fetch','github_read_file','drive_list_files','drive_read_file'}))
+                            openWorldHint=name in {'search','fetch','github_read_file','drive_list_files','drive_read_file','market_history'}))
 
     @server.resource('invest://status',mime_type='application/json')
     def status_resource():

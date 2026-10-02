@@ -8,6 +8,13 @@
 - Windows / Python 3.12 全套 unittest：601 项，588 项通过、13 项跳过，进程退出 0。
   跳过的可选依赖/外部运行环境不视为验收通过；负路径测试的 `round_trip: ERROR / FAIL`
   标准输出保留，不能单凭此行推翻 unittest 的实际退出状态，也不应删掉失败证据。
+- 补回实际缺失的优化器、风险指标和 bt 可选依赖后复测：unittest 601 项中
+  598 项通过、3 项跳过；pytest 618 项通过、3 项跳过、360 个子测试通过，均退出 0。
+  `pip check` 退出 0、输出 `No broken requirements found.`。这仍不是所有上游都已部署。
+- 已在候选分支修复 CI 的测试依赖遗漏、Windows UTF-8 读取、Hikyuu 上游能力标签和
+  PyPortfolioOpt/scikit-base 的运行期 packaging 依赖；不会通过跳过失败合同伪造绿色状态。
+  Hikyuu 的 china_market_data 标签仅描述上游 TDX 历史 A 股导入，当前 Invest 适配器
+  仍只读取研究绩效快照，不是新增可用行情入口。
 - 实际 stdio 子进程完成初始化、列工具、调用配置计算、无效输入失败；HTTP 完成
   初始化/列工具/调用、恶意 Host 421、缺失 OAuth Bearer 401 与资源元数据发现。
   JWT 使用测试签名校验 issuer/audience/subject/scope/expiry，不是生产身份提供者授权。
