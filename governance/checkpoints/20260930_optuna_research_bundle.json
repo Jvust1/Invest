@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "repository": "Jvust1/Invest",
+  "as_of": "2026-09-30",
+  "capability": "provider_prefix_search_later_evaluation",
+  "upstream": {
+    "repository": "optuna/optuna",
+    "stars": 14865,
+    "stars_checked_on": "2026-09-30",
+    "revision": "5c8e50d85b77dd5a1fd7e26e21f63debc81d6016",
+    "license": "MIT",
+    "license_blob": "6bbc1aa30fa6b9da220988c696b0750bd475c5db",
+    "tested_runtime": "5.0.0"
+  },
+  "base_dependency": {
+    "pr": 48,
+    "head": "1b2d415b2a18bb10f9f817d932bdd7084718af1e"
+  },
+  "verification": {
+    "focused_tests": 20,
+    "unittest_cases": 571,
+    "unittest_skips": 13,
+    "pytest_passed": 577,
+    "pytest_skipped": 13,
+    "pytest_subtests_passed": 375,
+    "pytest_baseline_failure": "test_capability_matrix_contains_allocation_and_china_data; reproduced on unchanged #48",
+    "real_optuna_tested": true,
+    "remote_exact_head_ci": "pending_publication"
+  },
+  "real_provider_calls": 0,
+  "real_trades": 0,
+  "private_holdings_used": false,
+  "frozen_holdout_opened": false
+}

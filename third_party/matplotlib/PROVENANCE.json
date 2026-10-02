@@ -1,0 +1,22 @@
+{
+  "upstream": "matplotlib/matplotlib",
+  "repository_url": "https://github.com/matplotlib/matplotlib",
+  "reviewed_revision": "1392cbe3c79cdb93f9282747841d648770f60249",
+  "release": "v3.10.8",
+  "release_tag_object": "4c67981258aebe692f58a27e760de9f417db9bae",
+  "integration_type": "Invest-authored saved-study rendering wrapper using the official optional SDK; no upstream implementation source or fonts copied",
+  "upstream_changes": "None. Invest adds input validation, fixed Agg rendering, workbench download routing, provenance metadata and deterministic tests.",
+  "reviewed_sources": ["lib/matplotlib/backends/backend_agg.py", "lib/matplotlib/figure.py"],
+  "verified_at_utc": "2026-09-30T20:07:00Z",
+  "verified_via": "GitHub plugin and official Matplotlib 3.10.8 documentation",
+  "stars": 23310,
+  "archived": false,
+  "last_push": "2026-09-30T03:22:33Z",
+  "license": "LicenseRef-Matplotlib",
+  "license_review": "Official PSF-based Matplotlib license permits use and derivative distribution with retained license/copyright and a change summary. GitHub's null license classification is not treated as permission. Generic adapter-safe license allowlist is unchanged.",
+  "license_source_path": "LICENSE/LICENSE",
+  "license_blob_sha": "ec51537db27dd4d9c9ed3cd39fd96485f3cfddea",
+  "license_documentation": "https://matplotlib.org/3.10.8/project/license.html",
+  "tested_package": "matplotlib==3.10.8",
+  "runtime": "optional, local FigureCanvasAgg PNG rendering; no provider, external rendering service, TeX or pyplot"
+}

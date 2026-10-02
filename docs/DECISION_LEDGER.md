@@ -95,3 +95,12 @@ CSV 可用于研究查看，但未知公司行动、停牌、每日限价、因�
 由于当前尚无真实 binding、frozen holdout 未打开，因此在首个真实 binding 之前补齐此约束：binding 必须引用已冻结 provider evidence 的 `evidence_id`、`license_evidence_sha256`，并要求 provider evidence 的 `raw_sha256`、`normalized_dataset_id`、`code_sha` 与 binding dataset 一致；binding 中任何 `verified` boundary 继续要求 supporting-evidence SHA-256。这样不能在 provider evidence 冻结后静默换数据/换代码，或只靠自由文本把边界升级为 verified。
 
 该门禁仍只验证 provenance linkage，不证明许可证据本身真实、市场数据完整、策略有效或收益可复现。
+
+## D022 — 复用成熟时间切分器，接入已有研究工作台
+
+2026-09-30：scikit-learn 官方仓库 67,434 stars，BSD-3-Clause，源码审阅固定到
+1.8.0 / 646da0f072a8afef6a980aa427a710311e67eb9d。复用真实 TimeSeriesSplit，
+而非另写时间切分器或只增加目录项。已有 run_study、A 股现金引擎、独立账本回放、
+持久化及中文工作台形成一条可运行链路。仅按训练段选择有限候选，后续评价、失败
+和负面结果都保留；gap 是交易日排除窗口，不宣称完成标签 purging。默认不选优
+比较继续可用；不触碰冻结留出协议。应用恢复依赖 PR #48，不重复其修复。

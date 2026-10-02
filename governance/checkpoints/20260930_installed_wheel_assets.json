@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "repository": "Jvust1/Invest",
+  "as_of": "2026-09-30",
+  "base_dependency": "34ce4e4ca27369a0c4c874935ba0308ec468c760",
+  "change": "include explicit workbench assets and registry in the built wheel",
+  "baseline": {
+    "missing_web_assets": 6,
+    "missing_registry": true,
+    "old_wheel_rejected_by_smoke": true
+  },
+  "verification": {
+    "new_wheel_install_outside_checkout": "pass",
+    "real_loopback_http_routes": 6,
+    "synthetic_study_cases_replayed": 18,
+    "study_save_download": "pass",
+    "new_unit_tests": 4,
+    "full_pytest_passed": 569,
+    "full_pytest_skipped": 13,
+    "full_pytest_subtests_passed": 348,
+    "remote_ci": "pending_exact_published_head"
+  },
+  "runtime_dependencies_changed": false,
+  "real_provider_calls": 0,
+  "real_trades": 0,
+  "main_merged": false,
+  "package_published_to_pypi": false
+}

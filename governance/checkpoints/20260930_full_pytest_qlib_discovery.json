@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "repository": "Jvust1/Invest",
+  "as_of": "2026-09-30",
+  "change": "restore truthful Qlib market-data discovery and collect all pytest-compatible tests",
+  "base": "1b2d415b2a18bb10f9f817d932bdd7084718af1e",
+  "evidence": [
+    "invest/qlib_bridge.py normalizes SH/SZ codes and initializes REG_CN",
+    "existing test_capability_matrix_contains_allocation_and_china_data failed on untouched base",
+    "unittest discovery omitted module-level pytest tests",
+    "new regression connects catalogue discovery to existing injected Qlib provider and research pipeline"
+  ],
+  "verification": {
+    "standalone_pytest_passed": 565,
+    "standalone_pytest_skipped": 13,
+    "standalone_pytest_subtests_passed": 348,
+    "assertions_weakened": false,
+    "new_test_count": 1,
+    "combined_with_pr49_and_pr50": "full pytest run recorded in PR; temporary merge only",
+    "remote_ci": "pending_exact_published_head"
+  },
+  "real_market_calls": 0,
+  "main_modified": false
+}

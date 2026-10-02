@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "scope": "Matplotlib saved-study derivative PNG integration",
+  "date": "2026-09-30",
+  "base_pr": 54,
+  "base_head": "772fb5a58f62fbdb4ddf03a1e204a9d172cad31e",
+  "upstream": "matplotlib/matplotlib",
+  "upstream_release": "3.10.8",
+  "upstream_revision": "1392cbe3c79cdb93f9282747841d648770f60249",
+  "verified_stars": 23310,
+  "license": "LicenseRef-Matplotlib",
+  "license_blob_sha": "ec51537db27dd4d9c9ed3cd39fd96485f3cfddea",
+  "generic_license_allowlist_changed": false,
+  "production_path": ["saved Workspace study", "workbench case selector or archive", "guarded GET study-chart", "real FigureCanvasAgg", "downloadable PNG with content identities"],
+  "validation": {
+    "actual_renderer_and_http_tests": "tests/test_study_charts.py",
+    "ui_state_unit_tests": "tests/study_charts_ui.test.cjs",
+    "actual_png_pixel_inspection": true,
+    "genuine_rolling_study_compatibility": true,
+    "backup_restore_identity": true,
+    "ci": "See the pull request for exact-head terminal results; this checkpoint does not self-certify future CI"
+  },
+  "boundaries": {
+    "synthetic_data_only_in_validation": true,
+    "real_provider_calls": false,
+    "credentials_used": false,
+    "private_holdings_used": false,
+    "transactions": false,
+    "frozen_holdout_opened": false,
+    "browser_layout_acceptance": false,
+    "frozen_executable_acceptance": false,
+    "main_merge_or_deployment": false
+  }
+}
