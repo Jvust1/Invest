@@ -1,0 +1,141 @@
+{
+  "scope": "Saved/restored native research to separately labeled actual Matplotlib PNG; no producer rerun",
+  "base_pr": 61,
+  "base_remote_head": "a2712ae4d626bb9e56d5db088b0198da4852d7c3",
+  "base_tree": "b08a173bec04d1dfa4468f92f72c03a0b304a8bc",
+  "author_source_commit": "0e02ba93ae0e84b4ee11fd6ce8c20d32e6b4afa1",
+  "local_source_tests": {
+    "python_passed": 419,
+    "native_chart_cases": 46,
+    "seconds": 40.73,
+    "node_passed": 45,
+    "native_node_cases": 25,
+    "existing_node_cases_unchanged": 20
+  },
+  "installed_wheel": {
+    "core": {
+      "schema": "invest-installed-native-recovery-v1",
+      "synthetic_only": true,
+      "installed_wheel_import": true,
+      "guarded_optional_sdks": [
+        "duckdb",
+        "matplotlib",
+        "mlflow",
+        "optuna",
+        "pyqlib",
+        "qlib"
+      ],
+      "optional_sdk_import_attempts": 0,
+      "python_external_network_attempts": 0,
+      "node_fetch_scope": "loopback_base_only",
+      "restore_empty_workspace": true,
+      "repeated_restore_idempotent": true,
+      "conflicting_timestamp_rejected": true,
+      "cash_schema_rejected_before_write": true,
+      "record_identity_preserved": true,
+      "producer_and_timestamp_preserved_as_declarations": true,
+      "http_list_and_raw_export": true,
+      "served_javascript_export_byte_identical": true,
+      "offline_arithmetic_revalidated": true,
+      "mlflow_archive_used": false,
+      "native_cash_units_conflated": false,
+      "browser_layout_verified": false
+    },
+    "charts": {
+      "schema": "invest-installed-native-recovery-v1",
+      "synthetic_only": true,
+      "installed_wheel_import": true,
+      "guarded_optional_sdks": [
+        "duckdb",
+        "mlflow",
+        "optuna",
+        "pyqlib",
+        "qlib"
+      ],
+      "optional_sdk_import_attempts": 0,
+      "python_external_network_attempts": 0,
+      "node_fetch_scope": "loopback_base_only",
+      "restore_empty_workspace": true,
+      "repeated_restore_idempotent": true,
+      "conflicting_timestamp_rejected": true,
+      "cash_schema_rejected_before_write": true,
+      "record_identity_preserved": true,
+      "producer_and_timestamp_preserved_as_declarations": true,
+      "http_list_and_raw_export": true,
+      "served_javascript_export_byte_identical": true,
+      "offline_arithmetic_revalidated": true,
+      "mlflow_archive_used": false,
+      "native_cash_units_conflated": false,
+      "browser_layout_verified": false,
+      "native_png_identity_verified": true,
+      "native_png_pixels_decoded": true,
+      "native_png_repeat_identical": true,
+      "native_served_javascript_png_byte_identical": true,
+      "cash_validator_still_rejects_native": true,
+      "native_chart_after_json_restore_identical": true
+    },
+    "runtime_files_byte_equal": 62,
+    "wheel_sha256": "95be3a53c76ad36a99498f712ea79822db40e8725aaab949a3915192e119162c"
+  },
+  "visual_review": {
+    "size": [
+      1200,
+      900
+    ],
+    "png_bytes": 148974,
+    "sha256": "353d644b622aef5d66192c977c4c59b81a5bf0722d4fd0707c947fe75e4dde8d",
+    "result": "Parent and independent reviewer inspected actual pixels; symbol/MA/fee and limitation labels legible, later-only unit curve and fractional nonpositive drawdown distinct"
+  },
+  "independent_review": {
+    "result": "No remaining blockers in source/API/UI/renderer and final smoke/evidence/documentation assembly",
+    "probes": [
+      "Timestamp-only declaration changes retain content ID/curve but alter full-envelope hash and render ID",
+      "Repeated rendering is byte-identical without mutating original",
+      "Changed Matplotlib rc configuration can change pixels; restoring it restores byte identity"
+    ],
+    "fixes": [
+      "Pre-lookup busy response no longer asserts record existence",
+      "Visible saved symbol/MA/fee-bps labels",
+      "Client fixed-dimension bound in addition to stream/type/structure/CRC checks"
+    ],
+    "reviewed_local_commit": "ec086c61eb3f768cb915a87b92f7297bad6e0495"
+  },
+  "upstream": {
+    "repository": "matplotlib/matplotlib",
+    "stars": 23310,
+    "checked_at_utc": "2026-10-01T01:12:18Z",
+    "runtime_version": "3.10.8",
+    "license": "Existing exact PSF-based Matplotlib license and notices retained; GitHub null classifier not used as determination"
+  },
+  "identity_scope": "Same record and rendering environment including configuration/fonts/rasterizer; renderer identity is not a signature or live-bytecode attestation",
+  "bounds": {
+    "record_bytes": 8388608,
+    "observations": 10000,
+    "plot_absolute_magnitude": 1000000000000.0,
+    "png_download_bytes": 8388608,
+    "pixels": [
+      1200,
+      900
+    ],
+    "validation_and_rendering": "shared nonblocking locks released before replies"
+  },
+  "unchanged": [
+    "Existing cash validators/routes and semantics",
+    "MLflow storage/migrations/privacy/45-second worker/30-second lock budgets",
+    "Existing full SDK/core recovery assertions"
+  ],
+  "limitations": [
+    "Inherited Workspace loader materializes SQLite text before native decode size guard; not a hostile-database sandbox",
+    "PNG client checks structure/CRCs, not general pixel decoding; actual output pixel decoding is separately tested",
+    "Historical intermittent Windows MLflow initialization failure remains unresolved despite later passing exact-head runs",
+    "No browser-layout/device/frozen-executable or real-market acceptance"
+  ],
+  "base_hosted_acceptance": {
+    "workflow_count": 15,
+    "all_success": true,
+    "recovery_run": 36798943658,
+    "full_stack_run": 36798943647,
+    "windows_full_suite": "1209 passed,13 optional skips,454 subtests"
+  },
+  "candidate_hosted_acceptance": "Pending publication and exact-head checks"
+}

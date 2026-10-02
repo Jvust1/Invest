@@ -1,0 +1,444 @@
+{
+  "scope": "Narrow fixed-vocabulary diagnostic extension; not a claimed timeout fix",
+  "base_pr": 59,
+  "base_remote_head": "859191940c7257ef3e5b6bc7087f951026f1b664",
+  "inherited_failure": {
+    "run": 36789951703,
+    "job": 110140253198,
+    "platform": "windows-latest Python 3.11",
+    "test": "test_completed_artifact_tampering_and_duplicate_run_fail_closed",
+    "stage": "initial archive before adversary",
+    "status": "archive_timeout",
+    "phase": "client_initialization",
+    "duration_seconds": 45.4
+  },
+  "inherited_exact_head_ci": {
+    "total_workflows": 17,
+    "success": 16,
+    "failure": 1,
+    "full_six_sdk_matrix": "four jobs passed"
+  },
+  "local": {
+    "phase_tests": "35 passed in 29.28s: phase/privacy/profile tests plus the actual-SDK artifact-tampering/duplicate-run case that failed on original Windows CI",
+    "profiler": [
+      {
+        "profile": "inherited_threads",
+        "synthetic_only": true,
+        "deadline_seconds": 45,
+        "elapsed_seconds": 3.918,
+        "sqlite_version": "3.53.1",
+        "process_timeout": false,
+        "returncode": 0,
+        "worker_status": "archived",
+        "worker_reason": null,
+        "phases": [
+          {
+            "name": "process_start",
+            "seconds": 0.0
+          },
+          {
+            "name": "invest_imported",
+            "seconds": 0.6986
+          },
+          {
+            "name": "mlflow_imported",
+            "seconds": 1.6657
+          },
+          {
+            "name": "archive_begin",
+            "seconds": 1.6672
+          },
+          {
+            "name": "record_validation",
+            "seconds": 1.6673
+          },
+          {
+            "name": "path_validation",
+            "seconds": 1.6704
+          },
+          {
+            "name": "sdk_import",
+            "seconds": 1.6707
+          },
+          {
+            "name": "sdk_store_import",
+            "seconds": 1.6722
+          },
+          {
+            "name": "lock_wait",
+            "seconds": 2.3233
+          },
+          {
+            "name": "client_initialization",
+            "seconds": 2.3237
+          },
+          {
+            "name": "client_begin",
+            "seconds": 2.3237
+          },
+          {
+            "name": "initial_tables",
+            "seconds": 2.3305
+          },
+          {
+            "name": "schema_upgrade",
+            "seconds": 2.3332
+          },
+          {
+            "name": "client_ready",
+            "seconds": 2.8361
+          },
+          {
+            "name": "experiment_lookup",
+            "seconds": 2.8366
+          },
+          {
+            "name": "get_experiment_by_name_begin",
+            "seconds": 2.8367
+          },
+          {
+            "name": "get_experiment_by_name_end",
+            "seconds": 2.8388
+          },
+          {
+            "name": "create_experiment_begin",
+            "seconds": 2.8389
+          },
+          {
+            "name": "create_experiment_end",
+            "seconds": 2.8433
+          },
+          {
+            "name": "get_experiment_begin",
+            "seconds": 2.8433
+          },
+          {
+            "name": "get_experiment_end",
+            "seconds": 3.0263
+          },
+          {
+            "name": "run_lookup",
+            "seconds": 3.0268
+          },
+          {
+            "name": "search_runs_begin",
+            "seconds": 3.0268
+          },
+          {
+            "name": "search_runs_end",
+            "seconds": 3.0379
+          },
+          {
+            "name": "create_run_begin",
+            "seconds": 3.038
+          },
+          {
+            "name": "create_run_end",
+            "seconds": 3.0442
+          },
+          {
+            "name": "artifact_validation",
+            "seconds": 3.0442
+          },
+          {
+            "name": "index_write",
+            "seconds": 3.0447
+          },
+          {
+            "name": "log_batch_begin",
+            "seconds": 3.0448
+          },
+          {
+            "name": "log_batch_end",
+            "seconds": 3.0611
+          },
+          {
+            "name": "get_experiment_begin",
+            "seconds": 3.0612
+          },
+          {
+            "name": "get_experiment_end",
+            "seconds": 3.0631
+          },
+          {
+            "name": "get_run_begin",
+            "seconds": 3.0632
+          },
+          {
+            "name": "get_run_end",
+            "seconds": 3.0718
+          },
+          {
+            "name": "artifact_write",
+            "seconds": 3.0722
+          },
+          {
+            "name": "log_text_begin",
+            "seconds": 3.0724
+          },
+          {
+            "name": "log_text_end",
+            "seconds": 3.0776
+          },
+          {
+            "name": "commit",
+            "seconds": 3.0777
+          },
+          {
+            "name": "set_terminated_begin",
+            "seconds": 3.0777
+          },
+          {
+            "name": "set_terminated_end",
+            "seconds": 3.0815
+          },
+          {
+            "name": "get_run_begin",
+            "seconds": 3.0815
+          },
+          {
+            "name": "get_run_end",
+            "seconds": 3.0856
+          },
+          {
+            "name": "archive_returned",
+            "seconds": 3.0858
+          },
+          {
+            "name": "worker_returned",
+            "seconds": 3.086
+          },
+          {
+            "name": "status_flushed",
+            "seconds": 3.086
+          }
+        ],
+        "committed_evidence": {
+          "success_emitted": true,
+          "artifact_matches": true,
+          "database_finished": true
+        }
+      },
+      {
+        "profile": "one_numeric_thread",
+        "synthetic_only": true,
+        "deadline_seconds": 45,
+        "elapsed_seconds": 3.972,
+        "sqlite_version": "3.53.1",
+        "process_timeout": false,
+        "returncode": 0,
+        "worker_status": "archived",
+        "worker_reason": null,
+        "phases": [
+          {
+            "name": "process_start",
+            "seconds": 0.0
+          },
+          {
+            "name": "invest_imported",
+            "seconds": 0.3616
+          },
+          {
+            "name": "mlflow_imported",
+            "seconds": 1.3488
+          },
+          {
+            "name": "archive_begin",
+            "seconds": 1.3511
+          },
+          {
+            "name": "record_validation",
+            "seconds": 1.3511
+          },
+          {
+            "name": "path_validation",
+            "seconds": 1.3542
+          },
+          {
+            "name": "sdk_import",
+            "seconds": 1.3546
+          },
+          {
+            "name": "sdk_store_import",
+            "seconds": 1.3561
+          },
+          {
+            "name": "lock_wait",
+            "seconds": 2.0766
+          },
+          {
+            "name": "client_initialization",
+            "seconds": 2.0769
+          },
+          {
+            "name": "client_begin",
+            "seconds": 2.077
+          },
+          {
+            "name": "initial_tables",
+            "seconds": 2.0887
+          },
+          {
+            "name": "schema_upgrade",
+            "seconds": 2.0927
+          },
+          {
+            "name": "client_ready",
+            "seconds": 2.4682
+          },
+          {
+            "name": "experiment_lookup",
+            "seconds": 2.4683
+          },
+          {
+            "name": "get_experiment_by_name_begin",
+            "seconds": 2.4683
+          },
+          {
+            "name": "get_experiment_by_name_end",
+            "seconds": 2.4701
+          },
+          {
+            "name": "create_experiment_begin",
+            "seconds": 2.4702
+          },
+          {
+            "name": "create_experiment_end",
+            "seconds": 2.4719
+          },
+          {
+            "name": "get_experiment_begin",
+            "seconds": 2.472
+          },
+          {
+            "name": "get_experiment_end",
+            "seconds": 2.6535
+          },
+          {
+            "name": "run_lookup",
+            "seconds": 2.6541
+          },
+          {
+            "name": "search_runs_begin",
+            "seconds": 2.6541
+          },
+          {
+            "name": "search_runs_end",
+            "seconds": 2.6665
+          },
+          {
+            "name": "create_run_begin",
+            "seconds": 2.6665
+          },
+          {
+            "name": "create_run_end",
+            "seconds": 2.6733
+          },
+          {
+            "name": "artifact_validation",
+            "seconds": 2.6734
+          },
+          {
+            "name": "index_write",
+            "seconds": 2.6738
+          },
+          {
+            "name": "log_batch_begin",
+            "seconds": 2.6739
+          },
+          {
+            "name": "log_batch_end",
+            "seconds": 2.6913
+          },
+          {
+            "name": "get_experiment_begin",
+            "seconds": 2.6914
+          },
+          {
+            "name": "get_experiment_end",
+            "seconds": 2.6935
+          },
+          {
+            "name": "get_run_begin",
+            "seconds": 2.6936
+          },
+          {
+            "name": "get_run_end",
+            "seconds": 2.7019
+          },
+          {
+            "name": "artifact_write",
+            "seconds": 2.7022
+          },
+          {
+            "name": "log_text_begin",
+            "seconds": 2.7023
+          },
+          {
+            "name": "log_text_end",
+            "seconds": 2.7084
+          },
+          {
+            "name": "commit",
+            "seconds": 2.7086
+          },
+          {
+            "name": "set_terminated_begin",
+            "seconds": 2.7086
+          },
+          {
+            "name": "set_terminated_end",
+            "seconds": 2.7132
+          },
+          {
+            "name": "get_run_begin",
+            "seconds": 2.7133
+          },
+          {
+            "name": "get_run_end",
+            "seconds": 2.7173
+          },
+          {
+            "name": "archive_returned",
+            "seconds": 2.7175
+          },
+          {
+            "name": "worker_returned",
+            "seconds": 2.7178
+          },
+          {
+            "name": "status_flushed",
+            "seconds": 2.7178
+          }
+        ],
+        "committed_evidence": {
+          "success_emitted": true,
+          "artifact_matches": true,
+          "database_finished": true
+        }
+      }
+    ]
+  },
+  "unchanged": {
+    "worker_timeout_seconds": 45,
+    "writer_lock_timeout_seconds": 30,
+    "storage_policy": "official MLflow SQLite defaults",
+    "schema_migrations": "official MLflow 3.16.1, unchanged",
+    "optional": "archive opt-in; saved Workspace record retained on archive failure"
+  },
+  "uncertainty": [
+    "Local Linux probes did not reproduce the Windows 45-second failure.",
+    "Fine phases are observations, not root-cause or reliability proof.",
+    "No Windows acceptance for this revision exists until exact-head hosted CI completes.",
+    "schema_upgrade is a start marker; later schema verification/default-experiment work can occur before the next marker."
+  ],
+  "independent_review": {
+    "result": "No remaining blockers after two findings were fixed",
+    "fixed": [
+      "Deactivate logging observer before best-effort handler removal, with removal-before-detach failure test",
+      "Include official sqlalchemy_workspace_store in backend pre-import"
+    ],
+    "import_only_probe": "All three backend modules: zero SQLite connection, network, or file-write attempts during pre-import",
+    "limit": "The pre-existing top-level SDK import attempted one socket.bind which the audit guard blocked; no external network access was permitted"
+  }
+}

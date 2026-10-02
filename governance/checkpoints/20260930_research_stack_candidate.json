@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "repository": "Jvust1/Invest",
+  "as_of_utc": "2026-09-30T21:59:00Z",
+  "capability": "coinstalled_native_replay_optimization_and_saved_rolling_study_archive_chart_restore",
+  "base_main_commit": "8d9e6aaa5ed8e2a71ef22430a45e0a77c4c24f8d",
+  "included_pr_heads": {
+    "48": "1b2d415b2a18bb10f9f817d932bdd7084718af1e",
+    "49": "3dc4dee9a0b70db0d41a8cbfc3957df0081ac917",
+    "50": "ff09bd6ad1a91c506b356fe91d02f1efdd5b6763",
+    "51": "34ce4e4ca27369a0c4c874935ba0308ec468c760",
+    "52": "f5f7e6d6d298c05869a8788aa81a25b95ca75c85",
+    "53": "45936788d2528c73fab891fe4ece0ca064319411",
+    "54": "772fb5a58f62fbdb4ddf03a1e204a9d172cad31e",
+    "55": "36f54d76d2289a06c7c726658ddae77881f50598",
+    "56": "df53f3f2d953f8d5198bac6abdf3a74e082728b1"
+  },
+  "new_functionality": [
+    "explicit_native_qlib_basis_and_source_contract_in_DuckDB_snapshots",
+    "source_and_replay_attrs_retained_by_both_pipeline_outputs",
+    "record_bound_UI_archive_status_and_retry",
+    "Python310_legacy_SQLite_busy_compatibility"
+  ],
+  "local_full_pytest": {
+    "passed": 863,
+    "skipped": 13,
+    "passing_subtests": 454,
+    "failed": 0,
+    "seconds": 207.04,
+    "environment": "Linux Python3.12; all_six_actual_SDKs_coinstalled"
+  },
+  "node_ui_tests": {
+    "passed": 8,
+    "failed": 0
+  },
+  "pip_check": "pass",
+  "js_syntax": "pass",
+  "diff_check": "pass",
+  "independent_review": "no remaining blocker; native bridge, isolated-wheel path, UI repeated/interrupted state, SQLite compatibility reviewed",
+  "installed_wheel_report": {
+    "schema": "invest-installed-research-stack-pilot-v1",
+    "installed_wheel_import": true,
+    "synthetic_only": true,
+    "versions": {
+      "pyqlib": "0.9.7",
+      "mlflow": "3.16.1",
+      "matplotlib": "3.10.8",
+      "duckdb": "1.5.6",
+      "optuna": "5.0.0",
+      "scikit-learn": "1.9.1"
+    },
+    "external_market_calls": 0,
+    "broker_connected": false,
+    "native_replay_rows": 120,
+    "optimization_trials": 12,
+    "training_rows": 84,
+    "evaluation_rows": 36,
+    "native_source_identity_preserved": true,
+    "native_research_json": true,
+    "rolling_cases": 9,
+    "saved_study_identity": "29d60fab3e7f2c38727cabb955d43d86f0fed62adb0781b64f1499767aac9d53",
+    "mlflow_archive_reused": true,
+    "png_identity_verified": true,
+    "private_backup_restored": true,
+    "restored_chart_identical": true,
+    "restored_archive_rebuilt": true,
+    "frozen_holdout_opened": false,
+    "browser_layout_verified": false,
+    "native_prices_used_for_cash_execution": false
+  },
+  "wheel_sha256": "3331e332ba159e2ec898e24d0e85c8d954bc0f18452677ffd89eeead9d73eb97",
+  "hosted_ci": "pending_at_local_checkpoint; verify_candidate_exact_head_before_cross_platform_claim",
+  "python310_runtime": "hosted_matrix_pending; syntax_and_legacy_SQLite_behavior_checked_locally",
+  "upstream_attribution": "individual docs/upstream and third_party exact license/source pins retained; all six official repos exceeded10000 stars when verified2026-09-30",
+  "limits": [
+    "synthetic_only_not_market_profitability",
+    "no_native_normalized_price_in_cash_engine",
+    "no_Qlib_FILE_experiments_or_model_training",
+    "no_frozen_EXE_or_browser_layout_acceptance",
+    "historical_Windows_archive_timeouts_not_proven_fixed_by_diagnostic_profiler",
+    "no_real_holdings_or_trades"
+  ],
+  "main_modified": false,
+  "merged": false,
+  "deployed": false
+}

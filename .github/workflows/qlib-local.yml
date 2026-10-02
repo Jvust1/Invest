@@ -1,0 +1,50 @@
+name: Invest native local Qlib data
+
+on:
+  pull_request:
+    paths:
+      - 'invest/qlib_bridge.py'
+      - 'invest/qlib_local.py'
+      - 'invest/pipeline.py'
+      - 'invest/research_pipeline.py'
+      - 'pyproject.toml'
+      - 'tests/test_qlib*'
+      - 'examples/qlib_local_research.py'
+      - '.github/workflows/qlib-local.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  runtime:
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ['3.11', '3.12']
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    env:
+      MLFLOW_DISABLE_TELEMETRY: 'true'
+      DO_NOT_TRACK: 'true'
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install real data SDK and compatible local archive pin
+        run: python -m pip install -e '.[qlib,mlflow,test]' 'pyqlib==0.9.7' 'mlflow==3.16.1'
+      - name: Verify installed runtime identities and no Torch installation
+        run: python -c "from importlib import metadata, util; assert metadata.version('pyqlib') == '0.9.7'; assert metadata.version('mlflow') == '3.16.1'; assert util.find_spec('torch') is None"
+      - name: Exercise real binary data and adversarial local contracts
+        run: python -m pytest tests/test_qlib_provider.py tests/test_qlib_contract.py tests/test_qlib_local.py -q
+      - name: Run both existing pipelines with synthetic native data
+        run: python -m examples.qlib_local_research
+      - name: Verify coinstalled real local MLflow archive
+        run: python -m pytest tests/test_mlflow_local.py tests/test_mlflow_tracking.py -q
+      - name: Compile local bridge
+        run: python -m py_compile invest/qlib_bridge.py invest/qlib_local.py

@@ -1,0 +1,86 @@
+{
+  "scope": "Independent native-only JSON recovery, no optional SDK execution and no new HTTP import endpoint",
+  "base_pr": 59,
+  "base_remote_head": "5a2ab7de29253af750326bf3d11b20da23001b17",
+  "author_source_commit": "a55bc5cb67870c6e4e80cab73232e8739828c049",
+  "source_acceptance": {
+    "python_passed": 322,
+    "recovery_cases": 61,
+    "seconds": 30.43,
+    "javascript_helpers_passed": 12
+  },
+  "installed_wheel": {
+    "schema": "invest-installed-native-recovery-v1",
+    "synthetic_only": true,
+    "installed_wheel_import": true,
+    "guarded_optional_sdks": [
+      "duckdb",
+      "matplotlib",
+      "mlflow",
+      "optuna",
+      "pyqlib",
+      "qlib"
+    ],
+    "optional_sdk_import_attempts": 0,
+    "python_external_network_attempts": 0,
+    "node_fetch_scope": "loopback_base_only",
+    "restore_empty_workspace": true,
+    "repeated_restore_idempotent": true,
+    "conflicting_timestamp_rejected": true,
+    "cash_schema_rejected_before_write": true,
+    "record_identity_preserved": true,
+    "producer_and_timestamp_preserved_as_declarations": true,
+    "http_list_and_raw_export": true,
+    "served_javascript_export_byte_identical": true,
+    "offline_arithmetic_revalidated": true,
+    "mlflow_archive_used": false,
+    "native_cash_units_conflated": false,
+    "browser_layout_verified": false
+  },
+  "packaging": {
+    "runtime_files_byte_equal": 61,
+    "wheel_sha256": "a91cfbf99c2f42122441a8f0a2e1e5bc2ca81119517ee41cc74d4bfcc58bade9"
+  },
+  "independent_review": {
+    "result": "No remaining blockers in source/API and assembled smoke/workflow/documentation review",
+    "fixed": [
+      "Reject foreign kind before native decoding",
+      "Scalar SQL byte/type header before bounded envelope fetch",
+      "Explicit four-column SELECT/INSERT and binary kind/ID equality under one transaction",
+      "Reject ignored insert and verify bounded exact post-insert envelope before commit; roll back side writes",
+      "Workflow covers transitive production and shared HTTP test dependencies"
+    ],
+    "reviewed_local_commit": "c50e56ca605e16be15ada037fcdbfee4baa7c0d1"
+  },
+  "semantics": {
+    "producer_and_recorded_at": "preserved unauthenticated declarations",
+    "identity": "canonical JSON preserves numeric types; input whitespace/key order not identity",
+    "idempotence": "identical complete envelope returns existing record; timestamp-string conflict rejects",
+    "units": "native unit-capital research remains distinct from cash/lot/T+1 studies"
+  },
+  "local_environment_limit": "Local optional SDKs were installed but import-guarded. Hosted core-only matrix additionally asserts their absence.",
+  "inherited_aggregate_limit": {
+    "pr": 59,
+    "head": "5a2ab7de29253af750326bf3d11b20da23001b17",
+    "workflows_passed": 16,
+    "workflows_total": 17,
+    "failed_run": 36794299116,
+    "platform": "Windows Python3.10",
+    "reason": "MLflow initial archive_timeout",
+    "last_phase": "schema_upgrade",
+    "study_saved": true,
+    "status": "Unresolved availability limitation; not a proven migration root cause"
+  },
+  "unchanged": [
+    "MLflow storage/migrations/privacy guards",
+    "45-second archive worker and30-second writer-lock budgets",
+    "Existing full six-SDK/MLflow assertions and workflows"
+  ],
+  "unclaimed": [
+    "Aggregate all-green acceptance",
+    "Authenticated producer or timestamp",
+    "Browser layout/device/frozen executable acceptance",
+    "Real-market data rights or strategy performance",
+    "General hostile-SQLite or subprocess network sandbox"
+  ]
+}

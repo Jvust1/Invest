@@ -329,6 +329,170 @@ def _index_api(rows: list[dict], symbol: str, start: str, end: str) -> dict[str,
     return result
 
 
+
+def akshare_available() -> bool:
+    """Return whether the optional AKShare research connector is installed."""
+    try:
+        import importlib.util
+        return importlib.util.find_spec("akshare") is not None
+    except (ImportError, ValueError):
+        return False
+
+
+def _akshare_day(value: object) -> str:
+    if isinstance(value, datetime):
+        return _date(value.date().isoformat())
+    if isinstance(value, date):
+        return _date(value.isoformat())
+    text = str(value)
+    if len(text) < 10 or not re.fullmatch(r"[0-9]{4}-[0-9]{2}-[0-9]{2}", text[:10]):
+        raise ValueError("AKShare 返回无效交易日期")
+    return _date(text[:10])
+
+
+def _akshare_records(frame: object, required: set[str], label: str) -> list[dict]:
+    columns = getattr(frame, "columns", None)
+    to_dict = getattr(frame, "to_dict", None)
+    if columns is None or not callable(to_dict):
+        raise ValueError(f"AKShare {label} 返回结构无效")
+    names = [str(name) for name in columns]
+    if not required.issubset(set(names)):
+        raise ValueError(f"AKShare {label} 缺少必要字段")
+    try:
+        rows = to_dict(orient="records")
+    except Exception:
+        raise ValueError(f"AKShare {label} 无法转换为记录") from None
+    if not isinstance(rows, list) or len(rows) > MAX_ROWS:
+        raise ValueError(f"AKShare {label} 返回行数无效")
+    if not all(isinstance(row, dict) for row in rows):
+        raise ValueError(f"AKShare {label} 返回记录格式无效")
+    return rows
+
+
+def fetch_akshare(symbol: str, start: str, end: str, *, client=None) -> dict:
+    """Fetch real, unadjusted A-share daily bars through AKShare for research.
+
+    AKShare is an optional connector. It supplies real historical OHLCV and a
+    market calendar, but does not by itself prove suspension, corporate-action,
+    risk-warning, survivorship, or point-in-time feature completeness. Those
+    unknowns intentionally remain blockers for simulated execution.
+    """
+    if not is_mainboard_symbol(symbol):
+        raise ValueError("仅支持单只沪深主板股票的标准代码")
+    start, end = _date(start), _date(end)
+    if start > end or (date.fromisoformat(end) - date.fromisoformat(start)).days > 365:
+        raise ValueError("一次最多获取 366 个自然日，且起始日不能晚于结束日")
+    if client is None:
+        try:
+            import akshare as client
+        except ImportError:
+            raise ValueError('未安装 AKShare 数据组件；请先运行 py -m pip install -e ".[market]"') from None
+
+    code = symbol.split(".")[0]
+    try:
+        hist_frame = client.stock_zh_a_hist(
+            symbol=code,
+            period="daily",
+            start_date=start.replace("-", ""),
+            end_date=end.replace("-", ""),
+            adjust="",
+        )
+    except Exception:
+        raise ValueError("AKShare 历史行情请求失败；未使用替代或伪造数据") from None
+
+    rows = _akshare_records(
+        hist_frame,
+        {"日期", "开盘", "收盘", "最高", "最低", "成交量"},
+        "stock_zh_a_hist",
+    )
+    if not rows:
+        raise ValueError("AKShare 没有返回该区间行情，未生成替代数据")
+
+    output = io.StringIO(newline="")
+    writer = csv.DictWriter(output, fieldnames=FIELDS, lineterminator="\n")
+    writer.writeheader()
+    seen_days: set[str] = set()
+    for row in rows:
+        day = _akshare_day(row.get("日期"))
+        if not start <= day <= end or day in seen_days:
+            raise ValueError("AKShare 返回日期越界或重复行")
+        seen_days.add(day)
+        provider_code = row.get("股票代码")
+        if provider_code not in (None, "") and str(provider_code).zfill(6) != code:
+            raise ValueError("AKShare 返回了非请求证券的数据")
+        try:
+            hands = Decimal(str(row.get("成交量")))
+            shares = hands * 100
+            if not shares.is_finite() or shares < 0 or shares != shares.to_integral_value():
+                raise ValueError("AKShare 成交量不能精确转换为整数股数")
+        except (DecimalException, ValueError):
+            raise ValueError("AKShare 成交量无效") from None
+        writer.writerow({
+            "symbol": symbol,
+            "date": day,
+            "open": row.get("开盘"),
+            "high": row.get("最高"),
+            "low": row.get("最低"),
+            "close": row.get("收盘"),
+            "volume_shares": str(shares),
+            "suspended": "",
+            "up_limit": "",
+            "down_limit": "",
+            "adj_factor": "",
+            "corporate_action": "",
+        })
+
+    calendar: list[str] = []
+    calendar_error: str | None = None
+    try:
+        cal_frame = client.tool_trade_date_hist_sina()
+        cal_rows = _akshare_records(cal_frame, {"trade_date"}, "tool_trade_date_hist_sina")
+        calendar = sorted({
+            _akshare_day(row.get("trade_date"))
+            for row in cal_rows
+            if start <= _akshare_day(row.get("trade_date")) <= end
+        })
+        if not calendar or calendar[0] > min(seen_days) or calendar[-1] < max(seen_days):
+            raise ValueError("AKShare 交易日历未覆盖行情区间")
+    except Exception:
+        calendar = []
+        calendar_error = "AKShare 交易日历不可用或覆盖不完整"
+
+    version = str(getattr(client, "__version__", "unknown"))
+    source = f"AKShare {version} / stock_zh_a_hist + tool_trade_date_hist_sina"
+    dataset = parse_csv(
+        output.getvalue(),
+        source=source,
+        calendar_csv="date\n" + "\n".join(calendar) if calendar else "",
+    )
+    dataset["meta"].update({
+        "source_kind": "akshare",
+        "calendar_source": "AKShare tool_trade_date_hist_sina / Sina Finance" if calendar else "missing",
+        "requested_start": start,
+        "requested_end": end,
+        "provider_volume_unit": "hands (100 shares)",
+        "provider_price_adjustment": "none",
+        "adapter_version": 1,
+        "provider_library_license": "MIT",
+        "provider_data_use_note": "AKShare states its data is for academic/research reference; upstream source terms still apply",
+    })
+    dataset["audit"]["warnings"].append(_issue(
+        "akshare_research_only",
+        "AKShare 提供真实历史行情用于研究，但上游接口可能变化；当前不把它视为交易所官方执行事实",
+    ))
+    dataset["audit"]["warnings"].append(_issue(
+        "provider_execution_metadata_pending",
+        "停牌、公司行动、风险警示、逐日涨跌停与 PIT 身份仍未完整验证；真实数据仅供研究，禁止模拟成交",
+    ))
+    if calendar_error:
+        item = _issue("provider_calendar_incomplete", calendar_error)
+        dataset["audit"]["warnings"].append(item)
+        dataset["audit"]["backtest_blockers"].append(item)
+    dataset["audit"]["backtest_ready"] = not dataset["audit"]["backtest_blockers"]
+    dataset["id"] = _identity(dataset)
+    return dataset
+
+
 def fetch_tushare(symbol: str, start: str, end: str, *, token: str | None = None) -> dict:
     """Official four-endpoint adapter; unknown flags block execution.
 

@@ -1,0 +1,18 @@
+{
+  "upstream": "mlflow/mlflow",
+  "repository_url": "https://github.com/mlflow/mlflow",
+  "reviewed_revision": "7faf28476bddcebb68ee8b08cdcba1bee7ad6109",
+  "integration_type": "Invest-authored local SDK integration; no MLflow implementation source vendored",
+  "reviewed_source": "mlflow/tracking/client.py",
+  "verified_at_utc": "2026-09-30T19:29:00Z",
+  "verified_via": "GitHub plugin",
+  "stars": 28199,
+  "archived": false,
+  "last_push": "2026-09-30T15:57:22Z",
+  "license": "Apache-2.0",
+  "license_source_path": "LICENSE.txt",
+  "license_blob_sha": "db7cb10b5e330d56b40370bc178974ccabe71458",
+  "root_notice_present": false,
+  "tested_package": "mlflow==3.16.1",
+  "runtime": "optional, local SQLite backend and file artifacts; no remote service"
+}

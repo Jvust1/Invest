@@ -6,8 +6,10 @@ Upstream: optuna/optuna @
 from __future__ import annotations
 
 from dataclasses import dataclass
+import hashlib
 from typing import Any
 
+import numpy as np
 import pandas as pd
 from sklearn.model_selection import TimeSeriesSplit
 
@@ -19,6 +21,39 @@ class OptimizationResult:
     params: dict[str, int]
     score: float
     fold_scores: tuple[float, ...]
+    trials: tuple[dict[str, Any], ...] = ()
+    seed: int | None = None
+    optimizer_version: str | None = None
+    training_fingerprint: str = ''
+    splits: int = 0
+    fee_bps: float = 0.0
+    score_metric: str = 'annualized_arithmetic_sharpe_zero_risk_free'
+
+
+def _validated_close(close: pd.Series) -> pd.Series:
+    series = pd.Series(close, dtype="float64")
+    if (series.empty or not np.isfinite(series).all() or (series <= 0).any()
+            or not series.index.is_unique or not series.index.is_monotonic_increasing):
+        raise ValueError("history must contain finite positive prices in unique chronological order")
+    return series
+
+
+def _training_fingerprint(close: pd.Series) -> str:
+    """Stable across pandas timestamp resolutions; no optional SDK dependency."""
+    close = _validated_close(close).copy()
+    if isinstance(close.index, pd.DatetimeIndex):
+        index = close.index
+        # pandas 3 can hold microsecond dates outside the nanosecond range.
+        # Unbounded conversions may overflow or wrap; reject before casting.
+        lower, upper = pd.Timestamp.min, pd.Timestamp.max
+        if index.tz is not None:
+            index = index.tz_convert('UTC')
+            lower, upper = lower.tz_localize('UTC'), upper.tz_localize('UTC')
+        if index.hasnans or index.min() < lower or index.max() > upper:
+            raise ValueError('training timestamps must fit the nanosecond range')
+        normalized = pd.DatetimeIndex(index.to_numpy(dtype='datetime64[ns]'), name=index.name)
+        close.index = normalized.tz_localize('UTC') if index.tz is not None else normalized
+    return hashlib.sha256(pd.util.hash_pandas_object(close, index=True).to_numpy(dtype='<u8').tobytes()).hexdigest()
 
 
 def _walkforward_score(
@@ -29,7 +64,7 @@ def _walkforward_score(
     fee_bps: float,
     splits: int,
 ) -> tuple[float, tuple[float, ...]]:
-    series = pd.Series(close, dtype="float64").dropna()
+    series = _validated_close(close)
     if len(series) < max(slow * 2, splits + 2):
         raise ValueError("not enough history for walk-forward optimization")
     splitter = TimeSeriesSplit(n_splits=splits)
@@ -52,23 +87,44 @@ def optimize_sma_walkforward(
     splits: int = 4,
     fee_bps: float = 5.0,
     study: Any | None = None,
+    seed: int = 0,
 ) -> OptimizationResult:
-    if n_trials < 1:
-        raise ValueError("n_trials must be positive")
-    if splits < 2:
-        raise ValueError("splits must be at least 2")
-    if study is None:
+    if type(n_trials) is not int or not 1 <= n_trials <= 100:
+        raise ValueError("n_trials must be an integer from 1 to 100")
+    if type(splits) is not int or not 2 <= splits <= 5:
+        raise ValueError("splits must be an integer from 2 to 5")
+    if type(seed) is not int or not 0 <= seed <= 2**32 - 1:
+        raise ValueError("seed must be an integer from 0 to 2**32 - 1")
+    if isinstance(fee_bps, bool) or not np.isfinite(fee_bps) or not 0 <= fee_bps < 10000:
+        raise ValueError("fee_bps must be finite and between 0 and 10000")
+    close = _validated_close(close)
+    if len(close) > 10000:
+        raise ValueError("optimization is limited to 10000 observations")
+    first_train, _ = next(TimeSeriesSplit(n_splits=splits).split(close))
+    slow_max = min(120, len(first_train))
+    if slow_max < 10:
+        raise ValueError("not enough history for a fully warmed first validation fold")
+    owned_study = study is None
+    if owned_study:
         try:
             import optuna
         except ImportError as exc:
             raise RuntimeError("Optuna is optional; install Invest with the 'optuna' extra") from exc
-        study = optuna.create_study(direction="maximize")
+        study = optuna.create_study(direction="maximize", sampler=optuna.samplers.TPESampler(seed=seed))
+    elif getattr(study, "trials", ()):
+        raise ValueError("use a fresh study; prior trials are not bound to this dataset or protocol")
+    direction = getattr(study, "direction", None)
+    if direction is not None and getattr(direction, "name", None) != "MAXIMIZE":
+        raise ValueError("study direction must be maximize")
 
     fold_map: dict[int, tuple[float, ...]] = {}
+    trials: list[dict[str, Any]] = []
 
     def objective(trial: Any) -> float:
-        fast = int(trial.suggest_int("fast", 3, 30))
-        slow = int(trial.suggest_int("slow", max(fast + 2, 10), 120))
+        fast = int(trial.suggest_int("fast", 3, min(30, slow_max - 2)))
+        slow = int(trial.suggest_int("slow", max(fast + 2, 10), slow_max))
+        if not 3 <= fast <= min(30, slow_max - 2) or not max(fast + 2, 10) <= slow <= slow_max:
+            raise ValueError("trial parameters fall outside the declared search space")
         score, folds = _walkforward_score(
             close,
             fast=fast,
@@ -78,13 +134,25 @@ def optimize_sma_walkforward(
         )
         number = int(getattr(trial, "number", len(fold_map)))
         fold_map[number] = folds
+        if not np.isfinite(score):
+            raise ValueError("non-finite validation score")
+        trials.append({'number': number, 'params': {'fast': fast, 'slow': slow},
+                       'score': score, 'fold_scores': folds})
         return score
 
     study.optimize(objective, n_trials=n_trials)
     best = study.best_trial
     best_number = int(getattr(best, "number", 0))
+    if best_number not in fold_map:
+        raise ValueError("best trial was not evaluated on this dataset and protocol")
     return OptimizationResult(
         params={"fast": int(best.params["fast"]), "slow": int(best.params["slow"])},
         score=float(best.value),
-        fold_scores=fold_map.get(best_number, ()),
+        fold_scores=fold_map[best_number],
+        trials=tuple(trials),
+        seed=seed if owned_study else None,
+        optimizer_version=optuna.__version__ if owned_study else None,
+        training_fingerprint=_training_fingerprint(close),
+        splits=splits,
+        fee_bps=float(fee_bps),
     )

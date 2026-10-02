@@ -3,6 +3,8 @@ import unittest
 import pandas as pd
 
 from invest.qlib_bridge import QlibMarketProvider
+from invest.pipeline import run_a_share_sma_backtest
+from invest.upstreams import capability_matrix
 
 
 class FakeDataAPI:
@@ -28,6 +30,16 @@ class FakeDataAPI:
 
 
 class QlibProviderTests(unittest.TestCase):
+    def test_china_data_discovery_matches_shipped_provider_pipeline(self):
+        self.assertIn('microsoft/qlib', capability_matrix()['china_market_data'])
+        self.assertIn('microsoft/qlib', capability_matrix()['market_data'])
+        api = FakeDataAPI()
+        result, summary = run_a_share_sma_backtest(
+            '000001', fast=1, slow=2, adjust='qlib', provider_instance=QlibMarketProvider(api))
+        self.assertEqual(api.calls[0][0], ['SZ000001'])
+        self.assertEqual(len(result), 2)
+        self.assertIn('total_return', summary)
+
     def test_normalize_instrument_for_a_share_codes(self):
         self.assertEqual(QlibMarketProvider.normalize_instrument("000001"), "SZ000001")
         self.assertEqual(QlibMarketProvider.normalize_instrument("600000"), "SH600000")
@@ -39,6 +51,7 @@ class QlibProviderTests(unittest.TestCase):
             "000001",
             start_date="2026-09-01",
             end_date="2026-09-30",
+            adjust="qlib",
         )
         self.assertEqual(list(frame.columns), ["open", "high", "low", "close", "volume"])
         self.assertAlmostEqual(float(frame.iloc[-1]["close"]), 10.7)

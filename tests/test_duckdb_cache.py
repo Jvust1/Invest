@@ -1,4 +1,5 @@
 import unittest
+from types import SimpleNamespace
 import pandas as pd
 
 from invest.providers.duckdb_cache import DuckDBMarketCache, cache_akshare_history
@@ -16,6 +17,10 @@ class FakeConnection:
 
     def register(self, name, frame):
         self.registered.append((name, frame.copy()))
+
+    def extract_statements(self, sql):
+        name = "SELECT" if sql == "SELECT 1 AS x" else "DELETE"
+        return [SimpleNamespace(type=SimpleNamespace(name=name))]
 
     def execute(self, sql):
         self.sql.append(sql)
