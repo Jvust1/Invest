@@ -1,7 +1,7 @@
 {
-  "project": "Jvust/Invest",
+  "project": "Jvust1/Invest",
   "purpose": "Track external projects used or evaluated by Invest with explicit adapter and license boundaries.",
-  "as_of": "2026-09-30",
+  "as_of": "2026-10-03",
   "batch": "20260930-high-star-50",
   "stages": [
     "active_adapter",
@@ -73,19 +73,38 @@
     },
     {
       "repo": "pmorissette/ffn",
-      "revision": "b1396bf4d426e4863549b0f76a7edd39f32ad460",
+      "revision": "1312e971233198c8d5a72daf79259e61b88ed0d4",
       "license": "MIT",
       "stars": 2679,
-      "status": "vendored_reference",
-      "path": "third_party/ffn",
-      "target": "third_party/ffn",
-      "stage": "reference_only",
+      "status": "active_adapter",
+      "path": "invest/opensource/features.py",
+      "target": "invest.opensource.run_integration",
+      "stage": "active_adapter",
       "capabilities": [
         "performance_analysis",
-        "risk_metrics"
+        "risk_metrics",
+        "price_path_performance"
       ],
       "python_import": "ffn",
-      "last_push": "2025-01-01T00:00:00Z"
+      "last_push": "2026-10-01T21:29:17Z",
+      "github_license_spdx": "MIT",
+      "archived": false,
+      "repository_id": 21006364,
+      "distribution": "ffn",
+      "tested_version": "1.2.2",
+      "integration_backend": "ffn",
+      "integration_batch": "20261003-eleven-executed-backends",
+      "metadata_observed_at": "2026-10-02T16:20:44.262224Z",
+      "license_url": "https://github.com/pmorissette/ffn/blob/1312e971233198c8d5a72daf79259e61b88ed0d4/LICENSE",
+      "license_sha256": "8711471566d722d55eca3f09196f342b2ee2960616e68127ec2a17b39ff99949",
+      "license_review": {
+        "label": "MIT",
+        "method": "Engineering screening after reading observed license text, not a legal classification or legal opinion.",
+        "notes": "Original copyright and permission notices must be retained in copies or substantial portions; do not infer data-source permission from the software license.",
+        "raw_github_spdx_preserved": true,
+        "manual_license_review_required": false
+      },
+      "notes": "Real optional offline adapter, tested with explicit synthetic caller arrays. No upstream source copied. Default-branch metadata revision is not asserted to be the installed package release commit; package versions and runtime license inventory are separate evidence."
     },
     {
       "repo": "jealous/stockstats",
@@ -420,12 +439,13 @@
       "stage": "active_adapter",
       "capabilities": [
         "backtesting",
-        "execution_architecture"
+        "execution_architecture",
+        "china_market_data"
       ],
       "python_import": "hikyuu",
       "last_push": "2026-09-30T14:39:05Z",
       "batch": "20260930-high-star-50",
-      "notes": "Research-only TradeManager.get_performance() snapshot adapter; no execution/order path."
+      "notes": "Research-only TradeManager.get_performance() snapshot adapter; no execution/order path. china_market_data describes upstream TDX historical A-share import, not an implemented Invest quote adapter; see https://github.com/fasiondog/hikyuu."
     },
     {
       "repo": "cvxgrp/cvxportfolio",
@@ -719,71 +739,147 @@
     },
     {
       "repo": "duckdb/duckdb",
-      "revision": "default-branch metadata snapshot 2026-09-30",
+      "revision": "20b5e848c64c5c096994cdd33f1d661eb5e41b6b",
       "license": "MIT",
-      "stars": 41818,
-      "status": "catalog_contract",
-      "path": null,
-      "target": "invest.upstream_catalog",
-      "stage": "catalog",
+      "stars": 41872,
+      "status": "active_adapter",
+      "path": "invest/opensource/data_engines.py",
+      "target": "invest.opensource.run_integration",
+      "stage": "active_adapter",
       "capabilities": [
         "analytical_storage",
-        "market_data"
+        "market_data",
+        "in_memory_sql_statistics"
       ],
       "python_import": "duckdb",
-      "last_push": "2026-09-29T19:17:02Z",
-      "batch": "20260930-high-star-50"
+      "last_push": "2026-10-02T15:58:51Z",
+      "batch": "20260930-high-star-50",
+      "github_license_spdx": "MIT",
+      "archived": false,
+      "repository_id": 138754790,
+      "distribution": "duckdb",
+      "tested_version": "1.5.6",
+      "integration_backend": "duckdb",
+      "integration_batch": "20261003-eleven-executed-backends",
+      "metadata_observed_at": "2026-10-02T16:20:44.262224Z",
+      "license_url": "https://github.com/duckdb/duckdb/blob/20b5e848c64c5c096994cdd33f1d661eb5e41b6b/LICENSE",
+      "license_sha256": "075c33400ffcb0c586dd106a029d3e733e9da3693f8fcb9cebfc651c8a2f14e3",
+      "license_review": {
+        "label": "MIT",
+        "method": "Engineering screening after reading observed license text, not a legal classification or legal opinion.",
+        "notes": "Original copyright and permission notices must be retained in copies or substantial portions.",
+        "raw_github_spdx_preserved": true,
+        "manual_license_review_required": false
+      },
+      "notes": "Real optional offline adapter, tested with explicit synthetic caller arrays. No upstream source copied. Default-branch metadata revision is not asserted to be the installed package release commit; package versions and runtime license inventory are separate evidence."
     },
     {
       "repo": "pola-rs/polars",
-      "revision": "default-branch metadata snapshot 2026-09-30",
+      "revision": "7a89bb7d5491e0ec34982d6d3af8f66f8f0c3272",
       "license": "MIT",
-      "stars": 39894,
-      "status": "catalog_contract",
-      "path": null,
-      "target": "invest.upstream_catalog",
-      "stage": "catalog",
+      "stars": 39911,
+      "status": "active_adapter",
+      "path": "invest/opensource/data_engines.py",
+      "target": "invest.opensource.run_integration",
+      "stage": "active_adapter",
       "capabilities": [
         "analytical_storage",
-        "market_data"
+        "market_data",
+        "columnar_descriptive_statistics"
       ],
       "python_import": "polars",
-      "last_push": "2026-09-30T06:56:48Z",
-      "batch": "20260930-high-star-50"
+      "last_push": "2026-10-02T16:06:07Z",
+      "batch": "20260930-high-star-50",
+      "github_license_spdx": "MIT",
+      "archived": false,
+      "repository_id": 263727855,
+      "distribution": "polars",
+      "tested_version": "1.44.2",
+      "integration_backend": "polars",
+      "integration_batch": "20261003-eleven-executed-backends",
+      "metadata_observed_at": "2026-10-02T16:20:44.262224Z",
+      "license_url": "https://github.com/pola-rs/polars/blob/7a89bb7d5491e0ec34982d6d3af8f66f8f0c3272/LICENSE",
+      "license_sha256": "8296022372dc83cc8ef234b3d4889ef8f8b1779754a78bebf13d2c5178a6b4c4",
+      "license_review": {
+        "label": "MIT",
+        "method": "Engineering screening after reading observed license text, not a legal classification or legal opinion.",
+        "notes": "Original copyright and permission notices must be retained in copies or substantial portions; includes Ritchie Vink and NVIDIA notices.",
+        "raw_github_spdx_preserved": true,
+        "manual_license_review_required": false
+      },
+      "notes": "Real optional offline adapter, tested with explicit synthetic caller arrays. No upstream source copied. Default-branch metadata revision is not asserted to be the installed package release commit; package versions and runtime license inventory are separate evidence."
     },
     {
       "repo": "apache/arrow",
-      "revision": "default-branch metadata snapshot 2026-09-30",
+      "revision": "676dd43c5fef2dbb3c42e7b03b43ca6f952bd405",
       "license": "Apache-2.0",
-      "stars": 17163,
-      "status": "catalog_contract",
-      "path": null,
-      "target": "invest.upstream_catalog",
-      "stage": "catalog",
+      "stars": 17167,
+      "status": "active_adapter",
+      "path": "invest/opensource/data_engines.py",
+      "target": "invest.opensource.run_integration",
+      "stage": "active_adapter",
       "capabilities": [
         "columnar_interchange",
-        "analytical_storage"
+        "analytical_storage",
+        "arrow_table_statistics"
       ],
       "python_import": "pyarrow",
-      "last_push": "2026-09-30T06:43:02Z",
-      "batch": "20260930-high-star-50"
+      "last_push": "2026-10-02T13:16:47Z",
+      "batch": "20260930-high-star-50",
+      "github_license_spdx": "Apache-2.0",
+      "archived": false,
+      "repository_id": 51905353,
+      "distribution": "pyarrow",
+      "tested_version": "25.0.1",
+      "integration_backend": "pyarrow",
+      "integration_batch": "20261003-eleven-executed-backends",
+      "metadata_observed_at": "2026-10-02T16:20:44.262224Z",
+      "license_url": "https://github.com/apache/arrow/blob/676dd43c5fef2dbb3c42e7b03b43ca6f952bd405/LICENSE.txt",
+      "license_sha256": "cd03925a27219d326d622609fbcae6567279af8b8885c33d5969a9e4ef5d7525",
+      "license_review": {
+        "label": "Apache-2.0 with bundled third-party license notices",
+        "method": "Engineering screening after reading observed license text, not a legal classification or legal opinion.",
+        "notes": "Top-level text contains Apache-2.0 plus a large collection of third-party notices; do not relabel every bundled component Apache-only. Preserve the distribution-specific LICENSE and NOTICE files; inspect actual wheel/binary contents before redistribution.",
+        "raw_github_spdx_preserved": true,
+        "manual_license_review_required": false
+      },
+      "notes": "Real optional offline adapter, tested with explicit synthetic caller arrays. No upstream source copied. Default-branch metadata revision is not asserted to be the installed package release commit; package versions and runtime license inventory are separate evidence."
     },
     {
       "repo": "plotly/plotly.py",
-      "revision": "default-branch metadata snapshot 2026-09-30",
+      "revision": "d586d225b8577fa3a4ff8954bdd47ef3b9cc0c07",
       "license": "MIT",
       "stars": 18817,
-      "status": "catalog_contract",
-      "path": null,
-      "target": "invest.upstream_catalog",
-      "stage": "catalog",
+      "status": "active_adapter",
+      "path": "invest/opensource/features.py",
+      "target": "invest.opensource.run_integration",
+      "stage": "active_adapter",
       "capabilities": [
         "visualization",
-        "research_reporting"
+        "research_reporting",
+        "chart_specification"
       ],
       "python_import": "plotly",
-      "last_push": "2026-09-25T07:35:35Z",
-      "batch": "20260930-high-star-50"
+      "last_push": "2026-10-01T07:39:55Z",
+      "batch": "20260930-high-star-50",
+      "github_license_spdx": "MIT",
+      "archived": false,
+      "repository_id": 14579099,
+      "distribution": "plotly",
+      "tested_version": "7.1.0",
+      "integration_backend": "plotly",
+      "integration_batch": "20261003-eleven-executed-backends",
+      "metadata_observed_at": "2026-10-02T16:20:44.262224Z",
+      "license_url": "https://github.com/plotly/plotly.py/blob/d586d225b8577fa3a4ff8954bdd47ef3b9cc0c07/LICENSE.txt",
+      "license_sha256": "ba712274f8336a5f0828c8e2bf639ab8a632c623800a35f96c8b0a67b5f2ab40",
+      "license_review": {
+        "label": "MIT",
+        "method": "Engineering screening after reading observed license text, not a legal classification or legal opinion.",
+        "notes": "Original copyright and permission notices must be retained; hosted services, integrations and data access are separate from this repository license.",
+        "raw_github_spdx_preserved": true,
+        "manual_license_review_required": false
+      },
+      "notes": "Real optional offline adapter, tested with explicit synthetic caller arrays. No upstream source copied. Default-branch metadata revision is not asserted to be the installed package release commit; package versions and runtime license inventory are separate evidence."
     },
     {
       "repo": "matplotlib/matplotlib",
@@ -872,37 +968,75 @@
     },
     {
       "repo": "scikit-learn/scikit-learn",
-      "revision": "default-branch metadata snapshot 2026-09-30",
+      "revision": "2cc5fc9856675eb112bbd6640404027195741710",
       "license": "BSD-3-Clause",
-      "stars": 67434,
-      "status": "catalog_contract",
-      "path": null,
-      "target": "invest.upstream_catalog",
-      "stage": "catalog",
+      "stars": 67451,
+      "status": "active_adapter",
+      "path": "invest/opensource/features.py",
+      "target": "invest.opensource.run_integration",
+      "stage": "active_adapter",
       "capabilities": [
         "machine_learning",
-        "time_series_validation"
+        "time_series_validation",
+        "chronological_model_comparison"
       ],
       "python_import": "sklearn",
-      "last_push": "2026-09-29T16:42:42Z",
-      "batch": "20260930-high-star-50"
+      "last_push": "2026-10-02T13:23:25Z",
+      "batch": "20260930-high-star-50",
+      "github_license_spdx": "BSD-3-Clause",
+      "archived": false,
+      "repository_id": 843222,
+      "distribution": "scikit-learn",
+      "tested_version": "1.9.1",
+      "integration_backend": "sklearn",
+      "integration_batch": "20261003-eleven-executed-backends",
+      "metadata_observed_at": "2026-10-02T16:20:44.262224Z",
+      "license_url": "https://github.com/scikit-learn/scikit-learn/blob/2cc5fc9856675eb112bbd6640404027195741710/COPYING",
+      "license_sha256": "50d6a9d340f19ab355609917993114daf5f47e3161067bcf34955bbd05cd9cb0",
+      "license_review": {
+        "label": "BSD-3-Clause",
+        "method": "Engineering screening after reading observed license text, not a legal classification or legal opinion.",
+        "notes": "Retain copyright, conditions and disclaimer for source/binary redistribution; no unauthorized endorsement. Models and training data need separate provenance review.",
+        "raw_github_spdx_preserved": true,
+        "manual_license_review_required": false
+      },
+      "notes": "Real optional offline adapter, tested with explicit synthetic caller arrays. No upstream source copied. Default-branch metadata revision is not asserted to be the installed package release commit; package versions and runtime license inventory are separate evidence."
     },
     {
       "repo": "statsmodels/statsmodels",
-      "revision": "default-branch metadata snapshot 2026-09-30",
+      "revision": "38965b6f33cff021b1232b537dbec0b532258b62",
       "license": "BSD-3-Clause",
-      "stars": 11666,
-      "status": "catalog_contract",
-      "path": null,
-      "target": "invest.upstream_catalog",
-      "stage": "catalog",
+      "stars": 11669,
+      "status": "active_adapter",
+      "path": "invest/opensource/statistics.py",
+      "target": "invest.opensource.run_integration",
+      "stage": "active_adapter",
       "capabilities": [
         "statistics",
-        "time_series_validation"
+        "time_series_validation",
+        "autocorrelation_diagnostics"
       ],
       "python_import": "statsmodels",
-      "last_push": "2026-09-29T14:19:52Z",
-      "batch": "20260930-high-star-50"
+      "last_push": "2026-10-02T15:11:44Z",
+      "batch": "20260930-high-star-50",
+      "github_license_spdx": "BSD-3-Clause",
+      "archived": false,
+      "repository_id": 1885237,
+      "distribution": "statsmodels",
+      "tested_version": "0.15.0",
+      "integration_backend": "statsmodels",
+      "integration_batch": "20261003-eleven-executed-backends",
+      "metadata_observed_at": "2026-10-02T16:20:44.262224Z",
+      "license_url": "https://github.com/statsmodels/statsmodels/blob/38965b6f33cff021b1232b537dbec0b532258b62/LICENSE.txt",
+      "license_sha256": "1ca78e1dec9dcebc55f3b96a862317f23e76422c5fc943568d955aad1f6b5fad",
+      "license_review": {
+        "label": "BSD-3-Clause",
+        "method": "Engineering screening after reading observed license text, not a legal classification or legal opinion.",
+        "notes": "Retain copyright, conditions and disclaimer for source/binary redistribution; no unauthorized contributor endorsement.",
+        "raw_github_spdx_preserved": true,
+        "manual_license_review_required": false
+      },
+      "notes": "Real optional offline adapter, tested with explicit synthetic caller arrays. No upstream source copied. Default-branch metadata revision is not asserted to be the installed package release commit; package versions and runtime license inventory are separate evidence."
     },
     {
       "repo": "pytorch/pytorch",
@@ -1160,6 +1294,139 @@
       "last_push": "2026-09-30T14:28:00Z",
       "batch": "20260930-high-star-50",
       "notes": "Current V5 repository LICENSE is Apache-2.0. Optional adapter uses obb.equity.price.historical(...).to_dataframe(); data-provider rights remain separate."
+    },
+    {
+      "repo": "bashtage/arch",
+      "capabilities": [
+        "variance_ratio_diagnostics"
+      ],
+      "revision": "88ffcf87042ed5d4adf48bac41b144bc90b287a2",
+      "license": "NOASSERTION",
+      "github_license_spdx": "NOASSERTION",
+      "stars": 1583,
+      "archived": false,
+      "repository_id": 23468876,
+      "status": "active_adapter",
+      "stage": "active_adapter",
+      "path": "invest/opensource/statistics.py",
+      "target": "invest.opensource.run_integration",
+      "python_import": "arch",
+      "distribution": "arch",
+      "tested_version": "8.0.0",
+      "integration_backend": "arch",
+      "integration_batch": "20261003-eleven-executed-backends",
+      "last_push": "2026-09-27T08:00:31Z",
+      "metadata_observed_at": "2026-10-02T16:20:44.262224Z",
+      "license_url": "https://github.com/bashtage/arch/blob/88ffcf87042ed5d4adf48bac41b144bc90b287a2/LICENSE.md",
+      "license_sha256": "c6e622bd89db4e13315f4e91605ff96fcbb9012d78ee74e429855870b203eed6",
+      "license_review": {
+        "label": "Custom observed permissive text; SPDX not asserted",
+        "method": "Engineering screening after reading observed license text, not a legal classification or legal opinion.",
+        "notes": "GitHub returns NOASSERTION. The observed file grants use/copy/modification/distribution with source and binary notice-retention and non-endorsement conditions. Manual license review remains required; no replacement SPDX guess is made.",
+        "raw_github_spdx_preserved": true,
+        "manual_license_review_required": true
+      },
+      "notes": "Real optional offline adapter, tested with explicit synthetic caller arrays. No upstream source copied. Default-branch metadata revision is not asserted to be the installed package release commit; package versions and runtime license inventory are separate evidence."
+    },
+    {
+      "repo": "scipy/scipy",
+      "capabilities": [
+        "distribution_diagnostics"
+      ],
+      "revision": "0a50dfe076cb866f93fdb05f3d78f51b6a64040a",
+      "license": "BSD-3-Clause",
+      "github_license_spdx": "BSD-3-Clause",
+      "stars": 15071,
+      "archived": false,
+      "repository_id": 1460385,
+      "status": "active_adapter",
+      "stage": "active_adapter",
+      "path": "invest/opensource/statistics.py",
+      "target": "invest.opensource.run_integration",
+      "python_import": "scipy",
+      "distribution": "scipy",
+      "tested_version": "1.18.1",
+      "integration_backend": "scipy",
+      "integration_batch": "20261003-eleven-executed-backends",
+      "last_push": "2026-10-02T12:07:09Z",
+      "metadata_observed_at": "2026-10-02T16:20:44.262224Z",
+      "license_url": "https://github.com/scipy/scipy/blob/0a50dfe076cb866f93fdb05f3d78f51b6a64040a/LICENSE.txt",
+      "license_sha256": "221e59f5e910fd7f94e44f0dac77436a11338c285c6346232e4a850a50da0e94",
+      "license_review": {
+        "label": "BSD-3-Clause",
+        "method": "Engineering screening after reading observed license text, not a legal classification or legal opinion.",
+        "notes": "Retain copyright, conditions and disclaimer; no unauthorized endorsement. Built distributions may include separately licensed numerical libraries; inspect distribution notices.",
+        "raw_github_spdx_preserved": true,
+        "manual_license_review_required": false
+      },
+      "notes": "Real optional offline adapter, tested with explicit synthetic caller arrays. No upstream source copied. Default-branch metadata revision is not asserted to be the installed package release commit; package versions and runtime license inventory are separate evidence."
+    },
+    {
+      "repo": "bukosabino/ta",
+      "capabilities": [
+        "technical_features"
+      ],
+      "revision": "a890410710a6e483c9ba08da7f3dd5089e4b9dff",
+      "license": "MIT",
+      "github_license_spdx": "MIT",
+      "stars": 5228,
+      "archived": false,
+      "repository_id": 116043206,
+      "status": "active_adapter",
+      "stage": "active_adapter",
+      "path": "invest/opensource/features.py",
+      "target": "invest.opensource.run_integration",
+      "python_import": "ta",
+      "distribution": "ta",
+      "tested_version": "0.11.0",
+      "integration_backend": "ta",
+      "integration_batch": "20261003-eleven-executed-backends",
+      "last_push": "2026-03-18T13:04:55Z",
+      "metadata_observed_at": "2026-10-02T16:20:44.262224Z",
+      "license_url": "https://github.com/bukosabino/ta/blob/a890410710a6e483c9ba08da7f3dd5089e4b9dff/LICENSE",
+      "license_sha256": "f4be1f16528123c4f41c55b91d52b7c07c12022f6acd75a7c4b3e461434600f0",
+      "license_review": {
+        "label": "MIT",
+        "method": "Engineering screening after reading observed license text, not a legal classification or legal opinion.",
+        "notes": "Original copyright and permission notices must be retained in copies or substantial portions; data-provider and trading rights are separate.",
+        "raw_github_spdx_preserved": true,
+        "manual_license_review_required": false
+      },
+      "notes": "Real optional offline adapter, tested with explicit synthetic caller arrays. No upstream source copied. Default-branch metadata revision is not asserted to be the installed package release commit; package versions and runtime license inventory are separate evidence."
+    },
+    {
+      "repo": "networkx/networkx",
+      "capabilities": [
+        "direction_transition_graph"
+      ],
+      "revision": "31b74e96903d7f873b30c8ff36d71a4c9252b107",
+      "license": "BSD-3-Clause",
+      "github_license_spdx": "NOASSERTION",
+      "stars": 17307,
+      "archived": false,
+      "repository_id": 890377,
+      "status": "active_adapter",
+      "stage": "active_adapter",
+      "path": "invest/opensource/features.py",
+      "target": "invest.opensource.run_integration",
+      "python_import": "networkx",
+      "distribution": "networkx",
+      "tested_version": "3.7",
+      "integration_backend": "networkx",
+      "integration_batch": "20261003-eleven-executed-backends",
+      "last_push": "2026-10-02T01:20:09Z",
+      "metadata_observed_at": "2026-10-02T16:20:44.262224Z",
+      "license_url": "https://github.com/networkx/networkx/blob/31b74e96903d7f873b30c8ff36d71a4c9252b107/LICENSE.txt",
+      "license_sha256": "6025f323ea29dc2f0ee0abd9523bf910186f55b0e148e6ebf646c55566278e2e",
+      "license_review": {
+        "label": "Text explicitly states BSD-3-Clause",
+        "method": "Engineering screening after reading observed license text, not a legal classification or legal opinion.",
+        "notes": "GitHub returns NOASSERTION; the observed top-level text explicitly identifies 3-clause BSD and contains those conditions. Preserve both the raw GitHub label and this text assessment; retain notices and avoid unauthorized endorsement.",
+        "raw_github_spdx_preserved": true,
+        "manual_license_review_required": false
+      },
+      "notes": "Real optional offline adapter, tested with explicit synthetic caller arrays. No upstream source copied. Default-branch metadata revision is not asserted to be the installed package release commit; package versions and runtime license inventory are separate evidence."
     }
-  ]
+  ],
+  "latest_integration_batch": "20261003-eleven-executed-backends"
 }

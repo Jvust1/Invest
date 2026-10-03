@@ -5,6 +5,9 @@ on:
     branches: [main, 'feat/**']
 permissions:
   contents: read
+env:
+  PYTHONUTF8: '1'
+  PYTHONIOENCODING: utf-8
 jobs:
   test:
     strategy:
@@ -19,8 +22,10 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - name: Install project
-        run: python -m pip install -e .
+        run: python -m pip install -e '.[chat,test]'
       - name: Standard-library tests
         run: python -m unittest discover -s tests -v
+      - name: Pytest functions and integration tests
+        run: python -m pytest tests -q
       - name: Compile source
         run: python -m compileall -q invest

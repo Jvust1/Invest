@@ -1,0 +1,17 @@
+# Documentation only. Do not paste real values into chat or commit a populated file.
+# Private local catalog, built from authorized Drive-mounted files:
+INVEST_CATALOG_PATH=<CATALOG_ABSOLUTE_PATH>
+INVEST_GITHUB_REF=main
+# Optional server-side read credential, unnecessary for this public repository:
+INVEST_GITHUB_TOKEN=<TOKEN>
+# Optional direct Drive OAuth. Local catalog mode needs none of these:
+INVEST_GOOGLE_CLIENT_ID=<CLIENT_ID>
+INVEST_GOOGLE_CLIENT_SECRET=<CLIENT_SECRET>
+INVEST_GOOGLE_REFRESH_TOKEN=<REFRESH_TOKEN>
+# Or a short-lived access token supplied by the operator:
+INVEST_GOOGLE_ACCESS_TOKEN=<TOKEN>
+# Only for authenticated public HTTPS. Leave unset for private stdio/tunnel:
+INVEST_MCP_RESOURCE_URL=https://<HOST>/mcp
+INVEST_MCP_ISSUER=https://<AUTH_ISSUER>
+INVEST_MCP_JWKS_URL=https://<AUTH_ISSUER>/<JWKS_PATH>
+INVEST_MCP_ALLOWED_SUBJECTS=<OWNER_SUBJECT>

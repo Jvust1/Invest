@@ -1,0 +1,29 @@
+name: Invest open-source research engines
+on:
+  push:
+    branches: ['feat/chat-mode-plugin-**', main]
+  pull_request:
+permissions:
+  contents: read
+env:
+  PYTHONUTF8: '1'
+  PYTHONIOENCODING: utf-8
+jobs:
+  research:
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -e '.[chat,test,research]'
+      - run: python -m pip check
+      - run: python -m unittest discover -s tests -p 'test_opensource*.py' -v
+      - run: python -m unittest discover -s tests -p 'test_chat_research.py' -v
+      - run: python tools/check_research_backends.py
+      - run: python tools/check_research_backends.py --mcp

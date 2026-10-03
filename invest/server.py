@@ -11,6 +11,7 @@ from pathlib import Path
 import re
 import secrets
 import sqlite3
+import threading
 from typing import Any
 from urllib.parse import parse_qs, urlsplit
 import uuid
@@ -20,6 +21,8 @@ from .backup import export_backup
 from .data import demo_dataset, fetch_tushare, parse_csv, verify_dataset_identity
 from .engine import backtest, research
 from .portfolio import PaperLedger
+from .workspace import Workspace
+from . import workbench_api
 
 MAX_BODY = 2 * 1024 * 1024
 DEFAULT_PARAMETERS = {
@@ -145,6 +148,8 @@ class InvestServer(ThreadingHTTPServer):
             raise ValueError("v0.1 仅允许本机访问；不提供公开托管或未认证局域网账户访问")
         self.state = StateStore(Path(data_dir) / "state.sqlite")
         self.ledger = PaperLedger(Path(data_dir) / "paper.sqlite")
+        self.workspace = Workspace(self.state.path)
+        self.study_lock = threading.Lock()
         self.csrf_token = secrets.token_urlsafe(32)
         self.web_root = Path(__file__).parent / "web"
         super().__init__(address, InvestHandler)
@@ -225,10 +230,16 @@ class InvestHandler(BaseHTTPRequestHandler):
             return items[0] if items else None
 
         if self.command == "GET":
-            if path in {"/", "/index.html", "/app.css", "/app.js"}:
-                name = "index.html" if path == "/" else path[1:]
-                mime = {"index.html": "text/html; charset=utf-8", "app.css": "text/css; charset=utf-8", "app.js": "text/javascript; charset=utf-8"}[name]
+            static = {"/": "workbench.html", "/legacy": "index.html", "/index.html": "index.html",
+                      "/app.css": "app.css", "/app.js": "app.js",
+                      "/workbench.css": "workbench.css", "/workbench.js": "workbench.js"}
+            if path in static:
+                name = static[path]
+                mime = {".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8",
+                        ".js": "text/javascript; charset=utf-8"}[Path(name).suffix]
                 return self._reply(200, body=(self.server.web_root / name).read_bytes(), content_type=mime)
+            if path.startswith("/api/workbench/"):
+                return workbench_api.dispatch(self, path, parameter)
             if path == "/api/config":
                 return self._reply(200, {"version": __version__, "csrf_token": self.server.csrf_token,
                     "tushare_configured": bool(os.environ.get("TUSHARE_TOKEN")), "default_parameters": DEFAULT_PARAMETERS})
@@ -256,6 +267,8 @@ class InvestHandler(BaseHTTPRequestHandler):
             raise LookupError("页面或记录不存在")
 
         payload = self._json_body()
+        if path.startswith("/api/workbench/"):
+            return workbench_api.dispatch(self, path, parameter, payload)
         if path == "/api/private-backup":
             if payload.get("confirm_private_export") is not True:
                 raise ValueError("请确认导出含模拟账本与私人研究笔记的完整备份")

@@ -75,5 +75,5 @@ def test_summary_matches_registry():
 def test_registry_file_is_packaged_source_metadata():
     path = Path(__file__).resolve().parents[1] / "invest" / "upstream_registry.json"
     data = json.loads(path.read_text(encoding="utf-8"))
-    assert data["project"] == "Jvust/Invest"
+    assert data["project"] == "Jvust1/Invest"
     assert data["license_policy"]["data_rights_separate_from_software_license"] is True

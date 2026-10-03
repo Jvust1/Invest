@@ -3,6 +3,7 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 from ._vendor import load_vendor
+from .paper_ledger import PaperLedger
 
 def inverse_variance_weights(prices: pd.DataFrame) -> dict[str, float]:
     """Dependency-light fallback allocation for missing convex solvers."""

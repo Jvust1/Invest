@@ -1,0 +1,1739 @@
+{
+  "schema_version": 1,
+  "snapshot_date_client": "2026-10-03",
+  "client_timezone": "Asia/Shanghai",
+  "generated_at_utc": "2026-10-02T16:29:24.024750Z",
+  "scope": "The eleven requested Python distributions installed in the Invest local runtime, read without installation, downloads or importing upstream runtime code.",
+  "runtime": {
+    "python_version": "3.12.14",
+    "python_implementation": "CPython",
+    "executable_relative_to_workspace": "work/runtime/Scripts/python.exe",
+    "site_packages_relative_to_workspace": "work/runtime/Lib/site-packages",
+    "platform": "Windows-11-10.0.22631-SP0",
+    "architecture": "AMD64"
+  },
+  "method": "importlib.metadata reads METADATA/WHEEL/INSTALLER and distribution RECORD; every available license/notice file listed by that RECORD is read and SHA-256 hashed. Hashes specified by RECORD are independently verified. Distribution metadata and upstream repository evidence are explicitly separate.",
+  "upstream_evidence_file": "docs/OPEN_SOURCE_EVIDENCE_20261003.json",
+  "upstream_evidence_sha256": "542dcc528d6ee37295e2df1f79e2eeff6ab7f4f6b00a9f7cdbe354abce1ed168",
+  "distributions": [
+    {
+      "requested_distribution": "polars",
+      "mapped_upstream_repository": "pola-rs/polars",
+      "observed_at_utc": "2026-10-02T16:29:18.315722Z",
+      "verification_status": "installed_metadata_and_available_license_files_verified",
+      "distribution_name": "polars",
+      "installed_version": "1.44.2",
+      "requires_python": ">=3.10",
+      "metadata_version": "2.4",
+      "license_metadata": {
+        "license_expression": null,
+        "license": "Copyright (c) 2025 Ritchie Vink\nCopyright (c) 2024 (Some portions) NVIDIA CORPORATION & AFFILIATES. All rights reserved.\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n",
+        "license_classifiers": [
+          "License :: OSI Approved :: MIT License"
+        ],
+        "license_file_fields": [
+          "LICENSE"
+        ]
+      },
+      "project_urls": [
+        "Homepage, https://www.pola.rs/",
+        "Documentation, https://docs.pola.rs/api/python/stable/reference/index.html",
+        "Repository, https://github.com/pola-rs/polars",
+        "Changelog, https://github.com/pola-rs/polars/releases"
+      ],
+      "homepage": null,
+      "requires_dist": [
+        "polars-runtime-32==1.44.2",
+        "polars-runtime-64==1.44.2; extra == \"rt64\"",
+        "polars-runtime-compat==1.44.2; extra == \"rtcompat\"",
+        "polars_cloud>=0.9.0; extra == \"polars-cloud\"",
+        "numpy>=1.16.0; extra == \"numpy\"",
+        "pandas; extra == \"pandas\"",
+        "polars[pyarrow]; extra == \"pandas\"",
+        "pyarrow>=7.0.0; extra == \"pyarrow\"",
+        "pydantic; extra == \"pydantic\"",
+        "fastexcel>=0.9; extra == \"calamine\"",
+        "openpyxl>=3.0.0; extra == \"openpyxl\"",
+        "xlsx2csv>=0.8.0; extra == \"xlsx2csv\"",
+        "xlsxwriter; extra == \"xlsxwriter\"",
+        "polars[calamine,openpyxl,xlsx2csv,xlsxwriter]; extra == \"excel\"",
+        "adbc-driver-manager[dbapi]; extra == \"adbc\"",
+        "adbc-driver-sqlite[dbapi]; extra == \"adbc\"",
+        "connectorx>=0.3.2; extra == \"connectorx\"",
+        "sqlalchemy; extra == \"sqlalchemy\"",
+        "polars[pandas]; extra == \"sqlalchemy\"",
+        "polars[adbc,connectorx,sqlalchemy]; extra == \"database\"",
+        "fsspec; extra == \"fsspec\"",
+        "deltalake!=1.5.*,>=1.0.0; extra == \"deltalake\"",
+        "pyiceberg>=0.9.0; extra == \"iceberg\"",
+        "gevent; extra == \"async\"",
+        "cloudpickle; extra == \"cloudpickle\"",
+        "matplotlib; extra == \"graph\"",
+        "altair>=5.4.0; extra == \"plot\"",
+        "great-tables>=0.8.0; extra == \"style\"",
+        "tzdata; platform_system == \"Windows\" and extra == \"timezone\"",
+        "cudf-polars-cu12; extra == \"gpu\"",
+        "polars[async,cloudpickle,database,deltalake,excel,fsspec,graph,iceberg,numpy,pandas,plot,pyarrow,pydantic,style,timezone]; extra == \"all\""
+      ],
+      "installer": "pip",
+      "direct_url": null,
+      "wheel_metadata": {
+        "wheel_version": "1.0",
+        "generator": "setuptools (84.0.0)",
+        "root_is_purelib": "true",
+        "tags": [
+          "py3-none-any"
+        ],
+        "build": null
+      },
+      "metadata_files": [
+        {
+          "path_relative_to_site_packages": "polars-1.44.2.dist-info/INSTALLER",
+          "path_relative_to_runtime": "Lib/site-packages/polars-1.44.2.dist-info/INSTALLER",
+          "size_bytes": 4,
+          "sha256": "ceebae7b8927a3227e5303cf5e0f1f7b34bb542ad7250ac03fbcde36ec2f1508",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg",
+          "record_hash_verified": true
+        },
+        {
+          "path_relative_to_site_packages": "polars-1.44.2.dist-info/METADATA",
+          "path_relative_to_runtime": "Lib/site-packages/polars-1.44.2.dist-info/METADATA",
+          "size_bytes": 11378,
+          "sha256": "b20f29aa21e8dbc2317684d2c7d7701f63b14529281da71f7281f2533c0481cb",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "sg8pqiHo28IxdoTSx9dwH2OxRSkoHacfcoHyUzwEgcs",
+          "record_hash_verified": true
+        },
+        {
+          "path_relative_to_site_packages": "polars-1.44.2.dist-info/RECORD",
+          "path_relative_to_runtime": "Lib/site-packages/polars-1.44.2.dist-info/RECORD",
+          "size_bytes": 30651,
+          "sha256": "f41889c396e52ed0c2bb4a4f117f8e4571f4f9166b9cb7d79c847a1f5ad902c2",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": null,
+          "record_hash_value": null,
+          "record_hash_verified": null
+        },
+        {
+          "path_relative_to_site_packages": "polars-1.44.2.dist-info/WHEEL",
+          "path_relative_to_runtime": "Lib/site-packages/polars-1.44.2.dist-info/WHEEL",
+          "size_bytes": 91,
+          "sha256": "61532836a2b3111b7ec23519c09df7c41180c27165fb872a6d8913b566b88ad1",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "YVMoNqKzERt-wjUZwJ33xBGAwnFl-4cqbYkTtWa4itE",
+          "record_hash_verified": true
+        }
+      ],
+      "license_notice_files": [
+        {
+          "path_relative_to_site_packages": "polars-1.44.2.dist-info/licenses/LICENSE",
+          "path_relative_to_runtime": "Lib/site-packages/polars-1.44.2.dist-info/licenses/LICENSE",
+          "size_bytes": 1145,
+          "sha256": "8296022372dc83cc8ef234b3d4889ef8f8b1779754a78bebf13d2c5178a6b4c4",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "gpYCI3Lcg8yO8jSz1Iie-Pixd5dUp4vr8T0sUXimtMQ",
+          "record_hash_verified": true,
+          "text_decode_status": "utf8_read",
+          "text_first_nonempty_line": "Copyright (c) 2025 Ritchie Vink",
+          "default_branch_license_comparison": {
+            "evidence_commit_sha": "7a89bb7d5491e0ec34982d6d3af8f66f8f0c3272",
+            "license_url": "https://github.com/pola-rs/polars/blob/7a89bb7d5491e0ec34982d6d3af8f66f8f0c3272/LICENSE",
+            "observed_upstream_sha256": "8296022372dc83cc8ef234b3d4889ef8f8b1779754a78bebf13d2c5178a6b4c4",
+            "sha256_matches": true,
+            "meaning": "This compares license file bytes only. Even a match does not establish the provenance of the installed wheel or package source."
+          }
+        }
+      ],
+      "dist_info_license_notice_count": 1,
+      "supplementary_package_license_notice_count": 0,
+      "source_provenance_status": "installed_metadata_observed; build_commit_and_download_origin_not_established",
+      "upstream_default_branch_reference": {
+        "repository": "pola-rs/polars",
+        "commit_sha": "7a89bb7d5491e0ec34982d6d3af8f66f8f0c3272",
+        "github_license_spdx": "MIT",
+        "purpose": "Separate upstream observation, not attribution of the installed build to this commit."
+      }
+    },
+    {
+      "requested_distribution": "duckdb",
+      "mapped_upstream_repository": "duckdb/duckdb",
+      "observed_at_utc": "2026-10-02T16:29:18.480935Z",
+      "verification_status": "installed_metadata_and_available_license_files_verified",
+      "distribution_name": "duckdb",
+      "installed_version": "1.5.6",
+      "requires_python": ">=3.10.0",
+      "metadata_version": "2.1",
+      "license_metadata": {
+        "license_expression": null,
+        "license": null,
+        "license_classifiers": [
+          "License :: OSI Approved :: MIT License"
+        ],
+        "license_file_fields": []
+      },
+      "project_urls": [
+        "Documentation, https://duckdb.org/docs/stable/clients/python/overview",
+        "Source, https://github.com/duckdb/duckdb-python",
+        "Issues, https://github.com/duckdb/duckdb-python/issues",
+        "Changelog, https://github.com/duckdb/duckdb-python/releases"
+      ],
+      "homepage": null,
+      "requires_dist": [
+        "ipython; extra == \"all\"",
+        "fsspec; extra == \"all\"",
+        "numpy; extra == \"all\"",
+        "pandas; extra == \"all\"",
+        "pyarrow; extra == \"all\"",
+        "adbc-driver-manager; extra == \"all\""
+      ],
+      "installer": "pip",
+      "direct_url": null,
+      "wheel_metadata": {
+        "wheel_version": "1.0",
+        "generator": "scikit-build-core 1.1.0",
+        "root_is_purelib": "false",
+        "tags": [
+          "cp312-cp312-win_amd64"
+        ],
+        "build": null
+      },
+      "metadata_files": [
+        {
+          "path_relative_to_site_packages": "duckdb-1.5.6.dist-info/INSTALLER",
+          "path_relative_to_runtime": "Lib/site-packages/duckdb-1.5.6.dist-info/INSTALLER",
+          "size_bytes": 4,
+          "sha256": "ceebae7b8927a3227e5303cf5e0f1f7b34bb542ad7250ac03fbcde36ec2f1508",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg",
+          "record_hash_verified": true
+        },
+        {
+          "path_relative_to_site_packages": "duckdb-1.5.6.dist-info/METADATA",
+          "path_relative_to_runtime": "Lib/site-packages/duckdb-1.5.6.dist-info/METADATA",
+          "size_bytes": 4245,
+          "sha256": "7ca8c6be6ceda35157b2087d4d577b4ca3a6b757e8b27463f0c827c2447d372b",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "fKjGvmzto1FXsgh9TVd7TKOmt1fosnRj8MgnwkR9Nys",
+          "record_hash_verified": true
+        },
+        {
+          "path_relative_to_site_packages": "duckdb-1.5.6.dist-info/RECORD",
+          "path_relative_to_runtime": "Lib/site-packages/duckdb-1.5.6.dist-info/RECORD",
+          "size_bytes": 7625,
+          "sha256": "ef86a5973a129428bc42f9b9d8ba67ef9034492e46b9abdf9e0b5d3cb364ae9c",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": null,
+          "record_hash_value": null,
+          "record_hash_verified": null
+        },
+        {
+          "path_relative_to_site_packages": "duckdb-1.5.6.dist-info/WHEEL",
+          "path_relative_to_runtime": "Lib/site-packages/duckdb-1.5.6.dist-info/WHEEL",
+          "size_bytes": 105,
+          "sha256": "52ad4a3b162a475288884417fee2046bd8229dd34998f881e71aadc2a9de1d79",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "Uq1KOxYqR1KIiEQX_uIEa9gindNJmPiB5xqtwqneHXk",
+          "record_hash_verified": true
+        }
+      ],
+      "license_notice_files": [
+        {
+          "path_relative_to_site_packages": "duckdb-1.5.6.dist-info/licenses/LICENSE",
+          "path_relative_to_runtime": "Lib/site-packages/duckdb-1.5.6.dist-info/licenses/LICENSE",
+          "size_bytes": 1079,
+          "sha256": "c8dd1b346eacc9c7334e2b8881b2a795d6b942c71e05e25c209696e3c7483931",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "yN0bNG6sycczTiuIgbKnlda5QsceBeJcIJaW48dIOTE",
+          "record_hash_verified": true,
+          "text_decode_status": "utf8_read",
+          "text_first_nonempty_line": "Copyright 2018-2026 Stichting DuckDB Foundation",
+          "default_branch_license_comparison": {
+            "evidence_commit_sha": "20b5e848c64c5c096994cdd33f1d661eb5e41b6b",
+            "license_url": "https://github.com/duckdb/duckdb/blob/20b5e848c64c5c096994cdd33f1d661eb5e41b6b/LICENSE",
+            "observed_upstream_sha256": "075c33400ffcb0c586dd106a029d3e733e9da3693f8fcb9cebfc651c8a2f14e3",
+            "sha256_matches": false,
+            "meaning": "This compares license file bytes only. Even a match does not establish the provenance of the installed wheel or package source."
+          }
+        },
+        {
+          "path_relative_to_site_packages": "duckdb/experimental/spark/LICENSE",
+          "path_relative_to_runtime": "Lib/site-packages/duckdb/experimental/spark/LICENSE",
+          "size_bytes": 13646,
+          "sha256": "bc219cdc6410cc929715f4622ce2424af890049b071f34d68dec1955554bf332",
+          "is_dist_info_file": false,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "vCGc3GQQzJKXFfRiLOJCSviQBJsHHzTWjewZVVVL8zI",
+          "record_hash_verified": true,
+          "text_decode_status": "utf8_read",
+          "text_first_nonempty_line": "Apache License"
+        }
+      ],
+      "dist_info_license_notice_count": 1,
+      "supplementary_package_license_notice_count": 1,
+      "source_provenance_status": "installed_metadata_observed; build_commit_and_download_origin_not_established",
+      "upstream_default_branch_reference": {
+        "repository": "duckdb/duckdb",
+        "commit_sha": "20b5e848c64c5c096994cdd33f1d661eb5e41b6b",
+        "github_license_spdx": "MIT",
+        "purpose": "Separate upstream observation, not attribution of the installed build to this commit."
+      },
+      "license_byte_difference_note": "Installed license bytes differ from the separate default-branch license snapshot; no byte identity is claimed."
+    },
+    {
+      "requested_distribution": "pyarrow",
+      "mapped_upstream_repository": "apache/arrow",
+      "observed_at_utc": "2026-10-02T16:29:18.537411Z",
+      "verification_status": "installed_metadata_and_available_license_files_verified",
+      "distribution_name": "pyarrow",
+      "installed_version": "25.0.1",
+      "requires_python": ">=3.10",
+      "metadata_version": "2.4",
+      "license_metadata": {
+        "license_expression": "Apache-2.0",
+        "license": null,
+        "license_classifiers": [],
+        "license_file_fields": [
+          "LICENSE.txt",
+          "NOTICE.txt"
+        ]
+      },
+      "project_urls": [
+        "Homepage, https://arrow.apache.org/",
+        "Documentation, https://arrow.apache.org/docs/python",
+        "Repository, https://github.com/apache/arrow",
+        "Issues, https://github.com/apache/arrow/issues"
+      ],
+      "homepage": null,
+      "requires_dist": [],
+      "installer": "pip",
+      "direct_url": null,
+      "wheel_metadata": {
+        "wheel_version": "1.0",
+        "generator": "scikit-build-core 0.12.2",
+        "root_is_purelib": "false",
+        "tags": [
+          "cp312-cp312-win_amd64"
+        ],
+        "build": null
+      },
+      "metadata_files": [
+        {
+          "path_relative_to_site_packages": "pyarrow-25.0.1.dist-info/INSTALLER",
+          "path_relative_to_runtime": "Lib/site-packages/pyarrow-25.0.1.dist-info/INSTALLER",
+          "size_bytes": 4,
+          "sha256": "ceebae7b8927a3227e5303cf5e0f1f7b34bb542ad7250ac03fbcde36ec2f1508",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg",
+          "record_hash_verified": true
+        },
+        {
+          "path_relative_to_site_packages": "pyarrow-25.0.1.dist-info/METADATA",
+          "path_relative_to_runtime": "Lib/site-packages/pyarrow-25.0.1.dist-info/METADATA",
+          "size_bytes": 3031,
+          "sha256": "12ed8d0988a6f7153fec923ee47b7fc1d6134463a86b1b89fa36f24c250163ff",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "Eu2NCYim9xU_7JI-5Ht_wdYTRGOoaxuJ-jbyTCUBY_8",
+          "record_hash_verified": true
+        },
+        {
+          "path_relative_to_site_packages": "pyarrow-25.0.1.dist-info/RECORD",
+          "path_relative_to_runtime": "Lib/site-packages/pyarrow-25.0.1.dist-info/RECORD",
+          "size_bytes": 78570,
+          "sha256": "1eddf4fb72b1b071868dc02d6fc8242125d98c6557ae6af8f783b1c84ef6a797",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": null,
+          "record_hash_value": null,
+          "record_hash_verified": null
+        },
+        {
+          "path_relative_to_site_packages": "pyarrow-25.0.1.dist-info/WHEEL",
+          "path_relative_to_runtime": "Lib/site-packages/pyarrow-25.0.1.dist-info/WHEEL",
+          "size_bytes": 106,
+          "sha256": "891c3fac5ba83f1ddc719fbe86618f8539979d8e478103c687553242892e8073",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "iRw_rFuoPx3ccZ--hmGPhTmXnY5HgQPGh1UyQokugHM",
+          "record_hash_verified": true
+        }
+      ],
+      "license_notice_files": [
+        {
+          "path_relative_to_site_packages": "pyarrow-25.0.1.dist-info/licenses/LICENSE.txt",
+          "path_relative_to_runtime": "Lib/site-packages/pyarrow-25.0.1.dist-info/licenses/LICENSE.txt",
+          "size_bytes": 114602,
+          "sha256": "b410defd7f5f8cac9cfa54a3a49fcd971de2be0462bbab980c8f869f1aac94d3",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "tBDe_X9fjKyc-lSjpJ_Nlx3ivgRiu6uYDI-GnxqslNM",
+          "record_hash_verified": true,
+          "text_decode_status": "utf8_read",
+          "text_first_nonempty_line": "Apache License",
+          "default_branch_license_comparison": {
+            "evidence_commit_sha": "676dd43c5fef2dbb3c42e7b03b43ca6f952bd405",
+            "license_url": "https://github.com/apache/arrow/blob/676dd43c5fef2dbb3c42e7b03b43ca6f952bd405/LICENSE.txt",
+            "observed_upstream_sha256": "cd03925a27219d326d622609fbcae6567279af8b8885c33d5969a9e4ef5d7525",
+            "sha256_matches": false,
+            "meaning": "This compares license file bytes only. Even a match does not establish the provenance of the installed wheel or package source."
+          }
+        },
+        {
+          "path_relative_to_site_packages": "pyarrow-25.0.1.dist-info/licenses/NOTICE.txt",
+          "path_relative_to_runtime": "Lib/site-packages/pyarrow-25.0.1.dist-info/licenses/NOTICE.txt",
+          "size_bytes": 2997,
+          "sha256": "2ccca1e730e671f55b8028facf2261a6f74b561a4d96a2ccd743be19c5619236",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "LMyh5zDmcfVbgCj6zyJhpvdLVhpNlqLM10O-GcVhkjY",
+          "record_hash_verified": true,
+          "text_decode_status": "utf8_read",
+          "text_first_nonempty_line": "Apache Arrow"
+        }
+      ],
+      "dist_info_license_notice_count": 2,
+      "supplementary_package_license_notice_count": 0,
+      "source_provenance_status": "installed_metadata_observed; build_commit_and_download_origin_not_established",
+      "upstream_default_branch_reference": {
+        "repository": "apache/arrow",
+        "commit_sha": "676dd43c5fef2dbb3c42e7b03b43ca6f952bd405",
+        "github_license_spdx": "Apache-2.0",
+        "purpose": "Separate upstream observation, not attribution of the installed build to this commit."
+      },
+      "license_byte_difference_note": "Installed license bytes differ from the separate default-branch license snapshot; no byte identity is claimed."
+    },
+    {
+      "requested_distribution": "statsmodels",
+      "mapped_upstream_repository": "statsmodels/statsmodels",
+      "observed_at_utc": "2026-10-02T16:29:18.967911Z",
+      "verification_status": "installed_metadata_and_available_license_files_verified",
+      "distribution_name": "statsmodels",
+      "installed_version": "0.15.0",
+      "requires_python": ">=3.10",
+      "metadata_version": "2.4",
+      "license_metadata": {
+        "license_expression": "BSD-3-Clause",
+        "license": null,
+        "license_classifiers": [],
+        "license_file_fields": [
+          "LICENSE.txt"
+        ]
+      },
+      "project_urls": [
+        "homepage, https://www.statsmodels.org",
+        "documentation, https://www.statsmodels.org/stable/index.html",
+        "repository, https://github.com/statsmodels/statsmodels",
+        "changelog, https://bashtage.github.io/arch/changes.html",
+        "bugtracker, https://github.com/statsmodels/statsmodels/issues"
+      ],
+      "homepage": null,
+      "requires_dist": [
+        "numpy<3,>=1.23.5",
+        "scipy!=1.9.2,>=1.8",
+        "pandas!=2.1.0,>=1.4",
+        "patsy>=0.5.6",
+        "packaging>=21.3",
+        "formulaic>=1.1.0",
+        "pytest<10,>=8.4.1; extra == \"test\"",
+        "pytest-randomly; extra == \"test\"",
+        "pytest-run-parallel; extra == \"test\"",
+        "pytest-xdist; extra == \"test\"",
+        "pytest-cov; extra == \"test\"",
+        "coverage[toml]; extra == \"test\"",
+        "meson; extra == \"test\"",
+        "ninja; sys_platform != \"emscripten\" and extra == \"test\"",
+        "sphinx; extra == \"doc\"",
+        "pandas!=2.1.0,>=2.2.2; extra == \"doc\"",
+        "pydata-sphinx-theme; extra == \"doc\"",
+        "jupyter; extra == \"doc\"",
+        "notebook; extra == \"doc\"",
+        "nbsphinx; extra == \"doc\"",
+        "nbconvert; extra == \"doc\"",
+        "pyyaml; extra == \"doc\"",
+        "pandas-datareader; extra == \"doc\"",
+        "simplegeneric; extra == \"doc\"",
+        "seaborn; extra == \"doc\"",
+        "numpydoc; extra == \"doc\"",
+        "pymc; os_name != \"nt\" and extra == \"doc\"",
+        "arviz; os_name != \"nt\" and extra == \"doc\"",
+        "jinja2; extra == \"doc\"",
+        "pickleshare; extra == \"doc\"",
+        "pytest<10,>=8.4.1; extra == \"doc\"",
+        "cython<4,>=3.0.10; extra == \"dev\"",
+        "setuptools_scm~=9.0; extra == \"dev\"",
+        "meson-python>=0.18.0; extra == \"dev\"",
+        "meson; extra == \"dev\"",
+        "ninja; extra == \"dev\"",
+        "matplotlib>=3; extra == \"dev\"",
+        "colorama; extra == \"dev\"",
+        "joblib; extra == \"dev\"",
+        "pywinpty; os_name == \"nt\" and extra == \"dev\"",
+        "ruff; extra == \"dev\"",
+        "polars>=1.0.0; extra == \"polars\""
+      ],
+      "installer": "pip",
+      "direct_url": null,
+      "wheel_metadata": {
+        "wheel_version": "1.0",
+        "generator": "meson",
+        "root_is_purelib": "false",
+        "tags": [
+          "cp312-cp312-win_amd64"
+        ],
+        "build": null
+      },
+      "metadata_files": [
+        {
+          "path_relative_to_site_packages": "statsmodels-0.15.0.dist-info/INSTALLER",
+          "path_relative_to_runtime": "Lib/site-packages/statsmodels-0.15.0.dist-info/INSTALLER",
+          "size_bytes": 4,
+          "sha256": "ceebae7b8927a3227e5303cf5e0f1f7b34bb542ad7250ac03fbcde36ec2f1508",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg",
+          "record_hash_verified": true
+        },
+        {
+          "path_relative_to_site_packages": "statsmodels-0.15.0.dist-info/METADATA",
+          "path_relative_to_runtime": "Lib/site-packages/statsmodels-0.15.0.dist-info/METADATA",
+          "size_bytes": 9611,
+          "sha256": "5c2b2bc90b451ec1d9d87529d25754011b4436f55f2a2956e0fabda34b82a826",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "XCsryQtFHsHZ2HUp0ldUARtENvVfKilW4Pq9o0uCqCY",
+          "record_hash_verified": true
+        },
+        {
+          "path_relative_to_site_packages": "statsmodels-0.15.0.dist-info/RECORD",
+          "path_relative_to_runtime": "Lib/site-packages/statsmodels-0.15.0.dist-info/RECORD",
+          "size_bytes": 238533,
+          "sha256": "83511f9a7d9dd9686edccc069930411d786b19c6a0bfd7b0177c168825d6cfb8",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": null,
+          "record_hash_value": null,
+          "record_hash_verified": null
+        },
+        {
+          "path_relative_to_site_packages": "statsmodels-0.15.0.dist-info/WHEEL",
+          "path_relative_to_runtime": "Lib/site-packages/statsmodels-0.15.0.dist-info/WHEEL",
+          "size_bytes": 85,
+          "sha256": "e743de01ba6503a3e4234858398a1e69c07d512d51e8482ec9f3a7b1c707d165",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "50PeAbplA6PkI0hYOYoeacB9US1R6EguyfOnsccH0WU",
+          "record_hash_verified": true
+        }
+      ],
+      "license_notice_files": [
+        {
+          "path_relative_to_site_packages": "statsmodels-0.15.0.dist-info/licenses/LICENSE.txt",
+          "path_relative_to_runtime": "Lib/site-packages/statsmodels-0.15.0.dist-info/licenses/LICENSE.txt",
+          "size_bytes": 1670,
+          "sha256": "0897212c24b09ba69c4917490d8828081d60bb4303ec0045e553a9e470f38efa",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "CJchLCSwm6acSRdJDYgoCB1gu0MD7ABF5VOp5HDzjvo",
+          "record_hash_verified": true,
+          "text_decode_status": "utf8_read",
+          "text_first_nonempty_line": "Copyright (C) 2006, Jonathan E. Taylor",
+          "default_branch_license_comparison": {
+            "evidence_commit_sha": "38965b6f33cff021b1232b537dbec0b532258b62",
+            "license_url": "https://github.com/statsmodels/statsmodels/blob/38965b6f33cff021b1232b537dbec0b532258b62/LICENSE.txt",
+            "observed_upstream_sha256": "1ca78e1dec9dcebc55f3b96a862317f23e76422c5fc943568d955aad1f6b5fad",
+            "sha256_matches": false,
+            "meaning": "This compares license file bytes only. Even a match does not establish the provenance of the installed wheel or package source."
+          }
+        },
+        {
+          "path_relative_to_site_packages": "statsmodels/multivariate/factor_rotation/LICENSE.txt",
+          "path_relative_to_runtime": "Lib/site-packages/statsmodels/multivariate/factor_rotation/LICENSE.txt",
+          "size_bytes": 1530,
+          "sha256": "91babea8a647589715c2926a622688ea2868494d5ec37057d672d2d3b61cf808",
+          "is_dist_info_file": false,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "kbq-qKZHWJcVwpJqYiaI6ihoSU1ew3BX1nLS07Yc-Ag",
+          "record_hash_verified": true,
+          "text_decode_status": "utf8_read",
+          "text_first_nonempty_line": "Copyright (c) 2015, Martin van der Schans"
+        },
+        {
+          "path_relative_to_site_packages": "statsmodels/stats/libqsturng/LICENSE.txt",
+          "path_relative_to_runtime": "Lib/site-packages/statsmodels/stats/libqsturng/LICENSE.txt",
+          "size_bytes": 1595,
+          "sha256": "973c83de0e81e9f6a2d4bc16b310032b18cacbe7bf2b162194069c94b15cc0cd",
+          "is_dist_info_file": false,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "lzyD3g6B6fai1LwWsxADKxjKy-e_KxYhlAaclLFcwM0",
+          "record_hash_verified": true,
+          "text_decode_status": "utf8_read",
+          "text_first_nonempty_line": "Copyright (c) 2011, Roger Lew [see LICENSE.txt]"
+        },
+        {
+          "path_relative_to_site_packages": "statsmodels/tsa/statespace/tests/results/frbny_nowcast/Nowcasting/LICENSE",
+          "path_relative_to_runtime": "Lib/site-packages/statsmodels/tsa/statespace/tests/results/frbny_nowcast/Nowcasting/LICENSE",
+          "size_bytes": 1561,
+          "sha256": "03afb3726577af6f8c6f4f267a53cec31e3666ff0452c2a1577bce23d5a66504",
+          "is_dist_info_file": false,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "A6-zcmV3r2-Mb08melPOwx42Zv8EUsKhV3vOI9WmZQQ",
+          "record_hash_verified": true,
+          "text_decode_status": "utf8_read",
+          "text_first_nonempty_line": "BSD 3-Clause License"
+        }
+      ],
+      "dist_info_license_notice_count": 1,
+      "supplementary_package_license_notice_count": 3,
+      "source_provenance_status": "installed_metadata_observed; build_commit_and_download_origin_not_established",
+      "upstream_default_branch_reference": {
+        "repository": "statsmodels/statsmodels",
+        "commit_sha": "38965b6f33cff021b1232b537dbec0b532258b62",
+        "github_license_spdx": "BSD-3-Clause",
+        "purpose": "Separate upstream observation, not attribution of the installed build to this commit."
+      },
+      "license_byte_difference_note": "Installed license bytes differ from the separate default-branch license snapshot; no byte identity is claimed."
+    },
+    {
+      "requested_distribution": "arch",
+      "mapped_upstream_repository": "bashtage/arch",
+      "observed_at_utc": "2026-10-02T16:29:20.020052Z",
+      "verification_status": "installed_metadata_and_available_license_files_verified",
+      "distribution_name": "arch",
+      "installed_version": "8.0.0",
+      "requires_python": ">=3.10",
+      "metadata_version": "2.4",
+      "license_metadata": {
+        "license_expression": "NCSA",
+        "license": null,
+        "license_classifiers": [],
+        "license_file_fields": [
+          "LICENSE.md"
+        ]
+      },
+      "project_urls": [
+        "homepage, https://github.com/bashtage/arch",
+        "documentation, https://bashtage.github.io/arch/",
+        "repository, https://github.com/bashtage/arch",
+        "changelog, https://bashtage.github.io/arch/changes.html"
+      ],
+      "homepage": null,
+      "requires_dist": [
+        "numpy<3,>=1.22.3",
+        "pandas>=1.4.0",
+        "scipy>=1.8",
+        "statsmodels>=0.13.0",
+        "packaging",
+        "pytest<9,>=8.4.1; extra == \"test\"",
+        "pytest-randomly; extra == \"test\"",
+        "pytest-xdist; extra == \"test\"",
+        "pytest-cov; extra == \"test\"",
+        "coverage[toml]; extra == \"test\"",
+        "meson; extra == \"test\"",
+        "ninja; extra == \"test\"",
+        "setuptools>=61; extra == \"doc\"",
+        "wheel; extra == \"doc\"",
+        "setuptools_scm[toml]<10,>=9.2.0; extra == \"doc\"",
+        "cython<4,>=3.0.13; extra == \"doc\"",
+        "numpy>=2.3.4; extra == \"doc\"",
+        "scipy>=1.16.0; extra == \"doc\"",
+        "ipython>=8.0.1; extra == \"doc\"",
+        "matplotlib>=3.10; extra == \"doc\"",
+        "patsy>=0.5.3; extra == \"doc\"",
+        "statsmodels>=0.13.5; extra == \"doc\"",
+        "jinja2; extra == \"doc\"",
+        "sphinx>=7; extra == \"doc\"",
+        "seaborn; extra == \"doc\"",
+        "numpydoc>=1.0.0; extra == \"doc\"",
+        "nbsphinx; extra == \"doc\"",
+        "sphinx-immaterial; extra == \"doc\"",
+        "jupyter; extra == \"doc\"",
+        "notebook; extra == \"doc\"",
+        "sphinx-autodoc-typehints; extra == \"doc\"",
+        "fonttools>=4.43.0; extra == \"doc\"",
+        "jupyterlab>=4.4.8; extra == \"doc\"",
+        "ipython>=7; extra == \"doc\"",
+        "sphinx_immaterial; extra == \"doc\"",
+        "nbconvert; extra == \"doc\"",
+        "pickleshare; extra == \"doc\"",
+        "pandas~=2.3.3; extra == \"doc\"",
+        "setuptools_scm[toml]<10,>=9.2.0; extra == \"dev\"",
+        "packaging; extra == \"dev\"",
+        "cython>=3.0.10; extra == \"dev\"",
+        "numba>=0.55; extra == \"dev\"",
+        "matplotlib>=3; extra == \"dev\"",
+        "seaborn; extra == \"dev\"",
+        "pytest<9,>=8.4.1; extra == \"dev\"",
+        "pytest-randomly; extra == \"dev\"",
+        "pytest-xdist; extra == \"dev\"",
+        "pytest-cov; extra == \"dev\"",
+        "black[jupyter]~=25.9.0; extra == \"dev\"",
+        "isort~=6.0; extra == \"dev\"",
+        "colorama; extra == \"dev\"",
+        "flake8; extra == \"dev\"",
+        "flake8-bugbear; extra == \"dev\"",
+        "mypy>=1.3; extra == \"dev\"",
+        "ruff>=0.8.6; extra == \"dev\"",
+        "pyupgrade>=3.4.0; extra == \"dev\"",
+        "jupyterlab-code-formatter; extra == \"dev\"",
+        "jupyterlab>=4.4.8; extra == \"dev\"",
+        "zipp>=3.19.1; extra == \"dev\""
+      ],
+      "installer": "pip",
+      "direct_url": null,
+      "wheel_metadata": {
+        "wheel_version": "1.0",
+        "generator": "meson",
+        "root_is_purelib": "false",
+        "tags": [
+          "cp312-cp312-win_amd64"
+        ],
+        "build": null
+      },
+      "metadata_files": [
+        {
+          "path_relative_to_site_packages": "arch-8.0.0.dist-info/INSTALLER",
+          "path_relative_to_runtime": "Lib/site-packages/arch-8.0.0.dist-info/INSTALLER",
+          "size_bytes": 4,
+          "sha256": "ceebae7b8927a3227e5303cf5e0f1f7b34bb542ad7250ac03fbcde36ec2f1508",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg",
+          "record_hash_verified": true
+        },
+        {
+          "path_relative_to_site_packages": "arch-8.0.0.dist-info/METADATA",
+          "path_relative_to_runtime": "Lib/site-packages/arch-8.0.0.dist-info/METADATA",
+          "size_bytes": 13802,
+          "sha256": "648ac149a8e156497b8def232e8d7bac9b51a379cda4017314b6c7f2d8ce0449",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "ZIrBSajhVkl7je8jLo17rJtRo3nNpAFzFLbH8tjOBEk",
+          "record_hash_verified": true
+        },
+        {
+          "path_relative_to_site_packages": "arch-8.0.0.dist-info/RECORD",
+          "path_relative_to_runtime": "Lib/site-packages/arch-8.0.0.dist-info/RECORD",
+          "size_bytes": 20392,
+          "sha256": "114b7ef15ba8c8d96076e937314f7c287209d5da854b27b746ea8f2eacf01e05",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": null,
+          "record_hash_value": null,
+          "record_hash_verified": null
+        },
+        {
+          "path_relative_to_site_packages": "arch-8.0.0.dist-info/WHEEL",
+          "path_relative_to_runtime": "Lib/site-packages/arch-8.0.0.dist-info/WHEEL",
+          "size_bytes": 85,
+          "sha256": "e743de01ba6503a3e4234858398a1e69c07d512d51e8482ec9f3a7b1c707d165",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "50PeAbplA6PkI0hYOYoeacB9US1R6EguyfOnsccH0WU",
+          "record_hash_verified": true
+        }
+      ],
+      "license_notice_files": [
+        {
+          "path_relative_to_site_packages": "arch-8.0.0.dist-info/licenses/LICENSE.md",
+          "path_relative_to_runtime": "Lib/site-packages/arch-8.0.0.dist-info/licenses/LICENSE.md",
+          "size_bytes": 1693,
+          "sha256": "220b64058072d00b8d83d4ae959d14fba52923466be76a92786c74e8ae7429e2",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "IgtkBYBy0AuNg9SulZ0U-6UpI0Zr52qSeGx06K50KeI",
+          "record_hash_verified": true,
+          "text_decode_status": "utf8_read",
+          "text_first_nonempty_line": "# License",
+          "default_branch_license_comparison": {
+            "evidence_commit_sha": "88ffcf87042ed5d4adf48bac41b144bc90b287a2",
+            "license_url": "https://github.com/bashtage/arch/blob/88ffcf87042ed5d4adf48bac41b144bc90b287a2/LICENSE.md",
+            "observed_upstream_sha256": "c6e622bd89db4e13315f4e91605ff96fcbb9012d78ee74e429855870b203eed6",
+            "sha256_matches": false,
+            "meaning": "This compares license file bytes only. Even a match does not establish the provenance of the installed wheel or package source."
+          }
+        }
+      ],
+      "dist_info_license_notice_count": 1,
+      "supplementary_package_license_notice_count": 0,
+      "source_provenance_status": "installed_metadata_observed; build_commit_and_download_origin_not_established",
+      "upstream_default_branch_reference": {
+        "repository": "bashtage/arch",
+        "commit_sha": "88ffcf87042ed5d4adf48bac41b144bc90b287a2",
+        "github_license_spdx": "NOASSERTION",
+        "purpose": "Separate upstream observation, not attribution of the installed build to this commit."
+      },
+      "license_label_note": "The installed distribution declares NCSA; the separate GitHub default-branch API observation was NOASSERTION. Both are preserved as observations from different sources, not silently normalized.",
+      "license_byte_difference_note": "Installed license bytes differ from the separate default-branch license snapshot; no byte identity is claimed."
+    },
+    {
+      "requested_distribution": "scipy",
+      "mapped_upstream_repository": "scipy/scipy",
+      "observed_at_utc": "2026-10-02T16:29:20.156073Z",
+      "verification_status": "installed_metadata_and_available_license_files_verified",
+      "distribution_name": "scipy",
+      "installed_version": "1.18.1",
+      "requires_python": ">=3.12",
+      "metadata_version": "2.1",
+      "license_metadata": {
+        "license_expression": null,
+        "license": "Copyright (c) 2001-2002 Enthought, Inc. 2003, SciPy Developers.\n All rights reserved.\n\n Redistribution and use in source and binary forms, with or without\n modification, are permitted provided that the following conditions\n are met:\n\n 1. Redistributions of source code must retain the above copyright\n    notice, this list of conditions and the following disclaimer.\n\n 2. Redistributions in binary form must reproduce the above\n    copyright notice, this list of conditions and the following\n    disclaimer in the documentation and/or other materials provided\n    with the distribution.\n\n 3. Neither the name of the copyright holder nor the names of its\n    contributors may be used to endorse or promote products derived\n    from this software without specific prior written permission.\n\n THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS\n \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT\n LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR\n A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT\n OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,\n SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT\n LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,\n DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY\n THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT\n (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE\n OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n\n ----\n\n\n ----\n\n This binary distribution of SciPy can also bundle the following software\n (depending on the build):\n\n\n Name: OpenBLAS\n Files: scipy.libs\\libscipy_openblas*.dll\n Description: bundled as a dynamically linked library\n Availability: https://github.com/OpenMathLib/OpenBLAS/\n License: BSD-3-Clause\n   Copyright (c) 2011-2014, The OpenBLAS Project\n   All rights reserved.\n\n   Redistribution and use in source and binary forms, with or without\n   modification, are permitted provided that the following conditions are\n   met:\n\n      1. Redistributions of source code must retain the above copyright\n         notice, this list of conditions and the following disclaimer.\n\n      2. Redistributions in binary form must reproduce the above copyright\n         notice, this list of conditions and the following disclaimer in\n         the documentation and/or other materials provided with the\n         distribution.\n      3. Neither the name of the OpenBLAS project nor the names of \n         its contributors may be used to endorse or promote products \n         derived from this software without specific prior written \n         permission.\n\n   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\"\n   AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE\n   IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE\n   ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE\n   LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL\n   DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR\n   SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER\n   CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,\n   OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE\n   USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n\n\n Name: LAPACK\n Files: scipy.libs\\libscipy_openblas*.dll\n Description: bundled in OpenBLAS\n Availability: https://github.com/OpenMathLib/OpenBLAS/\n License: BSD-3-Clause-Open-MPI\n   Copyright (c) 1992-2013 The University of Tennessee and The University\n                           of Tennessee Research Foundation.  All rights\n                           reserved.\n   Copyright (c) 2000-2013 The University of California Berkeley. All\n                           rights reserved.\n   Copyright (c) 2006-2013 The University of Colorado Denver.  All rights\n                           reserved.\n\n   $COPYRIGHT$\n\n   Additional copyrights may follow\n\n   $HEADER$\n\n   Redistribution and use in source and binary forms, with or without\n   modification, are permitted provided that the following conditions are\n   met:\n\n   - Redistributions of source code must retain the above copyright\n     notice, this list of conditions and the following disclaimer.\n\n   - Redistributions in binary form must reproduce the above copyright\n     notice, this list of conditions and the following disclaimer listed\n     in this license in the documentation and/or other materials\n     provided with the distribution.\n\n   - Neither the name of the copyright holders nor the names of its\n     contributors may be used to endorse or promote products derived from\n     this software without specific prior written permission.\n\n   The copyright holders provide no reassurances that the source code\n   provided does not infringe any patent, copyright, or any other\n   intellectual property rights of third parties.  The copyright holders\n   disclaim any liability to any recipient for claims brought against\n   recipient by any third party for infringement of that parties\n   intellectual property rights.\n\n   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS\n   \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT\n   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR\n   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT\n   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,\n   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT\n   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,\n   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY\n   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT\n   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE\n   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n\n\n Name: GCC runtime library\n Files: scipy.libs\\libscipy_openblas*.dll\n Description: statically linked to files compiled with gcc\n Availability: https://gcc.gnu.org/git/?p=gcc.git;a=tree;f=libgfortran\n License: GPL-3.0-or-later WITH GCC-exception-3.1\n   Copyright (C) 2002-2017 Free Software Foundation, Inc.\n\n   Libgfortran is free software; you can redistribute it and/or modify\n   it under the terms of the GNU General Public License as published by\n   the Free Software Foundation; either version 3, or (at your option)\n   any later version.\n\n   Libgfortran is distributed in the hope that it will be useful,\n   but WITHOUT ANY WARRANTY; without even the implied warranty of\n   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n   GNU General Public License for more details.\n\n   Under Section 7 of GPL version 3, you are granted additional\n   permissions described in the GCC Runtime Library Exception, version\n   3.1, as published by the Free Software Foundation.\n\n   You should have received a copy of the GNU General Public License and\n   a copy of the GCC Runtime Library Exception along with this program;\n   see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see\n   <http://www.gnu.org/licenses/>.\n\n\n ----\n\n Full text of license texts referred to above follows (that they are\n listed below does not necessarily imply the conditions apply to the\n present binary release):\n\n ----\n\n GCC RUNTIME LIBRARY EXCEPTION\n\n Version 3.1, 31 March 2009\n\n Copyright (C) 2009 Free Software Foundation, Inc. <http://fsf.org/>\n\n Everyone is permitted to copy and distribute verbatim copies of this\n license document, but changing it is not allowed.\n\n This GCC Runtime Library Exception (\"Exception\") is an additional\n permission under section 7 of the GNU General Public License, version\n 3 (\"GPLv3\"). It applies to a given file (the \"Runtime Library\") that\n bears a notice placed by the copyright holder of the file stating that\n the file is governed by GPLv3 along with this Exception.\n\n When you use GCC to compile a program, GCC may combine portions of\n certain GCC header files and runtime libraries with the compiled\n program. The purpose of this Exception is to allow compilation of\n non-GPL (including proprietary) programs to use, in this way, the\n header files and runtime libraries covered by this Exception.\n\n 0. Definitions.\n\n A file is an \"Independent Module\" if it either requires the Runtime\n Library for execution after a Compilation Process, or makes use of an\n interface provided by the Runtime Library, but is not otherwise based\n on the Runtime Library.\n\n \"GCC\" means a version of the GNU Compiler Collection, with or without\n modifications, governed by version 3 (or a specified later version) of\n the GNU General Public License (GPL) with the option of using any\n subsequent versions published by the FSF.\n\n \"GPL-compatible Software\" is software whose conditions of propagation,\n modification and use would permit combination with GCC in accord with\n the license of GCC.\n\n \"Target Code\" refers to output from any compiler for a real or virtual\n target processor architecture, in executable form or suitable for\n input to an assembler, loader, linker and/or execution\n phase. Notwithstanding that, Target Code does not include data in any\n format that is used as a compiler intermediate representation, or used\n for producing a compiler intermediate representation.\n\n The \"Compilation Process\" transforms code entirely represented in\n non-intermediate languages designed for human-written code, and/or in\n Java Virtual Machine byte code, into Target Code. Thus, for example,\n use of source code generators and preprocessors need not be considered\n part of the Compilation Process, since the Compilation Process can be\n understood as starting with the output of the generators or\n preprocessors.\n\n A Compilation Process is \"Eligible\" if it is done using GCC, alone or\n with other GPL-compatible software, or if it is done without using any\n work based on GCC. For example, using non-GPL-compatible Software to\n optimize any GCC intermediate representations would not qualify as an\n Eligible Compilation Process.\n\n 1. Grant of Additional Permission.\n\n You have permission to propagate a work of Target Code formed by\n combining the Runtime Library with Independent Modules, even if such\n propagation would otherwise violate the terms of GPLv3, provided that\n all Target Code was generated by Eligible Compilation Processes. You\n may then convey such a combination under terms of your choice,\n consistent with the licensing of the Independent Modules.\n\n 2. No Weakening of GCC Copyleft.\n\n The availability of this Exception does not imply any general\n presumption that third-party software is unaffected by the copyleft\n requirements of the license of GCC.\n\n ----\n\n                     GNU GENERAL PUBLIC LICENSE\n                        Version 3, 29 June 2007\n\n  Copyright (C) 2007 Free Software Foundation, Inc. <http://fsf.org/>\n  Everyone is permitted to copy and distribute verbatim copies\n  of this license document, but changing it is not allowed.\n\n                             Preamble\n\n   The GNU General Public License is a free, copyleft license for\n software and other kinds of works.\n\n   The licenses for most software and other practical works are designed\n to take away your freedom to share and change the works.  By contrast,\n the GNU General Public License is intended to guarantee your freedom to\n share and change all versions of a program--to make sure it remains free\n software for all its users.  We, the Free Software Foundation, use the\n GNU General Public License for most of our software; it applies also to\n any other work released this way by its authors.  You can apply it to\n your programs, too.\n\n   When we speak of free software, we are referring to freedom, not\n price.  Our General Public Licenses are designed to make sure that you\n have the freedom to distribute copies of free software (and charge for\n them if you wish), that you receive source code or can get it if you\n want it, that you can change the software or use pieces of it in new\n free programs, and that you know you can do these things.\n\n   To protect your rights, we need to prevent others from denying you\n these rights or asking you to surrender the rights.  Therefore, you have\n certain responsibilities if you distribute copies of the software, or if\n you modify it: responsibilities to respect the freedom of others.\n\n   For example, if you distribute copies of such a program, whether\n gratis or for a fee, you must pass on to the recipients the same\n freedoms that you received.  You must make sure that they, too, receive\n or can get the source code.  And you must show them these terms so they\n know their rights.\n\n   Developers that use the GNU GPL protect your rights with two steps:\n (1) assert copyright on the software, and (2) offer you this License\n giving you legal permission to copy, distribute and/or modify it.\n\n   For the developers' and authors' protection, the GPL clearly explains\n that there is no warranty for this free software.  For both users' and\n authors' sake, the GPL requires that modified versions be marked as\n changed, so that their problems will not be attributed erroneously to\n authors of previous versions.\n\n   Some devices are designed to deny users access to install or run\n modified versions of the software inside them, although the manufacturer\n can do so.  This is fundamentally incompatible with the aim of\n protecting users' freedom to change the software.  The systematic\n pattern of such abuse occurs in the area of products for individuals to\n use, which is precisely where it is most unacceptable.  Therefore, we\n have designed this version of the GPL to prohibit the practice for those\n products.  If such problems arise substantially in other domains, we\n stand ready to extend this provision to those domains in future versions\n of the GPL, as needed to protect the freedom of users.\n\n   Finally, every program is threatened constantly by software patents.\n States should not allow patents to restrict development and use of\n software on general-purpose computers, but in those that do, we wish to\n avoid the special danger that patents applied to a free program could\n make it effectively proprietary.  To prevent this, the GPL assures that\n patents cannot be used to render the program non-free.\n\n   The precise terms and conditions for copying, distribution and\n modification follow.\n\n                        TERMS AND CONDITIONS\n\n   0. Definitions.\n\n   \"This License\" refers to version 3 of the GNU General Public License.\n\n   \"Copyright\" also means copyright-like laws that apply to other kinds of\n works, such as semiconductor masks.\n\n   \"The Program\" refers to any copyrightable work licensed under this\n License.  Each licensee is addressed as \"you\".  \"Licensees\" and\n \"recipients\" may be individuals or organizations.\n\n   To \"modify\" a work means to copy from or adapt all or part of the work\n in a fashion requiring copyright permission, other than the making of an\n exact copy.  The resulting work is called a \"modified version\" of the\n earlier work or a work \"based on\" the earlier work.\n\n   A \"covered work\" means either the unmodified Program or a work based\n on the Program.\n\n   To \"propagate\" a work means to do anything with it that, without\n permission, would make you directly or secondarily liable for\n infringement under applicable copyright law, except executing it on a\n computer or modifying a private copy.  Propagation includes copying,\n distribution (with or without modification), making available to the\n public, and in some countries other activities as well.\n\n   To \"convey\" a work means any kind of propagation that enables other\n parties to make or receive copies.  Mere interaction with a user through\n a computer network, with no transfer of a copy, is not conveying.\n\n   An interactive user interface displays \"Appropriate Legal Notices\"\n to the extent that it includes a convenient and prominently visible\n feature that (1) displays an appropriate copyright notice, and (2)\n tells the user that there is no warranty for the work (except to the\n extent that warranties are provided), that licensees may convey the\n work under this License, and how to view a copy of this License.  If\n the interface presents a list of user commands or options, such as a\n menu, a prominent item in the list meets this criterion.\n\n   1. Source Code.\n\n   The \"source code\" for a work means the preferred form of the work\n for making modifications to it.  \"Object code\" means any non-source\n form of a work.\n\n   A \"Standard Interface\" means an interface that either is an official\n standard defined by a recognized standards body, or, in the case of\n interfaces specified for a particular programming language, one that\n is widely used among developers working in that language.\n\n   The \"System Libraries\" of an executable work include anything, other\n than the work as a whole, that (a) is included in the normal form of\n packaging a Major Component, but which is not part of that Major\n Component, and (b) serves only to enable use of the work with that\n Major Component, or to implement a Standard Interface for which an\n implementation is available to the public in source code form.  A\n \"Major Component\", in this context, means a major essential component\n (kernel, window system, and so on) of the specific operating system\n (if any) on which the executable work runs, or a compiler used to\n produce the work, or an object code interpreter used to run it.\n\n   The \"Corresponding Source\" for a work in object code form means all\n the source code needed to generate, install, and (for an executable\n work) run the object code and to modify the work, including scripts to\n control those activities.  However, it does not include the work's\n System Libraries, or general-purpose tools or generally available free\n programs which are used unmodified in performing those activities but\n which are not part of the work.  For example, Corresponding Source\n includes interface definition files associated with source files for\n the work, and the source code for shared libraries and dynamically\n linked subprograms that the work is specifically designed to require,\n such as by intimate data communication or control flow between those\n subprograms and other parts of the work.\n\n   The Corresponding Source need not include anything that users\n can regenerate automatically from other parts of the Corresponding\n Source.\n\n   The Corresponding Source for a work in source code form is that\n same work.\n\n   2. Basic Permissions.\n\n   All rights granted under this License are granted for the term of\n copyright on the Program, and are irrevocable provided the stated\n conditions are met.  This License explicitly affirms your unlimited\n permission to run the unmodified Program.  The output from running a\n covered work is covered by this License only if the output, given its\n content, constitutes a covered work.  This License acknowledges your\n rights of fair use or other equivalent, as provided by copyright law.\n\n   You may make, run and propagate covered works that you do not\n convey, without conditions so long as your license otherwise remains\n in force.  You may convey covered works to others for the sole purpose\n of having them make modifications exclusively for you, or provide you\n with facilities for running those works, provided that you comply with\n the terms of this License in conveying all material for which you do\n not control copyright.  Those thus making or running the covered works\n for you must do so exclusively on your behalf, under your direction\n and control, on terms that prohibit them from making any copies of\n your copyrighted material outside their relationship with you.\n\n   Conveying under any other circumstances is permitted solely under\n the conditions stated below.  Sublicensing is not allowed; section 10\n makes it unnecessary.\n\n   3. Protecting Users' Legal Rights From Anti-Circumvention Law.\n\n   No covered work shall be deemed part of an effective technological\n measure under any applicable law fulfilling obligations under article\n 11 of the WIPO copyright treaty adopted on 20 December 1996, or\n similar laws prohibiting or restricting circumvention of such\n measures.\n\n   When you convey a covered work, you waive any legal power to forbid\n circumvention of technological measures to the extent such circumvention\n is effected by exercising rights under this License with respect to\n the covered work, and you disclaim any intention to limit operation or\n modification of the work as a means of enforcing, against the work's\n users, your or third parties' legal rights to forbid circumvention of\n technological measures.\n\n   4. Conveying Verbatim Copies.\n\n   You may convey verbatim copies of the Program's source code as you\n receive it, in any medium, provided that you conspicuously and\n appropriately publish on each copy an appropriate copyright notice;\n keep intact all notices stating that this License and any\n non-permissive terms added in accord with section 7 apply to the code;\n keep intact all notices of the absence of any warranty; and give all\n recipients a copy of this License along with the Program.\n\n   You may charge any price or no price for each copy that you convey,\n and you may offer support or warranty protection for a fee.\n\n   5. Conveying Modified Source Versions.\n\n   You may convey a work based on the Program, or the modifications to\n produce it from the Program, in the form of source code under the\n terms of section 4, provided that you also meet all of these conditions:\n\n     a) The work must carry prominent notices stating that you modified\n     it, and giving a relevant date.\n\n     b) The work must carry prominent notices stating that it is\n     released under this License and any conditions added under section\n     7.  This requirement modifies the requirement in section 4 to\n     \"keep intact all notices\".\n\n     c) You must license the entire work, as a whole, under this\n     License to anyone who comes into possession of a copy.  This\n     License will therefore apply, along with any applicable section 7\n     additional terms, to the whole of the work, and all its parts,\n     regardless of how they are packaged.  This License gives no\n     permission to license the work in any other way, but it does not\n     invalidate such permission if you have separately received it.\n\n     d) If the work has interactive user interfaces, each must display\n     Appropriate Legal Notices; however, if the Program has interactive\n     interfaces that do not display Appropriate Legal Notices, your\n     work need not make them do so.\n\n   A compilation of a covered work with other separate and independent\n works, which are not by their nature extensions of the covered work,\n and which are not combined with it such as to form a larger program,\n in or on a volume of a storage or distribution medium, is called an\n \"aggregate\" if the compilation and its resulting copyright are not\n used to limit the access or legal rights of the compilation's users\n beyond what the individual works permit.  Inclusion of a covered work\n in an aggregate does not cause this License to apply to the other\n parts of the aggregate.\n\n   6. Conveying Non-Source Forms.\n\n   You may convey a covered work in object code form under the terms\n of sections 4 and 5, provided that you also convey the\n machine-readable Corresponding Source under the terms of this License,\n in one of these ways:\n\n     a) Convey the object code in, or embodied in, a physical product\n     (including a physical distribution medium), accompanied by the\n     Corresponding Source fixed on a durable physical medium\n     customarily used for software interchange.\n\n     b) Convey the object code in, or embodied in, a physical product\n     (including a physical distribution medium), accompanied by a\n     written offer, valid for at least three years and valid for as\n     long as you offer spare parts or customer support for that product\n     model, to give anyone who possesses the object code either (1) a\n     copy of the Corresponding Source for all the software in the\n     product that is covered by this License, on a durable physical\n     medium customarily used for software interchange, for a price no\n     more than your reasonable cost of physically performing this\n     conveying of source, or (2) access to copy the\n     Corresponding Source from a network server at no charge.\n\n     c) Convey individual copies of the object code with a copy of the\n     written offer to provide the Corresponding Source.  This\n     alternative is allowed only occasionally and noncommercially, and\n     only if you received the object code with such an offer, in accord\n     with subsection 6b.\n\n     d) Convey the object code by offering access from a designated\n     place (gratis or for a charge), and offer equivalent access to the\n     Corresponding Source in the same way through the same place at no\n     further charge.  You need not require recipients to copy the\n     Corresponding Source along with the object code.  If the place to\n     copy the object code is a network server, the Corresponding Source\n     may be on a different server (operated by you or a third party)\n     that supports equivalent copying facilities, provided you maintain\n     clear directions next to the object code saying where to find the\n     Corresponding Source.  Regardless of what server hosts the\n     Corresponding Source, you remain obligated to ensure that it is\n     available for as long as needed to satisfy these requirements.\n\n     e) Convey the object code using peer-to-peer transmission, provided\n     you inform other peers where the object code and Corresponding\n     Source of the work are being offered to the general public at no\n     charge under subsection 6d.\n\n   A separable portion of the object code, whose source code is excluded\n from the Corresponding Source as a System Library, need not be\n included in conveying the object code work.\n\n   A \"User Product\" is either (1) a \"consumer product\", which means any\n tangible personal property which is normally used for personal, family,\n or household purposes, or (2) anything designed or sold for incorporation\n into a dwelling.  In determining whether a product is a consumer product,\n doubtful cases shall be resolved in favor of coverage.  For a particular\n product received by a particular user, \"normally used\" refers to a\n typical or common use of that class of product, regardless of the status\n of the particular user or of the way in which the particular user\n actually uses, or expects or is expected to use, the product.  A product\n is a consumer product regardless of whether the product has substantial\n commercial, industrial or non-consumer uses, unless such uses represent\n the only significant mode of use of the product.\n\n   \"Installation Information\" for a User Product means any methods,\n procedures, authorization keys, or other information required to install\n and execute modified versions of a covered work in that User Product from\n a modified version of its Corresponding Source.  The information must\n suffice to ensure that the continued functioning of the modified object\n code is in no case prevented or interfered with solely because\n modification has been made.\n\n   If you convey an object code work under this section in, or with, or\n specifically for use in, a User Product, and the conveying occurs as\n part of a transaction in which the right of possession and use of the\n User Product is transferred to the recipient in perpetuity or for a\n fixed term (regardless of how the transaction is characterized), the\n Corresponding Source conveyed under this section must be accompanied\n by the Installation Information.  But this requirement does not apply\n if neither you nor any third party retains the ability to install\n modified object code on the User Product (for example, the work has\n been installed in ROM).\n\n   The requirement to provide Installation Information does not include a\n requirement to continue to provide support service, warranty, or updates\n for a work that has been modified or installed by the recipient, or for\n the User Product in which it has been modified or installed.  Access to a\n network may be denied when the modification itself materially and\n adversely affects the operation of the network or violates the rules and\n protocols for communication across the network.\n\n   Corresponding Source conveyed, and Installation Information provided,\n in accord with this section must be in a format that is publicly\n documented (and with an implementation available to the public in\n source code form), and must require no special password or key for\n unpacking, reading or copying.\n\n   7. Additional Terms.\n\n   \"Additional permissions\" are terms that supplement the terms of this\n License by making exceptions from one or more of its conditions.\n Additional permissions that are applicable to the entire Program shall\n be treated as though they were included in this License, to the extent\n that they are valid under applicable law.  If additional permissions\n apply only to part of the Program, that part may be used separately\n under those permissions, but the entire Program remains governed by\n this License without regard to the additional permissions.\n\n   When you convey a copy of a covered work, you may at your option\n remove any additional permissions from that copy, or from any part of\n it.  (Additional permissions may be written to require their own\n removal in certain cases when you modify the work.)  You may place\n additional permissions on material, added by you to a covered work,\n for which you have or can give appropriate copyright permission.\n\n   Notwithstanding any other provision of this License, for material you\n add to a covered work, you may (if authorized by the copyright holders of\n that material) supplement the terms of this License with terms:\n\n     a) Disclaiming warranty or limiting liability differently from the\n     terms of sections 15 and 16 of this License; or\n\n     b) Requiring preservation of specified reasonable legal notices or\n     author attributions in that material or in the Appropriate Legal\n     Notices displayed by works containing it; or\n\n     c) Prohibiting misrepresentation of the origin of that material, or\n     requiring that modified versions of such material be marked in\n     reasonable ways as different from the original version; or\n\n     d) Limiting the use for publicity purposes of names of licensors or\n     authors of the material; or\n\n     e) Declining to grant rights under trademark law for use of some\n     trade names, trademarks, or service marks; or\n\n     f) Requiring indemnification of licensors and authors of that\n     material by anyone who conveys the material (or modified versions of\n     it) with contractual assumptions of liability to the recipient, for\n     any liability that these contractual assumptions directly impose on\n     those licensors and authors.\n\n   All other non-permissive additional terms are considered \"further\n restrictions\" within the meaning of section 10.  If the Program as you\n received it, or any part of it, contains a notice stating that it is\n governed by this License along with a term that is a further\n restriction, you may remove that term.  If a license document contains\n a further restriction but permits relicensing or conveying under this\n License, you may add to a covered work material governed by the terms\n of that license document, provided that the further restriction does\n not survive such relicensing or conveying.\n\n   If you add terms to a covered work in accord with this section, you\n must place, in the relevant source files, a statement of the\n additional terms that apply to those files, or a notice indicating\n where to find the applicable terms.\n\n   Additional terms, permissive or non-permissive, may be stated in the\n form of a separately written license, or stated as exceptions;\n the above requirements apply either way.\n\n   8. Termination.\n\n   You may not propagate or modify a covered work except as expressly\n provided under this License.  Any attempt otherwise to propagate or\n modify it is void, and will automatically terminate your rights under\n this License (including any patent licenses granted under the third\n paragraph of section 11).\n\n   However, if you cease all violation of this License, then your\n license from a particular copyright holder is reinstated (a)\n provisionally, unless and until the copyright holder explicitly and\n finally terminates your license, and (b) permanently, if the copyright\n holder fails to notify you of the violation by some reasonable means\n prior to 60 days after the cessation.\n\n   Moreover, your license from a particular copyright holder is\n reinstated permanently if the copyright holder notifies you of the\n violation by some reasonable means, this is the first time you have\n received notice of violation of this License (for any work) from that\n copyright holder, and you cure the violation prior to 30 days after\n your receipt of the notice.\n\n   Termination of your rights under this section does not terminate the\n licenses of parties who have received copies or rights from you under\n this License.  If your rights have been terminated and not permanently\n reinstated, you do not qualify to receive new licenses for the same\n material under section 10.\n\n   9. Acceptance Not Required for Having Copies.\n\n   You are not required to accept this License in order to receive or\n run a copy of the Program.  Ancillary propagation of a covered work\n occurring solely as a consequence of using peer-to-peer transmission\n to receive a copy likewise does not require acceptance.  However,\n nothing other than this License grants you permission to propagate or\n modify any covered work.  These actions infringe copyright if you do\n not accept this License.  Therefore, by modifying or propagating a\n covered work, you indicate your acceptance of this License to do so.\n\n   10. Automatic Licensing of Downstream Recipients.\n\n   Each time you convey a covered work, the recipient automatically\n receives a license from the original licensors, to run, modify and\n propagate that work, subject to this License.  You are not responsible\n for enforcing compliance by third parties with this License.\n\n   An \"entity transaction\" is a transaction transferring control of an\n organization, or substantially all assets of one, or subdividing an\n organization, or merging organizations.  If propagation of a covered\n work results from an entity transaction, each party to that\n transaction who receives a copy of the work also receives whatever\n licenses to the work the party's predecessor in interest had or could\n give under the previous paragraph, plus a right to possession of the\n Corresponding Source of the work from the predecessor in interest, if\n the predecessor has it or can get it with reasonable efforts.\n\n   You may not impose any further restrictions on the exercise of the\n rights granted or affirmed under this License.  For example, you may\n not impose a license fee, royalty, or other charge for exercise of\n rights granted under this License, and you may not initiate litigation\n (including a cross-claim or counterclaim in a lawsuit) alleging that\n any patent claim is infringed by making, using, selling, offering for\n sale, or importing the Program or any portion of it.\n\n   11. Patents.\n\n   A \"contributor\" is a copyright holder who authorizes use under this\n License of the Program or a work on which the Program is based.  The\n work thus licensed is called the contributor's \"contributor version\".\n\n   A contributor's \"essential patent claims\" are all patent claims\n owned or controlled by the contributor, whether already acquired or\n hereafter acquired, that would be infringed by some manner, permitted\n by this License, of making, using, or selling its contributor version,\n but do not include claims that would be infringed only as a\n consequence of further modification of the contributor version.  For\n purposes of this definition, \"control\" includes the right to grant\n patent sublicenses in a manner consistent with the requirements of\n this License.\n\n   Each contributor grants you a non-exclusive, worldwide, royalty-free\n patent license under the contributor's essential patent claims, to\n make, use, sell, offer for sale, import and otherwise run, modify and\n propagate the contents of its contributor version.\n\n   In the following three paragraphs, a \"patent license\" is any express\n agreement or commitment, however denominated, not to enforce a patent\n (such as an express permission to practice a patent or covenant not to\n sue for patent infringement).  To \"grant\" such a patent license to a\n party means to make such an agreement or commitment not to enforce a\n patent against the party.\n\n   If you convey a covered work, knowingly relying on a patent license,\n and the Corresponding Source of the work is not available for anyone\n to copy, free of charge and under the terms of this License, through a\n publicly available network server or other readily accessible means,\n then you must either (1) cause the Corresponding Source to be so\n available, or (2) arrange to deprive yourself of the benefit of the\n patent license for this particular work, or (3) arrange, in a manner\n consistent with the requirements of this License, to extend the patent\n license to downstream recipients.  \"Knowingly relying\" means you have\n actual knowledge that, but for the patent license, your conveying the\n covered work in a country, or your recipient's use of the covered work\n in a country, would infringe one or more identifiable patents in that\n country that you have reason to believe are valid.\n\n   If, pursuant to or in connection with a single transaction or\n arrangement, you convey, or propagate by procuring conveyance of, a\n covered work, and grant a patent license to some of the parties\n receiving the covered work authorizing them to use, propagate, modify\n or convey a specific copy of the covered work, then the patent license\n you grant is automatically extended to all recipients of the covered\n work and works based on it.\n\n   A patent license is \"discriminatory\" if it does not include within\n the scope of its coverage, prohibits the exercise of, or is\n conditioned on the non-exercise of one or more of the rights that are\n specifically granted under this License.  You may not convey a covered\n work if you are a party to an arrangement with a third party that is\n in the business of distributing software, under which you make payment\n to the third party based on the extent of your activity of conveying\n the work, and under which the third party grants, to any of the\n parties who would receive the covered work from you, a discriminatory\n patent license (a) in connection with copies of the covered work\n conveyed by you (or copies made from those copies), or (b) primarily\n for and in connection with specific products or compilations that\n contain the covered work, unless you entered into that arrangement,\n or that patent license was granted, prior to 28 March 2007.\n\n   Nothing in this License shall be construed as excluding or limiting\n any implied license or other defenses to infringement that may\n otherwise be available to you under applicable patent law.\n\n   12. No Surrender of Others' Freedom.\n\n   If conditions are imposed on you (whether by court order, agreement or\n otherwise) that contradict the conditions of this License, they do not\n excuse you from the conditions of this License.  If you cannot convey a\n covered work so as to satisfy simultaneously your obligations under this\n License and any other pertinent obligations, then as a consequence you may\n not convey it at all.  For example, if you agree to terms that obligate you\n to collect a royalty for further conveying from those to whom you convey\n the Program, the only way you could satisfy both those terms and this\n License would be to refrain entirely from conveying the Program.\n\n   13. Use with the GNU Affero General Public License.\n\n   Notwithstanding any other provision of this License, you have\n permission to link or combine any covered work with a work licensed\n under version 3 of the GNU Affero General Public License into a single\n combined work, and to convey the resulting work.  The terms of this\n License will continue to apply to the part which is the covered work,\n but the special requirements of the GNU Affero General Public License,\n section 13, concerning interaction through a network will apply to the\n combination as such.\n\n   14. Revised Versions of this License.\n\n   The Free Software Foundation may publish revised and/or new versions of\n the GNU General Public License from time to time.  Such new versions will\n be similar in spirit to the present version, but may differ in detail to\n address new problems or concerns.\n\n   Each version is given a distinguishing version number.  If the\n Program specifies that a certain numbered version of the GNU General\n Public License \"or any later version\" applies to it, you have the\n option of following the terms and conditions either of that numbered\n version or of any later version published by the Free Software\n Foundation.  If the Program does not specify a version number of the\n GNU General Public License, you may choose any version ever published\n by the Free Software Foundation.\n\n   If the Program specifies that a proxy can decide which future\n versions of the GNU General Public License can be used, that proxy's\n public statement of acceptance of a version permanently authorizes you\n to choose that version for the Program.\n\n   Later license versions may give you additional or different\n permissions.  However, no additional obligations are imposed on any\n author or copyright holder as a result of your choosing to follow a\n later version.\n\n   15. Disclaimer of Warranty.\n\n   THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY\n APPLICABLE LAW.  EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT\n HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM \"AS IS\" WITHOUT WARRANTY\n OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO,\n THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR\n PURPOSE.  THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM\n IS WITH YOU.  SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF\n ALL NECESSARY SERVICING, REPAIR OR CORRECTION.\n\n   16. Limitation of Liability.\n\n   IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING\n WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MODIFIES AND/OR CONVEYS\n THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY\n GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE\n USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED TO LOSS OF\n DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD\n PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS),\n EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF\n SUCH DAMAGES.\n\n   17. Interpretation of Sections 15 and 16.\n\n   If the disclaimer of warranty and limitation of liability provided\n above cannot be given local legal effect according to their terms,\n reviewing courts shall apply local law that most closely approximates\n an absolute waiver of all civil liability in connection with the\n Program, unless a warranty or assumption of liability accompanies a\n copy of the Program in return for a fee.\n\n                      END OF TERMS AND CONDITIONS\n\n             How to Apply These Terms to Your New Programs\n\n   If you develop a new program, and you want it to be of the greatest\n possible use to the public, the best way to achieve this is to make it\n free software which everyone can redistribute and change under these terms.\n\n   To do so, attach the following notices to the program.  It is safest\n to attach them to the start of each source file to most effectively\n state the exclusion of warranty; and each file should have at least\n the \"copyright\" line and a pointer to where the full notice is found.\n\n     <one line to give the program's name and a brief idea of what it does.>\n     Copyright (C) <year>  <name of author>\n\n     This program is free software: you can redistribute it and/or modify\n     it under the terms of the GNU General Public License as published by\n     the Free Software Foundation, either version 3 of the License, or\n     (at your option) any later version.\n\n     This program is distributed in the hope that it will be useful,\n     but WITHOUT ANY WARRANTY; without even the implied warranty of\n     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n     GNU General Public License for more details.\n\n     You should have received a copy of the GNU General Public License\n     along with this program.  If not, see <http://www.gnu.org/licenses/>.\n\n Also add information on how to contact you by electronic and paper mail.\n\n   If the program does terminal interaction, make it output a short\n notice like this when it starts in an interactive mode:\n\n     <program>  Copyright (C) <year>  <name of author>\n     This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.\n     This is free software, and you are welcome to redistribute it\n     under certain conditions; type `show c' for details.\n\n The hypothetical commands `show w' and `show c' should show the appropriate\n parts of the General Public License.  Of course, your program's commands\n might be different; for a GUI interface, you would use an \"about box\".\n\n   You should also get your employer (if you work as a programmer) or school,\n if any, to sign a \"copyright disclaimer\" for the program, if necessary.\n For more information on this, and how to apply and follow the GNU GPL, see\n <http://www.gnu.org/licenses/>.\n\n   The GNU General Public License does not permit incorporating your program\n into proprietary programs.  If your program is a subroutine library, you\n may consider it more useful to permit linking proprietary applications with\n the library.  If this is what you want to do, use the GNU Lesser General\n Public License instead of this License.  But first, please read\n <http://www.gnu.org/philosophy/why-not-lgpl.html>.\n",
+        "license_classifiers": [
+          "License :: OSI Approved :: BSD License"
+        ],
+        "license_file_fields": []
+      },
+      "project_urls": [
+        "homepage, https://scipy.org/",
+        "documentation, https://docs.scipy.org/doc/scipy/",
+        "source, https://github.com/scipy/scipy",
+        "download, https://github.com/scipy/scipy/releases",
+        "tracker, https://github.com/scipy/scipy/issues"
+      ],
+      "homepage": null,
+      "requires_dist": [
+        "numpy<2.8,>=2.0.0",
+        "pytest>=8.0.0; extra == \"test\"",
+        "pytest-cov; extra == \"test\"",
+        "pytest-timeout; extra == \"test\"",
+        "pytest-xdist; extra == \"test\"",
+        "asv; extra == \"test\"",
+        "mpmath; extra == \"test\"",
+        "gmpy2; extra == \"test\"",
+        "threadpoolctl; extra == \"test\"",
+        "scikit-umfpack; extra == \"test\"",
+        "pooch; extra == \"test\"",
+        "hypothesis>=6.30; extra == \"test\"",
+        "array-api-strict>=2.3.1; extra == \"test\"",
+        "Cython; extra == \"test\"",
+        "meson; extra == \"test\"",
+        "ninja; sys_platform != \"emscripten\" and extra == \"test\"",
+        "scipy-doctest>=2.0.0; extra == \"test\"",
+        "sphinx<8.2.0,>=5.0.0; extra == \"doc\"",
+        "intersphinx_registry; extra == \"doc\"",
+        "pydata-sphinx-theme>=0.15.2; extra == \"doc\"",
+        "sphinx-copybutton; extra == \"doc\"",
+        "sphinx-design>=0.4.0; extra == \"doc\"",
+        "matplotlib>=3.5; extra == \"doc\"",
+        "numpydoc; extra == \"doc\"",
+        "jupytext; extra == \"doc\"",
+        "myst-nb>=1.2.0; extra == \"doc\"",
+        "pooch; extra == \"doc\"",
+        "jupyterlite-sphinx>=0.19.1; extra == \"doc\"",
+        "jupyterlite-pyodide-kernel; extra == \"doc\"",
+        "linkify-it-py; extra == \"doc\"",
+        "tabulate; extra == \"doc\"",
+        "click<8.3.0; extra == \"dev\"",
+        "spin; extra == \"dev\"",
+        "mypy==1.19.1; extra == \"dev\"",
+        "pyrefly==0.63.0; extra == \"dev\"",
+        "typing_extensions; extra == \"dev\"",
+        "types-psutil; extra == \"dev\"",
+        "pycodestyle; extra == \"dev\"",
+        "ruff>=0.12.0; extra == \"dev\"",
+        "cython-lint>=0.12.2; extra == \"dev\""
+      ],
+      "installer": "pip",
+      "direct_url": null,
+      "wheel_metadata": {
+        "wheel_version": "1.0",
+        "generator": "meson",
+        "root_is_purelib": "false",
+        "tags": [
+          "cp312-cp312-win_amd64"
+        ],
+        "build": null
+      },
+      "metadata_files": [
+        {
+          "path_relative_to_site_packages": "scipy-1.18.1.dist-info/INSTALLER",
+          "path_relative_to_runtime": "Lib/site-packages/scipy-1.18.1.dist-info/INSTALLER",
+          "size_bytes": 4,
+          "sha256": "ceebae7b8927a3227e5303cf5e0f1f7b34bb542ad7250ac03fbcde36ec2f1508",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg",
+          "record_hash_verified": true
+        },
+        {
+          "path_relative_to_site_packages": "scipy-1.18.1.dist-info/METADATA",
+          "path_relative_to_runtime": "Lib/site-packages/scipy-1.18.1.dist-info/METADATA",
+          "size_bytes": 61161,
+          "sha256": "c8313d18ca0168ff291fe0a3b50532f3a18b14547695e9aa7ca1c1ce6eca92dc",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "yDE9GMoBaP8pH-CjtQUy86GLFFR2lemqfKHBzm7Kktw",
+          "record_hash_verified": true
+        },
+        {
+          "path_relative_to_site_packages": "scipy-1.18.1.dist-info/RECORD",
+          "path_relative_to_runtime": "Lib/site-packages/scipy-1.18.1.dist-info/RECORD",
+          "size_bytes": 210944,
+          "sha256": "5e6878cfd8fb6de58b1860644bfae7a51f30a33c2d9aaf2d5400a244c54d7423",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": null,
+          "record_hash_value": null,
+          "record_hash_verified": null
+        },
+        {
+          "path_relative_to_site_packages": "scipy-1.18.1.dist-info/WHEEL",
+          "path_relative_to_runtime": "Lib/site-packages/scipy-1.18.1.dist-info/WHEEL",
+          "size_bytes": 85,
+          "sha256": "e743de01ba6503a3e4234858398a1e69c07d512d51e8482ec9f3a7b1c707d165",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "50PeAbplA6PkI0hYOYoeacB9US1R6EguyfOnsccH0WU",
+          "record_hash_verified": true
+        }
+      ],
+      "license_notice_files": [
+        {
+          "path_relative_to_site_packages": "scipy-1.18.1.dist-info/LICENSE.txt",
+          "path_relative_to_runtime": "Lib/site-packages/scipy-1.18.1.dist-info/LICENSE.txt",
+          "size_bytes": 45881,
+          "sha256": "f0f5c56b298ec9795df1199edc328a987242716d14a1bde6813112e22dc15f99",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "8PXFaymOyXld8Rme3DKKmHJCcW0Uob3mgTES4i3BX5k",
+          "record_hash_verified": true,
+          "text_decode_status": "utf8_read",
+          "text_first_nonempty_line": "Copyright (c) 2001-2002 Enthought, Inc. 2003, SciPy Developers.",
+          "default_branch_license_comparison": {
+            "evidence_commit_sha": "0a50dfe076cb866f93fdb05f3d78f51b6a64040a",
+            "license_url": "https://github.com/scipy/scipy/blob/0a50dfe076cb866f93fdb05f3d78f51b6a64040a/LICENSE.txt",
+            "observed_upstream_sha256": "221e59f5e910fd7f94e44f0dac77436a11338c285c6346232e4a850a50da0e94",
+            "sha256_matches": false,
+            "meaning": "This compares license file bytes only. Even a match does not establish the provenance of the installed wheel or package source."
+          }
+        },
+        {
+          "path_relative_to_site_packages": "scipy/_lib/_uarray/LICENSE",
+          "path_relative_to_runtime": "Lib/site-packages/scipy/_lib/_uarray/LICENSE",
+          "size_bytes": 1543,
+          "sha256": "e4c4acc31e8287066d7c995d26e3ef902ca1977ee187b260b11c278366503811",
+          "is_dist_info_file": false,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "5MSswx6ChwZtfJldJuPvkCyhl37hh7JgsRwng2ZQOBE",
+          "record_hash_verified": true,
+          "text_decode_status": "utf8_read",
+          "text_first_nonempty_line": "BSD 3-Clause License"
+        },
+        {
+          "path_relative_to_site_packages": "scipy/fft/_duccfft/LICENSE.md",
+          "path_relative_to_runtime": "Lib/site-packages/scipy/fft/_duccfft/LICENSE.md",
+          "size_bytes": 1523,
+          "sha256": "c04661685cff9d8035fe1c4c3ab357e7f7633cafc06a73e9d90c3c5fede8a86a",
+          "is_dist_info_file": false,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "wEZhaFz_nYA1_hxMOrNX5_djPK_AanPp2Qw8X-3oqGo",
+          "record_hash_verified": true,
+          "text_decode_status": "utf8_read",
+          "text_first_nonempty_line": "Copyright (C) 2010-2019 Max-Planck-Society"
+        },
+        {
+          "path_relative_to_site_packages": "scipy/integrate/LICENSE_DOP",
+          "path_relative_to_runtime": "Lib/site-packages/scipy/integrate/LICENSE_DOP",
+          "size_bytes": 3648,
+          "sha256": "6cc2ed6e35b8f376ff3d8f86aeef4e0c34c2309bd6f4a0565936d577839ba023",
+          "is_dist_info_file": false,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "bMLtbjW483b_PY-Gru9ODDTCMJvW9KBWWTbVd4OboCM",
+          "record_hash_verified": true,
+          "text_decode_status": "utf8_read",
+          "text_first_nonempty_line": "Copyright (C) 2025 SciPy developers"
+        },
+        {
+          "path_relative_to_site_packages": "scipy/spatial/qhull_src/COPYING_QHULL.txt",
+          "path_relative_to_runtime": "Lib/site-packages/scipy/spatial/qhull_src/COPYING_QHULL.txt",
+          "size_bytes": 1759,
+          "sha256": "2a6ebb495e26dd5f88cbc40c593733da6edb27b64936f70409cd5a1acafb1c32",
+          "is_dist_info_file": false,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "Km67SV4m3V-Iy8QMWTcz2m7bJ7ZJNvcECc1aGsr7HDI",
+          "record_hash_verified": true,
+          "text_decode_status": "utf8_read",
+          "text_first_nonempty_line": "Qhull, Copyright (c) 1993-2020"
+        }
+      ],
+      "dist_info_license_notice_count": 1,
+      "supplementary_package_license_notice_count": 4,
+      "source_provenance_status": "installed_metadata_observed; build_commit_and_download_origin_not_established",
+      "upstream_default_branch_reference": {
+        "repository": "scipy/scipy",
+        "commit_sha": "0a50dfe076cb866f93fdb05f3d78f51b6a64040a",
+        "github_license_spdx": "BSD-3-Clause",
+        "purpose": "Separate upstream observation, not attribution of the installed build to this commit."
+      },
+      "license_byte_difference_note": "Installed license bytes differ from the separate default-branch license snapshot; no byte identity is claimed."
+    },
+    {
+      "requested_distribution": "ta",
+      "mapped_upstream_repository": "bukosabino/ta",
+      "observed_at_utc": "2026-10-02T16:29:21.284388Z",
+      "verification_status": "installed_metadata_and_available_license_files_verified",
+      "distribution_name": "ta",
+      "installed_version": "0.11.0",
+      "requires_python": null,
+      "metadata_version": "2.4",
+      "license_metadata": {
+        "license_expression": null,
+        "license": "The MIT License (MIT)",
+        "license_classifiers": [
+          "License :: OSI Approved :: MIT License"
+        ],
+        "license_file_fields": []
+      },
+      "project_urls": [
+        "Documentation, https://technical-analysis-library-in-python.readthedocs.io/en/latest/",
+        "Bug Reports, https://github.com/bukosabino/ta/issues",
+        "Source, https://github.com/bukosabino/ta"
+      ],
+      "homepage": "https://github.com/bukosabino/ta",
+      "requires_dist": [
+        "numpy",
+        "pandas"
+      ],
+      "installer": "pip",
+      "direct_url": null,
+      "wheel_metadata": {
+        "wheel_version": "1.0",
+        "generator": "setuptools (84.0.0)",
+        "root_is_purelib": "true",
+        "tags": [
+          "py3-none-any"
+        ],
+        "build": null
+      },
+      "metadata_files": [
+        {
+          "path_relative_to_site_packages": "ta-0.11.0.dist-info/INSTALLER",
+          "path_relative_to_runtime": "Lib/site-packages/ta-0.11.0.dist-info/INSTALLER",
+          "size_bytes": 4,
+          "sha256": "ceebae7b8927a3227e5303cf5e0f1f7b34bb542ad7250ac03fbcde36ec2f1508",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg",
+          "record_hash_verified": true
+        },
+        {
+          "path_relative_to_site_packages": "ta-0.11.0.dist-info/METADATA",
+          "path_relative_to_runtime": "Lib/site-packages/ta-0.11.0.dist-info/METADATA",
+          "size_bytes": 1357,
+          "sha256": "2bd750a23e6d529569e25309b87b7050805e24c43393a1b1910c533d913012a1",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "K9dQoj5tUpVp4lMJuHtwUIBeJMQzk6GxkQxTPZEwEqE",
+          "record_hash_verified": true
+        },
+        {
+          "path_relative_to_site_packages": "ta-0.11.0.dist-info/RECORD",
+          "path_relative_to_runtime": "Lib/site-packages/ta-0.11.0.dist-info/RECORD",
+          "size_bytes": 1359,
+          "sha256": "cef92227b891eadafbc84aa04eea39fb55534dad18b9a85ad9ff24139dd963fb",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": null,
+          "record_hash_value": null,
+          "record_hash_verified": null
+        },
+        {
+          "path_relative_to_site_packages": "ta-0.11.0.dist-info/WHEEL",
+          "path_relative_to_runtime": "Lib/site-packages/ta-0.11.0.dist-info/WHEEL",
+          "size_bytes": 91,
+          "sha256": "61532836a2b3111b7ec23519c09df7c41180c27165fb872a6d8913b566b88ad1",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "YVMoNqKzERt-wjUZwJ33xBGAwnFl-4cqbYkTtWa4itE",
+          "record_hash_verified": true
+        }
+      ],
+      "license_notice_files": [],
+      "dist_info_license_notice_count": 0,
+      "supplementary_package_license_notice_count": 0,
+      "source_provenance_status": "installed_metadata_observed; build_commit_and_download_origin_not_established",
+      "upstream_default_branch_reference": {
+        "repository": "bukosabino/ta",
+        "commit_sha": "a890410710a6e483c9ba08da7f3dd5089e4b9dff",
+        "github_license_spdx": "MIT",
+        "purpose": "Separate upstream observation, not attribution of the installed build to this commit."
+      },
+      "license_file_limitation": "No separately installed license/notice file was found in this distribution RECORD. License metadata is recorded but does not substitute for a missing license text or prove package redistribution compliance."
+    },
+    {
+      "requested_distribution": "ffn",
+      "mapped_upstream_repository": "pmorissette/ffn",
+      "observed_at_utc": "2026-10-02T16:29:21.306313Z",
+      "verification_status": "installed_metadata_and_available_license_files_verified",
+      "distribution_name": "ffn",
+      "installed_version": "1.2.2",
+      "requires_python": ">=3.9",
+      "metadata_version": "2.5",
+      "license_metadata": {
+        "license_expression": "MIT",
+        "license": null,
+        "license_classifiers": [
+          "License :: OSI Approved :: MIT License"
+        ],
+        "license_file_fields": [
+          "LICENSE"
+        ]
+      },
+      "project_urls": [
+        "Repository, https://github.com/pmorissette/ffn",
+        "Homepage, http://pmorissette.github.io/ffn/",
+        "Documentation, https://pmorissette.github.io/ffn/"
+      ],
+      "homepage": null,
+      "requires_dist": [
+        "decorator>=5.0.7",
+        "matplotlib>=1",
+        "numpy",
+        "pandas>=0.19",
+        "scikit-learn>=0.15",
+        "scipy>=0.15",
+        "tabulate>=0.7.5",
+        "yfinance>=0.2",
+        "build; extra == 'dev'",
+        "bump-my-version; extra == 'dev'",
+        "check-dist; extra == 'dev'",
+        "codespell; extra == 'dev'",
+        "copier; extra == 'dev'",
+        "hatchling; extra == 'dev'",
+        "klink>=0.1.13; extra == 'dev'",
+        "mdformat; extra == 'dev'",
+        "mdformat-myst; extra == 'dev'",
+        "mdformat-tables>=1; extra == 'dev'",
+        "pytest; extra == 'dev'",
+        "pytest-benchmark; extra == 'dev'",
+        "pytest-cov; extra == 'dev'",
+        "ruff; extra == 'dev'",
+        "twine; extra == 'dev'",
+        "ty; extra == 'dev'",
+        "uv; extra == 'dev'",
+        "wheel; extra == 'dev'",
+        "yardang>=0.10.0; extra == 'dev'",
+        "build; extra == 'develop'",
+        "bump-my-version; extra == 'develop'",
+        "check-dist; extra == 'develop'",
+        "codespell; extra == 'develop'",
+        "copier; extra == 'develop'",
+        "hatchling; extra == 'develop'",
+        "klink>=0.1.13; extra == 'develop'",
+        "mdformat; extra == 'develop'",
+        "mdformat-myst; extra == 'develop'",
+        "mdformat-tables>=1; extra == 'develop'",
+        "pytest; extra == 'develop'",
+        "pytest-benchmark; extra == 'develop'",
+        "pytest-cov; extra == 'develop'",
+        "ruff; extra == 'develop'",
+        "twine; extra == 'develop'",
+        "ty; extra == 'develop'",
+        "uv; extra == 'develop'",
+        "wheel; extra == 'develop'",
+        "yardang>=0.10.0; extra == 'develop'",
+        "pytest; extra == 'test'",
+        "pytest-benchmark; extra == 'test'",
+        "pytest-cov; extra == 'test'"
+      ],
+      "installer": "pip",
+      "direct_url": null,
+      "wheel_metadata": {
+        "wheel_version": "1.0",
+        "generator": "hatchling 1.32.0",
+        "root_is_purelib": "true",
+        "tags": [
+          "py3-none-any"
+        ],
+        "build": null
+      },
+      "metadata_files": [
+        {
+          "path_relative_to_site_packages": "ffn-1.2.2.dist-info/INSTALLER",
+          "path_relative_to_runtime": "Lib/site-packages/ffn-1.2.2.dist-info/INSTALLER",
+          "size_bytes": 4,
+          "sha256": "ceebae7b8927a3227e5303cf5e0f1f7b34bb542ad7250ac03fbcde36ec2f1508",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg",
+          "record_hash_verified": true
+        },
+        {
+          "path_relative_to_site_packages": "ffn-1.2.2.dist-info/METADATA",
+          "path_relative_to_runtime": "Lib/site-packages/ffn-1.2.2.dist-info/METADATA",
+          "size_bytes": 5165,
+          "sha256": "e1cdebc75dd3d08246776441c4030cddad185cf2dafcc61c2385bfb4e2575d96",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "4c3rx13T0IJGd2RBxAMM3a0YXPLa_MYcI4W_tOJXXZY",
+          "record_hash_verified": true
+        },
+        {
+          "path_relative_to_site_packages": "ffn-1.2.2.dist-info/RECORD",
+          "path_relative_to_runtime": "Lib/site-packages/ffn-1.2.2.dist-info/RECORD",
+          "size_bytes": 822,
+          "sha256": "a5cc86b5db6f4599084049791e9353026292f095adb4591e533784f81a4ccf2f",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": null,
+          "record_hash_value": null,
+          "record_hash_verified": null
+        },
+        {
+          "path_relative_to_site_packages": "ffn-1.2.2.dist-info/WHEEL",
+          "path_relative_to_runtime": "Lib/site-packages/ffn-1.2.2.dist-info/WHEEL",
+          "size_bytes": 87,
+          "sha256": "ccec20e2307acd7da453dd7437e70c6b08e2bc3ead3bc3445af135da37b56d59",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "zOwg4jB6zX2kU910N-cMawjivD6tO8NEWvE12je1bVk",
+          "record_hash_verified": true
+        }
+      ],
+      "license_notice_files": [
+        {
+          "path_relative_to_site_packages": "ffn-1.2.2.dist-info/licenses/LICENSE",
+          "path_relative_to_runtime": "Lib/site-packages/ffn-1.2.2.dist-info/licenses/LICENSE",
+          "size_bytes": 1086,
+          "sha256": "8711471566d722d55eca3f09196f342b2ee2960616e68127ec2a17b39ff99949",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "hxFHFWbXItVeyj8JGW80Ky7ilgYW5oEn7CoXs5_5mUk",
+          "record_hash_verified": true,
+          "text_decode_status": "utf8_read",
+          "text_first_nonempty_line": "The MIT License (MIT)",
+          "default_branch_license_comparison": {
+            "evidence_commit_sha": "1312e971233198c8d5a72daf79259e61b88ed0d4",
+            "license_url": "https://github.com/pmorissette/ffn/blob/1312e971233198c8d5a72daf79259e61b88ed0d4/LICENSE",
+            "observed_upstream_sha256": "8711471566d722d55eca3f09196f342b2ee2960616e68127ec2a17b39ff99949",
+            "sha256_matches": true,
+            "meaning": "This compares license file bytes only. Even a match does not establish the provenance of the installed wheel or package source."
+          }
+        }
+      ],
+      "dist_info_license_notice_count": 1,
+      "supplementary_package_license_notice_count": 0,
+      "source_provenance_status": "installed_metadata_observed; build_commit_and_download_origin_not_established",
+      "upstream_default_branch_reference": {
+        "repository": "pmorissette/ffn",
+        "commit_sha": "1312e971233198c8d5a72daf79259e61b88ed0d4",
+        "github_license_spdx": "MIT",
+        "purpose": "Separate upstream observation, not attribution of the installed build to this commit."
+      }
+    },
+    {
+      "requested_distribution": "networkx",
+      "mapped_upstream_repository": "networkx/networkx",
+      "observed_at_utc": "2026-10-02T16:29:21.323879Z",
+      "verification_status": "installed_metadata_and_available_license_files_verified",
+      "distribution_name": "networkx",
+      "installed_version": "3.7",
+      "requires_python": "!=3.14.1,>=3.12",
+      "metadata_version": "2.4",
+      "license_metadata": {
+        "license_expression": "BSD-3-Clause",
+        "license": null,
+        "license_classifiers": [],
+        "license_file_fields": [
+          "LICENSE.txt"
+        ]
+      },
+      "project_urls": [
+        "Homepage, https://networkx.org/",
+        "Bug Tracker, https://github.com/networkx/networkx/issues",
+        "Documentation, https://networkx.org/documentation/stable/",
+        "Source Code, https://github.com/networkx/networkx"
+      ],
+      "homepage": null,
+      "requires_dist": [
+        "asv>=0.6.5; extra == \"benchmarking\"",
+        "py-rattler<0.22,>=0.21; extra == \"benchmarking\"",
+        "virtualenv; extra == \"benchmarking\"",
+        "numpy>=2.2; extra == \"default\"",
+        "scipy>=1.15; extra == \"default\"",
+        "matplotlib>=3.10; extra == \"default\"",
+        "pandas>=2.3; extra == \"default\"",
+        "pre-commit>=4.1; extra == \"developer\"",
+        "mypy>=1.15; extra == \"developer\"",
+        "sphinx>=8.0; extra == \"doc\"",
+        "pydata-sphinx-theme>=0.16; extra == \"doc\"",
+        "sphinx-gallery>=0.18; extra == \"doc\"",
+        "numpydoc>=1.8.0; extra == \"doc\"",
+        "pillow>=10; extra == \"doc\"",
+        "texext>=0.6.7; extra == \"doc\"",
+        "myst-nb>=1.1; extra == \"doc\"",
+        "intersphinx-registry; extra == \"doc\"",
+        "osmnx>=2.0.0; extra == \"example\"",
+        "momepy>=0.7.2; extra == \"example\"",
+        "contextily>=1.6; extra == \"example\"",
+        "seaborn>=0.13; extra == \"example\"",
+        "cairocffi>=1.7; extra == \"example\"",
+        "igraph>=0.11; extra == \"example\"",
+        "scikit-learn>=1.6; extra == \"example\"",
+        "iplotx>=0.9.0; extra == \"example\"",
+        "hiveplotlib>=0.28; extra == \"example\"",
+        "lxml>=4.6; extra == \"extra\"",
+        "pygraphviz>=2.0; extra == \"extra\"",
+        "pydot>=3.0.1; extra == \"extra\"",
+        "sympy>=1.10; extra == \"extra\"",
+        "build>=0.10; extra == \"release\"",
+        "twine>=4.0; extra == \"release\"",
+        "wheel>=0.40; extra == \"release\"",
+        "changelist==0.5; extra == \"release\"",
+        "pytest>=7.2; extra == \"test\"",
+        "pytest-cov>=4.0; extra == \"test\"",
+        "pytest-xdist>=3.0; extra == \"test\"",
+        "pytest-mpl; extra == \"test-extras\"",
+        "pytest-randomly; extra == \"test-extras\""
+      ],
+      "installer": "pip",
+      "direct_url": null,
+      "wheel_metadata": {
+        "wheel_version": "1.0",
+        "generator": "setuptools (84.0.0)",
+        "root_is_purelib": "true",
+        "tags": [
+          "py3-none-any"
+        ],
+        "build": null
+      },
+      "metadata_files": [
+        {
+          "path_relative_to_site_packages": "networkx-3.7.dist-info/INSTALLER",
+          "path_relative_to_runtime": "Lib/site-packages/networkx-3.7.dist-info/INSTALLER",
+          "size_bytes": 4,
+          "sha256": "ceebae7b8927a3227e5303cf5e0f1f7b34bb542ad7250ac03fbcde36ec2f1508",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg",
+          "record_hash_verified": true
+        },
+        {
+          "path_relative_to_site_packages": "networkx-3.7.dist-info/METADATA",
+          "path_relative_to_runtime": "Lib/site-packages/networkx-3.7.dist-info/METADATA",
+          "size_bytes": 6719,
+          "sha256": "ffcf42a343af6ffc54ff9cc4c09cf9638cd73b131370f395abd11b630186c90c",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "_89Co0Ovb_xU_5zEwJz5Y4zXOxMTcPOVq9EbYwGGyQw",
+          "record_hash_verified": true
+        },
+        {
+          "path_relative_to_site_packages": "networkx-3.7.dist-info/RECORD",
+          "path_relative_to_runtime": "Lib/site-packages/networkx-3.7.dist-info/RECORD",
+          "size_bytes": 103014,
+          "sha256": "4bb484fd2163c6b74594a75cd0cf0092354e64218ca63b6ac4cab3a51399a22a",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": null,
+          "record_hash_value": null,
+          "record_hash_verified": null
+        },
+        {
+          "path_relative_to_site_packages": "networkx-3.7.dist-info/WHEEL",
+          "path_relative_to_runtime": "Lib/site-packages/networkx-3.7.dist-info/WHEEL",
+          "size_bytes": 91,
+          "sha256": "61532836a2b3111b7ec23519c09df7c41180c27165fb872a6d8913b566b88ad1",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "YVMoNqKzERt-wjUZwJ33xBGAwnFl-4cqbYkTtWa4itE",
+          "record_hash_verified": true
+        }
+      ],
+      "license_notice_files": [
+        {
+          "path_relative_to_site_packages": "networkx-3.7.dist-info/licenses/LICENSE.txt",
+          "path_relative_to_runtime": "Lib/site-packages/networkx-3.7.dist-info/licenses/LICENSE.txt",
+          "size_bytes": 1763,
+          "sha256": "6025f323ea29dc2f0ee0abd9523bf910186f55b0e148e6ebf646c55566278e2e",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "YCXzI-op3C8O4KvZUjv5EBhvVbDhSObr9kbFVWYnji4",
+          "record_hash_verified": true,
+          "text_decode_status": "utf8_read",
+          "text_first_nonempty_line": "NetworkX is distributed with the 3-clause BSD license.",
+          "default_branch_license_comparison": {
+            "evidence_commit_sha": "31b74e96903d7f873b30c8ff36d71a4c9252b107",
+            "license_url": "https://github.com/networkx/networkx/blob/31b74e96903d7f873b30c8ff36d71a4c9252b107/LICENSE.txt",
+            "observed_upstream_sha256": "6025f323ea29dc2f0ee0abd9523bf910186f55b0e148e6ebf646c55566278e2e",
+            "sha256_matches": true,
+            "meaning": "This compares license file bytes only. Even a match does not establish the provenance of the installed wheel or package source."
+          }
+        }
+      ],
+      "dist_info_license_notice_count": 1,
+      "supplementary_package_license_notice_count": 0,
+      "source_provenance_status": "installed_metadata_observed; build_commit_and_download_origin_not_established",
+      "upstream_default_branch_reference": {
+        "repository": "networkx/networkx",
+        "commit_sha": "31b74e96903d7f873b30c8ff36d71a4c9252b107",
+        "github_license_spdx": "NOASSERTION",
+        "purpose": "Separate upstream observation, not attribution of the installed build to this commit."
+      }
+    },
+    {
+      "requested_distribution": "plotly",
+      "mapped_upstream_repository": "plotly/plotly.py",
+      "observed_at_utc": "2026-10-02T16:29:21.787914Z",
+      "verification_status": "installed_metadata_and_available_license_files_verified",
+      "distribution_name": "plotly",
+      "installed_version": "7.1.0",
+      "requires_python": ">=3.8",
+      "metadata_version": "2.5",
+      "license_metadata": {
+        "license_expression": "MIT",
+        "license": null,
+        "license_classifiers": [
+          "License :: OSI Approved :: MIT License"
+        ],
+        "license_file_fields": [
+          "LICENSE.txt"
+        ]
+      },
+      "project_urls": [
+        "Homepage, https://plotly.com/python/",
+        "Documentation, https://plotly.com/python/",
+        "GitHub, https://github.com/plotly/plotly.py",
+        "Changelog, https://github.com/plotly/plotly.py/blob/main/CHANGELOG.md"
+      ],
+      "homepage": null,
+      "requires_dist": [
+        "narwhals>=1.15.1",
+        "packaging",
+        "anywidget; extra == 'dev'",
+        "build; extra == 'dev'",
+        "colorcet; extra == 'dev'",
+        "fiona<=1.9.6; (python_version <= '3.8') and extra == 'dev'",
+        "geopandas; extra == 'dev'",
+        "inflect; extra == 'dev'",
+        "jupyter-builder; extra == 'dev'",
+        "jupyterlab; extra == 'dev'",
+        "kaleido>=1.3.0; extra == 'dev'",
+        "numpy>=1.22; extra == 'dev'",
+        "orjson; extra == 'dev'",
+        "pandas; extra == 'dev'",
+        "pdfrw; extra == 'dev'",
+        "pillow; extra == 'dev'",
+        "polars[timezone]; extra == 'dev'",
+        "pyarrow; extra == 'dev'",
+        "pytest; extra == 'dev'",
+        "pytz; extra == 'dev'",
+        "requests; extra == 'dev'",
+        "ruff==0.11.12; extra == 'dev'",
+        "scikit-image; extra == 'dev'",
+        "scipy; extra == 'dev'",
+        "sphinx-gallery; extra == 'dev'",
+        "statsmodels; extra == 'dev'",
+        "vaex; (python_version <= '3.9') and extra == 'dev'",
+        "xarray; extra == 'dev'",
+        "build; extra == 'dev-build'",
+        "jupyter-builder; extra == 'dev-build'",
+        "pytest; extra == 'dev-build'",
+        "requests; extra == 'dev-build'",
+        "ruff==0.11.12; extra == 'dev-build'",
+        "inflect; extra == 'dev-codegen'",
+        "pytest; extra == 'dev-codegen'",
+        "requests; extra == 'dev-codegen'",
+        "ruff==0.11.12; extra == 'dev-codegen'",
+        "pytest; extra == 'dev-core'",
+        "requests; extra == 'dev-core'",
+        "ruff==0.11.12; extra == 'dev-core'",
+        "anywidget; extra == 'dev-optional'",
+        "build; extra == 'dev-optional'",
+        "colorcet; extra == 'dev-optional'",
+        "fiona<=1.9.6; (python_version <= '3.8') and extra == 'dev-optional'",
+        "geopandas; extra == 'dev-optional'",
+        "inflect; extra == 'dev-optional'",
+        "jupyter-builder; extra == 'dev-optional'",
+        "jupyterlab; extra == 'dev-optional'",
+        "kaleido>=1.3.0; extra == 'dev-optional'",
+        "numpy>=1.22; extra == 'dev-optional'",
+        "orjson; extra == 'dev-optional'",
+        "pandas; extra == 'dev-optional'",
+        "pdfrw; extra == 'dev-optional'",
+        "pillow; extra == 'dev-optional'",
+        "polars[timezone]; extra == 'dev-optional'",
+        "pyarrow; extra == 'dev-optional'",
+        "pytest; extra == 'dev-optional'",
+        "pytz; extra == 'dev-optional'",
+        "requests; extra == 'dev-optional'",
+        "ruff==0.11.12; extra == 'dev-optional'",
+        "scikit-image; extra == 'dev-optional'",
+        "scipy; extra == 'dev-optional'",
+        "sphinx-gallery; extra == 'dev-optional'",
+        "statsmodels; extra == 'dev-optional'",
+        "vaex; (python_version <= '3.9') and extra == 'dev-optional'",
+        "xarray; extra == 'dev-optional'",
+        "numpy<2,>=1; extra == 'dev-pandas1'",
+        "pandas<2,>=1; extra == 'dev-pandas1'",
+        "setuptools<82; extra == 'dev-pandas1'",
+        "pandas<3,>=2; extra == 'dev-pandas2'",
+        "pandas>=3; (python_version >= '3.11') and extra == 'dev-pandas3'",
+        "numpy>=1.22; extra == 'express'",
+        "kaleido>=1.3.0; extra == 'kaleido'"
+      ],
+      "installer": "pip",
+      "direct_url": null,
+      "wheel_metadata": {
+        "wheel_version": "1.0",
+        "generator": "hatchling 1.32.0",
+        "root_is_purelib": "true",
+        "tags": [
+          "py3-none-any"
+        ],
+        "build": null
+      },
+      "metadata_files": [
+        {
+          "path_relative_to_site_packages": "plotly-7.1.0.dist-info/INSTALLER",
+          "path_relative_to_runtime": "Lib/site-packages/plotly-7.1.0.dist-info/INSTALLER",
+          "size_bytes": 4,
+          "sha256": "ceebae7b8927a3227e5303cf5e0f1f7b34bb542ad7250ac03fbcde36ec2f1508",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg",
+          "record_hash_verified": true
+        },
+        {
+          "path_relative_to_site_packages": "plotly-7.1.0.dist-info/METADATA",
+          "path_relative_to_runtime": "Lib/site-packages/plotly-7.1.0.dist-info/METADATA",
+          "size_bytes": 8817,
+          "sha256": "06b5359b97e92b0cf267237e7ec1b51fe531b6744d83810f2fb543e743687e1e",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "BrU1m5fpKwzyZyN-fsG1H-UxtnRNg4EPL7VD50Nofh4",
+          "record_hash_verified": true
+        },
+        {
+          "path_relative_to_site_packages": "plotly-7.1.0.dist-info/RECORD",
+          "path_relative_to_runtime": "Lib/site-packages/plotly-7.1.0.dist-info/RECORD",
+          "size_bytes": 271968,
+          "sha256": "242126400df502d77cc1984a988cc5948e47f574ecd93877c83dd1221d277a2b",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": null,
+          "record_hash_value": null,
+          "record_hash_verified": null
+        },
+        {
+          "path_relative_to_site_packages": "plotly-7.1.0.dist-info/WHEEL",
+          "path_relative_to_runtime": "Lib/site-packages/plotly-7.1.0.dist-info/WHEEL",
+          "size_bytes": 87,
+          "sha256": "ccec20e2307acd7da453dd7437e70c6b08e2bc3ead3bc3445af135da37b56d59",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "zOwg4jB6zX2kU910N-cMawjivD6tO8NEWvE12je1bVk",
+          "record_hash_verified": true
+        }
+      ],
+      "license_notice_files": [
+        {
+          "path_relative_to_site_packages": "../../share/jupyter/labextensions/jupyterlab-plotly/static/third-party-licenses.json",
+          "path_relative_to_runtime": "share/jupyter/labextensions/jupyterlab-plotly/static/third-party-licenses.json",
+          "size_bytes": 1264,
+          "sha256": "e202018f172ddcc66fccef9cbf0c2a2dde2d6be02ef19bb3b9cddf692313447d",
+          "is_dist_info_file": false,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "4gIBjxct3MZvzO-cvwwqLd4ta-Au8Zuzuc3faSMTRH0",
+          "record_hash_verified": true,
+          "text_decode_status": "utf8_read",
+          "text_first_nonempty_line": "{"
+        },
+        {
+          "path_relative_to_site_packages": "plotly-7.1.0.dist-info/licenses/LICENSE.txt",
+          "path_relative_to_runtime": "Lib/site-packages/plotly-7.1.0.dist-info/licenses/LICENSE.txt",
+          "size_bytes": 1086,
+          "sha256": "ba712274f8336a5f0828c8e2bf639ab8a632c623800a35f96c8b0a67b5f2ab40",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "unEidPgzal8IKMjiv2OauKYyxiOACjX5bIsKZ7Xyq0A",
+          "record_hash_verified": true,
+          "text_decode_status": "utf8_read",
+          "text_first_nonempty_line": "MIT License",
+          "default_branch_license_comparison": {
+            "evidence_commit_sha": "d586d225b8577fa3a4ff8954bdd47ef3b9cc0c07",
+            "license_url": "https://github.com/plotly/plotly.py/blob/d586d225b8577fa3a4ff8954bdd47ef3b9cc0c07/LICENSE.txt",
+            "observed_upstream_sha256": "ba712274f8336a5f0828c8e2bf639ab8a632c623800a35f96c8b0a67b5f2ab40",
+            "sha256_matches": true,
+            "meaning": "This compares license file bytes only. Even a match does not establish the provenance of the installed wheel or package source."
+          }
+        },
+        {
+          "path_relative_to_site_packages": "plotly/labextension/static/third-party-licenses.json",
+          "path_relative_to_runtime": "Lib/site-packages/plotly/labextension/static/third-party-licenses.json",
+          "size_bytes": 1264,
+          "sha256": "e202018f172ddcc66fccef9cbf0c2a2dde2d6be02ef19bb3b9cddf692313447d",
+          "is_dist_info_file": false,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "4gIBjxct3MZvzO-cvwwqLd4ta-Au8Zuzuc3faSMTRH0",
+          "record_hash_verified": true,
+          "text_decode_status": "utf8_read",
+          "text_first_nonempty_line": "{"
+        }
+      ],
+      "dist_info_license_notice_count": 1,
+      "supplementary_package_license_notice_count": 2,
+      "source_provenance_status": "installed_metadata_observed; build_commit_and_download_origin_not_established",
+      "upstream_default_branch_reference": {
+        "repository": "plotly/plotly.py",
+        "commit_sha": "d586d225b8577fa3a4ff8954bdd47ef3b9cc0c07",
+        "github_license_spdx": "MIT",
+        "purpose": "Separate upstream observation, not attribution of the installed build to this commit."
+      }
+    },
+    {
+      "requested_distribution": "scikit-learn",
+      "mapped_upstream_repository": "scikit-learn/scikit-learn",
+      "observed_at_utc": "2026-10-02T16:29:23.111376Z",
+      "verification_status": "installed_metadata_and_available_license_files_verified",
+      "distribution_name": "scikit-learn",
+      "installed_version": "1.9.1",
+      "requires_python": ">=3.11",
+      "metadata_version": "2.4",
+      "license_metadata": {
+        "license_expression": "BSD-3-Clause",
+        "license": null,
+        "license_classifiers": [],
+        "license_file_fields": [
+          "COPYING"
+        ]
+      },
+      "project_urls": [
+        "homepage, https://scikit-learn.org",
+        "source, https://github.com/scikit-learn/scikit-learn",
+        "download, https://pypi.org/project/scikit-learn/#files",
+        "tracker, https://github.com/scikit-learn/scikit-learn/issues",
+        "release notes, https://scikit-learn.org/stable/whats_new"
+      ],
+      "homepage": null,
+      "requires_dist": [
+        "numpy>=1.24.1",
+        "scipy>=1.10.0",
+        "joblib>=1.4.0",
+        "narwhals>=2.0.1",
+        "threadpoolctl>=3.5.0"
+      ],
+      "installer": "pip",
+      "direct_url": null,
+      "wheel_metadata": {
+        "wheel_version": "1.0",
+        "generator": "meson",
+        "root_is_purelib": "false",
+        "tags": [
+          "cp312-cp312-win_amd64"
+        ],
+        "build": null
+      },
+      "metadata_files": [
+        {
+          "path_relative_to_site_packages": "scikit_learn-1.9.1.dist-info/INSTALLER",
+          "path_relative_to_runtime": "Lib/site-packages/scikit_learn-1.9.1.dist-info/INSTALLER",
+          "size_bytes": 4,
+          "sha256": "ceebae7b8927a3227e5303cf5e0f1f7b34bb542ad7250ac03fbcde36ec2f1508",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg",
+          "record_hash_verified": true
+        },
+        {
+          "path_relative_to_site_packages": "scikit_learn-1.9.1.dist-info/METADATA",
+          "path_relative_to_runtime": "Lib/site-packages/scikit_learn-1.9.1.dist-info/METADATA",
+          "size_bytes": 9274,
+          "sha256": "32e503c710a61e4e04be4edb450f9f8141233ac6af3f3db59a877667538fa4ec",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "MuUDxxCmHk4Evk7bRQ-fgUEjOsavPz21mod2Z1OPpOw",
+          "record_hash_verified": true
+        },
+        {
+          "path_relative_to_site_packages": "scikit_learn-1.9.1.dist-info/RECORD",
+          "path_relative_to_runtime": "Lib/site-packages/scikit_learn-1.9.1.dist-info/RECORD",
+          "size_bytes": 154438,
+          "sha256": "c66777a18a4fa6d62db747642828344bdcce9e168b23738a6bf7a72a80c8a854",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": null,
+          "record_hash_value": null,
+          "record_hash_verified": null
+        },
+        {
+          "path_relative_to_site_packages": "scikit_learn-1.9.1.dist-info/WHEEL",
+          "path_relative_to_runtime": "Lib/site-packages/scikit_learn-1.9.1.dist-info/WHEEL",
+          "size_bytes": 85,
+          "sha256": "e743de01ba6503a3e4234858398a1e69c07d512d51e8482ec9f3a7b1c707d165",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "50PeAbplA6PkI0hYOYoeacB9US1R6EguyfOnsccH0WU",
+          "record_hash_verified": true
+        }
+      ],
+      "license_notice_files": [
+        {
+          "path_relative_to_site_packages": "scikit_learn-1.9.1.dist-info/licenses/COPYING",
+          "path_relative_to_runtime": "Lib/site-packages/scikit_learn-1.9.1.dist-info/licenses/COPYING",
+          "size_bytes": 2629,
+          "sha256": "014b1b1ad74cf00997f7081a1635c3c203cd70c08f39c13d9a39347fcd464979",
+          "is_dist_info_file": true,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "AUsbGtdM8AmX9wgaFjXDwgPNcMCPOcE9mjk0f81GSXk",
+          "record_hash_verified": true,
+          "text_decode_status": "utf8_read",
+          "text_first_nonempty_line": "BSD 3-Clause License",
+          "default_branch_license_comparison": {
+            "evidence_commit_sha": "2cc5fc9856675eb112bbd6640404027195741710",
+            "license_url": "https://github.com/scikit-learn/scikit-learn/blob/2cc5fc9856675eb112bbd6640404027195741710/COPYING",
+            "observed_upstream_sha256": "50d6a9d340f19ab355609917993114daf5f47e3161067bcf34955bbd05cd9cb0",
+            "sha256_matches": false,
+            "meaning": "This compares license file bytes only. Even a match does not establish the provenance of the installed wheel or package source."
+          }
+        },
+        {
+          "path_relative_to_site_packages": "sklearn/externals/array_api_compat/LICENSE",
+          "path_relative_to_runtime": "Lib/site-packages/sklearn/externals/array_api_compat/LICENSE",
+          "size_bytes": 1118,
+          "sha256": "464569596b7e6162762669e4e4d1fe8d2618c03901ca7ba36e2603415fb6865d",
+          "is_dist_info_file": false,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "RkVpWWt-YWJ2Jmnk5NH-jSYYwDkBynujbiYDQV-2hl0",
+          "record_hash_verified": true,
+          "text_decode_status": "utf8_read",
+          "text_first_nonempty_line": "MIT License"
+        },
+        {
+          "path_relative_to_site_packages": "sklearn/externals/array_api_extra/LICENSE",
+          "path_relative_to_runtime": "Lib/site-packages/sklearn/externals/array_api_extra/LICENSE",
+          "size_bytes": 1118,
+          "sha256": "8b2e8a4aa8a98ed811f17be2807b1eb90dcb021c1e5a0304d784d0a24f4ee907",
+          "is_dist_info_file": false,
+          "record_hash_algorithm": "sha256",
+          "record_hash_value": "iy6KSqipjtgR8XvigHseuQ3LAhweWgME14TQok9O6Qc",
+          "record_hash_verified": true,
+          "text_decode_status": "utf8_read",
+          "text_first_nonempty_line": "MIT License"
+        }
+      ],
+      "dist_info_license_notice_count": 1,
+      "supplementary_package_license_notice_count": 2,
+      "source_provenance_status": "installed_metadata_observed; build_commit_and_download_origin_not_established",
+      "upstream_default_branch_reference": {
+        "repository": "scikit-learn/scikit-learn",
+        "commit_sha": "2cc5fc9856675eb112bbd6640404027195741710",
+        "github_license_spdx": "BSD-3-Clause",
+        "purpose": "Separate upstream observation, not attribution of the installed build to this commit."
+      },
+      "license_byte_difference_note": "Installed license bytes differ from the separate default-branch license snapshot; no byte identity is claimed."
+    }
+  ],
+  "limitations": [
+    "This is a local installed-package snapshot, not a signed wheel provenance attestation, an SBOM of the complete environment, or a supply-chain security audit.",
+    "No direct_url.json was present for these eleven distributions; package-index origin, wheel archive hash and build commit are therefore not established by this evidence.",
+    "A RECORD hash verifies local bytes against local metadata, not the authenticity of the publisher or the original download.",
+    "An upstream default-branch commit is not assumed to be the source of an installed version. Matching license text alone cannot establish build provenance.",
+    "Only files listed by the requested distribution RECORD are included; transitive distributions must be inventoried separately before redistribution.",
+    "Installed versions and Requires-Python are environment-specific, not a guarantee that the same versions work across other supported Python versions.",
+    "Software license metadata does not grant rights to market data, exchange/broker services, API credentials, pretrained models or training datasets."
+  ],
+  "upstream_evidence_observed_input_sha256": "67515f88272f291cf3bcb13524ecabe4420721d4f327ef3f5107d558dbb82bb4",
+  "upstream_evidence_hash_mode": "UTF-8 source with LF line endings (Git canonical published bytes)",
+  "upstream_evidence_hash_note": "The collection-time CRLF input hash is retained separately. This reference binds to the canonical LF source distributed by Git; JSON content is unchanged."
+}

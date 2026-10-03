@@ -2,6 +2,17 @@
 
 A composable investment research and backtesting toolkit.
 
+## ChatGPT 普通聊天研究插件
+
+[聊天插件接入与验收](docs/CHAT_PLUGIN.md)：18 个只读 MCP 工具、GitHub/Drive
+有界检索、私有结构化资料索引、人民币配置/组合/风险情景。使用 `pip install -e '.[chat]'`。
+目标账户插件注册、授权与普通 Chat 实测仍须独立完成；不将软件测试写成真实投资能力。
+
+[0.3 开源能力融合](docs/OPEN_SOURCE_INTEGRATION_0_3.md)：11 个真实可选后端，覆盖 Polars / DuckDB / Arrow、
+statsmodels / arch / SciPy、ta / ffn、NetworkX / Plotly / scikit-learn；固定被测版本，提供 MCP 调用、
+跨引擎对照、时间顺序评估和 GitHub/运行时许可证据，不靠复制整仓源码或堆目录冒充集成。
+[0.2 升级](docs/CHAT_UPGRADE_0_2.md)：接入诊断、调用者历史数据质量检查、精确金额和搜索完整性修复。
+
 ## Included open-source components
 
 The third_party/ tree brings in reusable modules from the MIT-licensed bt,

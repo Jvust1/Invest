@@ -1,0 +1,10 @@
+.git
+.env*
+private
+.venv
+__pycache__
+*.sqlite*
+*.db*
+outputs
+delivery
+dist

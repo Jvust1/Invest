@@ -1,0 +1,9 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "invest-research",
+  "version": "0.3.0",
+  "description": "Evidence-first Invest research: bounded GitHub/Drive retrieval, CNY allocation scenarios, portfolio review and risk/backtest calculations. No brokerage or automatic orders.",
+  "author": {"name": "Jvust1"},
+  "repository": "https://github.com/Jvust1/Invest",
+  "keywords": ["investment-research", "github", "google-drive", "mcp"]
+}

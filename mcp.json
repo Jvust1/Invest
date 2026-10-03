@@ -1,0 +1,12 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+  "mcpServers": {
+    "invest": {
+      "type": "stdio",
+      "command": "python",
+      "args": ["-m", "invest.chat.mcp_server", "--transport", "stdio"],
+      "cwd": "${PLUGIN_ROOT}",
+      "env": {"PYTHONUTF8": "1", "PYTHONIOENCODING": "utf-8"}
+    }
+  }
+}
